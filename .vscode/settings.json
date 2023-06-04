@@ -1,0 +1,17 @@
+{
+  "eslint.codeAction.showDocumentation": {
+    "enable": false
+  },
+  "eslint.enable": true,
+  "eslint.probe": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "html",
+    "vue",
+    "markdown",
+    "react-native"
+  ],
+  "eslint.lintTask.enable": true
+}
