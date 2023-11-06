@@ -13,7 +13,7 @@ const Stack = createStackNavigator();
 const RootNavigation = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen component={Splash} name={ScreenName.Splash} />
         <Stack.Screen component={OnBoarding} name={ScreenName.OnBoarding} />
         <Stack.Screen
@@ -21,7 +21,7 @@ const RootNavigation = () => {
           name={NavigatorName.DrawerNavigator}
         />
         <Stack.Screen component={Login} name={ScreenName.Login} />
-        <Stack.Screen component={Register} name={ScreenName.Login} />
+        <Stack.Screen component={Register} name={ScreenName.Register} />
       </Stack.Navigator>
     </NavigationContainer>
   );
