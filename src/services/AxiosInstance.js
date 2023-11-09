@@ -1,6 +1,8 @@
 import axios from 'axios';
-import {store} from './store';
-import {setLoginState, setLogout} from './reducer/AuthSlice';
+import { store } from './store';
+import { setLoginState, setLogout } from './reducer/AuthSlice';
+
+
 const baseURL = 'https://postandshare-content-service-zm5xloquaa-em.a.run.app';
 const authAxiosInstance = axios.create({
   baseURL,
@@ -11,8 +13,9 @@ const authAxiosInstance = axios.create({
 });
 authAxiosInstance.interceptors.request.use(async req => {
   const {
-    authStore: {login_Data},
+    auth: {login_Data}
   } = store.getState();
+  console.log('in auth url', req.url, req.params, req.data);
   try {
     const currentTime = new Date().getTime();
     if (currentTime > login_Data?.exp) {
@@ -38,3 +41,5 @@ authAxiosInstance.interceptors.request.use(async req => {
 
   return req;
 });
+
+export {authAxiosInstance };

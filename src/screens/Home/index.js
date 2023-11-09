@@ -15,8 +15,9 @@ import Sizes from '../../constants/Sizes';
 import Colors from '../../constants/Colors';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import moment from 'moment';
+import NavigationScreenName from '../../constants/NavigationScreenName';
 
-const Home = () => {
+const Home = ({navigation}) => {
   const onPressMenu = () => {
     // navigation.openDrawer();
     //navigation.getParent('leftDrawer').openDrawer();
@@ -45,7 +46,7 @@ const Home = () => {
                   styles.box,
                   {backgroundColor: '#FFB33920', borderColor: '#FFB339'},
                 ]}
-                // onPress={() => navigation.navigate('Photos')}
+                onPress={() => navigation.navigate(NavigationScreenName.PHOTOS_STATUS)}
               >
                 <Image
                   source={Images.photo_video_icon}
@@ -64,7 +65,7 @@ const Home = () => {
                   styles.box,
                   {backgroundColor: '#20B2FB20', borderColor: '#20B2FB'},
                 ]}
-                // onPress={() => navigation.navigate('Photos')}
+                onPress={() => navigation.navigate(NavigationScreenName.EVENTS)}
               >
                 <Image
                   source={Images.remainder_icon}
@@ -83,7 +84,7 @@ const Home = () => {
                   styles.box,
                   {backgroundColor: '#D6363520', borderColor: '#D63635'},
                 ]}
-                // onPress={() => navigation.navigate('Photos')}
+                onPress={() => navigation.navigate(NavigationScreenName.WALLPAPER)}
               >
                 <Image
                   source={Images.wallpaper_icon}

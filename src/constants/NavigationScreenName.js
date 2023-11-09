@@ -8,7 +8,7 @@ export default {
 
   //Screen Name
   SPLASH: 'Splash',
-  ONBOARDING: 'onBoarding',
+  ONBOARDING: 'OnBoarding',
   LOGIN: 'Login',
   SIGNUP: 'Signup',
   FORGET_PASSWORD: 'Forget-Password',
@@ -19,4 +19,7 @@ export default {
   CUSTOM: 'Custom',
   PROFILE: 'Profile',
   ADD: 'Add',
+  PHOTOS_STATUS: 'PhotoStatus',
+  EVENTS: 'Events',
+  WALLPAPER: 'Wallpaper'
 };

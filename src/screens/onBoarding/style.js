@@ -16,6 +16,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  rootOboarding: {
+    width: Sizes.width,
+    height: '100%',
+    resizeMode: 'stretch',
+    backgroundColor: Colors.white,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   logo: {
     width: Sizes.wp('90%'),
     resizeMode: 'contain',
@@ -101,6 +110,79 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: Sizes.hp('3%'),
     marginHorizontal: Sizes.wp('10%'),
+  },
+ 
+  top_image_wrapper: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  text_wrapper: {
+    paddingHorizontal: Sizes.width * 0.05,
+    marginVertical: 10,
+  },
+  common: {
+    fontSize: Sizes.width * 0.11,
+  },
+  easyText: {
+    color: Colors.text1,
+    fontWeight: '600',
+  },
+  wayText: {
+    color: Colors.text2,
+    fontWeight: '600',
+  },
+  createText: {
+    color: Colors.text1,
+    fontWeight: '700',
+  },
+  yourText: {
+    color: Colors.text1,
+    fontWeight: '600',
+  },
+  postText: {
+    color: Colors.text3,
+    fontWeight: '600',
+  },
+  subtitle_text: {
+    color: Colors.text1,
+    opacity: 0.7,
+    letterSpacing: 0.5,
+    fontSize: 14,
+    lineHeight: 23,
+    fontWeight: '600',
+  },
+  bottomImage_root: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    paddingHorizontal: 40,
+    paddingVertical: 60,
+    width: Sizes.wp('100%')
+  },
+  startButton_cont: {
+    backgroundColor: Colors.white,
+    borderRadius: 15,
+    width: 160,
+    height: 63,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  startButton_text_wrapper: {
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'center',
+  },
+  startButton_text: {
+    color: Colors.text1,
+    fontWeight: '700',
+    fontSize: 20,
+    letterSpacing: 1,
+  },
+  startButton_icon: {
+    color: Colors.text1,
+    fontWeight: '700',
+    fontSize: 20,
+    marginBottom: -5,
   },
 });
 export default styles;

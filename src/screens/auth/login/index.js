@@ -18,8 +18,10 @@ import CustomInputField from '../../../components/CustomInputField';
 import CustomButton from '../../../components/CustomButton';
 import NavigationScreenName from '../../../constants/NavigationScreenName';
 import authStyle from '../authStyle';
-// import { useMutation } from 'react-query';
-// import { SendOTPonMobile } from '../../../services/authServices/auth.services';
+import { SendOTPonMobile } from '../../../services/authServices/auth.services';
+import { useMutation } from '@tanstack/react-query';
+import Loader from '../../../components/Loader';
+
 const Login = ({navigation}) => {
   const [state, setState] = useState({
     name: '',
@@ -30,23 +32,23 @@ const Login = ({navigation}) => {
     setState({...state, phone: text, err: {...state.err, phone: ''}});
   };
 
-  // const {mutate, isLoading: SendOTPonMobileLoading} = useMutation(
-  //   SendOTPonMobile,
-  //   {
-  //     onSuccess: success => {
-  //       ToastAndroid.show(success?.data?.message, ToastAndroid.SHORT);
+  const {mutate: SendOTPonMobileMuatate, isLoading: SendOTPonMobileLoading} = useMutation(
+    SendOTPonMobile,
+    {
+      onSuccess: success => {
+        ToastAndroid.show(success?.data?.message, ToastAndroid.SHORT);
 
-  //       console.log(success?.data , "in success");
-  //       // navigation.navigate(NavigationScreenName.CHECKOTP, {
-  //       //   mobileNumber: phone,
-  //       //   requesId: success?.data?.request_id,
-  //       // });
-  //     },
-  //     onError: error => {
-  //       ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
-  //     },
-  //   },
-  // );
+        console.log(success?.data , "in success");
+        navigation.navigate(NavigationScreenName.VERIFY_OTP, {
+          mobileNumber: state?.phone,
+          requesId: success?.data?.request_id,
+        });
+      },
+      onError: error => {
+        ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
+      },
+    },
+  );
 
 
 
@@ -57,12 +59,9 @@ const Login = ({navigation}) => {
       err.phone = 'Mobile Number is required';
       ToastAndroid.show('Please Enter Valid Mobile Number', ToastAndroid.SHORT);
     } else {
-
-      navigation.navigate(NavigationScreenName.VERIFY_OTP);
-      // console.log('cell', state.phone);
-      // mutate({
-      //   mobileNumber: state.phone,
-      // });
+      SendOTPonMobileMuatate({
+        mobileNumber: state.phone,
+      });
     }
     setState({...state, err});
   };
@@ -75,6 +74,7 @@ const Login = ({navigation}) => {
   };
   return (
     <>
+    <Loader open={SendOTPonMobileLoading } text='Sending OTP...'/>
       <ImageBackground source={Images.loginTop} style={authStyle.upperImage}>
         <View style={authStyle.topImgSec} />
         <Text style={authStyle.welcomeText}>Welcome !</Text>

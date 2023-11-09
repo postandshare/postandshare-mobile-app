@@ -3,7 +3,9 @@ export default {
     logo: require('../assets/images/logo.png'),
     topHeader: require('../assets/images/topHeader.png'),
     loginTop: require('../assets/images/login.png'),
-
+    splashTop: require('../assets/images/splash-top.png'),
+    splashBottom: require('../assets/images/splash-bottom.png'),
+    
     //bottom tab icons
     bottomHomeActive: require('../assets/icons/Home_active.png'),
     bottomHomeInactive: require('../assets/icons/Home_inactive.png'),

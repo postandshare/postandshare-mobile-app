@@ -12,18 +12,38 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import Images from '../../../constants/Images';
 import authStyle from '../authStyle';
-import Colors from '../../../constants/Colors';
 import {TextInput} from 'react-native-paper';
 import NavigationScreenName from '../../../constants/NavigationScreenName';
+import {SignInWithOTP} from '../../../services/authServices/auth.services';
+import {useMutation} from '@tanstack/react-query';
+import { useDispatch, useSelector } from 'react-redux';
+import { store } from '../../../services/store';
+import { setLoginState } from '../../../services/reducer/AuthSlice';
 
 export let newOtp = 0;
 
-const VerifyOTP = ({navigation}) => {
+const VerifyOTP = ({navigation, route}) => {
+  const {mobileNumber, requesId} = route.params;
+  const {login_Data} = useSelector(store => store.auth);
+  const dispatch = useDispatch();
   const [otp, setOtp] = useState('');
   const otpRef = useRef(null);
   const [resendTime, setResendTime] = useState(40);
   const [isOtpSend, setIsOtpSend] = useState(true);
   const [isOtpVerify, setIsOtpVerfiy] = useState(false);
+
+  const {mutate: SignInWithOTPMuatate, isLoading: SignInWithOTPLoading} =
+    useMutation(SignInWithOTP, {
+      onSuccess: success => {
+        
+        navigation.navigate(NavigationScreenName.DRWAER_NAVIGATOR);
+        dispatch(setLoginState(success?.data));
+        console.log(success?.data, 'in success');
+      },
+      onError: error => {
+        ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
+      },
+    });
 
   if (otp !== '') {
     newOtp = otp;
@@ -36,8 +56,15 @@ const VerifyOTP = ({navigation}) => {
       ToastAndroid.show('Please enter OTP !', ToastAndroid.SHORT);
       return;
     }
+    else if (!login_Data) {
+      SignInWithOTPMuatate({
+        mobileNumber: mobileNumber,
+        OTP: otp,
+        request_id: requesId,
+        });
 
-    navigation.navigate(NavigationScreenName.DRWAER_NAVIGATOR)
+      }
+   
 
     // if (studentDocId && medium) {
     //   verifyOtpAddStudentMutate({

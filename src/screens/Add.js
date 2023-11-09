@@ -1,11 +1,15 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import TopHeader from '../components/TopHeader'
 
 const Add = () => {
   return (
-    <View>
-      <Text>Add</Text>
-    </View>
+    <>
+      <TopHeader titile={"ADD PHOTOS"}/>
+      <View>
+        <Text>hi i am Add screen</Text>
+      </View>
+    </>
   )
 }
 

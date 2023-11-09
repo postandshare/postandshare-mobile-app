@@ -6,17 +6,37 @@ import NavigationScreenName from '../constants/NavigationScreenName';
 import Splash from '../screens/onBoarding/Splash';
 import DrawerStack from './DrawerStack';
 import AuthStack from './AuthStack';
-
+import {useDispatch, useSelector} from 'react-redux';
+import {store} from '../services/store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import LocalStorageKey from '../constants/LocalStorageKey';
+import {setOnBoarding} from '../services/reducer/AuthSlice';
+import OnBoarding from '../screens/onBoarding';
 
 const Stack = createStackNavigator();
 const Routes = () => {
   const [state, setState] = useState(true);
-  const [isAuthenticated , setIsAuthenticated] = useState(false);
+  const {login_Data, onBoarding} = useSelector(store => store.auth);
+  const dispatch = useDispatch();
+  const getOnboarding = async () => {
+    try {
+      const onboardingKey = await AsyncStorage.getItem(
+        LocalStorageKey.ONBOARDING,
+      );
+      if (onboardingKey !== null && onboardingKey !== undefined) {
+        dispatch(setOnBoarding(true));
+      }
+    } catch (error) {
+      console.log('in onboarding console.');
+    }
+  };
+
   useEffect(() => {
     setTimeout(() => {
       setState(false);
     }, 3000);
-    // getOnboarding();
+    getOnboarding();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -34,25 +54,21 @@ const Routes = () => {
               name={NavigationScreenName.SPLASH}
               component={Splash}
             />
-          ) : isAuthenticated? (
+          ) : !onBoarding ? (
             <Stack.Screen
-              name={'DrawerStack'}
-              component={DrawerStack}
+              name={NavigationScreenName.ONBOARDING}
+              component={OnBoarding}
             />
-          )
-          : (
-          <>
-           <Stack.Screen
-              name={NavigationScreenName.ATUH_NAVIGATOR}
-              component={AuthStack}
-            />
-            <Stack.Screen
-            name={NavigationScreenName.DRWAER_NAVIGATOR}
-            component={DrawerStack}
-          />
-          </> 
-          )
-        }
+          ) : login_Data ? (
+            <Stack.Screen name={'DrawerStack'} component={DrawerStack} />
+          ) : (
+            <>
+              <Stack.Screen
+                name={NavigationScreenName.ATUH_NAVIGATOR}
+                component={AuthStack}
+              />
+            </>
+          )}
         </Stack.Navigator>
       </NavigationContainer>
     </>
