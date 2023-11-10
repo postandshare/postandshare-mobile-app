@@ -16,6 +16,7 @@ import Colors from '../../constants/Colors';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import moment from 'moment';
 import NavigationScreenName from '../../constants/NavigationScreenName';
+import CustomCarousel from '../../components/CustomCarousel';
 
 const Home = ({navigation}) => {
   const onPressMenu = () => {
@@ -36,7 +37,10 @@ const Home = ({navigation}) => {
       <ScrollView nestedScrollEnabled>
         <View style={styles.root}>
           {/* carousel for the photos */}
-          <Text>Here carousel would come</Text>
+          <View style={{ marginVertical: 10, padding: 5 }}>
+            <CustomCarousel width={'98%'}/>
+          </View>
+         
           {/* card for the  photo and evnet and wallpaper */}
           <View style={styles.box_card_wrapper}>
             {/* box for the photos and video */}
