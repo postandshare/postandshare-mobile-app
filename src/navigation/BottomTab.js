@@ -12,108 +12,116 @@ import Video from '../screens/Video';
 import Add from '../screens/Add';
 import Custom from '../screens/Custom';
 import Profile from '../screens/Profile';
+import CustomBottomTab from '../components/BottomTab/CustomBottomTab';
 const Tab = createBottomTabNavigator();
 const BottomTab = () => {
-  //const {schoolDocId} = useSelector(store => store.commonStore);
   return (
     <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: '#0A85FE',
-        tabBarInactiveTintColor: '#0B1F32',
-        tabBarStyle: {
-          display: 
-        //   !schoolDocId ? 'none' :
-           'flex',
-          backgroundColor: '#fff',
-          height: Sizes.hp('8%'),
-          paddingBottom: Sizes.hp('1%'),
-          borderTopColor: '#fff',
-        },
-      }}>
-      <Tab.Screen
-        name={NavigationScreenName.HOME}
-        component={Home}
-        options={{
-          title: 'Home',
-          tabBarIcon: ({focused}) => (
-            <Image
-              source={
-                focused ? Images.bottomHomeActive : Images.bottomHomeInactive
-              }
-              style={styles.ic_img}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name={NavigationScreenName.VIDEO}
-        component={Video}
-        options={{
-          title: 'Video',
-          tabBarIcon: ({focused}) => (
-            <Image
-              source={
-                focused
-                  ? Images.bottomVideoActive
-                  : Images.bottomVideoInactive
-              }
-              style={styles.ic_img}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name={NavigationScreenName.ADD}
-        component={Add}
-        options={{
-          title: 'Add',
-          tabBarIcon: ({focused}) => (
-            <Image
-              source={
-                focused
-                  ? Images.bottomAdd
-                  : Images.bottomAdd
-              }
-              style={styles.ic_img}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name={NavigationScreenName.CUSTOM}
-        component={Custom}
-        options={{
-          title: 'Custom',
-          tabBarIcon: ({focused}) => (
-            <Image
-              source={
-                focused
-                  ? Images.bottomCustomActive
-                  : Images.bottomCustomInactive
-              }
-              style={styles.ic_img}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name={NavigationScreenName.PROFILE}
-        component={Profile}
-        options={{
-          title: 'Profile',
-          tabBarIcon: ({focused}) => (
-            <Image
-              source={
-                focused
-                  ? Images.bottomPorfileActive
-                  : Images.bottomProfileInactive
-              }
-              style={styles.ic_img}
-            />
-          ),
-        }}
-      />
+      // screenOptions={{
+      //   headerShown: false,
+      //   tabBarActiveTintColor: '#0A85FE',
+      //   tabBarInactiveTintColor: '#0B1F32',
+      //   tabBarStyle: {
+      //     display:
+      //   //   !schoolDocId ? 'none' :
+      //      'flex',
+      //     backgroundColor: '#fff',
+      //     height: Sizes.hp('8%'),
+      //     paddingBottom: Sizes.hp('1%'),
+      //     borderTopColor: '#fff',
+      //   },
+      // }}
+      tabBar={(props) => <CustomBottomTab {...props} />}>
+      <Tab.Group
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <Tab.Screen
+          name={NavigationScreenName.HOME}
+          component={Home}
+          options={{
+            title: 'Home',
+            // tabBarIcon: ({focused}) => (
+            //   <Image
+            //     source={
+            //       focused ? Images.bottomHomeActive : Images.bottomHomeInactive
+            //     }
+            //     style={styles.ic_img}
+            //   />
+            // ),
+          }}
+        />
+        <Tab.Screen
+          name={NavigationScreenName.VIDEO}
+          component={Video}
+          options={{
+            title: 'Video',
+            // tabBarIcon: ({focused}) => (
+            //   <Image
+            //     source={
+            //       focused
+            //         ? Images.bottomVideoActive
+            //         : Images.bottomVideoInactive
+            //     }
+            //     style={styles.ic_img}
+            //   />
+            // ),
+          }}
+        />
+        <Tab.Screen
+          name={NavigationScreenName.ADD}
+          component={Add}
+          options={
+            {
+              // title: 'Add',
+              // tabBarIcon: ({focused}) => (
+              //   <Image
+              //     source={
+              //       focused
+              //         ? Images.bottomAdd
+              //         : Images.bottomAdd
+              //     }
+              //     style={styles.ic_img}
+              //   />
+              // ),
+            }
+          }
+        />
+        <Tab.Screen
+          name={NavigationScreenName.CUSTOM}
+          component={Custom}
+          options={{
+            title: 'Custom',
+            // tabBarIcon: ({focused}) => (
+            //   <Image
+            //     source={
+            //       focused
+            //         ? Images.bottomCustomActive
+            //         : Images.bottomCustomInactive
+            //     }
+            //     style={styles.ic_img}
+            //   />
+            // ),
+          }}
+        />
+        <Tab.Screen
+          name={NavigationScreenName.PROFILE}
+          component={Profile}
+          options={{
+            title: 'Profile',
+            // tabBarIcon: ({focused}) => (
+            //   <Image
+            //     source={
+            //       focused
+            //         ? Images.bottomPorfileActive
+            //         : Images.bottomProfileInactive
+            //     }
+            //     style={styles.ic_img}
+            //   />
+            // ),
+          }}
+        />
+      </Tab.Group>
     </Tab.Navigator>
   );
 };
