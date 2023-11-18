@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import LocalStorageKey from '../constants/LocalStorageKey';
 import {setOnBoarding} from '../services/reducer/AuthSlice';
 import OnBoarding from '../screens/onBoarding';
+import BottomTab from './BottomTab';
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -60,7 +61,7 @@ const Routes = () => {
               component={OnBoarding}
             />
           ) : login_Data ? (
-            <Stack.Screen name={'DrawerStack'} component={DrawerStack} />
+            <Stack.Screen name={NavigationScreenName.DRWAER_NAVIGATOR} component={DrawerStack} />
           ) : (
             <>
               <Stack.Screen

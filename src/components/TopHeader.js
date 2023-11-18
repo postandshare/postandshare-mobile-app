@@ -12,7 +12,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {scale} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
-import { setLogout } from '../services/reducer/AuthSlice';
+import {setLogout} from '../services/reducer/AuthSlice';
 import Images from '../constants/Images';
 import Sizes from '../constants/Sizes';
 
@@ -25,6 +25,7 @@ const TopHeader = ({
   docId = '',
   filter,
   logout = false,
+  add ,
 }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -64,6 +65,10 @@ const TopHeader = ({
             <AntDesign name="filter" size={26} color="white" />
           </TouchableOpacity>
         </View>
+      ) : add ? (
+        <TouchableOpacity onPress={onPress}>
+          <AntDesign name={ "plussquareo"} size={26} color="white" />
+        </TouchableOpacity>
       ) : (
         <View />
       )}
