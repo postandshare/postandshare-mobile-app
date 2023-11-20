@@ -1,4 +1,5 @@
 import {
+  Image,
   ImageBackground,
   StyleSheet,
   Text,
@@ -25,7 +26,8 @@ const TopHeader = ({
   docId = '',
   filter,
   logout = false,
-  add ,
+  add,
+  icon,
 }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -67,7 +69,11 @@ const TopHeader = ({
         </View>
       ) : add ? (
         <TouchableOpacity onPress={onPress}>
-          <AntDesign name={ "plussquareo"} size={26} color="white" />
+          <AntDesign name={'plussquareo'} size={26} color="white" />
+        </TouchableOpacity>
+      ) : icon ? (
+        <TouchableOpacity onPress={onPress}>
+          <Image source={icon} style={{height: 30 , width: 30 ,}}/>
         </TouchableOpacity>
       ) : (
         <View />

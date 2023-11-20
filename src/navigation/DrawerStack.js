@@ -12,6 +12,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Privacy from '../screens/privacy';
 import Tutorial from '../screens/tutorials';
 import MyBussinessNavigator from '../screens/mybussiness';
+import BirthdayRemainderNavigator from '../screens/birthday';
 
 const LeftDrawer = createDrawerNavigator();
 const RightDrawer = createDrawerNavigator();
@@ -125,6 +126,23 @@ const DrawerStack = () => {
         component={MyBussinessNavigator}
         options={{
           title: 'My Bussiness',
+          drawerActiveBackgroundColor: Colors.PRIMARY,
+          drawerInactiveBackgroundColor: 'transparent',
+          // eslint-disable-next-line react/no-unstable-nested-components
+          drawerIcon: ({focused}) => (
+            <AntDesign
+              name="filetext1"
+              size={24}
+              color={focused ? Colors.white : Colors.text1}
+            />
+          ),
+        }}
+      />
+      <RightDrawer.Screen
+        name="Birthday Remainder"
+        component={BirthdayRemainderNavigator}
+        options={{
+          title: 'Birthday Remainder',
           drawerActiveBackgroundColor: Colors.PRIMARY,
           drawerInactiveBackgroundColor: 'transparent',
           // eslint-disable-next-line react/no-unstable-nested-components

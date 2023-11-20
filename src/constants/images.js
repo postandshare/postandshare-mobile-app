@@ -26,7 +26,7 @@ export default {
     wallpaper_icon: require('../assets/icons/wallpaper.png'),
     bell_icon: require('../assets/icons/bell.png'),
     otp_icon: require('../assets/icons/otpIcon.png'),
-
+    add_birthday_icon: require('../assets/icons/addbirthday.png'),
     //placeholder
     profile_placeholder1: require('../assets/placeholder/placeholder1.png'),
     profile_placeholder2: require('../assets/placeholder/placeholder2.png'),

@@ -21,5 +21,6 @@ export default {
   ADD: 'Add',
   PHOTOS_STATUS: 'PhotoStatus',
   EVENTS: 'Events',
-  WALLPAPER: 'Wallpaper'
+  WALLPAPER: 'Wallpaper',
+  BIRTHDAY_REMAINDER_NAVIGATOR: 'BirthdayRemainderNavigator',
 };
