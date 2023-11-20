@@ -13,6 +13,7 @@ import Privacy from '../screens/privacy';
 import Tutorial from '../screens/tutorials';
 import MyBussinessNavigator from '../screens/mybussiness';
 import BirthdayRemainderNavigator from '../screens/birthday';
+import PhotoSDK from '../screens/sdk';
 
 const LeftDrawer = createDrawerNavigator();
 const RightDrawer = createDrawerNavigator();
@@ -143,6 +144,23 @@ const DrawerStack = () => {
         component={BirthdayRemainderNavigator}
         options={{
           title: 'Birthday Remainder',
+          drawerActiveBackgroundColor: Colors.PRIMARY,
+          drawerInactiveBackgroundColor: 'transparent',
+          // eslint-disable-next-line react/no-unstable-nested-components
+          drawerIcon: ({focused}) => (
+            <AntDesign
+              name="filetext1"
+              size={24}
+              color={focused ? Colors.white : Colors.text1}
+            />
+          ),
+        }}
+      />
+      <RightDrawer.Screen
+        name="PhotoSDK"
+        component={PhotoSDK}
+        options={{
+          title: 'PhotoSDK Trails',
           drawerActiveBackgroundColor: Colors.PRIMARY,
           drawerInactiveBackgroundColor: 'transparent',
           // eslint-disable-next-line react/no-unstable-nested-components
