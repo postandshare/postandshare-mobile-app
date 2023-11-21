@@ -32,6 +32,26 @@ export default {
     profile_placeholder2: require('../assets/placeholder/placeholder2.png'),
 
 
+    //frames
+    frame1: require('../assets/frames/Frame 1.png'),
+    frame2: require('../assets/frames/Frame 3.png'),
+    frame3: require('../assets/frames/Frame 4.png'),
+    frame4: require('../assets/frames/Frame 6.png'),
+    frame5: require('../assets/frames/Frame 7.png'),
+    frame6: require('../assets/frames/Frame 8.png'),
+    frame7: require('../assets/frames/Frame 10.png'),
+    frame8: require('../assets/frames/Frame 12.png'),
+    frame9: require('../assets/frames/Frame 14.png'),
+    frame10: require('../assets/frames/Frame 15.png'),
+    frame11: require('../assets/frames/Frame 16.png'),
+    frame12: require('../assets/frames/Frame 17.png'),
+    frame13: require('../assets/frames/Frame 19.png'),
+    frame14: require('../assets/frames/Frame 23.png'),
+    frame15: require('../assets/frames/Frame 28.png'),
+    frame16: require('../assets/frames/Frame 30.png'),
+    frame17: require('../assets/frames/Frame 40.png'),
+    frame18: require('../assets/frames/Frame 53.png'),
+
   };
 
 const uploadedImages = [
