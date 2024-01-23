@@ -1,11 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import TopHeader from '../components/TopHeader'
 
 const Custom = () => {
   return (
-    <View>
-      <Text>Custom</Text>
-    </View>
+    <>
+      <TopHeader titile={'Custom'} />
+
+    </>
   )
 }
 

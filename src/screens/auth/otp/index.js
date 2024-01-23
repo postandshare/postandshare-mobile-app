@@ -17,7 +17,6 @@ import NavigationScreenName from '../../../constants/NavigationScreenName';
 import {SignInWithOTP} from '../../../services/authServices/auth.services';
 import {useMutation} from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
-import { store } from '../../../services/store';
 import { setLoginState } from '../../../services/reducer/AuthSlice';
 
 export let newOtp = 0;
@@ -64,27 +63,6 @@ const VerifyOTP = ({navigation, route}) => {
         });
 
       }
-   
-
-    // if (studentDocId && medium) {
-    //   verifyOtpAddStudentMutate({
-    //     otp: otp,
-    //     medium: medium,
-    //     studentDocId: studentDocId,
-    //   });
-    // } else if (!login_Data) {
-    //   SignInWithOTPMutate({
-    //     medium: mobileNumber,
-    //     OTP: otp,
-    //     request_id: requesId,
-    //   });
-    // } else {
-    //   getChildListByOTPMutate({
-    //     medium: mobileNumber,
-    //     request_id: requesId,
-    //     otp: otp,
-    //   })
-    // }
   };
 
   const resendHandler = () => {

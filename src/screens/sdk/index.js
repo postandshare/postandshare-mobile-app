@@ -23,7 +23,7 @@ import Images from '../../constants/images';
 import * as RNFS from 'react-native-fs';
 import {ScrollView} from 'react-native';
 
-const openPhotoFromCameraRollExample = async () => {
+export const openPhotoFromCameraRollExample = async () => {
   try {
     // Select a photo from the camera roll.
     let pickerResult = await ImagePicker.launchImageLibrary({
@@ -44,12 +44,49 @@ const openPhotoFromCameraRollExample = async () => {
     if (result != null) {
       // The user exported a new photo successfully and the newly generated photo is located at `result.image`.
       console.log(result.image);
+      try {
+        //const imageUrl = 'path/to/your/image.jpg'; // Replace with the actual path or URI of your image
+        const destinationPath = `${RNFS.DocumentDirectoryPath}/savedImage.jpg`;
+
+        // Check if the file exists
+        const fileExists = await RNFS.exists(destinationPath);
+
+        if (!fileExists) {
+          // Copy the image to the destination path
+          await RNFS.copyFile(result.image, destinationPath);
+          console.log('Image saved successfully!');
+        } else {
+          console.log('Image already saved!');
+        }
+      } catch (error) {
+        console.error('Error saving image:', error);
+      }
     } else {
       // The user tapped on the cancel button within the editor.
       return;
     }
   } catch (error) {
     console.log(error);
+  }
+};
+
+const saveImageToStorage = async () => {
+  try {
+    const imageUrl = 'path/to/your/image.jpg'; // Replace with the actual path or URI of your image
+    const destinationPath = `${RNFS.DocumentDirectoryPath}/savedImage.jpg`;
+
+    // Check if the file exists
+    const fileExists = await RNFS.exists(destinationPath);
+
+    if (!fileExists) {
+      // Copy the image to the destination path
+      await RNFS.copyFile(imageUrl, destinationPath);
+      console.log('Image saved successfully!');
+    } else {
+      console.log('Image already saved!');
+    }
+  } catch (error) {
+    console.error('Error saving image:', error);
   }
 };
 
@@ -383,7 +420,7 @@ export const photoFramesAppBundleExample = async () => {
                 midMode: FrameTileMode.STRETCH,
               },
               left: {
-                 midURI: Images.bell_icon,
+                midURI: Images.bell_icon,
                 midMode: FrameTileMode.STRETCH,
               },
               right: {
@@ -626,7 +663,8 @@ export const photoAnnotationExample = async () => {
   // Create a `Configuration` object.
   const configuration = {
     // For this example only the sticker, text, and brush tool are enabled.
-    tools: [Tool.STICKER, Tool.TEXT, Tool.BRUSH],
+    // tools: [Tool.STICKER, Tool.TEXT, Tool.BRUSH],
+    tools: [Tool.STICKER],
 
     // For this example only stickers suitable for annotations are enabled.
     sticker: {
@@ -647,13 +685,17 @@ export const photoAnnotationExample = async () => {
     },
   };
   try {
-    // Open the photo editor and handle the export as well as any occuring errors.
+    // Open the photo editor and handle the export as well as any occurring errors.
     const result = await PESDK.openEditor(photo, configuration);
 
-    // highlight-events
     if (result != null) {
       // The user exported a new photo successfully and the newly generated photo is located at `result.image`.
-      console.log(result.image);
+      const imagePath = RNFS.DocumentDirectoryPath + '/editedImage.jpg';
+
+      // Save the image to the file manager
+      await RNFS.copyFile(result.image, imagePath);
+
+      console.log('Image saved:', imagePath);
     } else {
       // The user tapped on the cancel button within the editor.
       return;
@@ -764,7 +806,6 @@ export const photoStickerAppBundleExample = async () => {
   }
 };
 
-
 export const photoTextConfigurationExample = async () => {
   try {
     // Add a photo from the assets directory.
@@ -794,9 +835,9 @@ export const photoTextConfigurationExample = async () => {
         // For this example only a small selection of colors is shown by default
         // e.g. based on favorite colors of the user.
         backgroundColors: [
-          { color: [0.9, 0.31, 0.31, 1], name: "Red" },
-          { color: [0.33, 1.0, 0.53, 1], name: "Green" },
-          { color: [1.0, 0.97, 0.39, 1], name: "Yellow" },
+          {color: [0.9, 0.31, 0.31, 1], name: 'Red'},
+          {color: [0.33, 1.0, 0.53, 1], name: 'Green'},
+          {color: [1.0, 0.97, 0.39, 1], name: 'Yellow'},
         ],
 
         // By default the editor provides a variety of different
@@ -804,8 +845,8 @@ export const photoTextConfigurationExample = async () => {
         // For this example only a small selection of colors is shown by default
         // e.g. based on favorite colors of the user.
         textColors: [
-          { color: [0, 0, 0, 1], name: "Black" },
-          { color: [1, 1, 1, 1], name: "White" },
+          {color: [0, 0, 0, 1], name: 'Black'},
+          {color: [1, 1, 1, 1], name: 'White'},
         ],
 
         // By default the default text color is set to [1, 1, 1, 1].
@@ -903,7 +944,6 @@ const PhotoSDK = () => {
           onPress={photoTextConfigurationExample}
           title={'Open Photo Editor For Text Example'}
         />
-        
       </ScrollView>
     </>
   );

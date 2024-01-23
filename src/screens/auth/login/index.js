@@ -1,17 +1,11 @@
 import {
-  StyleSheet,
   Text,
   View,
-  StatusBar,
   ImageBackground,
-  TextInput,
   TouchableOpacity,
   ToastAndroid,
 } from 'react-native';
 import React from 'react';
-
-
-
 import {useState} from 'react';
 import Images from '../../../constants/images';
 import CustomInputField from '../../../components/CustomInputField';

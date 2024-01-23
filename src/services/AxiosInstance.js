@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { store } from './store';
 import { setLoginState, setLogout } from './reducer/AuthSlice';
+import Config from 'react-native-config';
 
 
-const baseURL = 'https://postandshare-content-service-zm5xloquaa-em.a.run.app';
+const baseURL = `${Config.AUTH_URL}`;
 const authAxiosInstance = axios.create({
-  baseURL,
+  // baseURL,
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',

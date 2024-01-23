@@ -14,6 +14,7 @@ import Tutorial from '../screens/tutorials';
 import MyBussinessNavigator from '../screens/mybussiness';
 import BirthdayRemainderNavigator from '../screens/birthday';
 import PhotoSDK from '../screens/sdk';
+import CustomSDK from '../screens/customSDK';
 
 const LeftDrawer = createDrawerNavigator();
 const RightDrawer = createDrawerNavigator();
@@ -161,6 +162,23 @@ const DrawerStack = () => {
         component={PhotoSDK}
         options={{
           title: 'PhotoSDK Trails',
+          drawerActiveBackgroundColor: Colors.PRIMARY,
+          drawerInactiveBackgroundColor: 'transparent',
+          // eslint-disable-next-line react/no-unstable-nested-components
+          drawerIcon: ({focused}) => (
+            <AntDesign
+              name="filetext1"
+              size={24}
+              color={focused ? Colors.white : Colors.text1}
+            />
+          ),
+        }}
+      />
+      <RightDrawer.Screen
+        name="CustomSDK"
+        component={CustomSDK}
+        options={{
+          title: 'CustomSDK',
           drawerActiveBackgroundColor: Colors.PRIMARY,
           drawerInactiveBackgroundColor: 'transparent',
           // eslint-disable-next-line react/no-unstable-nested-components
