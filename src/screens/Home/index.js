@@ -10,7 +10,7 @@ import {
 import React from 'react';
 import styles from './style';
 import DashboardTopHeader from '../../components/DashboardTopHeader';
-import Images, {uploadedImages} from '../../constants/Images';
+import Images, {uploadedImages} from '../../constants/images';
 import Sizes from '../../constants/Sizes';
 import Colors from '../../constants/Colors';
 import AntDesign from 'react-native-vector-icons/AntDesign';

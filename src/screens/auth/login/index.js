@@ -13,7 +13,7 @@ import React from 'react';
 
 
 import {useState} from 'react';
-import Images from '../../../constants/Images';
+import Images from '../../../constants/images';
 import CustomInputField from '../../../components/CustomInputField';
 import CustomButton from '../../../components/CustomButton';
 import NavigationScreenName from '../../../constants/NavigationScreenName';

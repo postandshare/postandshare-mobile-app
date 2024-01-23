@@ -1,7 +1,7 @@
 import {FlatList, Image, ScrollView, Text, View} from 'react-native';
 import React from 'react';
 import TopHeader from '../../components/TopHeader';
-import Images from '../../constants/Images';
+import Images from '../../constants/images';
 import styles from './style';
 import CustomCarousel from '../../components/CustomCarousel';
 import BirthRemaiderCard from '../../components/BirthRemaiderCard';

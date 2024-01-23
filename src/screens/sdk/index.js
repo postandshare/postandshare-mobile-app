@@ -19,7 +19,7 @@ import {
   TextAction,
 } from 'react-native-photoeditorsdk';
 import CustomButton from '../../components/CustomButton';
-import Images from '../../constants/Images';
+import Images from '../../constants/images';
 import * as RNFS from 'react-native-fs';
 import {ScrollView} from 'react-native';
 

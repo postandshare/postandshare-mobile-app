@@ -14,7 +14,7 @@ import {scale} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import {setLogout} from '../services/reducer/AuthSlice';
-import Images from '../constants/Images';
+import Images from '../constants/images';
 import Sizes from '../constants/Sizes';
 
 const TopHeader = ({

@@ -3,7 +3,7 @@ import React from 'react';
 import TopHeader from '../../components/TopHeader';
 import styles from './style';
 import MyBussinessCard from '../../components/MyBussinessCard';
-import Images from '../../constants/Images';
+import Images from '../../constants/images';
 import CustomButton from '../../components/CustomButton';
 
 const MyBussiness_Data = [

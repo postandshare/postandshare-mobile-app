@@ -7,7 +7,8 @@ import Animated , {
     withTiming,
 } from 'react-native-reanimated';
 import styles from './style';
-import Images from '../../constants/Images';
+import Images from '../../constants/images';
+
 
 const Splash = () => {
   const Imagescale = useSharedValue(0);

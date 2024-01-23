@@ -9,7 +9,7 @@ import React from 'react';
 import styles from './style';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-import Images from '../../constants/Images';
+import Images from '../../constants/images';
 import NavigationScreenName from '../../constants/NavigationScreenName';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LocalStorageKey from '../../constants/LocalStorageKey';

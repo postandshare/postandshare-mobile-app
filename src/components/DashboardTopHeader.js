@@ -1,7 +1,7 @@
 import {ImageBackground, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import Sizes from '../constants/Sizes';
-import Images from '../constants/Images';
+import Images from '../constants/images';
 import { scale } from 'react-native-size-matters';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';

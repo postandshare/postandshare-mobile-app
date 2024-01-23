@@ -7,7 +7,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import NavigationScreenName from '../constants/NavigationScreenName';
 import Sizes from '../constants/Sizes';
 import Home from '../screens/Home';
-import Images from '../constants/Images';
+import Images from '../constants/images';
 import Video from '../screens/Video';
 import Add from '../screens/Add';
 import Custom from '../screens/Custom';

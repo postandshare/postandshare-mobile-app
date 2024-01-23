@@ -2,7 +2,7 @@ import {Dimensions, ImageBackground, StyleSheet, View} from 'react-native';
 import React from 'react';
 import Carousel from 'react-native-reanimated-carousel';
 import Sizes from '../constants/Sizes';
-import {uploadedImages} from '../constants/Images';
+import {uploadedImages} from '../constants/images';
 
 const width = Dimensions.get('window').width;
 const CustomCarousel = () => {

@@ -11,7 +11,7 @@ import NavigationScreenName from '../constants/NavigationScreenName';
 // import {setLogout} from '../services/reducers/AuthReducer';
 import {scale} from 'react-native-size-matters';
 import Colors from '../constants/Colors';
-import Images from '../constants/Images';
+import Images from '../constants/images';
 
 const Item = ({icon, text, path, onPress = () => {}}) => (
   <TouchableOpacity style={styles.item_root} onPress={onPress}>
