@@ -11,11 +11,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginHorizontal: Sizes.wp('2%'),
-    marginVertical: Sizes.hp('5%'),
+    marginVertical: Sizes.hp('3%'),
   },
   box: {
-    height: Sizes.hp('12%'),
-    width: Sizes.wp('25%'),
+    height: Sizes.hp('10%'),
+    width: Sizes.wp('20%'),
     borderRadius: 10,
     borderWidth: 1,
     justifyContent: 'center',
@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: Sizes.hp('12%'),
     width: Sizes.wp('25%'),
+    alignItems: 'center',
   },
   navigation_box: {
     width: Sizes.wp('94%'),
@@ -47,6 +48,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#3D398915',
     borderColor: '#3D398930',
+    marginVertical: 5,
   },
   navigation_box_text: {
     fontSize: 16,

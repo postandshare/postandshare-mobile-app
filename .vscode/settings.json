@@ -13,5 +13,6 @@
     "markdown",
     "react-native"
   ],
-  "eslint.lintTask.enable": true
+  "eslint.lintTask.enable": true,
+  "java.compile.nullAnalysis.mode": "disabled"
 }

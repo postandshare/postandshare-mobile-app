@@ -15,7 +15,6 @@ const BirthdayRemainderNavigator = () => {
         headerShown: false,
       }}>
       <Stack.Screen name="BirthdayRemainder" component={BirthdayRemainder} />
-
       <Stack.Screen name="BirthdayRemainderDetail" component={BirthdayRemainderDetail} />
       <Stack.Screen name="RemainderSetting" component={RemainderSetting} />
       <Stack.Screen name="AddRemainder" component={AddRemainder} />

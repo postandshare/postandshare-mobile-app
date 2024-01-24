@@ -111,7 +111,25 @@ const CustomSDK = () => {
     const configuration = {
       // For this example only the sticker, text, and brush tool are enabled.
       // tools: [Tool.STICKER, Tool.TEXT, Tool.BRUSH],
+      singleToolMode: true,
       tools: [Tool.STICKER],
+
+      theme: 'light',
+      custom: {
+        // Provide all available themes.
+        themes: {
+          dark: {
+            toolbarBackground: '#1c1c1c',
+            menuBackground: '#1c1c1c',
+            background: '#121212',
+          },
+          light: {
+            toolbarBackground: Colors.PRIMARY,
+            menuBackground: '#f7f7f7',
+            background: '#ebebeb',
+          },
+        },
+      },
 
       // For this example only stickers suitable for annotations are enabled.
       sticker: {

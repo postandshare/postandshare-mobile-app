@@ -13,6 +13,9 @@ import LocalStorageKey from '../constants/LocalStorageKey';
 import {setOnBoarding} from '../services/reducer/AuthSlice';
 import OnBoarding from '../screens/onBoarding';
 import BottomTab from './BottomTab';
+import ProfileNavigator from '../screens/profile/index';
+
+
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -61,7 +64,16 @@ const Routes = () => {
               component={OnBoarding}
             />
           ) : login_Data ? (
-            <Stack.Screen name={NavigationScreenName.DRWAER_NAVIGATOR} component={DrawerStack} />
+            <>
+              <Stack.Screen
+                name={NavigationScreenName.DRWAER_NAVIGATOR}
+                component={DrawerStack}
+              />
+              <Stack.Screen
+                name="ProfileNavigator"
+                component={ProfileNavigator}
+              />
+            </>
           ) : (
             <>
               <Stack.Screen

@@ -15,6 +15,7 @@ import MyBussinessNavigator from '../screens/mybussiness';
 import BirthdayRemainderNavigator from '../screens/birthday';
 import PhotoSDK from '../screens/sdk';
 import CustomSDK from '../screens/customSDK';
+import LanguageSelection from '../screens/auth/languageSelect';
 
 const LeftDrawer = createDrawerNavigator();
 const RightDrawer = createDrawerNavigator();
@@ -179,6 +180,23 @@ const DrawerStack = () => {
         component={CustomSDK}
         options={{
           title: 'CustomSDK',
+          drawerActiveBackgroundColor: Colors.PRIMARY,
+          drawerInactiveBackgroundColor: 'transparent',
+          // eslint-disable-next-line react/no-unstable-nested-components
+          drawerIcon: ({focused}) => (
+            <AntDesign
+              name="filetext1"
+              size={24}
+              color={focused ? Colors.white : Colors.text1}
+            />
+          ),
+        }}
+      />
+      <RightDrawer.Screen
+        name="Language Selection"
+        component={LanguageSelection}
+        options={{
+          title: 'Language Selection',
           drawerActiveBackgroundColor: Colors.PRIMARY,
           drawerInactiveBackgroundColor: 'transparent',
           // eslint-disable-next-line react/no-unstable-nested-components

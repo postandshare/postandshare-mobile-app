@@ -25,7 +25,7 @@ const Home = ({navigation}) => {
   };
   const onPressNotification = () => {};
   const onPresProfile = () => {
-    //navigation.getParent('rightDrawer').openDrawer();
+    navigation.navigate('ProfileNavigator');
   };
   return (
     <>
@@ -36,11 +36,6 @@ const Home = ({navigation}) => {
       />
       <ScrollView nestedScrollEnabled>
         <View style={styles.root}>
-          {/* carousel for the photos */}
-          <View style={{ marginVertical: 10, padding: 5 }}>
-            <CustomCarousel width={'98%'}/>
-          </View>
-         
           {/* card for the  photo and evnet and wallpaper */}
           <View style={styles.box_card_wrapper}>
             {/* box for the photos and video */}
@@ -50,8 +45,9 @@ const Home = ({navigation}) => {
                   styles.box,
                   {backgroundColor: '#FFB33920', borderColor: '#FFB339'},
                 ]}
-                onPress={() => navigation.navigate(NavigationScreenName.PHOTOS_STATUS)}
-              >
+                onPress={() =>
+                  navigation.navigate(NavigationScreenName.PHOTOS_STATUS)
+                }>
                 <Image
                   source={Images.photo_video_icon}
                   style={styles.box_image}
@@ -69,8 +65,9 @@ const Home = ({navigation}) => {
                   styles.box,
                   {backgroundColor: '#20B2FB20', borderColor: '#20B2FB'},
                 ]}
-                onPress={() => navigation.navigate(NavigationScreenName.EVENTS)}
-              >
+                onPress={() =>
+                  navigation.navigate(NavigationScreenName.EVENTS)
+                }>
                 <Image
                   source={Images.remainder_icon}
                   style={styles.box_image}
@@ -88,8 +85,9 @@ const Home = ({navigation}) => {
                   styles.box,
                   {backgroundColor: '#D6363520', borderColor: '#D63635'},
                 ]}
-                onPress={() => navigation.navigate(NavigationScreenName.WALLPAPER)}
-              >
+                onPress={() =>
+                  navigation.navigate(NavigationScreenName.WALLPAPER)
+                }>
                 <Image
                   source={Images.wallpaper_icon}
                   style={styles.box_image}
@@ -99,6 +97,13 @@ const Home = ({navigation}) => {
                 <Text style={styles.box_tittle}>Wallpaper</Text>
               </View>
             </View>
+          </View>
+          {/* carousel for the photos */}
+          <Text style={{fontSize: 18, fontWeight: 'bold', color: Colors.TEXT1}}>
+            Trending
+          </Text>
+          <View style={{padding: 5}}>
+            <CustomCarousel width={'98%'} />
           </View>
 
           {/* here carousel for the add offer details whenever there is add offer docid is setup*/}
@@ -147,7 +152,9 @@ const Home = ({navigation}) => {
               renderItem={({item}) => (
                 <View style={styles.uploadpic_container_image_view}>
                   <View style={styles.uploadpic_container_dateview}>
-                    <Text style={styles.uploadpic_container_date}>{moment().format("MMM Do")}</Text>
+                    <Text style={styles.uploadpic_container_date}>
+                      {moment().format('MMM Do')}
+                    </Text>
                   </View>
                   <Image
                     source={item?.pic}
