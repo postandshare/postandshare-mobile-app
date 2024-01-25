@@ -17,6 +17,7 @@ import ProfileNavigator from '../screens/profile/index';
 
 
 
+
 const Stack = createStackNavigator();
 const Routes = () => {
   const [state, setState] = useState(true);
@@ -73,6 +74,7 @@ const Routes = () => {
                 name="ProfileNavigator"
                 component={ProfileNavigator}
               />
+              
             </>
           ) : (
             <>

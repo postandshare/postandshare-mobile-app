@@ -1,18 +1,73 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import TopHeader from '../components/TopHeader'
+import {Dimensions, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import TopHeader from '../components/TopHeader';
+import DragDrop from '../components/DragDrop';
 
 const Add = () => {
+  const [dropInThePit, setDropInThePit] = React.useState(false);  
+  const drag = (x, y) => {
+    console.log('Dragging', x, y);
+  };
+  const drop = (x, y) => {
+    if(y > Dimensions.get('screen').height - 150){
+      console.log('Drop in the pit');
+    }
+    console.log('Dropping', x, y);
+  };
   return (
     <>
-      <TopHeader titile={"ADD PHOTOS"}/>
-      <View>
-        <Text>hi i am Add screen</Text>
-      </View>
+      <TopHeader titile={'ADD PHOTOS'} />
+      <SafeAreaView style={styles.screen}>
+        <DragDrop
+          onDrag={drag}
+          onDrop={drop}
+        >
+          <View style={styles.balls} />
+        </DragDrop>
+        <DragDrop
+          onDrag={drag}
+          onDrop={drop}
+        >
+
+        <Text>Hi I am Alok Rawat</Text>
+        </DragDrop>
+        <View style={styles.pit}>
+          <Text style={styles.text}>pit</Text>
+        </View>
+      </SafeAreaView>
     </>
-  )
-}
+  );
+};
 
-export default Add
+export default Add;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  pit: {
+    zIndex: 1,
+    position: 'absolute',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    bottom: 0,
+    width: '100%',
+    height: 100,
+    backgroundColor: 'black',
+  },
+  balls: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: 'blue',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    color: 'white',
+    fontSize: 20,
+  },
+});

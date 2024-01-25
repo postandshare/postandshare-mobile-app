@@ -208,7 +208,7 @@ const CustomSDK = () => {
                 {...whatsappPanResponder.panHandlers}>
                 +918957339512
               </Animated.Text>
-              {/* ...existing code... */}
+
             </ImageBackground>
           </View>
         ) : (
