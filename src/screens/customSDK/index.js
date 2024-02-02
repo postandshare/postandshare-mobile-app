@@ -1,4 +1,6 @@
 import {
+  Dimensions,
+  Image,
   ImageBackground,
   PermissionsAndroid,
   ScrollView,
@@ -8,7 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import styles from './style';
 import TopHeader from '../../components/TopHeader';
 import Colors from '../../constants/Colors';
@@ -25,6 +27,10 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import Images from '../../constants/images';
 import {PESDK, Tool} from 'react-native-photoeditorsdk';
 import {PanResponder, Animated} from 'react-native';
+import DragDrop from '../../components/DragDrop';
+import {TextInput} from 'react-native-paper';
+import ViewShot from 'react-native-view-shot';
+import RNFS from 'react-native-fs';
 
 const CustomSDK = () => {
   const [picUrl, setPicUrl] = React.useState('');
@@ -34,6 +40,19 @@ const CustomSDK = () => {
   const [mail, setMail] = React.useState(false);
   const [facebookPosition, setFacebookPosition] = useState({x: 0, y: 0});
   const [whatsappPosition, setWhatsappPosition] = useState({x: 0, y: 0});
+  const [text, setText] = useState('');
+  const [showFrame, setFrame] = useState(false);
+  const [showFrame1, setShowFrame1] = useState(false);
+  const [showFrame2, setShowFrame2] = useState(false);
+  const [state, setState] = useState({
+    location: false,
+    logo: false,
+    mobile: false,
+    email: false,
+    whatsApp: false,
+    text: false,
+  });
+  const viewShotRef = useRef();
   const facebookPanResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderMove: (_, gesture) => {
@@ -95,6 +114,14 @@ const CustomSDK = () => {
         mediaType: 'photo',
       });
       console.log(image.assets[0].uri);
+      setState(prev => ({
+        ...prev,
+        location: true,
+        mobile: true,
+        email: true,
+        whatsApp: true,
+        logo: true,
+      }));
       setPicUrl(image.assets[0].uri);
       // uploadePhoto(image.assets[0].uri, image.assets[0].type);
     } catch (error) {
@@ -166,6 +193,32 @@ const CustomSDK = () => {
     }
   };
 
+  const drag = (x, y) => {
+    console.log('Dragging', x, y);
+  };
+  const drop = (x, y) => {
+    if (y > Dimensions.get('screen').height - 150) {
+      console.log('Drop in the pit');
+    }
+    console.log('Dropping', x, y);
+  };
+
+  const onCapture = async () => {
+    const uri = await viewShotRef.current.capture();
+    console.log('Image URI:', uri);
+    setPicUrl(uri);
+    const path = `${RNFS.DocumentDirectoryPath}/myImage.jpg`;
+
+    // Convert the image uri to base64
+    const imageBase64 = await RNFS.readFile(uri, 'base64');
+
+    // Write the image file
+    await RNFS.writeFile(path, imageBase64, 'base64');
+
+    console.log('Image saved to', path);
+    // Now you can use the uri to display the image or save it to the device
+  };
+
   return (
     <>
       <TopHeader titile={'Custom SDK'} />
@@ -174,43 +227,103 @@ const CustomSDK = () => {
         showsVerticalScrollIndicator={false}>
         {/* choose image area */}
         {picUrl ? (
-          <View style={styles.chooseImageContainer}>
-            <ImageBackground
-              source={{uri: picUrl}}
-              resizeMode="cover"
-              style={{
-                height: '100%',
-                width: '100%',
-                justifyContent: 'center',
-              }}>
-              <Animated.Text
-                style={[
-                  styles.facebook,
-                  {
-                    position: 'absolute',
-                    left: facebookPosition.x,
-                    top: facebookPosition.y,
-                  },
-                ]}
-                {...facebookPanResponder.panHandlers}>
-                @facebook
-              </Animated.Text>
-              <Animated.Text
-                style={[
-                  styles.whatsapp,
-                  {
-                    position: 'absolute',
-                    color: 'red',
-                    left: whatsappPosition.x,
-                    top: whatsappPosition.y,
-                  },
-                ]}
-                {...whatsappPanResponder.panHandlers}>
-                +918957339512
-              </Animated.Text>
+          <ViewShot ref={viewShotRef} options={{format: 'jpg', quality: 0.9}}>
+            <View style={styles.chooseImageContainer}>
+              <ImageBackground
+                source={{uri: picUrl}}
+                resizeMode="cover"
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  justifyContent: 'center',
+                }}>
+                {state?.logo ? (
+                  <DragDrop onDrag={drag} onDrop={drop}>
+                    <Image
+                      source={Images.add_birthday_icon}
+                      style={{
+                        height: 50,
+                        width: 50,
 
-            </ImageBackground>
-          </View>
+                        left: 50,
+                      }}
+                    />
+                  </DragDrop>
+                ) : null}
+                {state?.mobile ? (
+                  <DragDrop onDrag={drag} onDrop={drop}>
+                    <Text
+                      style={{color: 'red', fontSize: 18, fontWeight: '700', position: 'absolute'}}>
+                      9876543210
+                    </Text>
+                  </DragDrop>
+                ) : null}
+                {state?.whatsApp ? (
+                  <DragDrop onDrag={drag} onDrop={drop}>
+                    <Text
+                      style={{color: 'red', fontSize: 18, fontWeight: '700'}}>
+                      8957339512
+                    </Text>
+                  </DragDrop>
+                ) : null}
+                {state?.email ? (
+                  <DragDrop onDrag={drag} onDrop={drop}>
+                    <Text
+                      style={{
+                        color: 'red',
+                        fontSize: 18,
+                        fontWeight: '700',
+                        position: 'absolute',
+                      }}>
+                      postandshare@gamilc.com
+                    </Text>
+                  </DragDrop>
+                ) : null}
+                {state?.location ? (
+                  <DragDrop onDrag={drag} onDrop={drop}>
+                    <Text
+                      style={{
+                        color: 'red',
+                        fontSize: 18,
+                        fontWeight: '700',
+                        zIndex: 1,
+                      }}>
+                      123, xyz street, abc city
+                    </Text>
+                  </DragDrop>
+                ) : null}
+                {showFrame ? (
+
+                  <Image
+                    source={Images.frame}
+                    style={{
+                      zIndex: 1,
+                      transform: [{rotate: '90deg'}],
+                    }}
+                  />
+                ) : null}
+                {showFrame1 ? (
+                  <Image
+                    source={Images.frame_1}
+                    style={{
+                      height: '100%',
+                      width: '100%',
+                    }}
+                  />
+                ) : null}
+                {showFrame2 ? (
+                  <ImageBackground
+                    source={Images.frame_2}
+                    style={{
+                      height: '100%',
+                      width: '100%',
+                      top: -20,
+                    }}
+                  />
+                ) : null}
+              </ImageBackground>
+            </View>
+          </ViewShot>
         ) : (
           <TouchableOpacity
             style={styles.chooseImageContainer}
@@ -227,13 +340,20 @@ const CustomSDK = () => {
           showsHorizontalScrollIndicator={false}>
           <TouchableOpacity
             style={styles.additionalDetails}
-            onPress={photoStickerConfigurationExample}>
+            onPress={() =>
+              setState(prev => ({...prev, location: !state?.location}))
+            }>
             <Entypo name="location-pin" size={30} color={Colors.white} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.additionalDetails}>
             <Text
               style={[styles.additionalDetailsText, {fontStyle: 'italic'}]}
-              onPress={photoAnnotationExample}>
+              onPress={() =>
+                setState(prev => ({
+                  ...prev,
+                  logo: !state?.logo,
+                }))
+              }>
               LOGO
             </Text>
           </TouchableOpacity>
@@ -242,15 +362,21 @@ const CustomSDK = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.additionalDetails}
-            onPress={openPhotoFromCameraRollExample}>
+            onPress={() =>
+              setState(prev => ({...prev, mobile: !state?.mobile}))
+            }>
             <AntDesign name="mobile1" size={30} color={Colors.white} />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.additionalDetails}
-            onPress={() => setWhatsApp(!whatsApp)}>
+            onPress={() =>
+              setState(prev => ({...prev, whatsApp: !state?.whatsApp}))
+            }>
             <FontAwesome name="whatsapp" size={30} color={Colors.white} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.additionalDetails}>
+          <TouchableOpacity
+            style={styles.additionalDetails}
+            onPress={() => setState(prev => ({...prev, email: !state?.email}))}>
             <AntDesign name="mail" size={30} color={Colors.white} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.additionalDetails}>
@@ -263,15 +389,33 @@ const CustomSDK = () => {
           horizontal
           contentContainerStyle={styles.frameContainer}
           showsHorizontalScrollIndicator={false}>
-          <View style={styles.frame}>
+          <TouchableOpacity
+            style={styles.frame}
+            onPress={() => {
+              setFrame(!showFrame);
+              setShowFrame1(false);
+              setShowFrame2(false);
+            }}>
             <Text style={styles.frameText}>Frame 1</Text>
-          </View>
-          <View style={styles.frame}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.frame}
+            onPress={() => {
+              setFrame(false);
+              setShowFrame1(!showFrame1);
+              setShowFrame2(false);
+            }}>
             <Text style={styles.frameText}>Frame 2</Text>
-          </View>
-          <View style={styles.frame}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.frame}
+            onPress={() => {
+              setFrame(false);
+              setShowFrame1(false);
+              setShowFrame2(!showFrame2);
+            }}>
             <Text style={styles.frameText}>Frame 3</Text>
-          </View>
+          </TouchableOpacity>
           <View style={styles.frame}>
             <Text style={styles.frameText}>Frame 4</Text>
           </View>
@@ -351,48 +495,11 @@ const CustomSDK = () => {
           </View>
         </ScrollView>
 
-        {/* language seection */}
-        {/* <ScrollView
-          horizontal
-          contentContainerStyle={styles.frameContainer}
-          showsHorizontalScrollIndicator={false}>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>English</Text>
-          </View>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>Hindi</Text>
-          </View>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>Spanish</Text>
-          </View>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>French</Text>
-          </View>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>German</Text>
-          </View>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>Chinese</Text>
-          </View>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>Japanese</Text>
-          </View>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>Russian</Text>
-          </View>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>Italian</Text>
-          </View>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>Arabic</Text>
-          </View>
-          </ScrollView>
-         */}
-
         {/* buttons for sae and share */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
+            onPress={onCapture}
             // onPress={() => async () => {
             //   await MediaLibrary.requestPermissionsAsync();
             //   // Then, save the image to the library.
