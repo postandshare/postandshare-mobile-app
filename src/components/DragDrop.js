@@ -61,7 +61,7 @@ const DragDrop = ({children, onDrag, onDrop}) => {
       <PanGestureHandler onGestureEvent={drag}>
         <Animated.View
           style={[
-            {zIndex: 2},
+            {zIndex: 3},
             useAnimatedStyle(() => {
               return {
                 transform: [{translateX: x.value}, {translateY: y.value}],

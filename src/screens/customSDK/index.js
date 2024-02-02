@@ -233,10 +233,13 @@ const CustomSDK = () => {
                 source={{uri: picUrl}}
                 resizeMode="cover"
                 style={{
+                  zIndex: 1,
                   height: '100%',
                   width: '100%',
                   justifyContent: 'center',
                 }}>
+
+                  <View style={{zIndex: 3}}>
                 {state?.logo ? (
                   <DragDrop onDrag={drag} onDrop={drop}>
                     <Image
@@ -286,21 +289,24 @@ const CustomSDK = () => {
                         color: 'red',
                         fontSize: 18,
                         fontWeight: '700',
-                        zIndex: 1,
                       }}>
                       123, xyz street, abc city
                     </Text>
                   </DragDrop>
                 ) : null}
+                </View>
+                
+                  <View style={{zIndex: 2,}}>
                 {showFrame ? (
-
+                
                   <Image
                     source={Images.frame}
                     style={{
-                      zIndex: 1,
+                    
                       transform: [{rotate: '90deg'}],
                     }}
                   />
+                
                 ) : null}
                 {showFrame1 ? (
                   <Image
@@ -321,6 +327,7 @@ const CustomSDK = () => {
                     }}
                   />
                 ) : null}
+                </View>
               </ImageBackground>
             </View>
           </ViewShot>
