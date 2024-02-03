@@ -3,8 +3,8 @@ import {
   Image,
   ImageBackground,
   PermissionsAndroid,
+  Platform,
   ScrollView,
-  Share,
   Text,
   ToastAndroid,
   TouchableOpacity,
@@ -31,16 +31,16 @@ import DragDrop from '../../components/DragDrop';
 import {TextInput} from 'react-native-paper';
 import ViewShot from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
+import Share from 'react-native-share';
+import {
+  useAnimatedGestureHandler,
+  useSharedValue,
+} from 'react-native-reanimated';
 
 const CustomSDK = () => {
   const [picUrl, setPicUrl] = React.useState('');
   const [imageUploading, setImageUploading] = React.useState(false);
-  const [whatsApp, setWhatsApp] = React.useState(false);
-  const [facebook, setFacebook] = React.useState(false);
-  const [mail, setMail] = React.useState(false);
-  const [facebookPosition, setFacebookPosition] = useState({x: 0, y: 0});
-  const [whatsappPosition, setWhatsappPosition] = useState({x: 0, y: 0});
-  const [text, setText] = useState('');
+
   const [showFrame, setFrame] = useState(false);
   const [showFrame1, setShowFrame1] = useState(false);
   const [showFrame2, setShowFrame2] = useState(false);
@@ -53,25 +53,7 @@ const CustomSDK = () => {
     text: false,
   });
   const viewShotRef = useRef();
-  const facebookPanResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderMove: (_, gesture) => {
-      setFacebookPosition({
-        x: gesture.moveX,
-        y: gesture.moveY,
-      });
-    },
-  });
 
-  const whatsappPanResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderMove: (_, gesture) => {
-      setWhatsappPosition({
-        x: gesture.moveX,
-        y: gesture.moveY,
-      });
-    },
-  });
   console.log(picUrl, 'in pic url');
   const uploadePhoto = async (path, mime) => {
     try {
@@ -203,20 +185,64 @@ const CustomSDK = () => {
     console.log('Dropping', x, y);
   };
 
+  async function requestStoragePermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: 'Storage Permission',
+          message: 'This app needs access to your storage to download Photos',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('Storage permission granted');
+      } else {
+        console.log('Storage permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  }
+
   const onCapture = async () => {
-    const uri = await viewShotRef.current.capture();
-    console.log('Image URI:', uri);
-    setPicUrl(uri);
-    const path = `${RNFS.DocumentDirectoryPath}/myImage.jpg`;
+    try {
+      await requestStoragePermission();
+      if (Platform.OS === 'android') {
+        const uri = await viewShotRef.current.capture();
+        console.log('Image URI:', uri);
+        setPicUrl(uri);
+        const imageName = `myImage_${new Date().getTime()}.jpg`;
+        const path = `${RNFS.DownloadDirectoryPath}/${imageName}`;
 
-    // Convert the image uri to base64
-    const imageBase64 = await RNFS.readFile(uri, 'base64');
+        // Convert the image uri to base64
+        const imageBase64 = await RNFS.readFile(uri, 'base64');
 
-    // Write the image file
-    await RNFS.writeFile(path, imageBase64, 'base64');
+        // Write the image file
+        await RNFS.writeFile(path, imageBase64, 'base64');
 
-    console.log('Image saved to', path);
-    // Now you can use the uri to display the image or save it to the device
+        console.log('Image saved to', path);
+        // setPicUrl('');
+      } else {
+        console.log('Storage permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  const shareImage = async () => {
+    const shareOptions = {
+      title: 'Share via',
+      message: 'some message',
+      url: picUrl,
+      social: Share.Social.WHATSAPP,
+    };
+    try {
+      const ShareResponse = await Share.open(shareOptions);
+      console.log(JSON.stringify(ShareResponse));
+    } catch (error) {
+      console.log('Error =>', error);
+    }
   };
 
   return (
@@ -238,95 +264,101 @@ const CustomSDK = () => {
                   width: '100%',
                   justifyContent: 'center',
                 }}>
+                <View style={{zIndex: 3}}>
+                  {state?.logo ? (
+                    <DragDrop onDrag={drag} onDrop={drop}>
+                      <Image
+                        source={Images.akSchoolIcon}
+                        style={{
+                          height: 50,
+                          width: 50,
+                          // left: 50,
+                        }}
+                      />
+                    </DragDrop>
+                  ) : null}
+                  {state?.mobile ? (
+                    <DragDrop onDrag={drag} onDrop={drop}>
+                      <Text
+                        style={{
+                          color: 'red',
+                          fontSize: 18,
+                          fontWeight: '700',
+                          position: 'absolute',
+                        }}>
+                        9876543210
+                      </Text>
+                    </DragDrop>
+                  ) : null}
+                  {state?.whatsApp ? (
+                    <DragDrop onDrag={drag} onDrop={drop}>
+                      <Text
+                        style={{
+                          color: 'red',
+                          fontSize: 18,
+                          fontWeight: '700',
+                          position: 'absolute',
+                        }}>
+                        8957339512
+                      </Text>
+                    </DragDrop>
+                  ) : null}
+                  {state?.email ? (
+                    <DragDrop onDrag={drag} onDrop={drop}>
+                      <Text
+                        style={{
+                          color: 'red',
+                          fontSize: 18,
+                          fontWeight: '700',
+                          position: 'absolute',
+                        }}>
+                        postandshare@gamilc.com
+                      </Text>
+                    </DragDrop>
+                  ) : null}
+                  {state?.location ? (
+                    <DragDrop onDrag={drag} onDrop={drop}>
+                      <Text
+                        style={{
+                          color: 'red',
+                          fontSize: 18,
+                          fontWeight: '700',
+                          position: 'absolute',
+                        }}>
+                        123, xyz street, abc city
+                      </Text>
+                    </DragDrop>
+                  ) : null}
+                </View>
 
-                  <View style={{zIndex: 3}}>
-                {state?.logo ? (
-                  <DragDrop onDrag={drag} onDrop={drop}>
+                <View style={{zIndex: 2}}>
+                  {showFrame ? (
                     <Image
-                      source={Images.add_birthday_icon}
+                      source={Images.frame}
                       style={{
-                        height: 50,
-                        width: 50,
-
-                        left: 50,
+                        transform: [{rotate: '90deg'}],
                       }}
                     />
-                  </DragDrop>
-                ) : null}
-                {state?.mobile ? (
-                  <DragDrop onDrag={drag} onDrop={drop}>
-                    <Text
-                      style={{color: 'red', fontSize: 18, fontWeight: '700', position: 'absolute'}}>
-                      9876543210
-                    </Text>
-                  </DragDrop>
-                ) : null}
-                {state?.whatsApp ? (
-                  <DragDrop onDrag={drag} onDrop={drop}>
-                    <Text
-                      style={{color: 'red', fontSize: 18, fontWeight: '700'}}>
-                      8957339512
-                    </Text>
-                  </DragDrop>
-                ) : null}
-                {state?.email ? (
-                  <DragDrop onDrag={drag} onDrop={drop}>
-                    <Text
+                  ) : null}
+                  {showFrame1 ? (
+                    <Image
+                      source={Images.frame_1}
                       style={{
-                        color: 'red',
-                        fontSize: 18,
-                        fontWeight: '700',
-                        position: 'absolute',
-                      }}>
-                      postandshare@gamilc.com
-                    </Text>
-                  </DragDrop>
-                ) : null}
-                {state?.location ? (
-                  <DragDrop onDrag={drag} onDrop={drop}>
-                    <Text
+                        height: '100%',
+                        width: '100%',
+                      }}
+                    />
+                  ) : null}
+                  {showFrame2 ? (
+                    <ImageBackground
+                      source={Images.frame_2}
                       style={{
-                        color: 'red',
-                        fontSize: 18,
-                        fontWeight: '700',
-                      }}>
-                      123, xyz street, abc city
-                    </Text>
-                  </DragDrop>
-                ) : null}
-                </View>
-                
-                  <View style={{zIndex: 2,}}>
-                {showFrame ? (
-                
-                  <Image
-                    source={Images.frame}
-                    style={{
-                    
-                      transform: [{rotate: '90deg'}],
-                    }}
-                  />
-                
-                ) : null}
-                {showFrame1 ? (
-                  <Image
-                    source={Images.frame_1}
-                    style={{
-                      height: '100%',
-                      width: '100%',
-                    }}
-                  />
-                ) : null}
-                {showFrame2 ? (
-                  <ImageBackground
-                    source={Images.frame_2}
-                    style={{
-                      height: '100%',
-                      width: '100%',
-                      top: -20,
-                    }}
-                  />
-                ) : null}
+                        height: '100%',
+                        width: '100%',
+                        top: -20,
+                      }}
+                    />
+                  ) : null}
                 </View>
               </ImageBackground>
             </View>
@@ -504,32 +536,13 @@ const CustomSDK = () => {
 
         {/* buttons for sae and share */}
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={onCapture}
-            // onPress={() => async () => {
-            //   await MediaLibrary.requestPermissionsAsync();
-            //   // Then, save the image to the library.
-            //   await MediaLibrary.saveToLibraryAsync(result.image);
-
-            //   // Delete the temporary export file only after the saving process has finished,
-            //   // to be able to access it again in case anything went wrong while uploading
-            //   // the photo.
-            //   return FileSystem.deleteAsync(result.image);
-            // }}
-          >
+          <TouchableOpacity style={styles.button} onPress={onCapture}>
             <Text style={[styles.buttonText, {color: Colors.SECONDRY}]}>
               Save
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() =>
-              Share.share({
-                title: 'Post and Share App',
-                message: 'This is the message',
-                url: picUrl,
-              })
-            }
+            onPress={shareImage}
             style={[styles.button, {backgroundColor: Colors.SECONDRY}]}>
             <Text style={styles.buttonText}>Share</Text>
           </TouchableOpacity>

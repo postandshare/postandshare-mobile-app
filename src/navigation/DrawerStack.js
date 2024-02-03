@@ -18,6 +18,7 @@ import CustomSDK from '../screens/customSDK';
 import LanguageSelection from '../screens/auth/languageSelect';
 import ImageEditor from '../screens/ImageEditor';
 
+
 const LeftDrawer = createDrawerNavigator();
 const RightDrawer = createDrawerNavigator();
 const MainDrawer = () => {
@@ -227,6 +228,7 @@ const DrawerStack = () => {
           ),
         }}
       />
+
     </RightDrawer.Navigator>
   );
 };
