@@ -1,7 +1,9 @@
 import {
   Dimensions,
+  FlatList,
   Image,
   ImageBackground,
+  Keyboard,
   PermissionsAndroid,
   Platform,
   ScrollView,
@@ -19,38 +21,43 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {
-  openPhotoFromCameraRollExample,
-  photoStickerConfigurationExample,
-} from '../sdk';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Images from '../../constants/images';
-import {PESDK, Tool} from 'react-native-photoeditorsdk';
-import {PanResponder, Animated} from 'react-native';
 import DragDrop from '../../components/DragDrop';
-import {TextInput} from 'react-native-paper';
 import ViewShot from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
 import Share from 'react-native-share';
-import {
-  useAnimatedGestureHandler,
-  useSharedValue,
-} from 'react-native-reanimated';
+import {Button, Dialog, Modal, Portal, TextInput} from 'react-native-paper';
+import FontFamily from '../../constants/FontFamily';
+import ColorPicker, {
+  Panel1,
+  Swatches,
+  Preview,
+  OpacitySlider,
+  HueSlider,
+} from 'reanimated-color-picker';
+import { use } from 'i18next';
 
 const CustomSDK = () => {
   const [picUrl, setPicUrl] = React.useState('');
+  const [textColor  , setTextColor] = useState('#fff');
+  const [showModal, setShowModal] = useState(false);
   const [imageUploading, setImageUploading] = React.useState(false);
-
+  const [visible, setVisible] = React.useState(false);
   const [showFrame, setFrame] = useState(false);
   const [showFrame1, setShowFrame1] = useState(false);
   const [showFrame2, setShowFrame2] = useState(false);
+  const [textAlignment, setTextAlignment] = useState('left');
+  const [fontFamily, setFontFamily] = useState('Arial');
+  const [showFontFamily, setShowFontFamily] = useState(false);
   const [state, setState] = useState({
     location: false,
     logo: false,
     mobile: false,
     email: false,
     whatsApp: false,
-    text: false,
+    text: '',
+    showText: false,
   });
   const viewShotRef = useRef();
 
@@ -104,74 +111,12 @@ const CustomSDK = () => {
         whatsApp: true,
         logo: true,
       }));
+      setShowFrame1(true);
       setPicUrl(image.assets[0].uri);
       // uploadePhoto(image.assets[0].uri, image.assets[0].type);
     } catch (error) {
       console.log(error);
       ToastAndroid.show('Something went wrong', ToastAndroid.LONG);
-    }
-  };
-
-  const photoAnnotationExample = async () => {
-    // Add a photo from the assets directory.
-    const photo = picUrl;
-
-    // Create a `Configuration` object.
-    const configuration = {
-      // For this example only the sticker, text, and brush tool are enabled.
-      // tools: [Tool.STICKER, Tool.TEXT, Tool.BRUSH],
-      singleToolMode: true,
-      tools: [Tool.STICKER],
-
-      theme: 'light',
-      custom: {
-        // Provide all available themes.
-        themes: {
-          dark: {
-            toolbarBackground: '#1c1c1c',
-            menuBackground: '#1c1c1c',
-            background: '#121212',
-          },
-          light: {
-            toolbarBackground: Colors.PRIMARY,
-            menuBackground: '#f7f7f7',
-            background: '#ebebeb',
-          },
-        },
-      },
-
-      // For this example only stickers suitable for annotations are enabled.
-      sticker: {
-        categories: [
-          {
-            identifier: 'annotation_stickers',
-            name: 'Annotation',
-            thumbnailURI: Images.bell_icon,
-            items: [
-              {identifier: 'imgly_sticker_shapes_arrow_02'},
-              {identifier: 'imgly_sticker_shapes_arrow_03'},
-              {identifier: 'imgly_sticker_shapes_badge_11'},
-              {identifier: 'imgly_sticker_shapes_badge_12'},
-              {identifier: 'imgly_sticker_shapes_badge_36'},
-            ],
-          },
-        ],
-      },
-    };
-    try {
-      // Open the photo editor and handle the export as well as any occurring errors.
-      const result = await PESDK.openEditor(photo, configuration);
-      console.log(result, 'in result');
-      if (result != null) {
-        // The user exported a new photo successfully and the newly generated photo is located at `result.image`.
-        setPicUrl(result?.image);
-      } else {
-        // The user tapped on the cancel button within the editor.
-        return;
-      }
-    } catch (error) {
-      // There was an error generating the photo.
-      console.log(error);
     }
   };
 
@@ -221,7 +166,15 @@ const CustomSDK = () => {
         await RNFS.writeFile(path, imageBase64, 'base64');
 
         console.log('Image saved to', path);
-        // setPicUrl('');
+        setState(prev => ({
+          ...prev,
+          location: false,
+          mobile: false,
+          email: false,
+          whatsApp: false,
+          logo: false,
+        }));
+        setShowFrame1(false);
       } else {
         console.log('Storage permission denied');
       }
@@ -245,9 +198,182 @@ const CustomSDK = () => {
     }
   };
 
+  const hideDialog = () => setVisible(false);
+  const hideDialogFontFamily = () => setShowFontFamily(false);
+  const onSelectColor = ({hex}) => {
+    // do something with the selected color.
+    console.log(hex);
+    setTextColor(hex);
+  };
   return (
     <>
       <TopHeader titile={'Custom SDK'} />
+
+      {/* dialogue for adding the text on the image */}
+      <Portal>
+        <Dialog dismissable={false} visible={visible} onDismiss={hideDialog}>
+          <Dialog.Title>Add Text</Dialog.Title>
+          <Dialog.Content>
+            <TextInput
+              label="Add Text"
+              value={state?.text}
+              mode="outlined"
+              numberOfLines={3}
+              multiline
+              style={{
+                textAlign: textAlignment,
+              }}
+              onBlur={() => Keyboard.dismiss()}
+              onChangeText={text => setState(prev => ({...prev, text}))}
+            />
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <TouchableOpacity
+                onPress={() => setTextAlignment('left')}
+                style={{
+                  backgroundColor:
+                    textAlignment === 'left' ? Colors.PRIMARY : Colors.white,
+                  borderWidth: 1,
+                  borderColor:
+                    textAlignment === 'left' ? Colors.PRIMARY : Colors.text2,
+                  borderRadius: 5,
+                  width: 30,
+                  alignItems: 'center',
+                  marginVertical: 5,
+                }}>
+                <Feather name="align-left" size={20} color={Colors.text1} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setTextAlignment('center')}
+                style={{
+                  backgroundColor:
+                    textAlignment === 'center' ? Colors.PRIMARY : Colors.white,
+                  borderWidth: 1,
+                  borderColor:
+                    textAlignment === 'center' ? Colors.PRIMARY : Colors.text2,
+                  borderRadius: 5,
+                  width: 30,
+                  alignItems: 'center',
+                  marginVertical: 5,
+                }}>
+                <Feather name="align-center" size={20} color={Colors.text1} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setTextAlignment('right')}
+                style={{
+                  backgroundColor:
+                    textAlignment === 'right' ? Colors.PRIMARY : Colors.white,
+                  borderWidth: 1,
+                  borderColor:
+                    textAlignment === 'right' ? Colors.PRIMARY : Colors.text2,
+                  borderRadius: 5,
+                  width: 30,
+                  alignItems: 'center',
+                  marginVertical: 5,
+                }}>
+                <Feather name="align-right" size={20} color={Colors.text1} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setTextAlignment('justify')}
+                style={{
+                  backgroundColor:
+                    textAlignment === 'justify' ? Colors.PRIMARY : Colors.white,
+                  borderWidth: 1,
+                  borderColor:
+                    textAlignment === 'justify' ? Colors.PRIMARY : Colors.text2,
+                  borderRadius: 5,
+                  width: 30,
+                  alignItems: 'center',
+                  marginVertical: 5,
+                }}>
+                <Feather name="align-justify" size={20} color={Colors.text1} />
+              </TouchableOpacity>
+            </View>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button
+              onPress={() => {
+                setVisible(false);
+              }}>
+              Cancel
+            </Button>
+            <Button
+              onPress={() => {
+                setState(prev => ({...prev, showText: true}));
+                setVisible(false);
+              }}>
+              Ok
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+
+        {/* font family dialogue */}
+        <Dialog visible={showFontFamily} onDismiss={hideDialogFontFamily}>
+          <Dialog.Title>Please Select Font Family</Dialog.Title>
+          <Dialog.Content>
+            <Dialog.ScrollArea>
+              <FlatList
+                data={FontFamily}
+                keyExtractor={item => item}
+                renderItem={({item}) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setFontFamily(item);
+                      setShowFontFamily(false);
+                    }}
+                    style={[
+                      {
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      },
+                    ]}>
+                    <Text
+                      style={[
+                        fontFamily === item ? {color: Colors.PRIMARY} : null,
+                        {fontFamily: item},
+                        styles.item_content,
+                      ]}>
+                      {item}
+                    </Text>
+                    {fontFamily === item && (
+                      <AntDesign
+                        name="check"
+                        size={20}
+                        color={Colors.PRIMARY}
+                      />
+                    )}
+                  </TouchableOpacity>
+                )}
+              />
+            </Dialog.ScrollArea>
+          </Dialog.Content>
+        </Dialog>
+
+        {/* modal for color picker */}
+        <Dialog
+          visible={showModal}
+          animationType="slide"
+          contentContainerStyle={{}}>
+          <Dialog.Title>Choose Color</Dialog.Title>
+          <Dialog.Content style={{alignContent: 'center' , alignItems: 'center'}}>
+            <ColorPicker
+              style={{width: '70%'}}
+              value="red"
+              onComplete={onSelectColor}>
+              <Preview />
+              <Panel1 />
+              <HueSlider />
+              <OpacitySlider />
+              <Swatches />
+            </ColorPicker>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setShowModal(false)}>Done</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+
       <ScrollView
         contentContainerStyle={styles.root}
         showsVerticalScrollIndicator={false}>
@@ -329,6 +455,21 @@ const CustomSDK = () => {
                       </Text>
                     </DragDrop>
                   ) : null}
+                  {state?.text && state?.showText ? (
+                    <DragDrop onDrag={drag} onDrop={drop}>
+                      <Text
+                        style={{
+                          color: textColor,
+                          fontSize: 18,
+                          fontWeight: '700',
+                          position: 'absolute',
+                          textAlign: textAlignment,
+                          fontFamily: fontFamily,
+                        }}>
+                        {state?.text}
+                      </Text>
+                    </DragDrop>
+                  ) : null}
                 </View>
 
                 <View style={{zIndex: 2}}>
@@ -360,6 +501,16 @@ const CustomSDK = () => {
                     />
                   ) : null}
                 </View>
+                <TouchableOpacity
+                  onPress={() => setPicUrl('')}
+                  style={{
+                    zIndex: 4,
+                    top: -10,
+                    right: -15,
+                    position: 'absolute',
+                  }}>
+                  <AntDesign name="closecircleo" size={30} color={'red'} />
+                </TouchableOpacity>
               </ImageBackground>
             </View>
           </ViewShot>
@@ -482,7 +633,9 @@ const CustomSDK = () => {
           horizontal
           contentContainerStyle={styles.frameContainer}
           showsHorizontalScrollIndicator={false}>
-          <TouchableOpacity style={styles.frame}>
+          <TouchableOpacity
+            style={styles.frame}
+            onPress={() => setVisible(true)}>
             <MaterialCommunityIcons
               name="text-recognition"
               size={20}
@@ -498,22 +651,26 @@ const CustomSDK = () => {
             />
             <Text style={styles.frameText}>Sticker</Text>
           </View>
-          <View style={styles.frame}>
+          <TouchableOpacity
+            onPress={() => setShowFontFamily(true)}
+            style={styles.frame}>
             <MaterialCommunityIcons
               name="draw"
               size={30}
               color={Colors.SECONDRY}
             />
-            <Text style={styles.frameText}>Draw</Text>
-          </View>
-          <View style={styles.frame}>
+            <Text style={styles.frameText}>Font Style</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setShowModal(true)}
+            style={styles.frame}>
             <MaterialCommunityIcons
               name="star-four-points-outline"
               size={20}
               color={Colors.SECONDRY}
             />
             <Text style={styles.frameText}>Glow</Text>
-          </View>
+          </TouchableOpacity>
           <View style={styles.frame}>
             <Text style={styles.frameText}>Effect 5</Text>
           </View>

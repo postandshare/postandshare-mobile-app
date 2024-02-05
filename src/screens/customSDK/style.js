@@ -80,7 +80,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignSelf: 'center',
     },
-
+    scroller: {
+       
+    },
+    item_content: {
+        marginVertical: 10,
+        alignItems: 'center',
+        fontSize: 18
+    }
 });
 
 export default styles;

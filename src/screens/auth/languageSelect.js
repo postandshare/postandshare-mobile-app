@@ -11,40 +11,69 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import Images from '../../constants/images';
 import authStyle from './authStyle';
+import Colors from '../../constants/Colors';
 
 const ReginalLanguage = [
-  'English',
-  'हिंदी',
-  'ગુજરાતી',
-  'ਪੰਜਾਬੀ',
-  'বাঙালি',
-  'नेपाली',
-  'मैथिली',
-  'भोजपुरी',
-  'अवधी',
-  'अंगिका',
-  'बगेली',
-  'ब्रजभाषा',
-  'चट्टीसगढ़ी',
-  'गोंडी',
-  'हरियाणवी',
-  'कॉशुर',
-  'कोंकणी',
-  'मागही',
-  'मारवाड़ी',
-  'माराठी',
-  'नागपुरी',
-  'निमाड़ी',
-  'ओड़िया',
-  'पाली',
-  'पंजाबी',
-  'राजस्थानी',
-  'साँई',
+  {
+    _id: 1,
+    name: 'English',
+    language: 'en',
+  },
+  {
+    _id: 2,
+    name: 'Hindi',
+    language: 'hi',
+  },
+  {
+    _id: 3,
+    name: 'Marathi',
+    language: 'mr',
+  },
+  {
+    _id: 4,
+    name: 'Gujarati',
+    language: 'gu',
+  },
+  {
+    _id: 5,
+    name: 'Tamil',
+    language: 'ta',
+  },
+  {
+    _id: 6,
+    name: 'Telugu',
+    language: 'te',
+  },
+  {
+    _id: 7,
+    name: 'Kannada',
+    language: 'kn',
+  },
+  {
+    _id: 8,
+    name: 'Malayalam',
+    language: 'ml',
+  },
+  {
+    _id: 9,
+    name: 'Bengali',
+    language: 'bn',
+  },
+  {
+    _id: 10,
+    name: 'Punjabi',
+    language: 'pa',
+  },
+  {
+    _id: 11,
+    name: 'Odia',
+    language: 'or',
+  },
 ];
 
-const AppLanguage = ['English', 'हिंदी'];
-
 const LanguageSelection = ({navigation}) => {
+  const [selectReginalLan, setRiginalLan] = useState('en');
+  const [loading, setLoading] = useState(false);
   return (
     <>
       {/* upper card */}
@@ -58,42 +87,62 @@ const LanguageSelection = ({navigation}) => {
         </Text>
       </ImageBackground>
 
-      <ScrollView contentContainerStyle={{flexGrow: 1}} nestedScrollEnabled>
-        <Pressable style={{flex: 1}}>
+      {/* flatlist for rendering the regional language */}
+      <FlatList
+        numColumns={2}
+        contentContainerStyle={{justifyContent: 'space-between', marginHorizontal: 10}}
+    
+        data={ReginalLanguage}
+        keyExtractor={(item) => item?._id}
+        ListHeaderComponent={
           <View style={authStyle.middleContainer}>
-            <Text style={authStyle.input}>App Language</Text>
-            {AppLanguage.map((item, index) => (
-              <View style={authStyle.input} key={index}>
-                <Text style={authStyle.input}>{item}</Text>
-              </View>
-            ))}
-            <Text style={authStyle.input}>Regional Language</Text>
-            <View>
-              {/* flatlist for rendering the regional language */}
-              <FlatList
-                numColumns={2}
-                contentContainerStyle={{justifyContent: 'space-between'}}
-                data={ReginalLanguage}
-                renderItem={({item}) => (
-                  <View style={{flex: 1 , }}>
-                    <Text style={authStyle.input}>{item}</Text>
-                  </View>
-                )}
-                keyExtractor={index => index._id}
-                extraData={ReginalLanguage}
-              />
-            </View>
+            <Text style={[authStyle.input, {fontSize: 20, fontWeight: '500'}]}>
+              Regional Language:-
+            </Text>
           </View>
-          <View style={authStyle.submitBtnContainer}>
-            <TouchableOpacity
-              style={authStyle.submitBtn}
-              // onPress={() => handleSubmit()}
-            >
-              <Text style={authStyle.submitBtnTxt}>Continue</Text>
-            </TouchableOpacity>
+        }
+        renderItem={({item}) => (
+          <TouchableOpacity
+            onPress={() => setRiginalLan(item?.language)}
+            style={{flex: 1}}>
+            <Text
+              style={
+                selectReginalLan === item?.language
+                  ? authStyle.selectedLanguage
+                  : authStyle.unSelectedLanguage
+              }>
+              {item?.name}
+            </Text>
+          </TouchableOpacity>
+        )}
+        ListFooterComponent={
+          <View style={authStyle.bottom_content_root}>
+            <Pressable
+              style={({pressed}) => [
+                {
+                  backgroundColor: pressed
+                    ? Colors.PRIMARY
+                    : Colors.SECONDRY,
+                  padding: 10,
+                  borderRadius: 5,
+                  alignItems: 'center',
+                },
+                
+              ]}
+              onPress={() => {
+                setLoading(true);
+                setTimeout(() => {
+                  setLoading(false);
+                  // navigation.navigate('Login');
+                }, 1000);
+              }}>
+              <Text style={authStyle.signin_text}>
+                {loading ? 'Please wait...' : 'Continue'}
+              </Text>
+            </Pressable>
           </View>
-        </Pressable>
-      </ScrollView>
+        }
+      />
     </>
   );
 };

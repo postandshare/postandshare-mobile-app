@@ -22,5 +22,11 @@ export default {
   PHOTOS_STATUS: 'PhotoStatus',
   EVENTS: 'Events',
   WALLPAPER: 'Wallpaper',
+  TERM_AND_CONDITION: 'TermAndCondtion',
   BIRTHDAY_REMAINDER_NAVIGATOR: 'BirthdayRemainderNavigator',
+  MY_BUSSINESS: 'MyBussinessNavigator',
+  LANGUAGE_SELECTION: 'LanguageSelection',
+  MY_POST: 'MyPost',
+  TUTORIALS: 'Tutorial',
+  Privacy_Policy: 'Privacy',
 };

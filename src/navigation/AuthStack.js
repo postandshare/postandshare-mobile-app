@@ -3,6 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import NavigationScreenName from '../constants/NavigationScreenName';
 import Login from '../screens/auth/login';
 import VerifyOTP from '../screens/auth/otp';
+import LanguageSelection from '../screens/auth/languageSelect';
 
 
 
@@ -21,6 +22,7 @@ const AuthStack = () => {
       /> */}
       {/* <Stack.Screen name={NavigationScreenName.SIGNUP} component={Signup} /> */}
       <Stack.Screen name={NavigationScreenName.VERIFY_OTP} component={VerifyOTP} />
+      <Stack.Screen name={NavigationScreenName.LANGUAGE_SELECTION} component={LanguageSelection}/>
     </Stack.Navigator>
   );
 };

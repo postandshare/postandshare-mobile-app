@@ -82,12 +82,13 @@ const authStyle = StyleSheet.create({
     fontSize: scale(13),
     fontWeight: '600',
   },
-  middleContainer: {marginVertical: 30, marginHorizontal: 16},
+  middleContainer: {marginVertical: 10},
   input: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 16,
+    alignContent: 'center', 
   },
   otpBoxTxt: {
     fontSize: 16,
@@ -199,6 +200,24 @@ const authStyle = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
+  selectedLanguage: {
+    color: Colors.PRIMARY,
+    flex: 1,
+    fontSize: 18,
+    fontWeight: '500',
+    fontFamily: 'Poppins-Regular',
+    margin: 5,
+  },
+  unSelectedLanguage: {
+    color: Colors.text1,
+    flex: 1,
+    margin: 5,
+    fontSize: 15,
+    fontWeight: '300',
+    
+  },
+  
+
 });
 
 export default authStyle;

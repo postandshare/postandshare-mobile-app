@@ -57,15 +57,12 @@ const TutorialCardNavData = [
 const Tutorial = () => {
   return (
     <>
-      <TopHeader
-        titile="Tutorials"
-        path={NavigationScreenName.BOTOOM_TAB_NAVIGATOR}
-      />
+      <TopHeader titile="Tutorials" />
       <ScrollView style={styles.root}>
         <View style={styles.container}>
-          {TutorialCardNavData?.map((item, idx) =>
+          {TutorialCardNavData?.map((item, idx) => (
             <TutorailNavCard key={idx} item={item} />
-          )}
+          ))}
         </View>
       </ScrollView>
     </>

@@ -20,8 +20,8 @@ import CustomCarousel from '../../components/CustomCarousel';
 
 const Home = ({navigation}) => {
   const onPressMenu = () => {
-    // navigation.openDrawer();
-    //navigation.getParent('leftDrawer').openDrawer();
+    navigation.openDrawer();
+    navigation.getParent('leftDrawer').openDrawer();
   };
   const onPressNotification = () => {};
   const onPresProfile = () => {

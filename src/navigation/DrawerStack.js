@@ -16,8 +16,7 @@ import BirthdayRemainderNavigator from '../screens/birthday';
 import PhotoSDK from '../screens/sdk';
 import CustomSDK from '../screens/customSDK';
 import LanguageSelection from '../screens/auth/languageSelect';
-import ImageEditor from '../screens/ImageEditor';
-
+import CustomDrawerLeft from '../components/CustomDrawerLeft';
 
 const LeftDrawer = createDrawerNavigator();
 const RightDrawer = createDrawerNavigator();
@@ -28,27 +27,29 @@ const MainDrawer = () => {
       screenOptions={{
         headerShown: false,
         drawerPosition: 'left',
-        drawerContentStyle: {},
+        drawerContentStyle: {
+          backgroundColor: '#f5f5ff',
+        },
       }}
-      //   drawerContent={({navigation}) => (
-      //     <CustomDrawer navigation={navigation} />
-      //   )}
-    >
+      drawerContent={({navigation}) => (
+        <CustomDrawerLeft navigation={navigation} />
+      )}>
       <LeftDrawer.Screen
-        name={NavigationScreenName.BOTOOM_TAB_NAVIGATOR}
+        name="DashBoard"
         component={BottomTab}
-      />
-      <LeftDrawer.Screen
-        name={NavigationScreenName.PHOTOS_STATUS}
-        component={PhotoStatus}
-      />
-      <LeftDrawer.Screen
-        name={NavigationScreenName.EVENTS}
-        component={Events}
-      />
-      <LeftDrawer.Screen
-        name={NavigationScreenName.WALLPAPER}
-        component={Wallpaper}
+        options={{
+          title: 'Dashboard',
+          drawerActiveBackgroundColor: Colors.PRIMARY,
+          drawerInactiveBackgroundColor: 'transparent',
+          // eslint-disable-next-line react/no-unstable-nested-components
+          drawerIcon: ({focused}) => (
+            <AntDesign
+              name="home"
+              size={24}
+              color={focused ? Colors.white : Colors.text1}
+            />
+          ),
+        }}
       />
     </LeftDrawer.Navigator>
   );
@@ -58,7 +59,6 @@ const DrawerStack = () => {
   return (
     <RightDrawer.Navigator
       id="rightDrawer"
-      s
       screenOptions={{
         headerShown: false,
         drawerPosition: 'right',
@@ -75,74 +75,7 @@ const DrawerStack = () => {
           drawerInactiveBackgroundColor: 'transparent',
         }}
       />
-      <RightDrawer.Screen
-        name="Term & Conditions"
-        component={TermAndCondtion}
-        options={{
-          title: 'Term & Conditions',
-          drawerActiveBackgroundColor: Colors.PRIMARY,
-          drawerInactiveBackgroundColor: 'transparent',
-          // eslint-disable-next-line react/no-unstable-nested-components
-          drawerIcon: ({focused}) => (
-            <AntDesign
-              name="filetext1"
-              size={24}
-              color={focused ? Colors.white : Colors.text1}
-            />
-          ),
-        }}
-      />
-      <RightDrawer.Screen
-        name="Privacy Policy"
-        component={Privacy}
-        options={{
-          title: 'Privacy Policy',
-          drawerActiveBackgroundColor: Colors.PRIMARY,
-          drawerInactiveBackgroundColor: 'transparent',
-          // eslint-disable-next-line react/no-unstable-nested-components
-          drawerIcon: ({focused}) => (
-            <AntDesign
-              name="filetext1"
-              size={24}
-              color={focused ? Colors.white : Colors.text1}
-            />
-          ),
-        }}
-      />
-      <RightDrawer.Screen
-        name="Tutorial"
-        component={Tutorial}
-        options={{
-          title: 'Tutorial',
-          drawerActiveBackgroundColor: Colors.PRIMARY,
-          drawerInactiveBackgroundColor: 'transparent',
-          // eslint-disable-next-line react/no-unstable-nested-components
-          drawerIcon: ({focused}) => (
-            <AntDesign
-              name="filetext1"
-              size={24}
-              color={focused ? Colors.white : Colors.text1}
-            />
-          ),
-        }}
-      />
-      <RightDrawer.Screen
-        name="My Bussiness"
-        component={MyBussinessNavigator}
-        options={{
-          title: 'My Bussiness',
-          drawerActiveBackgroundColor: Colors.PRIMARY,
-          drawerInactiveBackgroundColor: 'transparent',
-          // eslint-disable-next-line react/no-unstable-nested-components
-          drawerIcon: ({focused}) => (
-            <AntDesign
-              name="filetext1"
-              size={24}
-              color={focused ? Colors.white : Colors.text1}
-            />
-          ),
-        }}
-      />
+
       <RightDrawer.Screen
         name="Birthday Remainder"
         component={BirthdayRemainderNavigator}
@@ -194,41 +127,6 @@ const DrawerStack = () => {
           ),
         }}
       />
-      <RightDrawer.Screen
-        name="Language Selection"
-        component={LanguageSelection}
-        options={{
-          title: 'Language Selection',
-          drawerActiveBackgroundColor: Colors.PRIMARY,
-          drawerInactiveBackgroundColor: 'transparent',
-          // eslint-disable-next-line react/no-unstable-nested-components
-          drawerIcon: ({focused}) => (
-            <AntDesign
-              name="filetext1"
-              size={24}
-              color={focused ? Colors.white : Colors.text1}
-            />
-          ),
-        }}
-      />
-      <RightDrawer.Screen
-        name="ImageEditor"
-        component={ImageEditor}
-        options={{
-          title: 'ImageEditor',
-          drawerActiveBackgroundColor: Colors.PRIMARY,
-          drawerInactiveBackgroundColor: 'transparent',
-          // eslint-disable-next-line react/no-unstable-nested-components
-          drawerIcon: ({focused}) => (
-            <AntDesign
-              name="filetext1"
-              size={24}
-              color={focused ? Colors.white : Colors.text1}
-            />
-          ),
-        }}
-      />
-
     </RightDrawer.Navigator>
   );
 };

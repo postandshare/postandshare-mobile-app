@@ -14,9 +14,12 @@ import {setOnBoarding} from '../services/reducer/AuthSlice';
 import OnBoarding from '../screens/onBoarding';
 import BottomTab from './BottomTab';
 import ProfileNavigator from '../screens/profile/index';
-
-
-
+import TermAndCondtion from '../screens/term&condition';
+import MyBussinessNavigator from '../screens/mybussiness';
+import MyPost from '../screens/mypost';
+import Tutorial from '../screens/tutorials';
+import Privacy from '../screens/privacy';
+import LanguageSelection from '../screens/auth/languageSelect';
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -74,7 +77,30 @@ const Routes = () => {
                 name="ProfileNavigator"
                 component={ProfileNavigator}
               />
-              
+              <Stack.Screen
+                name={NavigationScreenName.TERM_AND_CONDITION}
+                component={TermAndCondtion}
+              />
+              <Stack.Screen
+                name={NavigationScreenName.MY_BUSSINESS}
+                component={MyBussinessNavigator}
+              />
+              <Stack.Screen
+                name={NavigationScreenName.MY_POST}
+                component={MyPost}
+              />
+              <Stack.Screen
+                name={NavigationScreenName.TUTORIALS}
+                component={Tutorial}
+              />
+              <Stack.Screen
+                name={NavigationScreenName.Privacy_Policy}
+                component={Privacy}
+              />
+              <Stack.Screen
+                name={NavigationScreenName.LANGUAGE_SELECTION}
+                component={LanguageSelection}
+              />
             </>
           ) : (
             <>
