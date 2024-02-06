@@ -4,7 +4,7 @@ import { setLoginState, setLogout } from './reducer/AuthSlice';
 import Config from 'react-native-config';
 
 
-const baseURL = `${Config.AUTH_URL}`;
+const baseURL = 'https://postandshare-content-service-zm5xloquaa-em.a.run.app';
 const authAxiosInstance = axios.create({
   // baseURL,
   timeout: 15000,
