@@ -8,6 +8,11 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {persistor, store} from './src/services/store';
 import Routes from './src/navigation/RootNavigation';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import { Amplify } from 'aws-amplify';
+import aws_exports from './src/aws-exports';
+
+
+Amplify.configure(aws_exports);
 
 export const queryClient = new QueryClient({
   defaultOptions: {

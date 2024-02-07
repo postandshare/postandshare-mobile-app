@@ -1,6 +1,13 @@
-import {Button, StyleSheet, Image as RNImage} from 'react-native';
+import {
+  Button,
+  StyleSheet,
+  Image as RNImage,
+  Text as RNText,
+  PanResponder,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import TopHeader from '../components/TopHeader';
+
 import {
   Canvas,
   Fill,
@@ -10,7 +17,6 @@ import {
   Text,
   useCanvasRef,
 } from '@shopify/react-native-skia';
-
 
 import DragDrop from '../components/DragDrop';
 
@@ -25,7 +31,23 @@ const Custom = () => {
   const [image, setImage] = useState();
   const [capturedImage, setCapturedImage] = useState('');
   const canvasRef = useCanvasRef();
-  const [showText, setShowText] = useState(true);
+  const [imagePosition, setImagePosition] = useState({x: 50, y: 10});
+
+  const panResponder = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onPanResponderMove: (evt, gestureState) => {
+      setImagePosition({
+        x: imagePosition.x + gestureState.dx,
+        y: imagePosition.y + gestureState.dy,
+      });
+    },
+    onPanResponderRelease: (evt, gestureState) => {
+      setImagePosition({
+        x: imagePosition.x + gestureState.dx,
+        y: imagePosition.y + gestureState.dy,
+      });
+    },
+  });
 
   useEffect(() => {
     generateSkiaImage(
@@ -41,26 +63,24 @@ const Custom = () => {
     <>
       <TopHeader titile={'Custom'} />
 
-      <Canvas ref={canvasRef} style={{width: 300, height: 300}}>
-        <Fill color="red" />
+      <Canvas ref={canvasRef} 
+      style={{width: 300, height: 300}}
+      {...panResponder.panHandlers}
+      >
+        <Fill color="white" />
 
         {image ? (
-          <Image
-            x={50}
-            y={10}
-            image={image}
-            width={300}
-            height={300}
-            fit="cover"
-          />
+          <>
+            <Image
+              x={50}
+              y={10}
+              image={image}
+              width={300}
+              height={300}
+              fit="cover"
+            />
+          </>
         ) : null}
-        <Text
-        x={10}
-        y={32}
-        text="Hello World"
-        color={'#000'}
-      />
-
       </Canvas>
 
       <Button

@@ -28,6 +28,7 @@ const TopHeader = ({
   logout = false,
   add,
   icon,
+  IconProp,
 }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -42,6 +43,7 @@ const TopHeader = ({
       }
     }
   };
+
   return (
     <ImageBackground source={Images?.topHeader} style={styles.root}>
       <View style={styles.left_wrap}>
@@ -73,8 +75,10 @@ const TopHeader = ({
         </TouchableOpacity>
       ) : icon ? (
         <TouchableOpacity onPress={onPress}>
-          <Image source={icon} style={{height: 30 , width: 30 ,}}/>
+          <Image source={icon} style={{height: 30, width: 30}} />
         </TouchableOpacity>
+      ) : IconProp ? (
+        <TouchableOpacity onPress={onPress}>{IconProp}</TouchableOpacity>
       ) : (
         <View />
       )}

@@ -31,6 +31,7 @@ export default {
     //placeholder
     profile_placeholder1: require('../assets/placeholder/placeholder1.png'),
     profile_placeholder2: require('../assets/placeholder/placeholder2.png'),
+    profilePlaceholder: require('../assets/images/profile-placeholder.png'),
 
 
     //frames

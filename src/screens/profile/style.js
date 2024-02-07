@@ -44,6 +44,53 @@ const styles = StyleSheet.create({
     color: Colors.TEXT1,
     fontWeight: '700',
   },
+  textinputView: {
+    width: '95%',
+    backgroundColor: '#f5f5f5',
+    // elevation: 10,
+    marginHorizontal: 20,
+    alignItems: 'center',
+    borderRadius: 20,
+    padding: 20,
+  },
+  customInput: {
+    width: '100%',
+    height: 60,
+    borderWidth: 1,
+    borderColor: 'grey',
+    borderRadius: 5,
+    flexDirection: 'row',
+    padding: 10,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+
+  },
+  button: {
+    width: '100%',
+    borderRadius: 15,
+    paddingVertical: 15,
+    justifyContent: 'center',
+    backgroundColor: Colors.PRIMARY,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  errorText: {
+    fontSize: 12,
+    color: 'red',
+    marginTop: 5,
+    marginLeft: 5,
+  },
+  title: {
+    color: Colors.TEXT1,
+    fontSize: 16,
+  },
+  margin: {
+    width: '100%',
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    borderColor: 'white',
+    elevation: 5,
+  },
 });
 
 export default styles;

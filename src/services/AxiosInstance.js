@@ -16,7 +16,7 @@ authAxiosInstance.interceptors.request.use(async req => {
   const {
     auth: {login_Data}
   } = store.getState();
-  console.log('in auth url', req.url, req.params, req.data);
+  console.log('in auth url', req?.url, req?.params, req?.data);
   try {
     const currentTime = new Date().getTime();
     if (currentTime > login_Data?.exp) {

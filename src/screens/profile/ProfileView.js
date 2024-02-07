@@ -14,6 +14,8 @@ import {getUserProfile} from '../../services/userServices/profile.services';
 import {useQuery} from '@tanstack/react-query';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import moment from 'moment';
+import Colors from '../../constants/Colors';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const ViewBox = ({title, value}) => {
   return (
@@ -48,10 +50,19 @@ const ProfileView = ({}) => {
     }, [getUserProfileRefetch]),
   );
 
-
   return (
     <>
-      <TopHeader titile={'Profile'}/>
+      <TopHeader
+        titile={'Profile'}
+        IconProp={
+          <FontAwesome name={'edit'} size={25} color={Colors.SECONDRY} />
+        }
+        onPress={() =>
+          navigation.navigate('EditProfile', {
+            data: getUserProfile_Data?.data?.obj,
+          })
+        }
+      />
       <ScrollView
         contentContainerStyle={styles.root}
         refreshControl={
@@ -64,9 +75,9 @@ const ProfileView = ({}) => {
         <View style={styles.image_wrap}>
           <Image
             source={
-              // getUserProfile_Data?.data?.obj?.profilePic
-              //   ? {uri: getUserProfile_Data?.data?.obj?.profilePic}
-              //   :
+              getUserProfile_Data?.data?.obj?.profilePic
+                ? {uri: getUserProfile_Data?.data?.obj?.profilePic}
+                :
               images.akSchoolIcon
             }
             style={styles.profile_pic}
@@ -107,8 +118,6 @@ const ProfileView = ({}) => {
             title={'Date of Birth'}
             value={moment(getUserProfile_Data?.data?.obj?.DOB).format('LL')}
           />
-
-
         </View>
       </ScrollView>
     </>
