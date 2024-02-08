@@ -20,6 +20,7 @@ import MyPost from '../screens/mypost';
 import Tutorial from '../screens/tutorials';
 import Privacy from '../screens/privacy';
 import LanguageSelection from '../screens/auth/languageSelect';
+import FeedBack from '../screens/FeedBack';
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -101,6 +102,10 @@ const Routes = () => {
                 name={NavigationScreenName.LANGUAGE_SELECTION}
                 component={LanguageSelection}
               />
+              <Stack.Screen
+                name={NavigationScreenName.FEEDBACK}
+                component={FeedBack}
+                />
             </>
           ) : (
             <>

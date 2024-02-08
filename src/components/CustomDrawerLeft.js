@@ -84,8 +84,8 @@ const CustomDrawerLeft = ({navigation}) => {
         <Item
           icon={<Entypo name={'star-outlined'} style={styles.icon} />}
           text="Rate Us"
-          // path={NavigationScreenName.PROFILE}
-          // onPress={() => navigation.navigate(NavigationScreenName.PROFILE)}
+          path={NavigationScreenName.FEEDBACK}
+          onPress={() => navigation.navigate(NavigationScreenName.FEEDBACK)}
         />
         <Item
           icon={<Entypo name={'info'} style={styles.icon} />}

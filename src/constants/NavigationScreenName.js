@@ -29,4 +29,5 @@ export default {
   MY_POST: 'MyPost',
   TUTORIALS: 'Tutorial',
   Privacy_Policy: 'Privacy',
+  FEEDBACK: 'FeedBack',
 };

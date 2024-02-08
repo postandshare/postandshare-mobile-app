@@ -17,8 +17,10 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import moment from 'moment';
 import NavigationScreenName from '../../constants/NavigationScreenName';
 import CustomCarousel from '../../components/CustomCarousel';
+import {SegmentedButtons} from 'react-native-paper';
 
 const Home = ({navigation}) => {
+  const [value, setValue] = React.useState('photo');
   const onPressMenu = () => {
     navigation.openDrawer();
     navigation.getParent('leftDrawer').openDrawer();
@@ -27,6 +29,7 @@ const Home = ({navigation}) => {
   const onPresProfile = () => {
     navigation.navigate('ProfileNavigator');
   };
+
   return (
     <>
       <DashboardTopHeader
@@ -98,8 +101,50 @@ const Home = ({navigation}) => {
               </View>
             </View>
           </View>
+
+          {/* container for photo and video status */}
+          <View
+            style={{
+              flex: 1,
+              width: Sizes.wp('90%'),
+              alignSelf: 'center',
+              flexDirection: 'row',
+              borderWidth: 1,
+              borderRadius: 10,
+              borderColor: '#DADADA',
+              backgroundColor: Colors.PRIMARY,
+            }}>
+            <TouchableOpacity
+              onPress={() => setValue('photo')}
+              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <Text
+                style={{
+                  color: value === 'photo' ? Colors.white : Colors.TEXT1,
+                  fontSize: 16,
+                }}>
+                Photos
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setValue('video')}
+              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <Text
+                style={{
+                  color: value === 'video' ? Colors.white : Colors.text1,
+                  fontSize: 16,
+                }}>
+                Videos
+              </Text>
+            </TouchableOpacity>
+          </View>
+
           {/* carousel for the photos */}
-          <Text style={{fontSize: 18, fontWeight: 'bold', color: Colors.TEXT1}}>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: 'bold',
+              color: Colors.TEXT1,
+            }}>
             Trending
           </Text>
           <View style={{padding: 5}}>
