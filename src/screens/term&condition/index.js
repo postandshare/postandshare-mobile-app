@@ -11,7 +11,6 @@ const TermAndCondtion = () => {
     <>
       <TopHeader
         titile={'Term & Condition'}
-        path={NavigationScreenName.BOTOOM_TAB_NAVIGATOR}
       />
       {/* stack wala dekh lena bcz abhi back hard button history ke hisab se back le rha hai lein goback se jahan ka path set kroge wahan jayega so check out history configuration along with hard press intergration in the topheader components */}
 
