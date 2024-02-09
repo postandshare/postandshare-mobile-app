@@ -36,7 +36,6 @@ import ColorPicker, {
   OpacitySlider,
   HueSlider,
 } from 'reanimated-color-picker';
-import {use} from 'i18next';
 
 const CustomSDK = ({route, navigation}) => {
   const {picData} = route.params;
@@ -522,7 +521,7 @@ const CustomSDK = ({route, navigation}) => {
           <ViewShot ref={viewShotRef} options={{format: 'jpg', quality: 0.9}}>
             <View style={styles.chooseImageContainer}>
               <ImageBackground
-                source={picData?.pic}
+                source={imgData}
                 resizeMode="cover"
                 style={{
                   zIndex: 1,

@@ -29,6 +29,7 @@ const TopHeader = ({
   add,
   icon,
   IconProp,
+  next,
 }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -79,6 +80,10 @@ const TopHeader = ({
         </TouchableOpacity>
       ) : IconProp ? (
         <TouchableOpacity onPress={onPress}>{IconProp}</TouchableOpacity>
+      ) : next ? (
+        <TouchableOpacity onPress={onPress}>
+          <Text style={styles.title}>{next}</Text>
+        </TouchableOpacity>
       ) : (
         <View />
       )}

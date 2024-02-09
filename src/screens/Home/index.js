@@ -217,10 +217,9 @@ const Home = ({navigation}) => {
                         <TouchableOpacity
                           onPress={() =>
                             navigation.navigate(
-                              NavigationScreenName.MY_BUSSINESS,
+                              NavigationScreenName.PHOTO_NAVIGATOR,
                               {
-                                screen: 'MyBussiness',
-                                params: {picData: item},
+                                initialRouteName: item
                               },
                             )
                           }

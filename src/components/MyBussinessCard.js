@@ -11,9 +11,13 @@ const MyBussinessCard = ({
   userDocId,
   lastUpdated,
   onPress,
+  edit,
+  onPressForPhotoEdit,
 }) => {
   return (
-    <TouchableOpacity style={styles.root_container}>
+    <TouchableOpacity style={styles.root_container} onPress={
+      onPressForPhotoEdit
+    }>
       {/* profile image */}
       <View style={styles.profile_container}>
         {image ? (
@@ -41,9 +45,11 @@ const MyBussinessCard = ({
       </View>
 
       {/* edit button */}
-      <TouchableOpacity style={styles.edit_button} onPress={onPress}>
-        <FontAwesome style={{color: '#26A9E1'}} name={'edit'} size={25} />
-      </TouchableOpacity>
+      {edit ? (
+        <TouchableOpacity style={styles.edit_button} onPress={onPress}>
+          <FontAwesome style={{color: '#26A9E1'}} name={'edit'} size={25} />
+        </TouchableOpacity>
+      ) : null}
     </TouchableOpacity>
   );
 };
