@@ -68,8 +68,8 @@ const Home = ({navigation}) => {
                 style={[
                   styles.box,
                   screenName === 'remainder'
-                  ?  {backgroundColor: '#20B2FB20', borderColor: '#20B2FB'}
-                  : null,
+                    ? {backgroundColor: '#20B2FB20', borderColor: '#20B2FB'}
+                    : null,
                 ]}
                 onPress={() => setScreenName('remainder')}>
                 <Image
@@ -88,8 +88,8 @@ const Home = ({navigation}) => {
                 style={[
                   styles.box,
                   screenName === 'wallpaper'
-                  ? {backgroundColor: '#D6363520', borderColor: '#D63635'}
-                  : null,
+                    ? {backgroundColor: '#D6363520', borderColor: '#D63635'}
+                    : null,
                 ]}
                 onPress={() => setScreenName('wallpaper')}>
                 <Image
@@ -214,7 +214,17 @@ const Home = ({navigation}) => {
                       showsHorizontalScrollIndicator={false}
                       data={uploadedImages}
                       renderItem={({item}) => (
-                        <View style={styles.uploadpic_container_image_view}>
+                        <TouchableOpacity
+                          onPress={() =>
+                            navigation.navigate(
+                              NavigationScreenName.MY_BUSSINESS,
+                              {
+                                screen: 'MyBussiness',
+                                params: {picData: item},
+                              },
+                            )
+                          }
+                          style={styles.uploadpic_container_image_view}>
                           <View style={styles.uploadpic_container_dateview}>
                             <Text style={styles.uploadpic_container_date}>
                               {moment().format('MMM Do')}
@@ -224,7 +234,7 @@ const Home = ({navigation}) => {
                             source={item?.pic}
                             style={styles.uploadpic_container_image}
                           />
-                        </View>
+                        </TouchableOpacity>
                       )}
                       keyExtractor={index => index._id}
                       extraData={uploadedImages}

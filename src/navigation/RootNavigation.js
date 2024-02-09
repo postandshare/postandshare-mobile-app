@@ -21,6 +21,8 @@ import Tutorial from '../screens/tutorials';
 import Privacy from '../screens/privacy';
 import LanguageSelection from '../screens/auth/languageSelect';
 import FeedBack from '../screens/FeedBack';
+import PhotoNavigator from '../screens/photo/PhotoNavigator';
+import CustomSDK from '../screens/customSDK';
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -105,7 +107,12 @@ const Routes = () => {
               <Stack.Screen
                 name={NavigationScreenName.FEEDBACK}
                 component={FeedBack}
-                />
+              />
+              <Stack.Screen
+                name={NavigationScreenName.PHOTO_NAVIGATOR}
+                component={PhotoNavigator}
+              />
+              <Stack.Screen name="CustomSDK" component={CustomSDK} />
             </>
           ) : (
             <>

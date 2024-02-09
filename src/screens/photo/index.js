@@ -3,7 +3,9 @@ import React from 'react'
 import TopHeader from '../../components/TopHeader'
 import NavigationScreenName from '../../constants/NavigationScreenName'
 
-const PhotoStatus = () => {
+const PhotoStatus = ({navigation , route}) => {
+  const {picData} = route.params;
+  console.log(picData, 'photoStatus');
   return (
    <>
     <TopHeader titile={'Photo Status'} />

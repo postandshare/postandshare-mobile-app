@@ -5,6 +5,7 @@ import styles from './style';
 import MyBussinessCard from '../../components/MyBussinessCard';
 import Images from '../../constants/images';
 import CustomButton from '../../components/CustomButton';
+import NavigationScreenName from '../../constants/NavigationScreenName';
 
 const MyBussiness_Data = [
   {
@@ -57,7 +58,10 @@ const MyBussiness_Data = [
   },
 ];
 
-const MyBussiness = ({navigation}) => {
+const MyBussiness = ({navigation, route}) => {
+  const {picData} = route.params || {};
+  const PhotoData = picData;
+  console.log(picData, 'editDateForPhoto');
   return (
     <>
       <TopHeader
@@ -76,12 +80,22 @@ const MyBussiness = ({navigation}) => {
               image={item?.image}
               userDocId={item?.userDocId}
               lastUpdated={item?.lastUpdated}
-              onPress={() => navigation.navigate('Edit Bussiness')}
+              onPress={() =>
+                picData
+                  ? navigation.navigate('CustomSDK', {
+                      picData: PhotoData,
+                    })
+                  : navigation.navigate('Edit Bussiness')
+              }
             />
           ))}
         </View>
 
-       <CustomButton title={'Premium'} secondary={false} customStyle={styles.premium_Buttton}/>
+        <CustomButton
+          title={'Premium'}
+          secondary={false}
+          customStyle={styles.premium_Buttton}
+        />
       </ScrollView>
     </>
   );

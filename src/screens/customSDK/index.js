@@ -27,7 +27,7 @@ import DragDrop from '../../components/DragDrop';
 import ViewShot from 'react-native-view-shot';
 import RNFS from 'react-native-fs';
 import Share from 'react-native-share';
-import {Button, Dialog, Modal, Portal, TextInput} from 'react-native-paper';
+import {Button, Dialog, Portal, TextInput} from 'react-native-paper';
 import FontFamily from '../../constants/FontFamily';
 import ColorPicker, {
   Panel1,
@@ -36,11 +36,14 @@ import ColorPicker, {
   OpacitySlider,
   HueSlider,
 } from 'reanimated-color-picker';
-import { use } from 'i18next';
+import {use} from 'i18next';
 
-const CustomSDK = () => {
+const CustomSDK = ({route, navigation}) => {
+  const {picData} = route.params;
+  const imgData = picData;
+  console.log(picData, 'customSDK');
   const [picUrl, setPicUrl] = React.useState('');
-  const [textColor  , setTextColor] = useState('#fff');
+  const [textColor, setTextColor] = useState('#fff');
   const [showModal, setShowModal] = useState(false);
   const [imageUploading, setImageUploading] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
@@ -356,7 +359,8 @@ const CustomSDK = () => {
           animationType="slide"
           contentContainerStyle={{}}>
           <Dialog.Title>Choose Color</Dialog.Title>
-          <Dialog.Content style={{alignContent: 'center' , alignItems: 'center'}}>
+          <Dialog.Content
+            style={{alignContent: 'center', alignItems: 'center'}}>
             <ColorPicker
               style={{width: '70%'}}
               value="red"
@@ -503,6 +507,142 @@ const CustomSDK = () => {
                 </View>
                 <TouchableOpacity
                   onPress={() => setPicUrl('')}
+                  style={{
+                    zIndex: 4,
+                    top: -10,
+                    right: -15,
+                    position: 'absolute',
+                  }}>
+                  <AntDesign name="closecircleo" size={30} color={'red'} />
+                </TouchableOpacity>
+              </ImageBackground>
+            </View>
+          </ViewShot>
+        ) : imgData ? (
+          <ViewShot ref={viewShotRef} options={{format: 'jpg', quality: 0.9}}>
+            <View style={styles.chooseImageContainer}>
+              <ImageBackground
+                source={picData?.pic}
+                resizeMode="cover"
+                style={{
+                  zIndex: 1,
+                  height: '100%',
+                  width: '100%',
+                  justifyContent: 'center',
+                }}>
+                <View style={{zIndex: 3}}>
+                  {state?.logo ? (
+                    <DragDrop onDrag={drag} onDrop={drop}>
+                      <Image
+                        source={Images.akSchoolIcon}
+                        style={{
+                          height: 50,
+                          width: 50,
+                          // left: 50,
+                        }}
+                      />
+                    </DragDrop>
+                  ) : null}
+                  {state?.mobile ? (
+                    <DragDrop onDrag={drag} onDrop={drop}>
+                      <Text
+                        style={{
+                          color: 'red',
+                          fontSize: 18,
+                          fontWeight: '700',
+                          position: 'absolute',
+                        }}>
+                        9876543210
+                      </Text>
+                    </DragDrop>
+                  ) : null}
+                  {state?.whatsApp ? (
+                    <DragDrop onDrag={drag} onDrop={drop}>
+                      <Text
+                        style={{
+                          color: 'red',
+                          fontSize: 18,
+                          fontWeight: '700',
+                          position: 'absolute',
+                        }}>
+                        8957339512
+                      </Text>
+                    </DragDrop>
+                  ) : null}
+                  {state?.email ? (
+                    <DragDrop onDrag={drag} onDrop={drop}>
+                      <Text
+                        style={{
+                          color: 'red',
+                          fontSize: 18,
+                          fontWeight: '700',
+                          position: 'absolute',
+                        }}>
+                        postandshare@gamilc.com
+                      </Text>
+                    </DragDrop>
+                  ) : null}
+                  {state?.location ? (
+                    <DragDrop onDrag={drag} onDrop={drop}>
+                      <Text
+                        style={{
+                          color: 'red',
+                          fontSize: 18,
+                          fontWeight: '700',
+                          position: 'absolute',
+                        }}>
+                        123, xyz street, abc city
+                      </Text>
+                    </DragDrop>
+                  ) : null}
+                  {state?.text && state?.showText ? (
+                    <DragDrop onDrag={drag} onDrop={drop}>
+                      <Text
+                        style={{
+                          color: textColor,
+                          fontSize: 18,
+                          fontWeight: '700',
+                          position: 'absolute',
+                          textAlign: textAlignment,
+                          fontFamily: fontFamily,
+                        }}>
+                        {state?.text}
+                      </Text>
+                    </DragDrop>
+                  ) : null}
+                </View>
+
+                <View style={{zIndex: 2}}>
+                  {showFrame ? (
+                    <Image
+                      source={Images.frame}
+                      style={{
+                        transform: [{rotate: '90deg'}],
+                      }}
+                    />
+                  ) : null}
+                  {showFrame1 ? (
+                    <Image
+                      source={Images.frame_1}
+                      style={{
+                        height: '100%',
+                        width: '100%',
+                      }}
+                    />
+                  ) : null}
+                  {showFrame2 ? (
+                    <ImageBackground
+                      source={Images.frame_2}
+                      style={{
+                        height: '100%',
+                        width: '100%',
+                        top: -20,
+                      }}
+                    />
+                  ) : null}
+                </View>
+                <TouchableOpacity
+                  onPress={() => navigation.goBack()}
                   style={{
                     zIndex: 4,
                     top: -10,

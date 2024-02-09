@@ -5,7 +5,7 @@ export default {
   DRWAER_NAVIGATOR: 'DrawerStack',
 
   //Navigator in the Screen Name
-
+  PHOTO_NAVIGATOR: 'PhotoNavigator',
   //Screen Name
   SPLASH: 'Splash',
   ONBOARDING: 'OnBoarding',

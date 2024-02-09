@@ -110,7 +110,7 @@ const DrawerStack = () => {
           ),
         }}
       />
-      <RightDrawer.Screen
+      {/* <RightDrawer.Screen
         name="CustomSDK"
         component={CustomSDK}
         options={{
@@ -126,7 +126,7 @@ const DrawerStack = () => {
             />
           ),
         }}
-      />
+      /> */}
     </RightDrawer.Navigator>
   );
 };
