@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import TopHeader from '../../components/TopHeader';
 
@@ -7,9 +7,8 @@ const EditBussiness = () => {
     <>
       <TopHeader titile={'EditBussiness'} />
 
-      <View>
-        <Text>EditBussiness</Text>
-      </View>
+      
+      
     </>
   );
 };
