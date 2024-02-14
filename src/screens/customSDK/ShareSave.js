@@ -115,7 +115,7 @@ const ShareSave = ({route, navigation}) => {
         ToastAndroid.show('Image saved to ' + path, ToastAndroid.SHORT);
   
         // Save the image to the camera roll
-        //await savePicture(path);
+        await savePicture(path);
   
         navigation.navigate(NavigationScreenName.HOME);
       } else {
