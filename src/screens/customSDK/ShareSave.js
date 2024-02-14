@@ -14,9 +14,52 @@ import RNFS from 'react-native-fs';
 import Share from 'react-native-share';
 import TopHeader from '../../components/TopHeader';
 import NavigationScreenName from '../../constants/NavigationScreenName';
+import { CameraRoll } from "@react-native-camera-roll/camera-roll";
 
 const ShareSave = ({route, navigation}) => {
   const {picUrl} = route.params;
+
+  async function hasAndroidPermission() {
+    const getCheckPermissionPromise = () => {
+      if (Platform.Version >= 33) {
+        return Promise.all([
+          PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES),
+          PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO),
+        ]).then(
+          ([hasReadMediaImagesPermission, hasReadMediaVideoPermission]) =>
+            hasReadMediaImagesPermission && hasReadMediaVideoPermission,
+        );
+      } else {
+        return PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+      }
+    };
+
+
+    const hasPermission = await getCheckPermissionPromise();
+    if (hasPermission) {
+      return true;
+    }
+
+
+    const getRequestPermissionPromise = () => {
+      if (Platform.Version >= 33) {
+        return PermissionsAndroid.requestMultiple([
+          PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+          PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO,
+        ]).then(
+          (statuses) =>
+            statuses[PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES] ===
+              PermissionsAndroid.RESULTS.GRANTED &&
+            statuses[PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO] ===
+              PermissionsAndroid.RESULTS.GRANTED,
+        );
+      } else {
+        return PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE).then((status) => status === PermissionsAndroid.RESULTS.GRANTED);
+      }
+    };
+  
+    return await getRequestPermissionPromise();
+  }
 
   console.log(picUrl, 'uri , picUrl');
 
@@ -39,21 +82,41 @@ const ShareSave = ({route, navigation}) => {
     }
   }
 
+
+  async function savePicture(uri) {
+    if (Platform.OS === "android" && !(await hasAndroidPermission())) {
+      return;
+    }
+  
+    CameraRoll.saveAsset(uri, {type: 'photo',album: CameraRoll.AlbumTypeOptions.All})
+      .then(() => {
+        console.log('Image saved to camera roll');
+        ToastAndroid.show('Image saved to camera roll', ToastAndroid.SHORT);
+      })
+      .catch((err) => {
+        console.warn(err);
+      });
+  };
+
   const onCapture = async () => {
     try {
       await requestStoragePermission();
       if (Platform.OS === 'android') {
         const imageName = `myImage_${new Date().getTime()}.jpg`;
-        const path = `${RNFS.DownloadDirectoryPath}/${imageName}`;
-
+        const path = `${RNFS.CachesDirectoryPath}/${imageName}`;
+  
         // Convert the image uri to base64
         const imageBase64 = await RNFS.readFile(picUrl, 'base64');
-
+  
         // Write the image file
         await RNFS.writeFile(path, imageBase64, 'base64');
-
+  
         console.log('Image saved to', path);
         ToastAndroid.show('Image saved to ' + path, ToastAndroid.SHORT);
+  
+        // Save the image to the camera roll
+        //await savePicture(path);
+  
         navigation.navigate(NavigationScreenName.HOME);
       } else {
         console.log('Storage permission denied');
