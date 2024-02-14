@@ -40,7 +40,7 @@ import ColorPicker, {
 const CustomSDK = ({route, navigation}) => {
   const {picData} = route.params;
   const imgData = picData;
-  console.log(picData, 'customSDK');
+
   const [picUrl, setPicUrl] = React.useState('');
   const [textColor, setTextColor] = useState('#fff');
   const [showModal, setShowModal] = useState(false);
@@ -151,54 +151,36 @@ const CustomSDK = ({route, navigation}) => {
     }
   }
 
-  const onCapture = async () => {
-    try {
-      await requestStoragePermission();
-      if (Platform.OS === 'android') {
-        const uri = await viewShotRef.current.capture();
-        console.log('Image URI:', uri);
-        setPicUrl(uri);
-        const imageName = `myImage_${new Date().getTime()}.jpg`;
-        const path = `${RNFS.DownloadDirectoryPath}/${imageName}`;
-
-        // Convert the image uri to base64
-        const imageBase64 = await RNFS.readFile(uri, 'base64');
-
-        // Write the image file
-        await RNFS.writeFile(path, imageBase64, 'base64');
-
-        console.log('Image saved to', path);
-        setState(prev => ({
-          ...prev,
-          location: false,
-          mobile: false,
-          email: false,
-          whatsApp: false,
-          logo: false,
-        }));
-        setShowFrame1(false);
-      } else {
-        console.log('Storage permission denied');
-      }
-    } catch (err) {
-      console.warn(err);
-    }
+const onCapture = async () => {
+    const uri = await viewShotRef.current.capture();
+    console.log('Image URI:', uri);
+    setPicUrl(uri);
+    setState(prev => ({
+      ...prev,
+      location: false,
+      mobile: false,
+      email: false,
+      whatsApp: false,
+      logo: false,
+    }));
+    setShowFrame1(false);
+    navigation.navigate('ShareSave', {picUrl: uri});
   };
 
-  const shareImage = async () => {
-    const shareOptions = {
-      title: 'Share via',
-      message: 'some message',
-      url: picUrl,
-      social: Share.Social.WHATSAPP,
-    };
-    try {
-      const ShareResponse = await Share.open(shareOptions);
-      console.log(JSON.stringify(ShareResponse));
-    } catch (error) {
-      console.log('Error =>', error);
-    }
-  };
+  // const shareImage = async () => {
+  //   const shareOptions = {
+  //     title: 'Share via',
+  //     message: 'some message',
+  //     url: picUrl,
+  //     social: Share.Social.WHATSAPP,
+  //   };
+  //   try {
+  //     const ShareResponse = await Share.open(shareOptions);
+  //     console.log(JSON.stringify(ShareResponse));
+  //   } catch (error) {
+  //     console.log('Error =>', error);
+  //   }
+  // };
 
   const hideDialog = () => setVisible(false);
   const hideDialogFontFamily = () => setShowFontFamily(false);
@@ -209,7 +191,7 @@ const CustomSDK = ({route, navigation}) => {
   };
   return (
     <>
-      <TopHeader titile={'Custom SDK'} />
+      <TopHeader titile={'Custom SDK'} next={'Next'} onPress={onCapture}/>
 
       {/* dialogue for adding the text on the image */}
       <Portal>
@@ -478,7 +460,7 @@ const CustomSDK = ({route, navigation}) => {
                 <View style={{zIndex: 2}}>
                   {showFrame ? (
                     <Image
-                      source={Images.frame}
+                      source={Images.frame_1}
                       style={{
                         transform: [{rotate: '90deg'}],
                       }}
@@ -504,6 +486,7 @@ const CustomSDK = ({route, navigation}) => {
                     />
                   ) : null}
                 </View>
+              </ImageBackground>
                 <TouchableOpacity
                   onPress={() => setPicUrl('')}
                   style={{
@@ -514,7 +497,6 @@ const CustomSDK = ({route, navigation}) => {
                   }}>
                   <AntDesign name="closecircleo" size={30} color={'red'} />
                 </TouchableOpacity>
-              </ImageBackground>
             </View>
           </ViewShot>
         ) : imgData ? (
@@ -668,48 +650,102 @@ const CustomSDK = ({route, navigation}) => {
           contentContainerStyle={styles.additionalDetailsContainer}
           showsHorizontalScrollIndicator={false}>
           <TouchableOpacity
-            style={styles.additionalDetails}
+            style={[
+              state?.location ? {backgroundColor: Colors.PRIMARY} : {},
+              styles.additionalDetails,
+            ]}
             onPress={() =>
               setState(prev => ({...prev, location: !state?.location}))
             }>
-            <Entypo name="location-pin" size={30} color={Colors.white} />
+            <Entypo
+              name="location-pin"
+              size={30}
+              color={state?.location ? Colors.white : Colors.TEXT1}
+            />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.additionalDetails}>
+          <TouchableOpacity
+            onPress={() =>
+              setState(prev => ({
+                ...prev,
+                logo: !state?.logo,
+              }))
+            }
+            style={[
+              state?.logo ? {backgroundColor: Colors.PRIMARY} : {},
+              styles.additionalDetails,
+            ]}>
             <Text
-              style={[styles.additionalDetailsText, {fontStyle: 'italic'}]}
-              onPress={() =>
-                setState(prev => ({
-                  ...prev,
-                  logo: !state?.logo,
-                }))
-              }>
+              style={[
+                state?.logo ? {color: Colors.white} : {color: Colors.TEXT1},
+                styles.additionalDetailsText,
+                {fontStyle: 'italic'},
+              ]}>
               LOGO
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.additionalDetails}>
-            <Feather name="image" size={30} color={Colors.white} />
+          <TouchableOpacity
+            style={[
+              state?.image ? {backgroundColor: Colors.PRIMARY} : {},
+              styles.additionalDetails,
+            ]}>
+            <Feather
+              name="image"
+              size={30}
+              color={
+                state?.image ? {color: Colors.white} : {color: Colors.TEXT1}
+              }
+            />
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.additionalDetails}
+            style={[
+              state?.mobile ? {backgroundColor: Colors.PRIMARY} : {},
+              styles.additionalDetails,
+            ]}
             onPress={() =>
               setState(prev => ({...prev, mobile: !state?.mobile}))
             }>
-            <AntDesign name="mobile1" size={30} color={Colors.white} />
+            <AntDesign
+              name="mobile1"
+              size={30}
+              color={state?.mobile ? Colors.white : Colors.TEXT1}
+            />
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.additionalDetails}
+            style={[
+              state?.whatsApp ? {backgroundColor: Colors.PRIMARY} : {},
+              styles.additionalDetails,
+            ]}
             onPress={() =>
               setState(prev => ({...prev, whatsApp: !state?.whatsApp}))
             }>
-            <FontAwesome name="whatsapp" size={30} color={Colors.white} />
+            <FontAwesome
+              name="whatsapp"
+              size={30}
+              color={state?.whatsApp ? Colors.white : Colors.TEXT1}
+            />
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.additionalDetails}
+            style={[
+              state?.email ? {backgroundColor: Colors.PRIMARY} : {},
+              styles.additionalDetails,
+            ]}
             onPress={() => setState(prev => ({...prev, email: !state?.email}))}>
-            <AntDesign name="mail" size={30} color={Colors.white} />
+            <AntDesign
+              name="mail"
+              size={30}
+              color={state?.email ? Colors.white : Colors.TEXT1}
+            />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.additionalDetails}>
-            <Entypo name="facebook" size={30} color={Colors.white} />
+          <TouchableOpacity
+            style={[
+              state?.facebook ? {backgroundColor: Colors.PRIMARY} : {},
+              styles.additionalDetails,
+            ]}>
+            <Entypo
+              name="facebook"
+              size={30}
+              color={state?.facebook ? Colors.white : Colors.TEXT1}
+            />
           </TouchableOpacity>
         </ScrollView>
 
@@ -719,7 +755,12 @@ const CustomSDK = ({route, navigation}) => {
           contentContainerStyle={styles.frameContainer}
           showsHorizontalScrollIndicator={false}>
           <TouchableOpacity
-            style={styles.frame}
+            style={[
+              showFrame
+                ? {backgroundColor: Colors.PRIMARY}
+                : {backgroundColor: Colors.white},
+              styles.frame,
+            ]}
             onPress={() => {
               setFrame(!showFrame);
               setShowFrame1(false);
@@ -728,7 +769,12 @@ const CustomSDK = ({route, navigation}) => {
             <Text style={styles.frameText}>Frame 1</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.frame}
+            style={[
+              showFrame1
+                ? {backgroundColor: Colors.PRIMARY}
+                : {backgroundColor: Colors.white},
+              styles.frame,
+            ]}
             onPress={() => {
               setFrame(false);
               setShowFrame1(!showFrame1);
@@ -737,7 +783,12 @@ const CustomSDK = ({route, navigation}) => {
             <Text style={styles.frameText}>Frame 2</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.frame}
+            style={[
+              showFrame2
+                ? {backgroundColor: Colors.PRIMARY}
+                : {backgroundColor: Colors.white},
+              styles.frame,
+            ]}
             onPress={() => {
               setFrame(false);
               setShowFrame1(false);
@@ -829,20 +880,6 @@ const CustomSDK = ({route, navigation}) => {
             <Text style={styles.frameText}>Effect 10</Text>
           </View>
         </ScrollView>
-
-        {/* buttons for sae and share */}
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={onCapture}>
-            <Text style={[styles.buttonText, {color: Colors.SECONDRY}]}>
-              Save
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={shareImage}
-            style={[styles.button, {backgroundColor: Colors.SECONDRY}]}>
-            <Text style={styles.buttonText}>Share</Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
     </>
   );

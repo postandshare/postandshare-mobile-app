@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
   additionalDetails: {
     height: 50,
     width: 50,
-    backgroundColor: Colors.PRIMARY,
     borderRadius: 40,
     justifyContent: 'center',
     alignItems: 'center',
@@ -35,7 +34,6 @@ const styles = StyleSheet.create({
     margin: 10,
   },
     additionalDetailsText: {
-        color: Colors.white,
         fontWeight: 'bold',
     },
     frameContainer: {
@@ -46,7 +44,6 @@ const styles = StyleSheet.create({
         height: 60,
         width: 70,
         padding: 10,
-        backgroundColor: Colors.white,
         borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',

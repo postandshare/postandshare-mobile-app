@@ -23,6 +23,7 @@ import LanguageSelection from '../screens/auth/languageSelect';
 import FeedBack from '../screens/FeedBack';
 import PhotoNavigator from '../screens/photo/PhotoNavigator';
 import CustomSDK from '../screens/customSDK';
+import ShareSave from '../screens/customSDK/ShareSave';
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -113,6 +114,7 @@ const Routes = () => {
                 component={PhotoNavigator}
               />
               <Stack.Screen name="CustomSDK" component={CustomSDK} />
+              <Stack.Screen name='ShareSave' component={ShareSave} />
             </>
           ) : (
             <>
