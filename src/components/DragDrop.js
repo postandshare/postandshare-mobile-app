@@ -1,4 +1,10 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import Animated, {
   runOnJS,
@@ -17,13 +23,14 @@ import {
 } from 'react-native-gesture-handler';
 import Sizes from '../constants/Sizes';
 
-const DragDrop = ({children, onDrag, onDrop}) => {
+const DragDrop = ({children, onDrag, onDrop, setShowModal}) => {
   const panRef = React.createRef();
   const pinchRef = React.createRef();
   const x = useSharedValue(0);
   const y = useSharedValue(0);
   const scale = useSharedValue(1);
   const savedScale = useSharedValue(1);
+
   const drag = useAnimatedGestureHandler({
     onStart: (_, ctx) => {
       ctx.x = x.value;
@@ -64,23 +71,22 @@ const DragDrop = ({children, onDrag, onDrop}) => {
   });
 
   const animatedStyle = useAnimatedStyle(() => {
-  return {
-    transform: [
-      { translateX: x.value },
-      { translateY: y.value },
-      // { scale: scale.value }, // Apply the scale value here
-    ],
-  };
-});
+    return {
+      transform: [
+        {translateX: x.value},
+        {translateY: y.value},
+        // { scale: scale.value }, // Apply the scale value here
+      ],
+    };
+  });
 
-//we can use double pinch gesture to zoom in and out
+  //we can use double pinch gesture to zoom in and out
 
   const animatedStyleForPinch = useAnimatedStyle(() => {
     return {
       transform: [{scale: scale.value}],
     };
-  }
-  );
+  });
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
@@ -88,13 +94,20 @@ const DragDrop = ({children, onDrag, onDrop}) => {
         ref={panRef}
         simultaneousHandlers={pinchRef}
         onGestureEvent={drag}>
-        <Animated.View
-          style={animatedStyle}>
+        <Animated.View style={animatedStyle}>
           <PinchGestureHandler
             ref={pinchRef}
             simultaneousHandlers={panRef}
             onGestureEvent={pinchGesture}>
-            <Animated.View style={animatedStyleForPinch}>{children}</Animated.View>
+            <Animated.View style={animatedStyleForPinch}>
+              <Pressable
+                onPress={() => console.log('pressed')}
+                onLongPress={() => {
+                  return setShowModal(true);
+                }}>
+                {children}
+              </Pressable>
+            </Animated.View>
           </PinchGestureHandler>
         </Animated.View>
       </PanGestureHandler>

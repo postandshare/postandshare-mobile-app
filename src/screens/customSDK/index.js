@@ -43,6 +43,7 @@ const CustomSDK = ({route, navigation}) => {
 
   const [picUrl, setPicUrl] = React.useState('');
   const [textColor, setTextColor] = useState('#fff');
+  const [sdkTextColor, setSDKTextColor] = useState('#fff');
   const [showModal, setShowModal] = useState(false);
   const [imageUploading, setImageUploading] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
@@ -151,7 +152,7 @@ const CustomSDK = ({route, navigation}) => {
     }
   }
 
-const onCapture = async () => {
+  const onCapture = async () => {
     const uri = await viewShotRef.current.capture();
     console.log('Image URI:', uri);
     setPicUrl(uri);
@@ -188,10 +189,11 @@ const onCapture = async () => {
     // do something with the selected color.
     console.log(hex);
     setTextColor(hex);
+    setSDKTextColor(hex);
   };
   return (
     <>
-      <TopHeader titile={'Custom SDK'} next={'Next'} onPress={onCapture}/>
+      <TopHeader titile={'Custom SDK'} next={'Next'} onPress={onCapture} />
 
       {/* dialogue for adding the text on the image */}
       <Portal>
@@ -389,10 +391,13 @@ const onCapture = async () => {
                     </DragDrop>
                   ) : null}
                   {state?.mobile ? (
-                    <DragDrop onDrag={drag} onDrop={drop}>
+                    <DragDrop
+                      onDrag={drag}
+                      onDrop={drop}
+                      setShowModal={setShowModal}>
                       <Text
                         style={{
-                          color: 'red',
+                          color: textColor,
                           fontSize: 18,
                           fontWeight: '700',
                           position: 'absolute',
@@ -402,10 +407,13 @@ const onCapture = async () => {
                     </DragDrop>
                   ) : null}
                   {state?.whatsApp ? (
-                    <DragDrop onDrag={drag} onDrop={drop}>
+                    <DragDrop
+                      onDrag={drag}
+                      onDrop={drop}
+                      setShowModal={setShowModal}>
                       <Text
                         style={{
-                          color: 'red',
+                          color: textColor,
                           fontSize: 18,
                           fontWeight: '700',
                           position: 'absolute',
@@ -415,10 +423,13 @@ const onCapture = async () => {
                     </DragDrop>
                   ) : null}
                   {state?.email ? (
-                    <DragDrop onDrag={drag} onDrop={drop}>
+                    <DragDrop
+                      onDrag={drag}
+                      onDrop={drop}
+                      setShowModal={setShowModal}>
                       <Text
                         style={{
-                          color: 'red',
+                          color: textColor,
                           fontSize: 18,
                           fontWeight: '700',
                           position: 'absolute',
@@ -428,10 +439,13 @@ const onCapture = async () => {
                     </DragDrop>
                   ) : null}
                   {state?.location ? (
-                    <DragDrop onDrag={drag} onDrop={drop}>
+                    <DragDrop
+                      onDrag={drag}
+                      onDrop={drop}
+                      setShowModal={setShowModal}>
                       <Text
                         style={{
-                          color: 'red',
+                          color: textColor,
                           fontSize: 18,
                           fontWeight: '700',
                           position: 'absolute',
@@ -441,7 +455,10 @@ const onCapture = async () => {
                     </DragDrop>
                   ) : null}
                   {state?.text && state?.showText ? (
-                    <DragDrop onDrag={drag} onDrop={drop}>
+                    <DragDrop
+                      onDrag={drag}
+                      onDrop={drop}
+                      setShowModal={setShowModal}>
                       <Text
                         style={{
                           color: textColor,
@@ -487,16 +504,16 @@ const onCapture = async () => {
                   ) : null}
                 </View>
               </ImageBackground>
-                <TouchableOpacity
-                  onPress={() => setPicUrl('')}
-                  style={{
-                    zIndex: 4,
-                    top: -10,
-                    right: -15,
-                    position: 'absolute',
-                  }}>
-                  <AntDesign name="closecircleo" size={30} color={'red'} />
-                </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setPicUrl('')}
+                style={{
+                  zIndex: 4,
+                  top: -10,
+                  right: -15,
+                  position: 'absolute',
+                }}>
+                <AntDesign name="closecircleo" size={30} color={'red'} />
+              </TouchableOpacity>
             </View>
           </ViewShot>
         ) : imgData ? (
@@ -525,10 +542,13 @@ const onCapture = async () => {
                     </DragDrop>
                   ) : null}
                   {state?.mobile ? (
-                    <DragDrop onDrag={drag} onDrop={drop}>
+                    <DragDrop
+                      onDrag={drag}
+                      onDrop={drop}
+                      setShowModal={setShowModal}>
                       <Text
                         style={{
-                          color: 'red',
+                          color: textColor,
                           fontSize: 18,
                           fontWeight: '700',
                           position: 'absolute',
@@ -538,10 +558,13 @@ const onCapture = async () => {
                     </DragDrop>
                   ) : null}
                   {state?.whatsApp ? (
-                    <DragDrop onDrag={drag} onDrop={drop}>
+                    <DragDrop
+                      onDrag={drag}
+                      onDrop={drop}
+                      setShowModal={setShowModal}>
                       <Text
                         style={{
-                          color: 'red',
+                          color: textColor,
                           fontSize: 18,
                           fontWeight: '700',
                           position: 'absolute',
@@ -551,10 +574,13 @@ const onCapture = async () => {
                     </DragDrop>
                   ) : null}
                   {state?.email ? (
-                    <DragDrop onDrag={drag} onDrop={drop}>
+                    <DragDrop
+                      onDrag={drag}
+                      onDrop={drop}
+                      setShowModal={setShowModal}>
                       <Text
                         style={{
-                          color: 'red',
+                          color: textColor,
                           fontSize: 18,
                           fontWeight: '700',
                           position: 'absolute',
@@ -564,10 +590,13 @@ const onCapture = async () => {
                     </DragDrop>
                   ) : null}
                   {state?.location ? (
-                    <DragDrop onDrag={drag} onDrop={drop}>
+                    <DragDrop
+                      onDrag={drag}
+                      onDrop={drop}
+                      setShowModal={setShowModal}>
                       <Text
                         style={{
-                          color: 'red',
+                          color: textColor,
                           fontSize: 18,
                           fontWeight: '700',
                           position: 'absolute',
@@ -577,7 +606,10 @@ const onCapture = async () => {
                     </DragDrop>
                   ) : null}
                   {state?.text && state?.showText ? (
-                    <DragDrop onDrag={drag} onDrop={drop}>
+                    <DragDrop
+                      onDrag={drag}
+                      onDrop={drop}
+                      setShowModal={setShowModal}>
                       <Text
                         style={{
                           color: textColor,
