@@ -68,10 +68,19 @@ const DragDrop = ({children, onDrag, onDrop}) => {
     transform: [
       { translateX: x.value },
       { translateY: y.value },
-      { scale: scale.value }, // Apply the scale value here
+      // { scale: scale.value }, // Apply the scale value here
     ],
   };
 });
+
+//we can use double pinch gesture to zoom in and out
+
+  const animatedStyleForPinch = useAnimatedStyle(() => {
+    return {
+      transform: [{scale: scale.value}],
+    };
+  }
+  );
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
@@ -85,7 +94,7 @@ const DragDrop = ({children, onDrag, onDrop}) => {
             ref={pinchRef}
             simultaneousHandlers={panRef}
             onGestureEvent={pinchGesture}>
-            <Animated.View style={animatedStyle}>{children}</Animated.View>
+            <Animated.View style={animatedStyleForPinch}>{children}</Animated.View>
           </PinchGestureHandler>
         </Animated.View>
       </PanGestureHandler>
