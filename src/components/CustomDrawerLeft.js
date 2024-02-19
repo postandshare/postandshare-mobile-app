@@ -1,10 +1,17 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Alert,
+  Image,
+  Share,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useState} from 'react';
 import Sizes from '../constants/Sizes';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {scale} from 'react-native-size-matters';
@@ -12,6 +19,8 @@ import Colors from '../constants/Colors';
 import Images from '../constants/images';
 import NavigationScreenName from '../constants/NavigationScreenName';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useDispatch} from 'react-redux';
+import {setLoginState} from '../services/reducer/AuthSlice';
 
 const Item = ({icon, text, path, onPress = () => {}}) => (
   <TouchableOpacity style={styles.item_root} onPress={onPress}>
@@ -23,6 +32,32 @@ const Item = ({icon, text, path, onPress = () => {}}) => (
   </TouchableOpacity>
 );
 const CustomDrawerLeft = ({navigation}) => {
+  const dispatch = useDispatch();
+
+  const handlePressLogout = () => {
+    Alert.alert('Post and Share App', 'Are you sure want to Logout ?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'Logout',
+        onPress: () => {
+          dispatch(setLoginState(''));
+        },
+      },
+    ]);
+  };
+
+  const ShareUs = async () => {
+    await Share.share({
+      message: 'Post and Share App',
+      //  url: 'https://play.google.com/store/apps/details?id=com.postandshare',
+      title: 'Post and Share App',
+    });
+  };
+
   return (
     <DrawerContentScrollView>
       <View style={styles.root}>
@@ -78,8 +113,10 @@ const CustomDrawerLeft = ({navigation}) => {
         <Item
           icon={<Entypo name={'share'} style={styles.icon} />}
           text="Share Us"
-          // path={NavigationScreenName.PROFILE}
-          // onPress={() => navigation.navigate(NavigationScreenName.PROFILE)}
+          onPress={async() => {
+            await navigation.goBack(NavigationScreenName.HOME);
+            ShareUs();
+          }}
         />
         <Item
           icon={<Entypo name={'star-outlined'} style={styles.icon} />}
@@ -112,10 +149,10 @@ const CustomDrawerLeft = ({navigation}) => {
         <Item
           icon={<AntDesign name={'logout'} style={styles.icon} />}
           text="Logout"
-          // path={NavigationScreenName.LANGUAGE_SELECTION}
-          // onPress={() =>
-          //   navigation.navigate(NavigationScreenName.LANGUAGE_SELECTION)
-          // }
+          onPress={async() => {
+            await navigation.goBack(NavigationScreenName.HOME);
+            handlePressLogout();
+          }}
         />
       </View>
     </DrawerContentScrollView>

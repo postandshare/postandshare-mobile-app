@@ -16,6 +16,8 @@ authAxiosInstance.interceptors.request.use(async req => {
   const {
     auth: {login_Data}
   } = store.getState();
+
+
   console.log('in auth url', req?.url, req?.params, req?.data);
   try {
     const currentTime = new Date().getTime();
@@ -33,6 +35,7 @@ authAxiosInstance.interceptors.request.use(async req => {
       req.headers['Authorization'] = `Bearer ${data?.accessToken?.token}`;
       return req;
     }
+    console.log("working");
   } catch (error) {
     const {dispatch} = store;
     dispatch(setLogout());

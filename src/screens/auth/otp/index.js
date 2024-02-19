@@ -18,6 +18,7 @@ import {SignInWithOTP} from '../../../services/authServices/auth.services';
 import {useMutation} from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoginState } from '../../../services/reducer/AuthSlice';
+import Loader from '../../../components/Loader';
 
 export let newOtp = 0;
 
@@ -35,7 +36,7 @@ const VerifyOTP = ({navigation, route}) => {
     useMutation(SignInWithOTP, {
       onSuccess: success => {
         
-        navigation.navigate(NavigationScreenName.DRWAER_NAVIGATOR);
+        // navigation.navigate(NavigationScreenName.HOME);
         dispatch(setLoginState(success?.data));
         console.log(success?.data, 'in success');
       },
@@ -91,8 +92,12 @@ const VerifyOTP = ({navigation, route}) => {
     }
     return () => clearInterval(timer);
   }, [isOtpSend, resendTime]);
+
+  
   return (
     <>
+      <Loader text='Loading...' open={SignInWithOTPLoading} />
+
       {/* upper card */}
       <ImageBackground source={Images.loginTop} style={authStyle.upperImage}>
         <View style={authStyle.topImgSec}>

@@ -88,7 +88,7 @@ const authStyle = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 16,
-    alignContent: 'center', 
+    // alignContent: 'center', 
   },
   otpBoxTxt: {
     fontSize: 16,
@@ -96,10 +96,12 @@ const authStyle = StyleSheet.create({
     color: Colors.TEXT1,
   },
   otpTxtInput: {
-  
-  
-
-   
+    width: 22,
+    height: 1,
+    left: 35,
+    zIndex: 2,
+    opacity: 0.05,
+    color: Colors.TEXT1,
   },
   otpBox: {
     height: 40,

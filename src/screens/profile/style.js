@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
+    resizeMode: 'center',
   },
   name_text: {
     color: Colors.TEXT1,
@@ -33,15 +34,15 @@ const styles = StyleSheet.create({
     width: Sizes.wp('90%'),
     alignSelf: 'center',
     borderRadius: 10,
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: Colors.SECONDRY
   },
   view_box_title: {
-    color: Colors.TEXT1,
+    color: Colors.PRIMARY,
     marginTop: 5,
   },
   view_box_value: {
-    color: Colors.TEXT1,
+    color: Colors.SECONDRY,
     fontWeight: '700',
   },
   textinputView: {

@@ -37,16 +37,16 @@ const DragDrop = ({children, onDrag, onDrop, setShowModal}) => {
       ctx.y = y.value;
     },
     onActive: (event, ctx) => {
-      // const newX = event.translationX + ctx.x;
-      // const newY = event.translationY + ctx.y;
-      // if (newX >= 0 && newX <= Sizes.height * 0.4) {
-      //   x.value = newX;
-      // }
-      // if (newY >= 0 && newY <= Sizes.width * 0.9) {
-      //   y.value = newY;
-      // }
-      x.value = event.translationX + ctx.x;
-      y.value = event.translationY + ctx.y;
+      const newX = event.translationX + ctx.x;
+      const newY = event.translationY + ctx.y;
+      if (newX >= 0 && newX <= Sizes.height * 0.4) {
+        x.value = newX;
+      }
+      if (newY >= 0 && newY <= Sizes.width * 0.75) {
+        y.value = newY;
+      }
+      // x.value = event.translationX + ctx.x;
+      // y.value = event.translationY + ctx.y;
       if (onDrag) {
         runOnJS(onDrag)(x.value, y.value);
       }
@@ -101,10 +101,11 @@ const DragDrop = ({children, onDrag, onDrop, setShowModal}) => {
             onGestureEvent={pinchGesture}>
             <Animated.View style={animatedStyleForPinch}>
               <Pressable
-                onPress={() => console.log('pressed')}
-                onLongPress={() => {
-                  return setShowModal(true);
-                }}>
+              onPress={() => console.log('pressed')}
+              onLongPress={() => {
+                return setShowModal(true);
+              }}
+              >
                 {children}
               </Pressable>
             </Animated.View>

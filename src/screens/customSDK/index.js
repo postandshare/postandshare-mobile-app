@@ -40,7 +40,8 @@ import ColorPicker, {
 const CustomSDK = ({route, navigation}) => {
   const {picData} = route.params;
   const imgData = picData;
-
+  const [showSticker, setShowSticker] = useState(false);
+  const [stickers, setStickers] = useState();
   const [picUrl, setPicUrl] = React.useState('');
   const [textColor, setTextColor] = useState('#fff');
   const [sdkTextColor, setSDKTextColor] = useState('#fff');
@@ -48,11 +49,12 @@ const CustomSDK = ({route, navigation}) => {
   const [imageUploading, setImageUploading] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
   const [showFrame, setFrame] = useState(false);
-  const [showFrame1, setShowFrame1] = useState(false);
+  const [showFrame1, setShowFrame1] = useState(true);
   const [showFrame2, setShowFrame2] = useState(false);
   const [textAlignment, setTextAlignment] = useState('left');
   const [fontFamily, setFontFamily] = useState('Arial');
   const [showFontFamily, setShowFontFamily] = useState(false);
+  const [showCross, setShowCross] = useState(true);
   const [state, setState] = useState({
     location: false,
     logo: false,
@@ -64,7 +66,6 @@ const CustomSDK = ({route, navigation}) => {
   });
   const viewShotRef = useRef();
 
-  console.log(picUrl, 'in pic url');
   const uploadePhoto = async (path, mime) => {
     try {
       setImageUploading(true);
@@ -122,6 +123,30 @@ const CustomSDK = ({route, navigation}) => {
       ToastAndroid.show('Something went wrong', ToastAndroid.LONG);
     }
   };
+  const TakeStickerfromGallery = async () => {
+    try {
+      await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        {
+          title: 'Post and Share App',
+          message:
+            'We want to access the photo gallery' +
+            'To perform the desired function',
+        },
+      );
+      const image = await launchImageLibrary({
+        maxWidth: 30,
+        maxHeight: 40,
+        mediaType: 'photo',
+      });
+      console.log(image.assets[0].uri);
+      setStickers(image.assets[0].uri);
+      // uploadePhoto(image.assets[0].uri, image.assets[0].type);
+    } catch (error) {
+      console.log(error);
+      ToastAndroid.show('Something went wrong', ToastAndroid.LONG);
+    }
+  };
 
   const drag = (x, y) => {
     console.log('Dragging', x, y);
@@ -153,6 +178,7 @@ const CustomSDK = ({route, navigation}) => {
   }
 
   const onCapture = async () => {
+    setShowCross(false);
     const uri = await viewShotRef.current.capture();
     console.log('Image URI:', uri);
     setPicUrl(uri);
@@ -366,11 +392,13 @@ const CustomSDK = ({route, navigation}) => {
         showsVerticalScrollIndicator={false}>
         {/* choose image area */}
         {picUrl ? (
-          <ViewShot ref={viewShotRef} options={{format: 'jpg', quality: 0.9}}>
+          <ViewShot
+            ref={viewShotRef}
+            options={{format: 'png', quality: 1.0, result: 'base64'}}>
             <View style={styles.chooseImageContainer}>
               <ImageBackground
                 source={{uri: picUrl}}
-                resizeMode="cover"
+                resizeMode="center"
                 style={{
                   zIndex: 1,
                   height: '100%',
@@ -382,6 +410,18 @@ const CustomSDK = ({route, navigation}) => {
                     <DragDrop onDrag={drag} onDrop={drop}>
                       <Image
                         source={Images.akSchoolIcon}
+                        style={{
+                          height: 50,
+                          width: 50,
+                          // left: 50,
+                        }}
+                      />
+                    </DragDrop>
+                  ) : null}
+                  {showSticker ? (
+                    <DragDrop onDrag={drag} onDrop={drop}>
+                      <Image
+                        source={{uri: stickers}}
                         style={{
                           height: 50,
                           width: 50,
@@ -504,16 +544,18 @@ const CustomSDK = ({route, navigation}) => {
                   ) : null}
                 </View>
               </ImageBackground>
-              <TouchableOpacity
-                onPress={() => setPicUrl('')}
-                style={{
-                  zIndex: 4,
-                  top: -10,
-                  right: -15,
-                  position: 'absolute',
-                }}>
-                <AntDesign name="closecircleo" size={30} color={'red'} />
-              </TouchableOpacity>
+              {showCross ? (
+                <TouchableOpacity
+                  onPress={() => navigation.goBack()}
+                  style={{
+                    zIndex: 4,
+                    top: -10,
+                    right: -15,
+                    position: 'absolute',
+                  }}>
+                  <AntDesign name="closecircleo" size={30} color={'red'} />
+                </TouchableOpacity>
+              ) : null}
             </View>
           </ViewShot>
         ) : imgData ? (
@@ -533,6 +575,18 @@ const CustomSDK = ({route, navigation}) => {
                     <DragDrop onDrag={drag} onDrop={drop}>
                       <Image
                         source={Images.akSchoolIcon}
+                        style={{
+                          height: 50,
+                          width: 50,
+                          // left: 50,
+                        }}
+                      />
+                    </DragDrop>
+                  ) : null}
+                  {showSticker ? (
+                    <DragDrop onDrag={drag} onDrop={drop}>
+                      <Image
+                        source={{uri: stickers}}
                         style={{
                           height: 50,
                           width: 50,
@@ -654,16 +708,18 @@ const CustomSDK = ({route, navigation}) => {
                     />
                   ) : null}
                 </View>
-                <TouchableOpacity
-                  onPress={() => navigation.goBack()}
-                  style={{
-                    zIndex: 4,
-                    top: -10,
-                    right: -15,
-                    position: 'absolute',
-                  }}>
-                  <AntDesign name="closecircleo" size={30} color={'red'} />
-                </TouchableOpacity>
+                {showCross ? (
+                  <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={{
+                      zIndex: 4,
+                      top: -10,
+                      right: -15,
+                      position: 'absolute',
+                    }}>
+                    <AntDesign name="closecircleo" size={30} color={'red'} />
+                  </TouchableOpacity>
+                ) : null}
               </ImageBackground>
             </View>
           </ViewShot>
@@ -865,14 +921,22 @@ const CustomSDK = ({route, navigation}) => {
             />
             <Text style={styles.frameText}>Add Text</Text>
           </TouchableOpacity>
-          <View style={styles.frame}>
+          <TouchableOpacity
+            onPress={() => {
+              if (stickers) {
+                setShowSticker(!showSticker);
+              } else {
+                TakeStickerfromGallery();
+              }
+            }}
+            style={styles.frame}>
             <MaterialCommunityIcons
               name="sticker-emoji"
               size={20}
               color={Colors.SECONDRY}
             />
             <Text style={styles.frameText}>Sticker</Text>
-          </View>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setShowFontFamily(true)}
             style={styles.frame}>

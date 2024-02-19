@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
     marginVertical: 20,
     borderWidth: 1,
     borderColor: Colors.PRIMARY,
@@ -78,7 +77,6 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     scroller: {
-       
     },
     item_content: {
         marginVertical: 10,
