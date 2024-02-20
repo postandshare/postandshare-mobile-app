@@ -1,29 +1,19 @@
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Pressable, StyleSheet} from 'react-native';
 import React from 'react';
 import Animated, {
   runOnJS,
   useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
-  withDecay,
-  withSpring,
 } from 'react-native-reanimated';
 import {
-  Gesture,
-  GestureDetector,
   GestureHandlerRootView,
   PanGestureHandler,
   PinchGestureHandler,
 } from 'react-native-gesture-handler';
 import Sizes from '../constants/Sizes';
 
-const DragDrop = ({children, onDrag, onDrop, setShowModal}) => {
+const DragDrop = ({children, onDrag, onDrop, setShowModal, setBorderBox}) => {
   const panRef = React.createRef();
   const pinchRef = React.createRef();
   const x = useSharedValue(0);
@@ -101,11 +91,11 @@ const DragDrop = ({children, onDrag, onDrop, setShowModal}) => {
             onGestureEvent={pinchGesture}>
             <Animated.View style={animatedStyleForPinch}>
               <Pressable
-              onPress={() => console.log('pressed')}
-              onLongPress={() => {
-                return setShowModal(true);
-              }}
-              >
+                onPress={() => console.log('pressed')}
+                onLongPress={() => 
+                  // setBorderBox(true)
+                  setShowModal(true)
+                }>
                 {children}
               </Pressable>
             </Animated.View>

@@ -55,6 +55,22 @@ const CustomSDK = ({route, navigation}) => {
   const [fontFamily, setFontFamily] = useState('Arial');
   const [showFontFamily, setShowFontFamily] = useState(false);
   const [showCross, setShowCross] = useState(true);
+  const [tools, setTools] = useState({
+    rotate: '',
+    flip: '',
+    fontSize: 10,
+    fontFamily: 'normal',
+    color: '',
+    fontWeight: '',
+    fontStyle: '',
+  });
+  const [controls, setControls] = useState({
+    open: false,
+  });
+
+  const [x, setX] = useState(0);
+  const [y, setY] = useState(0);
+  const [borderBox, setBorderBox] = useState(false);
   const [state, setState] = useState({
     location: false,
     logo: false,
@@ -578,7 +594,6 @@ const CustomSDK = ({route, navigation}) => {
                         style={{
                           height: 50,
                           width: 50,
-                          // left: 50,
                         }}
                       />
                     </DragDrop>
@@ -590,7 +605,6 @@ const CustomSDK = ({route, navigation}) => {
                         style={{
                           height: 50,
                           width: 50,
-                          // left: 50,
                         }}
                       />
                     </DragDrop>
@@ -599,16 +613,42 @@ const CustomSDK = ({route, navigation}) => {
                     <DragDrop
                       onDrag={drag}
                       onDrop={drop}
-                      setShowModal={setShowModal}>
-                      <Text
-                        style={{
-                          color: textColor,
-                          fontSize: 18,
-                          fontWeight: '700',
-                          position: 'absolute',
-                        }}>
-                        9876543210
-                      </Text>
+                      setShowModal={setShowModal}
+                      setBorderBox={setBorderBox}>
+                      {borderBox ? (
+                        <TouchableOpacity
+                          style={{
+                            borderWidth: 1,
+                            borderColor: Colors.PRIMARY,
+                            padding: 5,
+                            borderRadius: 5,
+                            width: 120,
+                            height: 40,
+                            left: x,
+                            top: y,
+                            alignItems: 'center',
+                          }}>
+                          <Text
+                            style={{
+                              color: textColor,
+                              fontSize: tools.fontSize,
+                              fontWeight: '700',
+                              position: 'absolute',
+                            }}>
+                            9876543210
+                          </Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <Text
+                          style={{
+                            color: textColor,
+                            fontSize: 18,
+                            fontWeight: '700',
+                            position: 'absolute',
+                          }}>
+                          9876543210
+                        </Text>
+                      )}
                     </DragDrop>
                   ) : null}
                   {state?.whatsApp ? (
@@ -682,7 +722,7 @@ const CustomSDK = ({route, navigation}) => {
                 <View style={{zIndex: 2}}>
                   {showFrame ? (
                     <Image
-                      source={Images.frame}
+                      source={Images.frame1}
                       style={{
                         transform: [{rotate: '90deg'}],
                       }}
@@ -906,6 +946,165 @@ const CustomSDK = ({route, navigation}) => {
             <Text style={styles.frameText}>Frame 10</Text>
           </View>
         </ScrollView>
+
+        {borderBox ? (
+          <>
+            <ScrollView
+              horizontal
+              contentContainerStyle={styles.frameContainer}
+              showsHorizontalScrollIndicator={false}>
+              <TouchableOpacity
+                style={{}}
+                onPress={() => {
+                  setControls(prev => ({
+                    ...prev,
+                    open: !prev.open,
+                  }));
+                }}>
+                <Text>Controls</Text>
+              </TouchableOpacity>
+            </ScrollView>
+
+            <View>
+              {controls.open ? (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
+                  {/* up and down */}
+                  <View>
+                    <TouchableOpacity
+                      onPress={() => setY(y - 10)}
+                      style={{
+                        backgroundColor: Colors.PRIMARY,
+                        padding: 10,
+                        borderRadius: 5,
+                        margin: 10,
+                        width: 50,
+                      }}>
+                      <AntDesign
+                        name="upcircleo"
+                        size={30}
+                        color={Colors.white}
+                      />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      onPress={() => setY(y + 10)}
+                      style={{
+                        backgroundColor: Colors.PRIMARY,
+                        padding: 10,
+                        borderRadius: 5,
+                        margin: 10,
+                        width: 50,
+                      }}>
+                      <AntDesign
+                        name="downcircleo"
+                        size={30}
+                        color={Colors.white}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  {/* right and left */}
+                  <View>
+                    <TouchableOpacity
+                      onPress={() => setX(x + 10)}
+                      style={{
+                        backgroundColor: Colors.PRIMARY,
+                        padding: 10,
+                        borderRadius: 5,
+                        margin: 10,
+                        width: 50,
+                      }}>
+                      <AntDesign
+                        name="rightcircleo"
+                        size={30}
+                        color={Colors.white}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => setX(x - 10)}
+                      style={{
+                        backgroundColor: Colors.PRIMARY,
+                        padding: 10,
+                        borderRadius: 5,
+                        margin: 10,
+                        width: 50,
+                      }}>
+                      <AntDesign
+                        name="leftcircleo"
+                        size={30}
+                        color={Colors.white}
+                      />
+                    </TouchableOpacity>
+                  </View>
+
+                  {/* font size up and down */}
+                  <View>
+                    <TouchableOpacity
+                      onPress={() =>
+                        setTools(prev => ({
+                          ...prev,
+                          fontSize: prev.fontSize + 2,
+                        }))
+                      }
+                      style={{
+                        backgroundColor: Colors.PRIMARY,
+                        padding: 10,
+                        borderRadius: 5,
+                        margin: 10,
+                        width: 50,
+                      }}>
+                      <MaterialCommunityIcons
+                        name="format-font-size-increase"
+                        size={30}
+                        color={Colors.white}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => setTools(prev => ({
+                        ...prev,
+                        fontSize: prev.fontSize - 2,
+                      }))}
+                      style={{
+                        backgroundColor: Colors.PRIMARY,
+                        padding: 10,
+                        borderRadius: 5,
+                        margin: 10,
+                        width: 50,
+                      }}>
+                      <MaterialCommunityIcons
+                        name="format-font-size-decrease"
+                        size={30}
+                        color={Colors.white}
+                      />
+                    </TouchableOpacity>
+                  </View>
+
+
+                  {/* font color */}
+                  <TouchableOpacity
+                    onPress={() => setShowModal(true)}
+                    style={{
+                      backgroundColor: Colors.PRIMARY,
+                      padding: 10,
+                      borderRadius: 5,
+                      margin: 10,
+                      width: 50,
+                    }}>
+                    <MaterialCommunityIcons
+                      name="select-color"
+                      size={30}
+                      color={Colors.white}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ) : null}
+            </View>
+          </>
+        ) : null}
+
         {/* effects on screen */}
         <ScrollView
           horizontal
