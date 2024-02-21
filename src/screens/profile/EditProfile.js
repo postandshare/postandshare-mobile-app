@@ -26,7 +26,7 @@ import Loader from '../../components/Loader';
 import {DISTRICTS, STATES} from '../../constants';
 import {Checkbox} from 'react-native-paper';
 import {useMutation} from '@tanstack/react-query';
-import {updateUserProfile} from '../../services/userServices/profile.services';
+import {updateSelfPhoto, updateUserProfile} from '../../services/userServices/profile.services';
 import Sizes from '../../constants/Sizes';
 
 const phoneRegExp =
@@ -80,6 +80,21 @@ const EditProfile = ({route, navigation}) => {
   const [imageUploading, setImageUploading] = useState(false);
   const [open, setOpen] = useState(false);
   const passRef = useRef(null);
+
+
+  const {
+    mutate: updateSelfPhotoMutate,
+    isLoading: updateSelfPhotoLoading,
+  } = useMutation(updateSelfPhoto, {
+    onSuccess: ({data}) => {
+      ToastAndroid.show(data?.message, ToastAndroid.LONG);
+    },
+    onError: err =>
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG),
+    enabled: false,
+  });
+
+
   const uploadePhoto = async (path, mime) => {
     try {
       console.log(path, 'in uploade photo');
@@ -91,9 +106,9 @@ const EditProfile = ({route, navigation}) => {
       });
       setImageUploading(false);
 
-      // changeStudentProfilePicMutate({
-      //   profilePic: uplode?.fileURL,
-      // });
+      updateSelfPhotoMutate({
+        profilePic: uplode?.fileURL,
+      });
       setprofilePic(uplode?.fileURL);
     } catch (error) {
       setImageUploading(false);

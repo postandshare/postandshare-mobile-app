@@ -6,9 +6,6 @@ import {
   PanResponder,
   useWindowDimensions,
   ToastAndroid,
-  Platform,
-  PermissionsAndroid,
-  Share,
 } from 'react-native';
 import React, {useEffect, useMemo, useState} from 'react';
 import TopHeader from '../components/TopHeader';
@@ -23,11 +20,12 @@ import {
   Picture,
   Skia,
   Text,
+  TextBlob,
   createPicture,
   useCanvasRef,
+  useFont,
+  useImage,
 } from '@shopify/react-native-skia';
-
-import DragDrop from '../components/DragDrop';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
@@ -36,7 +34,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 
-const END_POSITION = 200;
 const generateSkiaImage = async path => {
   return await Skia.Data.fromURI(path).then(data =>
     Skia.Image.MakeImageFromEncoded(data),
@@ -94,6 +91,7 @@ const Custom = () => {
       }
     });
   }, []);
+
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [
@@ -103,26 +101,42 @@ const Custom = () => {
     };
   });
 
+  async function savePicture(uri) {
+    CameraRoll.saveAsset(uri, {
+      type: 'photo',
+      album: CameraRoll.AlbumTypeOptions.All,
+    })
+      .then(() => {
+        console.log('Image saved to camera roll');
+        ToastAndroid.show('Image saved to camera roll', ToastAndroid.SHORT);
+      })
+      .catch(err => {
+        console.warn(err);
+      });
+  }
+  
   return (
     <>
       <TopHeader titile={'Custom'} />
       <GestureDetector gesture={gesture}>
         <Canvas ref={canvasRef} style={{flex: 1}}>
-          <Fill color="white" />
+        <Fill color="white" />
           {image ? (
             <>
               <Image
-                x={50}
-                y={10}
                 image={image}
-                width={300}
-                height={300}
-                fit="cover"
+                fit="contain"
+                x={0}
+                y={0}
+                width={500}
+                height={500}
               />
             </>
           ) : null}
           <Circle cx={translateX} cy={translateY} r={20} color="#3E3E" />
-          <Text x={150} y={50} text={'Hello World'} color={'white'} />
+
+
+          <Text x={0} y={0} text="Hello World"  />
         </Canvas>
       </GestureDetector>
 
@@ -135,6 +149,19 @@ const Custom = () => {
             const base64 = skImg.encodeToBase64(ImageFormat.PNG, 100);
             const uri = 'data:image/png;base64,' + base64;
             setCapturedImage(uri);
+            const imageName = `myImage_${new Date().getTime()}.jpg`;
+
+            // Define the path to save the image
+            const path = `${RNFS.CachesDirectoryPath}/${imageName}`;
+            // Write the file
+            RNFS.writeFile(path, base64, 'base64')
+              .then(async () => {
+                console.log('Image saved to', path);
+                await savePicture(path);
+              })
+              .catch(error => {
+                console.error(error);
+              });
           }
         }}
       />

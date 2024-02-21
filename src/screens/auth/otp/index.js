@@ -15,10 +15,11 @@ import authStyle from '../authStyle';
 import {TextInput} from 'react-native-paper';
 import NavigationScreenName from '../../../constants/NavigationScreenName';
 import {SignInWithOTP} from '../../../services/authServices/auth.services';
-import {useMutation} from '@tanstack/react-query';
-import { useDispatch, useSelector } from 'react-redux';
-import { setLoginState } from '../../../services/reducer/AuthSlice';
+import {useMutation, useQuery} from '@tanstack/react-query';
+import {useDispatch, useSelector} from 'react-redux';
+import {setLoginState} from '../../../services/reducer/AuthSlice';
 import Loader from '../../../components/Loader';
+import {getUserProfile} from '../../../services/userServices/profile.services';
 
 export let newOtp = 0;
 
@@ -31,19 +32,44 @@ const VerifyOTP = ({navigation, route}) => {
   const [resendTime, setResendTime] = useState(40);
   const [isOtpSend, setIsOtpSend] = useState(true);
   const [isOtpVerify, setIsOtpVerfiy] = useState(false);
+  const [loginStateData, setLoginStateData] = useState(null);
 
   const {mutate: SignInWithOTPMuatate, isLoading: SignInWithOTPLoading} =
     useMutation(SignInWithOTP, {
-      onSuccess: success => {
-        
-        // navigation.navigate(NavigationScreenName.HOME);
-        dispatch(setLoginState(success?.data));
-        console.log(success?.data, 'in success');
+      onSuccess: async success => {
+        // setLoginStateData(success?.data);
+        // await getUserProfileRefetch();
+         dispatch(setLoginState(success?.data));
       },
       onError: error => {
         ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
       },
     });
+
+  const {
+    isLoading: getUserProfileLoading,
+    isFetching: getUserProfileFetching,
+    refetch: getUserProfileRefetch,
+    data: getUserProfile_Data,
+    isError: getUserProfile_isError,
+  } = useQuery({
+    queryKey: ['getUserProfile'],
+    queryFn: () => getUserProfile(),
+    onSuccess: success => {
+      if (success?.data?.isProfileUpdated == false) {
+        console.log(true , "in the if condition")
+        navigation.navigate(NavigationScreenName.LANGUAGE_SELECTION, {
+          loginStateData: loginStateData,
+        });
+      } else {
+        dispatch(setLoginState(loginStateData));
+      }
+    },
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
 
   if (otp !== '') {
     newOtp = otp;
@@ -55,15 +81,13 @@ const VerifyOTP = ({navigation, route}) => {
     if (!otp || otp === '') {
       ToastAndroid.show('Please enter OTP !', ToastAndroid.SHORT);
       return;
-    }
-    else if (!login_Data) {
+    } else if (!login_Data) {
       SignInWithOTPMuatate({
         mobileNumber: mobileNumber,
         OTP: otp,
         request_id: requesId,
-        });
-
-      }
+      });
+    }
   };
 
   const resendHandler = () => {
@@ -93,10 +117,9 @@ const VerifyOTP = ({navigation, route}) => {
     return () => clearInterval(timer);
   }, [isOtpSend, resendTime]);
 
-  
   return (
     <>
-      <Loader text='Loading...' open={SignInWithOTPLoading} />
+      <Loader text="Loading..." open={SignInWithOTPLoading} />
 
       {/* upper card */}
       <ImageBackground source={Images.loginTop} style={authStyle.upperImage}>

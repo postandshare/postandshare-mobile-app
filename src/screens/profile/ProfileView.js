@@ -16,6 +16,9 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import moment from 'moment';
 import Colors from '../../constants/Colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {Skeleton} from 'moti/skeleton';
+import {MotiView} from 'moti';
+import Sizes from '../../constants/Sizes';
 
 const ViewBox = ({title, value}) => {
   return (
@@ -50,6 +53,50 @@ const ProfileView = ({}) => {
     }, [getUserProfileRefetch]),
   );
 
+  const Spacer = ({height = 16}) => <View style={{height}} />;
+
+  const skeletonLoading = (
+    <MotiView
+      transition={{
+        type: 'timing',
+      }}
+      style={styles.container}
+      animate={{backgroundColor: '#f5f5f5'}}>
+      <Skeleton
+        colorMode={'light'}
+        radius="round"
+        height={95}
+        width={95}
+        alingSele
+      />
+      <Spacer />
+      <Skeleton
+        height={Sizes.hp('10%')}
+        width={Sizes.wp('90%')}
+        colorMode="light"
+      />
+      <Spacer />
+      <Skeleton
+        height={Sizes.hp('10%')}
+        width={Sizes.wp('90%')}
+        colorMode="light"
+      />
+      <Spacer />
+      <Skeleton
+        height={Sizes.hp('10%')}
+        width={Sizes.wp('90%')}
+        colorMode="light"
+      />
+      <Spacer />
+      <Skeleton
+        height={Sizes.hp('10%')}
+        width={Sizes.wp('90%')}
+        colorMode="light"
+      />
+      <Spacer />
+    </MotiView>
+  );
+
   return (
     <>
       <TopHeader
@@ -71,54 +118,71 @@ const ProfileView = ({}) => {
             onRefresh={() => getUserProfileRefetch()}
           />
         }>
-        {/* image of the profile */}
-        <View style={styles.image_wrap}>
-          <Image
-            source={
-              getUserProfile_Data?.data?.obj?.profilePic
-                ? {uri: getUserProfile_Data?.data?.obj?.profilePic}
-                :
-              images.akSchoolIcon
-            }
-            style={styles.profile_pic}
-          />
-        </View>
+        {getUserProfileLoading || getUserProfileFetching ? (
+          skeletonLoading
+        ) : (
+          <>
+            {/* image of the profile */}
+            <View style={styles.image_wrap}>
+              <Image
+                source={
+                  getUserProfile_Data?.data?.obj?.profilePic
+                    ? {uri: getUserProfile_Data?.data?.obj?.profilePic}
+                    : images.akSchoolIcon
+                }
+                style={styles.profile_pic}
+              />
+            </View>
 
-        {/* name of the profile */}
-        <Text style={styles.name_text}>
-          {getUserProfile_Data?.data?.obj?.firstName}{' '}
-          {getUserProfile_Data?.data?.obj?.middle}{' '}
-          {getUserProfile_Data?.data?.obj?.lastName}
-        </Text>
+            {/* name of the profile */}
+            <Text style={styles.name_text}>
+              {getUserProfile_Data?.data?.obj?.firstName}{' '}
+              {getUserProfile_Data?.data?.obj?.middle}{' '}
+              {getUserProfile_Data?.data?.obj?.lastName}
+            </Text>
 
-        {/* other details of the profile */}
-        <View style={styles.other_details}>
-          <ViewBox
-            title={'Email'}
-            value={getUserProfile_Data?.data?.obj?.email}
-          />
-          <ViewBox
-            title={'Phone'}
-            value={getUserProfile_Data?.data?.obj?.mobileNumber}
-          />
-          <ViewBox
-            title={'Address'}
-            value={
-              getUserProfile_Data?.data?.obj?.currentAddress?.address +
-              ' ' +
-              getUserProfile_Data?.data?.obj?.currentAddress?.dist +
-              ' ' +
-              getUserProfile_Data?.data?.obj?.currentAddress?.state +
-              ' ' +
-              getUserProfile_Data?.data?.obj?.currentAddress?.pinCode
-            }
-          />
+            {/* other details of the profile */}
+            <View style={styles.other_details}>
+              <ViewBox
+                title={'Email'}
+                value={getUserProfile_Data?.data?.obj?.email}
+              />
+              <ViewBox
+                title={'Phone'}
+                value={getUserProfile_Data?.data?.obj?.mobileNumber}
+              />
+              <ViewBox
+                title={'Address'}
+                value={
+                  getUserProfile_Data?.data?.obj?.currentAddress?.address +
+                  ' ' +
+                  getUserProfile_Data?.data?.obj?.currentAddress?.dist +
+                  ' ' +
+                  getUserProfile_Data?.data?.obj?.currentAddress?.state +
+                  ' ' +
+                  getUserProfile_Data?.data?.obj?.currentAddress?.pinCode
+                }
+              />
 
-          <ViewBox
-            title={'Date of Birth'}
-            value={moment(getUserProfile_Data?.data?.obj?.DOB).format('LL')}
-          />
-        </View>
+              <ViewBox
+                title={'Date of Birth'}
+                value={moment(getUserProfile_Data?.data?.obj?.DOB).format('LL')}
+              />
+
+              <ViewBox
+                title={'Gender'}
+                value={getUserProfile_Data?.data?.obj?.gender}
+              />
+
+              <ViewBox
+                title={'WhatsApp Number'}
+                value={getUserProfile_Data?.data?.obj?.whatsappNumber}
+              />
+
+              
+            </View>
+          </>
+        )}
       </ScrollView>
     </>
   );

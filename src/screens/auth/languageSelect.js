@@ -5,13 +5,17 @@ import {
   Pressable,
   ScrollView,
   Text,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import Images from '../../constants/images';
 import authStyle from './authStyle';
 import Colors from '../../constants/Colors';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { getSelectedRegionalLanguages, upsertRegionalLanguage } from '../../services/userServices/profile.services';
+import { useFocusEffect } from '@react-navigation/native';
 
 const ReginalLanguage = [
   {
@@ -71,9 +75,49 @@ const ReginalLanguage = [
   },
 ];
 
-const LanguageSelection = ({navigation}) => {
+const LanguageSelection = ({navigation, route}) => {
+  const [loginStateData, setLoginStateData] = useState(route?.params?.loginStateData);
+  console.log(loginStateData, 'loginStateData');
   const [selectReginalLan, setRiginalLan] = useState('en');
   const [loading, setLoading] = useState(false);
+
+  const {
+    isLoading: getSelectedRegionalLanguagesLoading,
+    isFetching: getSelectedRegionalLanguagesFetching,
+    refetch: getSelectedRegionalLanguagesRefetch,
+    data: getSelectedRegionalLanguages_Data,
+    isError: getSelectedRegionalLanguages_isError,
+  } = useQuery({
+    queryKey: ['getSelectedRegionalLanguages'],
+    queryFn: () => getSelectedRegionalLanguages(),
+    onSuccess: success => {
+      console.log(success?.data , "success");
+    },
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
+
+  const {mutate: upsertRegionalLanguageMuatate, isLoading: upsertRegionalLanguageLoading} =
+    useMutation(upsertRegionalLanguage, {
+      onSuccess: async success => {
+       
+      },
+      onError: error => {
+        ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
+      },
+    });
+
+
+  useFocusEffect(
+    useCallback(() => {
+      getSelectedRegionalLanguagesRefetch();
+    }
+  , []));
+
+
+
   return (
     <>
       {/* upper card */}

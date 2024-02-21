@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   },
   view_box: {
     backgroundColor: '#fff',
-    padding: 5,
+    padding: 10,
     marginVertical: 5,
     width: Sizes.wp('90%'),
     alignSelf: 'center',
@@ -91,6 +91,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: 'white',
     elevation: 5,
+  },
+
+
+  // moti container styles
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
   },
 });
 

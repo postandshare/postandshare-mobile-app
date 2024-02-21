@@ -1,11 +1,13 @@
-import {ScrollView, Text, View} from 'react-native';
-import React from 'react';
+import {Pressable, ScrollView, Text, View} from 'react-native';
+import React, {useReducer} from 'react';
 import TopHeader from '../../components/TopHeader';
 import styles from './style';
 import MyBussinessCard from '../../components/MyBussinessCard';
 import Images from '../../constants/images';
 import CustomButton from '../../components/CustomButton';
 import NavigationScreenName from '../../constants/NavigationScreenName';
+import {MotiView} from 'moti';
+import {Skeleton} from 'moti/skeleton';
 
 const MyBussiness_Data = [
   {
@@ -58,7 +60,11 @@ const MyBussiness_Data = [
   },
 ];
 
+const Spacer = ({height = 16}) => <View style={{height}} />;
+
 const MyBussiness = ({navigation, route}) => {
+  const [dark, toggle] = useReducer(s => !s, true);
+  const colorMode = dark ? 'dark' : 'light';
   const {picData} = route.params || {};
   const PhotoData = picData;
   console.log(picData, 'editDateForPhoto');
@@ -73,22 +79,22 @@ const MyBussiness = ({navigation, route}) => {
         {/* card for the bussiness name and update */}
         <View style={styles.container}>
           {MyBussiness_Data?.map((item, index) => (
-            <MyBussinessCard
-              key={index}
-              name={item?.name}
-              EstblishmentDate={item?.EstblishmentDate}
-              image={item?.image}
-              userDocId={item?.userDocId}
-              lastUpdated={item?.lastUpdated}
-              edit={true}
-              onPress={() =>
-                picData
-                  ? navigation.navigate('CustomSDK', {
-                      picData: PhotoData,
-                    })
-                  : navigation.navigate('Edit Bussiness')
-              }
-            />
+              <MyBussinessCard
+                key={index}
+                name={item?.name}
+                EstblishmentDate={item?.EstblishmentDate}
+                image={item?.image}
+                userDocId={item?.userDocId}
+                lastUpdated={item?.lastUpdated}
+                edit={true}
+                onPress={() =>
+                  picData
+                    ? navigation.navigate('CustomSDK', {
+                        picData: PhotoData,
+                      })
+                    : navigation.navigate('Edit Bussiness')
+                }
+              />
           ))}
         </View>
 
