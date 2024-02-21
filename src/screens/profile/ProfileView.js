@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   RefreshControl,
   ScrollView,
@@ -19,6 +20,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Skeleton} from 'moti/skeleton';
 import {MotiView} from 'moti';
 import Sizes from '../../constants/Sizes';
+import {useDispatch} from 'react-redux';
+import {setProfileUpdated} from '../../services/reducer/CommonReducer';
 
 const ViewBox = ({title, value}) => {
   return (
@@ -30,7 +33,7 @@ const ViewBox = ({title, value}) => {
 };
 const ProfileView = ({}) => {
   const navigation = useNavigation();
-
+  const dispatch = useDispatch();
   const {
     isLoading: getUserProfileLoading,
     isFetching: getUserProfileFetching,
@@ -40,7 +43,32 @@ const ProfileView = ({}) => {
   } = useQuery({
     queryKey: ['getUserProfile'],
     queryFn: () => getUserProfile(),
-    onSuccess: success => {},
+    onSuccess: success => {
+      if (success?.data?.obj?.isProfileUpdated == false) {
+        Alert.alert(
+          'Post And Share App',
+          'Please update your profile to continue',
+          [
+            {
+              text: 'Cancel',
+              onPress: () => navigation.goBack(),
+              style: 'cancel',
+            },
+            {
+              text: 'Update',
+              onPress: () =>
+                navigation.navigate('EditProfile', {
+                  data: getUserProfile_Data?.data?.obj,
+                }),
+            },
+          ],
+          {cancelable: false},
+        );
+      }
+      if (success?.data?.obj?.isProfileUpdated == true) {
+        dispatch(setProfileUpdated(true));
+      }
+    },
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
@@ -178,8 +206,6 @@ const ProfileView = ({}) => {
                 title={'WhatsApp Number'}
                 value={getUserProfile_Data?.data?.obj?.whatsappNumber}
               />
-
-              
             </View>
           </>
         )}

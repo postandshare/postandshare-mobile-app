@@ -29,6 +29,8 @@ const Stack = createStackNavigator();
 const Routes = () => {
   const [state, setState] = useState(true);
   const {login_Data, onBoarding} = useSelector(store => store.auth);
+  const {isProfileUpdated} = useSelector(store => store.commonStore);
+  console.log(isProfileUpdated, 'isProfileUpdated');
   const dispatch = useDispatch();
   const getOnboarding = async () => {
     try {
@@ -72,50 +74,63 @@ const Routes = () => {
               component={OnBoarding}
             />
           ) : login_Data ? (
-            <>
-              <Stack.Screen
-                name={NavigationScreenName.DRWAER_NAVIGATOR}
-                component={DrawerStack}
-              />
-              <Stack.Screen
-                name="ProfileNavigator"
-                component={ProfileNavigator}
-              />
-              <Stack.Screen
-                name={NavigationScreenName.TERM_AND_CONDITION}
-                component={TermAndCondtion}
-              />
-              <Stack.Screen
-                name={NavigationScreenName.MY_BUSSINESS}
-                component={MyBussinessNavigator}
-              />
-              <Stack.Screen
-                name={NavigationScreenName.MY_POST}
-                component={MyPost}
-              />
-              <Stack.Screen
-                name={NavigationScreenName.TUTORIALS}
-                component={Tutorial}
-              />
-              <Stack.Screen
-                name={NavigationScreenName.Privacy_Policy}
-                component={Privacy}
-              />
-              <Stack.Screen
-                name={NavigationScreenName.LANGUAGE_SELECTION}
-                component={LanguageSelection}
-              />
-              <Stack.Screen
-                name={NavigationScreenName.FEEDBACK}
-                component={FeedBack}
-              />
-              <Stack.Screen
-                name={NavigationScreenName.PHOTO_NAVIGATOR}
-                component={PhotoNavigator}
-              />
-              <Stack.Screen name="CustomSDK" component={CustomSDK} />
-              <Stack.Screen name='ShareSave' component={ShareSave} />
-            </>
+            isProfileUpdated == false ? (
+              <>
+                <Stack.Screen
+                  name={NavigationScreenName.LANGUAGE_SELECTION}
+                  component={LanguageSelection}
+                />
+                <Stack.Screen
+                  name="ProfileNavigator"
+                  component={ProfileNavigator}
+                />
+              </>
+            ) : (
+              <>
+                <Stack.Screen
+                  name={NavigationScreenName.DRWAER_NAVIGATOR}
+                  component={DrawerStack}
+                />
+                <Stack.Screen
+                  name="ProfileNavigator"
+                  component={ProfileNavigator}
+                />
+                <Stack.Screen
+                  name={NavigationScreenName.TERM_AND_CONDITION}
+                  component={TermAndCondtion}
+                />
+                <Stack.Screen
+                  name={NavigationScreenName.MY_BUSSINESS}
+                  component={MyBussinessNavigator}
+                />
+                <Stack.Screen
+                  name={NavigationScreenName.MY_POST}
+                  component={MyPost}
+                />
+                <Stack.Screen
+                  name={NavigationScreenName.TUTORIALS}
+                  component={Tutorial}
+                />
+                <Stack.Screen
+                  name={NavigationScreenName.Privacy_Policy}
+                  component={Privacy}
+                />
+                <Stack.Screen
+                  name={NavigationScreenName.LANGUAGE_SELECTION}
+                  component={LanguageSelection}
+                />
+                <Stack.Screen
+                  name={NavigationScreenName.FEEDBACK}
+                  component={FeedBack}
+                />
+                <Stack.Screen
+                  name={NavigationScreenName.PHOTO_NAVIGATOR}
+                  component={PhotoNavigator}
+                />
+                <Stack.Screen name="CustomSDK" component={CustomSDK} />
+                <Stack.Screen name="ShareSave" component={ShareSave} />
+              </>
+            )
           ) : (
             <>
               <Stack.Screen

@@ -3,6 +3,7 @@ import {
   Image,
   ImageBackground,
   Pressable,
+  RefreshControl,
   ScrollView,
   Text,
   ToastAndroid,
@@ -13,72 +14,21 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import Images from '../../constants/images';
 import authStyle from './authStyle';
 import Colors from '../../constants/Colors';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { getSelectedRegionalLanguages, upsertRegionalLanguage } from '../../services/userServices/profile.services';
-import { useFocusEffect } from '@react-navigation/native';
+import {useMutation, useQuery} from '@tanstack/react-query';
+import {
+  deleteRegionalLanguage,
+  getSelectedRegionalLanguages,
+  upsertRegionalLanguage,
+} from '../../services/userServices/profile.services';
+import {useFocusEffect} from '@react-navigation/native';
+import {getRegionalLanguages} from '../../services/userServices/monitoring.services';
+import NavigationScreenName from '../../constants/NavigationScreenName';
+import {useSelector} from 'react-redux';
+import {store} from '../../services/store';
 
-const ReginalLanguage = [
-  {
-    _id: 1,
-    name: 'English',
-    language: 'en',
-  },
-  {
-    _id: 2,
-    name: 'Hindi',
-    language: 'hi',
-  },
-  {
-    _id: 3,
-    name: 'Marathi',
-    language: 'mr',
-  },
-  {
-    _id: 4,
-    name: 'Gujarati',
-    language: 'gu',
-  },
-  {
-    _id: 5,
-    name: 'Tamil',
-    language: 'ta',
-  },
-  {
-    _id: 6,
-    name: 'Telugu',
-    language: 'te',
-  },
-  {
-    _id: 7,
-    name: 'Kannada',
-    language: 'kn',
-  },
-  {
-    _id: 8,
-    name: 'Malayalam',
-    language: 'ml',
-  },
-  {
-    _id: 9,
-    name: 'Bengali',
-    language: 'bn',
-  },
-  {
-    _id: 10,
-    name: 'Punjabi',
-    language: 'pa',
-  },
-  {
-    _id: 11,
-    name: 'Odia',
-    language: 'or',
-  },
-];
-
-const LanguageSelection = ({navigation, route}) => {
-  const [loginStateData, setLoginStateData] = useState(route?.params?.loginStateData);
-  console.log(loginStateData, 'loginStateData');
-  const [selectReginalLan, setRiginalLan] = useState('en');
+const LanguageSelection = ({navigation}) => {
+  const {isProfileUpdated} = useSelector(store => store.commonStore);
+  const [selectReginalLan, setRiginalLan] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const {
@@ -90,33 +40,64 @@ const LanguageSelection = ({navigation, route}) => {
   } = useQuery({
     queryKey: ['getSelectedRegionalLanguages'],
     queryFn: () => getSelectedRegionalLanguages(),
-    onSuccess: success => {
-      console.log(success?.data , "success");
+    onSuccess: async success => {
+      const selectedLanguages = [];
+      await success?.data?.list?.map(item => {
+        selectedLanguages.push(item?.languageDocId);
+      });
+      setRiginalLan(selectedLanguages);
     },
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
     enabled: false,
   });
+  const {
+    isLoading: getRegionalLanguagesLoading,
+    isFetching: getRegionalLanguagesFetching,
+    refetch: getRegionalLanguagesRefetch,
+    data: getRegionalLanguages_Data,
+    isError: getRegionalLanguages_isError,
+  } = useQuery({
+    queryKey: ['getRegionalLanguages'],
+    queryFn: () => getRegionalLanguages(),
+    onSuccess: success => {},
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
 
-  const {mutate: upsertRegionalLanguageMuatate, isLoading: upsertRegionalLanguageLoading} =
-    useMutation(upsertRegionalLanguage, {
-      onSuccess: async success => {
-       
-      },
-      onError: error => {
-        ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
-      },
-    });
-
+  const {
+    mutate: upsertRegionalLanguageMuatate,
+    isLoading: upsertRegionalLanguageLoading,
+  } = useMutation(upsertRegionalLanguage, {
+    onSuccess: success => {
+      console.log(success?.data, 'success');
+    },
+    onError: error => {
+      ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
+    },
+  });
+  const {
+    mutate: deleteRegionalLanguageMuatate,
+    isLoading: deleteRegionalLanguageLoading,
+  } = useMutation(deleteRegionalLanguage, {
+    onSuccess: success => {
+      console.log(success?.data, 'success');
+    },
+    onError: error => {
+      ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
+    },
+  });
 
   useFocusEffect(
     useCallback(() => {
+      getRegionalLanguagesRefetch();
       getSelectedRegionalLanguagesRefetch();
-    }
-  , []));
-
-
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []),
+  );
 
   return (
     <>
@@ -134,10 +115,28 @@ const LanguageSelection = ({navigation, route}) => {
       {/* flatlist for rendering the regional language */}
       <FlatList
         numColumns={2}
-        contentContainerStyle={{justifyContent: 'space-between', marginHorizontal: 10}}
-    
-        data={ReginalLanguage}
-        keyExtractor={(item) => item?._id}
+        contentContainerStyle={{
+          justifyContent: 'space-between',
+          marginHorizontal: 10,
+        }}
+        refreshControl={
+          <RefreshControl
+            refreshing={
+              getRegionalLanguagesFetching ||
+              getSelectedRegionalLanguagesFetching ||
+              upsertRegionalLanguageLoading ||
+              deleteRegionalLanguageLoading ||
+              getSelectedRegionalLanguagesLoading ||
+              getRegionalLanguagesLoading ||
+              loading
+            }
+            onRefresh={
+              getSelectedRegionalLanguagesRefetch && getRegionalLanguagesRefetch
+            }
+          />
+        }
+        data={getRegionalLanguages_Data?.data?.list}
+        keyExtractor={item => item?._id}
         ListHeaderComponent={
           <View style={authStyle.middleContainer}>
             <Text style={[authStyle.input, {fontSize: 20, fontWeight: '500'}]}>
@@ -147,15 +146,27 @@ const LanguageSelection = ({navigation, route}) => {
         }
         renderItem={({item}) => (
           <TouchableOpacity
-            onPress={() => setRiginalLan(item?.language)}
+            onPress={async () => {
+              if (selectReginalLan.includes(item?._id)) {
+                setRiginalLan(selectReginalLan.filter(id => id !== item?._id));
+                deleteRegionalLanguageMuatate({
+                  languageDocId: item?._id,
+                });
+              } else {
+                setRiginalLan([...selectReginalLan, item?._id]);
+                upsertRegionalLanguageMuatate({
+                  languageDocId: item?._id,
+                });
+              }
+            }}
             style={{flex: 1}}>
             <Text
               style={
-                selectReginalLan === item?.language
+                selectReginalLan.includes(item._id)
                   ? authStyle.selectedLanguage
                   : authStyle.unSelectedLanguage
               }>
-              {item?.name}
+              {item?.languageName}
             </Text>
           </TouchableOpacity>
         )}
@@ -164,20 +175,19 @@ const LanguageSelection = ({navigation, route}) => {
             <Pressable
               style={({pressed}) => [
                 {
-                  backgroundColor: pressed
-                    ? Colors.PRIMARY
-                    : Colors.SECONDRY,
+                  backgroundColor: pressed ? Colors.PRIMARY : Colors.SECONDRY,
                   padding: 10,
                   borderRadius: 5,
                   alignItems: 'center',
                 },
-                
               ]}
               onPress={() => {
                 setLoading(true);
                 setTimeout(() => {
                   setLoading(false);
-                  // navigation.navigate('Login');
+                  isProfileUpdated == false
+                    ? navigation.navigate("ProfileNavigator")
+                    : navigation.navigate(NavigationScreenName.HOME);
                 }, 1000);
               }}>
               <Text style={authStyle.signin_text}>

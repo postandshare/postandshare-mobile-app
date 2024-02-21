@@ -32,19 +32,24 @@ const VerifyOTP = ({navigation, route}) => {
   const [resendTime, setResendTime] = useState(40);
   const [isOtpSend, setIsOtpSend] = useState(true);
   const [isOtpVerify, setIsOtpVerfiy] = useState(false);
-  const [loginStateData, setLoginStateData] = useState(null);
+  const [loginStateData, setLoginStateData] = useState();
 
   const {mutate: SignInWithOTPMuatate, isLoading: SignInWithOTPLoading} =
     useMutation(SignInWithOTP, {
       onSuccess: async success => {
-        // setLoginStateData(success?.data);
-        // await getUserProfileRefetch();
-         dispatch(setLoginState(success?.data));
+        dispatch(setLoginState(success?.data));
+        await getUserProfileRefetch();
       },
       onError: error => {
         ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
       },
     });
+
+  // useEffect(() => {
+  //   if (loginStateData) {
+  //     getUserProfileRefetch();
+  //   }
+  // });
 
   const {
     isLoading: getUserProfileLoading,
@@ -57,12 +62,11 @@ const VerifyOTP = ({navigation, route}) => {
     queryFn: () => getUserProfile(),
     onSuccess: success => {
       if (success?.data?.isProfileUpdated == false) {
-        console.log(true , "in the if condition")
         navigation.navigate(NavigationScreenName.LANGUAGE_SELECTION, {
           loginStateData: loginStateData,
         });
       } else {
-        dispatch(setLoginState(loginStateData));
+        navigation.navigate(NavigationScreenName.HOME);
       }
     },
     onError: err => {

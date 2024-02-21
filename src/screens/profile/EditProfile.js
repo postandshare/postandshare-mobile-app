@@ -28,6 +28,8 @@ import {Checkbox} from 'react-native-paper';
 import {useMutation} from '@tanstack/react-query';
 import {updateSelfPhoto, updateUserProfile} from '../../services/userServices/profile.services';
 import Sizes from '../../constants/Sizes';
+import { useDispatch } from 'react-redux';
+import { setProfileUpdated } from '../../services/reducer/CommonReducer';
 
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -80,7 +82,7 @@ const EditProfile = ({route, navigation}) => {
   const [imageUploading, setImageUploading] = useState(false);
   const [open, setOpen] = useState(false);
   const passRef = useRef(null);
-
+  const dispatch = useDispatch();
 
   const {
     mutate: updateSelfPhotoMutate,
@@ -149,6 +151,7 @@ const EditProfile = ({route, navigation}) => {
     useMutation(updateUserProfile, {
       onSuccess: ({data}) => {
         ToastAndroid.show(data?.message, ToastAndroid.LONG);
+        dispatch(setProfileUpdated(true));
         navigation.goBack();
       },
       onError: err =>

@@ -34,6 +34,12 @@ export const getSelectedRegionalLanguages = params => {
       body,
     );
   };
+
+  export const deleteRegionalLanguage = body => {
+    return authAxiosInstance.delete(
+      `${user_route}/deleteRegionalLanguage/${body?.languageDocId}`,
+    );
+  };
   
   export const updateSelfPhoto = body => {
     return authAxiosInstance.put(
