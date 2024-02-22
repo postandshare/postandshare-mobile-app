@@ -97,7 +97,7 @@ const CustomInput = React.forwardRef((props, ref) => {
             backgroundColor: '#fff',
             paddingHorizontal: props?.label ? 2 : 0,
           }}>
-          <Text style={{fontSize: 12, color: 'black'}}>
+          <Text style={{fontSize: 12, color: Colors.PRIMARY}}>
             {props?.label ?? ''}
           </Text>
         </View>

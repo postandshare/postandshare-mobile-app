@@ -78,7 +78,7 @@ const ProfileView = ({}) => {
   useFocusEffect(
     useCallback(() => {
       getUserProfileRefetch();
-    }, [getUserProfileRefetch]),
+    }, [getUserProfileRefetch, navigation]),
   );
 
   const Spacer = ({height = 16}) => <View style={{height}} />;

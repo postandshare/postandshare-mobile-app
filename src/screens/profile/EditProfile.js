@@ -377,6 +377,7 @@ const EditProfile = ({route, navigation}) => {
             }}
             maximumDate={new Date()}
             mode="date"
+            
           />
 
           {errors.DOB ? (
@@ -530,10 +531,10 @@ const EditProfile = ({route, navigation}) => {
           <Text style={styles.header}>Current Address</Text>
           <CustomInput
             label="Current Address"
-            value={values?.caddress}
-            error={errors?.caddress}
-            touched={touched?.caddress}
-            onChange={handleChange(values?.caddress)}
+            value={values['caddress']}
+            error={errors['caddress']}
+            touched={touched['caddress']}
+            onChange={handleChange('caddress')}
             onBlur={() => handleBlur('caddress')}
             setFieldTouched={() => setFieldTouched('caddress')}
             placeholder="Current Address"

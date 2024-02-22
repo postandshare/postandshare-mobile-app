@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   title: {
-    color: Colors.TEXT1,
+    color: Colors.PRIMARY,
     fontSize: 16,
   },
   margin: {

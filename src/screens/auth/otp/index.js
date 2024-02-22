@@ -20,6 +20,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setLoginState} from '../../../services/reducer/AuthSlice';
 import Loader from '../../../components/Loader';
 import {getUserProfile} from '../../../services/userServices/profile.services';
+import { setProfileUpdated } from '../../../services/reducer/CommonReducer';
 
 export let newOtp = 0;
 
@@ -60,13 +61,18 @@ const VerifyOTP = ({navigation, route}) => {
   } = useQuery({
     queryKey: ['getUserProfile'],
     queryFn: () => getUserProfile(),
-    onSuccess: success => {
-      if (success?.data?.isProfileUpdated == false) {
+    onSuccess: async success => {
+      console.log(success?.data, 'isProfileUpdated');
+      if (success?.data?.obj?.isProfileUpdated == false) {
+        dispatch(setProfileUpdated(false));
         navigation.navigate(NavigationScreenName.LANGUAGE_SELECTION, {
           loginStateData: loginStateData,
         });
+        console.log("success?.data?.isProfileUpdated == false");
       } else {
-        navigation.navigate(NavigationScreenName.HOME);
+        dispatch(setProfileUpdated(true));
+        await navigation.navigate(NavigationScreenName.DRWAER_NAVIGATOR);
+        console.log("else part of success?.data?.isProfileUpdated == false");
       }
     },
     onError: err => {

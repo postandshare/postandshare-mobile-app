@@ -7,10 +7,10 @@ import {
 } from 'react-native';
 import React from 'react';
 import {scale} from 'react-native-size-matters';
-
 import Feather from 'react-native-vector-icons/Feather';
 import Colors from '../constants/Colors';
 import Sizes from '../constants/Sizes';
+
 const CustomInputField = ({
   label = 'Label',
   placeholder = 'placeholder',

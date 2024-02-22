@@ -21,6 +21,7 @@ import NavigationScreenName from '../constants/NavigationScreenName';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch} from 'react-redux';
 import {setLoginState} from '../services/reducer/AuthSlice';
+import { setProfileUpdated } from '../services/reducer/CommonReducer';
 
 const Item = ({icon, text, path, onPress = () => {}}) => (
   <TouchableOpacity style={styles.item_root} onPress={onPress}>
@@ -45,6 +46,7 @@ const CustomDrawerLeft = ({navigation}) => {
         text: 'Logout',
         onPress: () => {
           dispatch(setLoginState(''));
+          dispatch(setProfileUpdated(false));
         },
       },
     ]);

@@ -187,7 +187,7 @@ const LanguageSelection = ({navigation}) => {
                   setLoading(false);
                   isProfileUpdated == false
                     ? navigation.navigate("ProfileNavigator")
-                    : navigation.navigate(NavigationScreenName.HOME);
+                    : navigation.navigate(NavigationScreenName.DRWAER_NAVIGATOR);
                 }, 1000);
               }}>
               <Text style={authStyle.signin_text}>

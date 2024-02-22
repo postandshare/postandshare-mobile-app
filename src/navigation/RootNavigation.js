@@ -84,6 +84,10 @@ const Routes = () => {
                   name="ProfileNavigator"
                   component={ProfileNavigator}
                 />
+                <Stack.Screen
+                  name={NavigationScreenName.DRWAER_NAVIGATOR}
+                  component={DrawerStack}
+                />
               </>
             ) : (
               <>
