@@ -3,6 +3,8 @@ import React from 'react';
 import Sizes from '../constants/Sizes';
 import Colors from '../constants/Colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import moment from 'moment';
+import images from '../constants/images';
 
 const MyBussinessCard = ({
   name,
@@ -12,17 +14,18 @@ const MyBussinessCard = ({
   lastUpdated,
   onPress,
   edit,
+  onPressEdit,
   onPressForPhotoEdit,
 }) => {
   return (
     <TouchableOpacity style={styles.root_container} onPress={
-      onPressForPhotoEdit
+      onPressForPhotoEdit ?? onPress
     }>
       {/* profile image */}
       <View style={styles.profile_container}>
         {image ? (
           <Image
-            source={image}
+            source={image ? {uri: image} : images.profilePlaceholder}
             style={{
               height: Sizes.hp('8%'),
               width: Sizes.hp('8%'),
@@ -41,12 +44,12 @@ const MyBussinessCard = ({
       {/* bussiness name and est date */}
       <View style={styles.name_container}>
         <Text style={styles.bussinessName}>{name}</Text>
-        <Text style={styles.est_date}>{EstblishmentDate}</Text>
+        <Text style={styles.est_date}>{moment(EstblishmentDate).format('LL')}</Text>
       </View>
 
       {/* edit button */}
       {edit ? (
-        <TouchableOpacity style={styles.edit_button} onPress={onPress}>
+        <TouchableOpacity style={styles.edit_button} onPress={onPressEdit}>
           <FontAwesome style={{color: '#26A9E1'}} name={'edit'} size={25} />
         </TouchableOpacity>
       ) : null}
@@ -60,6 +63,7 @@ const styles = StyleSheet.create({
   root_container: {
     flex: 1,
     width: Sizes.wp('95%'),
+    maxHeight: Sizes.hp('10%'),
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#3D398945',

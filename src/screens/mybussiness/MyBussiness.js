@@ -1,5 +1,13 @@
-import {Pressable, ScrollView, Text, View} from 'react-native';
-import React, {useReducer} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import {
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  Text,
+  ToastAndroid,
+  View,
+} from 'react-native';
+import React, {useCallback, useReducer} from 'react';
 import TopHeader from '../../components/TopHeader';
 import styles from './style';
 import MyBussinessCard from '../../components/MyBussinessCard';
@@ -8,6 +16,9 @@ import CustomButton from '../../components/CustomButton';
 import NavigationScreenName from '../../constants/NavigationScreenName';
 import {MotiView} from 'moti';
 import {Skeleton} from 'moti/skeleton';
+import {useQuery} from '@tanstack/react-query';
+import {getAllBusinessList} from '../../services/userServices/bussiness.servies';
+import {useFocusEffect} from '@react-navigation/native';
 
 const MyBussiness_Data = [
   {
@@ -60,14 +71,34 @@ const MyBussiness_Data = [
   },
 ];
 
-const Spacer = ({height = 16}) => <View style={{height}} />;
-
 const MyBussiness = ({navigation, route}) => {
-  const [dark, toggle] = useReducer(s => !s, true);
-  const colorMode = dark ? 'dark' : 'light';
   const {picData} = route.params || {};
   const PhotoData = picData;
-  console.log(picData, 'editDateForPhoto');
+
+  const {
+    isLoading: getAllBusinessListLoading,
+    isFetching: getAllBusinessListFetching,
+    refetch: getAllBusinessListRefetch,
+    data: getAllBusinessList_Data,
+    isError: getAllBusinessList_isError,
+  } = useQuery({
+    queryKey: ['getAllBusinessList'],
+    queryFn: () => getAllBusinessList(),
+    onSuccess: success => {
+      // console.log(success?.data , "success in my bussiness")
+    },
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
+
+  useFocusEffect(
+    useCallback(() => {
+      getAllBusinessListRefetch();
+    }, [getAllBusinessListRefetch, navigation]),
+  );
+
   return (
     <>
       <TopHeader
@@ -75,26 +106,42 @@ const MyBussiness = ({navigation, route}) => {
         add
         onPress={() => navigation.navigate('Add Bussiness')}
       />
-      <ScrollView contentContainerStyle={styles.root}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={getAllBusinessListFetching || getAllBusinessListLoading}
+            onRefresh={() => getAllBusinessListRefetch()}
+          />
+        }
+        contentContainerStyle={styles.root}>
         {/* card for the bussiness name and update */}
         <View style={styles.container}>
-          {MyBussiness_Data?.map((item, index) => (
-              <MyBussinessCard
-                key={index}
-                name={item?.name}
-                EstblishmentDate={item?.EstblishmentDate}
-                image={item?.image}
-                userDocId={item?.userDocId}
-                lastUpdated={item?.lastUpdated}
-                edit={true}
-                onPress={() =>
-                  picData
-                    ? navigation.navigate('CustomSDK', {
-                        picData: PhotoData,
-                      })
-                    : navigation.navigate('Edit Bussiness')
-                }
-              />
+          {getAllBusinessList_Data?.data?.list?.map((item, index) => (
+            <MyBussinessCard
+              key={index}
+              name={item?.businessName}
+              EstblishmentDate={item?.createdOn}
+              image={item?.logo}
+              userDocId={item?._id}
+              lastUpdated={item?.lastUpdated ?? item?.createdOn}
+              edit={true}
+              onPressEdit={() =>
+                navigation.navigate('Edit Bussiness', {
+                  businessId: item?._id,
+                  businessType:item?.businessType,
+                })
+              }
+              onPress={() =>
+                picData
+                  ? navigation.navigate('CustomSDK', {
+                      picData: PhotoData,
+                    })
+                  : navigation.navigate('View Bussiness', {
+                      businessId: item?._id,
+                      businessType:item?.businessType,
+                    })
+              }
+            />
           ))}
         </View>
 

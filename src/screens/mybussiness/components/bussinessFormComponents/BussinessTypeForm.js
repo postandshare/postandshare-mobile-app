@@ -47,9 +47,6 @@ const BussinessTypeForm = ({bussinessTypeFormik}) => {
       });
       setImageUploading(false);
       console.log(uplode?.fileURL, 'uplode file url');
-      //   updateSelfPhotoMutate({
-      //     profilePic: uplode?.fileURL,
-      //   });
       bussinessTypeFormik.setValues(prev => ({
         ...prev,
         logo: uplode?.fileURL,

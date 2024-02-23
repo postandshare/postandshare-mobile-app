@@ -7,7 +7,7 @@ import {
   ToastAndroid,
   View,
 } from 'react-native';
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Colors from '../../../constants/Colors';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -21,7 +21,7 @@ import BussinessPartnerForm from './bussinessFormComponents/BussinessPartnerForm
 import {addBusiness} from '../../../services/userServices/bussiness.servies';
 import {useMutation} from '@tanstack/react-query';
 import NavigationScreenName from '../../../constants/NavigationScreenName';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import Loader from '../../../components/Loader';
 
 const BussinessType = ({}) => {
@@ -72,25 +72,19 @@ const BussinessType = ({}) => {
         )
         .required(),
       businessWebsite: yup.string().optional(),
-      bussinessAddress: yup
-        .string().trim()
-        .matches(RegExp(/^[a-zA-Z0-9._-]+$/), 'Invalid Address')
-        .required(),
+      bussinessAddress: yup.string().required(),
       bussinessPinCode: yup
         .string()
         .matches(RegExp(/^[0-9]{6}$/), 'Invalid Pincode')
         .required(),
       bussinessTehsil: yup
         .string()
-        .matches(RegExp(/^[a-zA-Z0-9._-]+$/), 'Invalid Tehsil')
         .required(),
       bussinessDistrict: yup
         .string()
-        .matches(RegExp(/^[a-zA-Z0-9._-]+$/), 'Invalid District')
         .required(),
       bussinessState: yup
         .string()
-        .matches(RegExp(/^[a-zA-Z0-9._-]+$/), 'Invalid State')
         .required(),
     }),
     onSubmit: formValues => {
@@ -104,17 +98,15 @@ const BussinessType = ({}) => {
       bussinessOwnerPhone: '',
       bussinessOwnerWhatsapp: '',
       bussinessOwnerDessignation: '',
+      bussinessOwnerPhoto: '',
 
       //bussinessPartnerInfo
-      bussinessPartnerName: '',
-      bussinessPartnerDesignation: '',
-      bussinessPartnerPhoto: '',
+      bussinessPartner: [],
     },
     validationSchema: yup.object({
       //bussinessPartner
       bussinessOwnerName: yup
         .string()
-        .matches(RegExp(/^[a-zA-Z0-9._-]+$/), 'Invalid Name')
         .required(),
       bussinessOwnerPhone: yup
         .string()
@@ -126,25 +118,17 @@ const BussinessType = ({}) => {
         .optional(),
       bussinessOwnerDessignation: yup
         .string()
-        .matches(RegExp(/^[a-zA-Z0-9._-]+$/), 'Invalid Designation')
         .required(),
-      bussinessPartnerName: yup
-        .string()
-        .matches(RegExp(/^[a-zA-Z0-9._-]+$/), 'Invalid Name')
-        .required(),
-      bussinessPartnerDesignation: yup
-        .string()
-        .matches(RegExp(/^[a-zA-Z0-9._-]+$/), 'Invalid Designation')
-        .optional(),
-      bussinessPartnerPhoto: yup
-        .string()
-        .matches(RegExp(/^[a-zA-Z0-9._-]+$/), 'Invalid Photo')
-        .optional(),
     }),
     onSubmit: formValues => {
       console.log(formValues, 'in bussiness formik');
     },
   });
+
+  console.log(
+    bussinessPartnerFormik?.values?.bussinessPartner,
+    'bussinessPartner IN BUSSINESS TYPE FORMIK IN THE LATEST FORMIKNSH IUODSFSF U SJDHASIDN JOSD AMDI',
+  );
 
   const {mutate: addBusinesslMutate, isLoading: addBusinesslLoading} =
     useMutation(addBusiness, {
@@ -170,14 +154,7 @@ const BussinessType = ({}) => {
       description: bussinessProfileFormik?.values?.bussinessDetail,
       email: bussinessProfileFormik?.values?.bussinessEmail,
       website: bussinessProfileFormik?.values?.businessWebsite,
-      businessPartnerDetail: [
-        {
-          name: bussinessPartnerFormik?.values?.bussinessPartnerName,
-          designation:
-            bussinessPartnerFormik?.values?.bussinessPartnerDesignation,
-          photo: bussinessPartnerFormik?.values?.bussinessPartnerPhoto,
-        },
-      ],
+      businessPartnerDetail: bussinessPartnerFormik?.values?.bussinessPartner,
       address: {
         address: bussinessProfileFormik?.values?.bussinessAddress,
         pinCode: bussinessProfileFormik?.values?.bussinessPinCode,
@@ -189,7 +166,7 @@ const BussinessType = ({}) => {
       mobileNumber: bussinessPartnerFormik?.values?.bussinessOwnerPhone,
       whatsappNumber: bussinessPartnerFormik?.values?.bussinessOwnerWhatsapp,
       designation: bussinessPartnerFormik?.values?.bussinessOwnerDessignation,
-      ownerPhoto: '',
+      ownerPhoto: bussinessPartnerFormik?.values?.bussinessOwnerPhoto,
     });
   };
 

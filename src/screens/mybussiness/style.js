@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.Background,
   },
   container: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: Colors.Background,
     justifyContent: 'center',
     margin: 10,

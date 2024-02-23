@@ -16,10 +16,15 @@ import CustomButton from '../../../../components/CustomButton';
 import uploadFile from '../../../../utils/uploadFile';
 import ImageCropPicker from 'react-native-image-crop-picker';
 
-const AddBussinessPartnerSheet = ({onPressCross, bussinessTypeFormik}) => {
+const AddBussinessPartnerSheet = ({
+  onPressCross,
+  bussinessTypeFormik,
+  AddBussinessPartner,
+}) => {
   const [profilePic, setprofilePic] = useState(
-    bussinessTypeFormik?.values?.bussinessPartnerPhoto,
+    bussinessTypeFormik?.values?.bussinessPartnerPhoto??'',
   );
+
   const [imageUploading, setImageUploading] = useState(false);
 
   const uploadePhoto = async (path, mime) => {
@@ -38,7 +43,7 @@ const AddBussinessPartnerSheet = ({onPressCross, bussinessTypeFormik}) => {
       //   });
       bussinessTypeFormik.setValues(prev => ({
         ...prev,
-        logo: uplode?.fileURL,
+        bussinessPartnerPhoto: uplode?.fileURL,
       }));
       setprofilePic(uplode?.fileURL);
     } catch (error) {
@@ -75,6 +80,9 @@ const AddBussinessPartnerSheet = ({onPressCross, bussinessTypeFormik}) => {
       ToastAndroid.show('Permission Denied', ToastAndroid.LONG);
     }
   };
+
+
+
   return (
     <>
       {/* header */}
@@ -112,7 +120,7 @@ const AddBussinessPartnerSheet = ({onPressCross, bussinessTypeFormik}) => {
           <Text>Desingnation</Text>
           <CustomTextInputFormik
             formik={bussinessTypeFormik}
-            name={'bussinessPartnerDesignation'}
+            name={'bussinessPartnerDessignation'}
             label={'Desingnation'}
           />
         </View>
@@ -135,7 +143,7 @@ const AddBussinessPartnerSheet = ({onPressCross, bussinessTypeFormik}) => {
         <CustomButton
           title={'Add'}
           onPress={() => {
-            console.log('add');
+            AddBussinessPartner();
           }}
         />
       </View>

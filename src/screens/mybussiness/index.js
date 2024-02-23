@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import MyBussiness from './MyBussiness';
 import AddBussiness from './AddBussiness';
 import EditBussiness from './EditBussiness';
+import ViewBussiness from './ViewBussiness';
 
 const Stack = createStackNavigator();
 const MyBussinessNavigator = () => {
@@ -17,6 +18,7 @@ const MyBussinessNavigator = () => {
       <Stack.Group screenOptions={{presentation: 'modal'}}>
         <Stack.Screen name="Add Bussiness" component={AddBussiness} />
         <Stack.Screen name="Edit Bussiness" component={EditBussiness} />
+        <Stack.Screen name='View Bussiness' component={ViewBussiness} />
       </Stack.Group>
     </Stack.Navigator>
   );

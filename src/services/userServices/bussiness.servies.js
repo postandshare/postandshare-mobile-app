@@ -31,3 +31,7 @@ export const deleteBusiness = body => {
 export const changeBusinessLogo = body => {
   return authAxiosInstance.put(`${bussiness_route}/changeBusinessLogo`, body);
 };
+
+export const addBusinessPartner = body => {
+  return authAxiosInstance.post(`${bussiness_route}/addBusinessPartner`, body);
+};

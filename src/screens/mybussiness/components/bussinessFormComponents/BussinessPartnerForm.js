@@ -1,4 +1,5 @@
 import {
+  Image,
   PermissionsAndroid,
   ScrollView,
   StyleSheet,
@@ -14,12 +15,62 @@ import ImageCropPicker from 'react-native-image-crop-picker';
 import CustomTextInputFormik from '../../../../components/CustomTextInputFormik';
 import ActionSheet from 'react-native-actions-sheet';
 import AddBussinessPartnerSheet from '../actionsheets/AddBussinessPartnerSheet';
+import {useFormik} from 'formik';
+import * as yup from 'yup';
+import Colors from '../../../../constants/Colors';
+import images from '../../../../constants/images';
+import {useMutation} from '@tanstack/react-query';
+import {addBusinessPartner} from '../../../../services/userServices/bussiness.servies';
 
 const BussinessPartnerForm = ({bussinessTypeFormik}) => {
   const [profilePic, setprofilePic] = useState(
     bussinessTypeFormik?.values?.logo,
   );
-  const [bussinessPartner, setBussinessPartner] = useState([{}]);
+  const [bussinessPartner, setBussinessPartner] = useState([]);
+
+  const bussinessPartnerDetailsFormik = useFormik({
+    initialValues: {
+      bussinessPartnerName: '',
+      bussinessPartnerDessignation: '',
+      bussinessPartnerPhoto: '',
+    },
+    validationSchema: yup.object({
+      //bussinessPartner
+      bussinessPartnerName: yup.string().required('Required'),
+      bussinessPartnerDessignation: yup.string().optional(),
+      bussinessPartnerPhoto: yup.string().optional(),
+    }),
+    onSubmit: formValues => {
+      actionSheetRef?.current?.hide();
+      console.log(formValues, 'in bussiness formik');
+      let temp = {
+        name: formValues?.bussinessPartnerName,
+        designation: formValues?.bussinessPartnerDessignation,
+        photo: formValues?.bussinessPartnerPhoto,
+      };
+      setBussinessPartner(prev => [...prev, formValues]);
+      // addBusinessPartnerlMutate(formValues);
+      bussinessTypeFormik.setValues(prev => ({
+        ...prev,
+        bussinessPartner: [...prev?.bussinessPartner, temp],
+      }));
+    },
+  });
+
+  const {
+    mutate: addBusinessPartnerlMutate,
+    isLoading: addBusinessPartnerlLoading,
+  } = useMutation(addBusinessPartner, {
+    onSuccess: ({data}) => {
+      ToastAndroid.show(data?.message, ToastAndroid.LONG);
+      bussinessPartnerDetailsFormik?.resetForm();
+    },
+    onError: err => {
+      console.log(err?.response?.data?.message, 'err');
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+  });
+
   const [imageUploading, setImageUploading] = useState(false);
 
   const uploadePhoto = async (path, mime) => {
@@ -38,7 +89,7 @@ const BussinessPartnerForm = ({bussinessTypeFormik}) => {
       //   });
       bussinessTypeFormik.setValues(prev => ({
         ...prev,
-        logo: uplode?.fileURL,
+        bussinessOwnerPhoto: uplode?.fileURL,
       }));
       setprofilePic(uplode?.fileURL);
     } catch (error) {
@@ -76,15 +127,20 @@ const BussinessPartnerForm = ({bussinessTypeFormik}) => {
     }
   };
 
+  // console.log(bussinessPartner, 'bussiness partner in the state');
+
   const actionSheetRef = useRef(null);
   const onPressCross = () => {
     actionSheetRef?.current?.hide();
   };
-  const AddBussinessPartner = () => {
-    // setBussinessPartner(prev => {
-      
-    // });
-  }
+  const AddBussinessPartner = async () => {
+    bussinessPartnerDetailsFormik?.setTouched({
+      bussinessPartnerName: true,
+      bussinessPartnerDessignation: true,
+      bussinessPartnerPhoto: true,
+    });
+    bussinessPartnerDetailsFormik.handleSubmit();
+  };
   return (
     <>
       <ActionSheet
@@ -98,7 +154,8 @@ const BussinessPartnerForm = ({bussinessTypeFormik}) => {
         }}>
         <AddBussinessPartnerSheet
           onPressCross={onPressCross}
-          bussinessTypeFormik={bussinessTypeFormik}
+          bussinessTypeFormik={bussinessPartnerDetailsFormik}
+          AddBussinessPartner={AddBussinessPartner}
         />
       </ActionSheet>
 
@@ -159,6 +216,48 @@ const BussinessPartnerForm = ({bussinessTypeFormik}) => {
           <Text style={{fontSize: 20, fontWeight: 'bold', marginTop: 20}}>
             Bussiness Partner
           </Text>
+          {bussinessPartner?.map((item, index) => (
+            <View key={index} style={styles.partnerCard}>
+              <View style={{flex: 0.2}}>
+                <Image
+                  source={
+                    item && item.bussinessPartnerPhoto
+                      ? {uri: item.bussinessPartnerPhoto}
+                      : images && images.profilePlaceholder
+                  }
+                  style={{width: 50, height: 50, borderRadius: 50}}
+                />
+              </View>
+              <View style={{flex: 0.6}}>
+                <Text style={{fontSize: 16, color: Colors.TEXT1}}>
+                  {item?.bussinessPartnerName}
+                </Text>
+                <Text style={{fontSize: 14, color: Colors.TEXT1}}>
+                  {item?.bussinessPartnerDessignation}
+                </Text>
+              </View>
+              <View style={{flex: 0.2, justifyContent: 'center'}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    let temp = bussinessPartner;
+                    temp.splice(index, 1);
+                    setBussinessPartner(temp);
+                    bussinessTypeFormik.setValues(prev => ({
+                      ...prev,
+                      bussinessPartner: temp,
+                    }));
+                  }}>
+                  <Text style={{color: 'red'}}>Remove</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    actionSheetRef?.current?.show();
+                  }}>
+                  <Text style={{color: 'blue', fontStyle: 'italic'}}>Edit</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ))}
           <TouchableOpacity
             onPress={() => {
               actionSheetRef?.current?.show();
@@ -191,5 +290,16 @@ const styles = StyleSheet.create({
     width: '95%',
     marginTop: 10,
     alignSelf: 'center',
+  },
+  partnerCard: {
+    flexDirection: 'row',
+    flex: 1,
+    backgroundColor: '#F0FBFF',
+    elevation: 5,
+    marginVertical: 10,
+    borderWidth: 0.5,
+    padding: 10,
+    borderRadius: 10,
+    borderColor: '#3D3989',
   },
 });
