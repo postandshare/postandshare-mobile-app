@@ -108,7 +108,7 @@ const AddBussinessPartnerSheet = ({
       {/* body */}
       <View style={styles.container}>
         <View style={styles.textInputField}>
-          <Text>Partner Name</Text>
+          <Text  color={Colors.TEXT1}>Partner Name</Text>
           <CustomTextInputFormik
             formik={bussinessTypeFormik}
             name={'bussinessPartnerName'}
@@ -117,7 +117,7 @@ const AddBussinessPartnerSheet = ({
         </View>
         {/* desingnation */}
         <View style={styles.textInputField}>
-          <Text>Desingnation</Text>
+          <Text color={Colors.TEXT1}>Desingnation</Text>
           <CustomTextInputFormik
             formik={bussinessTypeFormik}
             name={'bussinessPartnerDessignation'}
@@ -136,7 +136,7 @@ const AddBussinessPartnerSheet = ({
               style={{width: '100%', height: '100%', borderRadius: 10}}
             />
           ) : (
-            <Text style={styles.photoInputText}>Add Photo</Text>
+            <Text  color={Colors.TEXT1}>Add Photo</Text>
           )}
         </TouchableOpacity>
 

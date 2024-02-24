@@ -247,15 +247,16 @@ const Home = ({navigation}) => {
                     alignSelf: 'center',
                     fontWeight: '500',
                     marginVertical: 10,
+                    color: Colors.TEXT1,
                   }}>
                   This Featue will come in future release
                 </Text>
               )}
             </>
           ) : screenName === 'remainder' ? (
-            <Text>Remainder</Text>
+            <Text  color={Colors.TEXT1}>Remainder</Text>
           ) : screenName === 'wallpaper' ? (
-            <Text>Wallpaper</Text>
+            <Text  color={Colors.TEXT1}>Wallpaper</Text>
           ) : null}
         </View>
       </ScrollView>

@@ -232,9 +232,9 @@ const BussinessType = ({bussinessDetails}) => {
               formStep === 1 ? {backgroundColor: Colors.PRIMARY} : null,
               styles.container,
             ]}>
-            <Entypo name="user" size={20} />
+            <Entypo name="user" size={20} color={formStep === 1 ? 'white': Colors.TEXT1}/>
           </View>
-          <Text>BussinessType</Text>
+          <Text style={{color: Colors.TEXT1}}>BussinessType</Text>
         </View>
         {/* bussiness profile */}
         <View style={{alignItems: 'center'}}>
@@ -243,9 +243,9 @@ const BussinessType = ({bussinessDetails}) => {
               formStep === 2 ? {backgroundColor: Colors.PRIMARY} : null,
               styles.container,
             ]}>
-            <FontAwesome5 name="hand-holding-usd" size={20} />
+            <FontAwesome5 name="hand-holding-usd" size={20} color={formStep === 2 ? 'white': Colors.TEXT1}/>
           </View>
-          <Text>Bussiness Profile</Text>
+          <Text style={{color: Colors.TEXT1}}>Bussiness Profile</Text>
         </View>
 
         {/* patner */}
@@ -255,9 +255,9 @@ const BussinessType = ({bussinessDetails}) => {
               formStep === 3 ? {backgroundColor: Colors.PRIMARY} : null,
               styles.container,
             ]}>
-            <Ionicons name="people" size={20} />
+            <Ionicons name="people" size={20} color={formStep === 3 ? 'white': Colors.TEXT1}/>
           </View>
-          <Text>Bussiness Partner</Text>
+          <Text style={{color: Colors.TEXT1}}>Bussiness Partner</Text>
         </View>
       </View>
 

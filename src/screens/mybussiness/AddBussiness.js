@@ -23,7 +23,7 @@ const AddBussiness = ({route}) => {
           <>
             {/* selection for bussiness */}
             <View style={{flex: 0.91}}>
-              <Text style={{fontSize: 20, marginTop: 20, margin: 5}}>
+              <Text style={{fontSize: 20, marginTop: 20, margin: 5, color: Colors.TEXT1}}>
                 Select Bussiness Type
               </Text>
               <BussinessSelect

@@ -5,15 +5,17 @@ import Dropdown from '../../../../components/Dropdown';
 import {DISTRICTS, STATES} from '../../../../constants';
 import globalStyles from '../../../../styles/globalStyles';
 import Sizes from '../../../../constants/Sizes';
+import Colors from '../../../../constants/Colors';
 
 const BussinessProfileForm = ({bussinessTypeFormik}) => {
   return (
     <ScrollView
       // keyboardDismissMode='on-drag'
+      nestedScrollEnabled
       contentContainerStyle={styles.root}>
       {/* bussiness name */}
       <View style={styles.textInputField}>
-        <Text>Bussiness Name</Text>
+        <Text color={Colors.TEXT1}>Bussiness Name</Text>
         <CustomTextInputFormik
           formik={bussinessTypeFormik}
           name={'bussinessName'}
@@ -22,7 +24,7 @@ const BussinessProfileForm = ({bussinessTypeFormik}) => {
       </View>
       {/* bussiness detail */}
       <View style={styles.textInputField}>
-        <Text>Bussiness Detail</Text>
+        <Text color={Colors.TEXT1}>Bussiness Detail</Text>
         <CustomTextInputFormik
           formik={bussinessTypeFormik}
           name={'bussinessDetail'}
@@ -33,7 +35,7 @@ const BussinessProfileForm = ({bussinessTypeFormik}) => {
       </View>
       {/* bussiness Email */}
       <View style={styles.textInputField}>
-        <Text>Bussiness Email</Text>
+        <Text color={Colors.TEXT1}>Bussiness Email</Text>
         <CustomTextInputFormik
           formik={bussinessTypeFormik}
           name={'bussinessEmail'}
@@ -42,7 +44,7 @@ const BussinessProfileForm = ({bussinessTypeFormik}) => {
       </View>
       {/* bussiness Website */}
       <View style={styles.textInputField}>
-        <Text>Bussiness Website</Text>
+        <Text color={Colors.TEXT1}>Bussiness Website</Text>
         <CustomTextInputFormik
           formik={bussinessTypeFormik}
           name={'businessWebsite'}
@@ -51,7 +53,7 @@ const BussinessProfileForm = ({bussinessTypeFormik}) => {
       </View>
       {/* bussiness Address */}
       <View style={styles.textInputField}>
-        <Text>Bussiness Address</Text>
+        <Text color={Colors.TEXT1}>Bussiness Address</Text>
         <CustomTextInputFormik
           formik={bussinessTypeFormik}
           name={'bussinessAddress'}
@@ -60,7 +62,7 @@ const BussinessProfileForm = ({bussinessTypeFormik}) => {
       </View>
       {/* bussiness tehsil */}
       <View style={styles.textInputField}>
-        <Text>Bussiness Tehsil</Text>
+        <Text color={Colors.TEXT1}>Bussiness Tehsil</Text>
         <CustomTextInputFormik
           formik={bussinessTypeFormik}
           name={'bussinessTehsil'}
@@ -69,7 +71,7 @@ const BussinessProfileForm = ({bussinessTypeFormik}) => {
       </View>
       {/* bussiness PinCode */}
       <View style={styles.textInputField}>
-        <Text>Bussiness PinCode</Text>
+        <Text color={Colors.TEXT1}>Bussiness PinCode</Text>
         <CustomTextInputFormik
           formik={bussinessTypeFormik}
           name={'bussinessPinCode'}
@@ -83,7 +85,7 @@ const BussinessProfileForm = ({bussinessTypeFormik}) => {
           width: Sizes.wp('91%'),
           marginHorizontal: 8,
         }}>
-        <Text>Select State</Text>
+        <Text color={Colors.TEXT1}>Select State</Text>
         <Dropdown
           value={bussinessTypeFormik.values.bussinessState}
           label="Select State*"
@@ -112,7 +114,7 @@ const BussinessProfileForm = ({bussinessTypeFormik}) => {
           width: Sizes.wp('91%'),
           marginHorizontal: 8,
         }}>
-        <Text>Select District</Text>
+        <Text color={Colors.TEXT1}>Select District</Text>
         <Dropdown
           value={bussinessTypeFormik.values.bussinessDistrict}
           label="Select District*"

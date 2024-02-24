@@ -177,7 +177,7 @@ const BussinessPartnerForm = ({bussinessTypeFormik , bussinessDetails}) => {
 
         {/* your name */}
         <View style={styles.textInputField}>
-          <Text>Your Name</Text>
+          <Text color={Colors.TEXT1}>Your Name</Text>
           <CustomTextInputFormik
             formik={bussinessTypeFormik}
             name={'bussinessOwnerName'}
@@ -186,7 +186,7 @@ const BussinessPartnerForm = ({bussinessTypeFormik , bussinessDetails}) => {
         </View>
         {/* desingnation */}
         <View style={styles.textInputField}>
-          <Text>Desingnation</Text>
+          <Text color={Colors.TEXT1}>Desingnation</Text>
           <CustomTextInputFormik
             formik={bussinessTypeFormik}
             name={'bussinessOwnerDessignation'}
@@ -195,7 +195,7 @@ const BussinessPartnerForm = ({bussinessTypeFormik , bussinessDetails}) => {
         </View>
         {/* mobile */}
         <View style={styles.textInputField}>
-          <Text>Mobile</Text>
+          <Text color={Colors.TEXT1}>Mobile</Text>
           <CustomTextInputFormik
             formik={bussinessTypeFormik}
             name={'bussinessOwnerPhone'}
@@ -206,7 +206,7 @@ const BussinessPartnerForm = ({bussinessTypeFormik , bussinessDetails}) => {
         </View>
         {/* whatsapp */}
         <View style={styles.textInputField}>
-          <Text>Whatsapp</Text>
+          <Text color={Colors.TEXT1}>Whatsapp</Text>
           <CustomTextInputFormik
             formik={bussinessTypeFormik}
             name={'bussinessOwnerWhatsapp'}
@@ -219,7 +219,7 @@ const BussinessPartnerForm = ({bussinessTypeFormik , bussinessDetails}) => {
         {/* BUSSINESS PARTNER   */}
         {bussinessDetails ? null : (
           <View style={{flex: 1, marginHorizontal: 10}}>
-            <Text style={{fontSize: 20, fontWeight: 'bold', marginTop: 20}}>
+            <Text style={{fontSize: 20, fontWeight: 'bold', marginTop: 20, color: Colors.TEXT1}}>
               Bussiness Partner
             </Text>
             {bussinessPartner?.map((item, index) => (
@@ -307,6 +307,7 @@ const styles = StyleSheet.create({
   tittle: {
     fontSize: 20,
     fontWeight: 'bold',
+    color: Colors.TEXT1,
   },
   textInputField: {
     width: '95%',

@@ -13,6 +13,7 @@ import Loader from '../../../../components/Loader';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import uploadFile from '../../../../utils/uploadFile';
 import globalStyles from '../../../../styles/globalStyles';
+import Colors from '../../../../constants/Colors';
 
 const bussinessCategory = [
   {label: 'Doctor', value: 'Doctor'},
@@ -174,10 +175,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginTop: 10,
     fontWeight: '700',
+    color: Colors.TEXT1
   },
   subtitle: {
     fontSize: 15,
     marginTop: 10,
     fontWeight: '500',
+    color: Colors.TEXT1
   },
 });
