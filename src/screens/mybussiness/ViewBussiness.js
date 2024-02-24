@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/self-closing-comp */
 import {
+  Alert,
   Image,
   PermissionsAndroid,
   RefreshControl,
@@ -17,6 +18,7 @@ import {useMutation, useQuery} from '@tanstack/react-query';
 import {
   addBusinessPartner,
   changeBusinessLogo,
+  deleteBusiness,
   getAllBusinessList,
   updateBusinessPartner,
 } from '../../services/userServices/bussiness.servies';
@@ -44,7 +46,6 @@ const ViewBussiness = ({route, navigation}) => {
   const [imageUploading, setImageUploading] = useState(false);
   const [bussinessPartnerDetails, setBussinessPartnerDetails] = useState();
 
-  // console.log(bussinessPartnerDetails?._id);
 
   const bussinessPartnerDetailsFormik = useFormik({
     initialValues: {
@@ -68,8 +69,11 @@ const ViewBussiness = ({route, navigation}) => {
         businessDocId: businessId,
       };
       // setBussinessPartner(prev => [...prev, formValues]);
-      if (bussinessPartnerDetails && Object?.keys(bussinessPartnerDetails).length > 0) {
-        console.log("first")
+      if (
+        bussinessPartnerDetails &&
+        Object?.keys(bussinessPartnerDetails).length > 0
+      ) {
+        console.log('first');
         temp.businessPartnerDocId = bussinessPartnerDetails?._id;
         updateBusinessPartnerMutate(temp);
       } else {
@@ -115,6 +119,7 @@ const ViewBussiness = ({route, navigation}) => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
   });
+
   const {
     mutate: updateBusinessPartnerMutate,
     isLoading: updateBusinessPartnerLoading,
@@ -129,6 +134,7 @@ const ViewBussiness = ({route, navigation}) => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
   });
+
   const {
     mutate: changeBusinessLogoMutate,
     isLoading: changeBusinessLogoLoading,
@@ -143,7 +149,17 @@ const ViewBussiness = ({route, navigation}) => {
     },
   });
 
-
+  const {mutate: deleteBusinessMutate, isLoading: deleteBusinessLoading} =
+    useMutation(deleteBusiness, {
+      onSuccess: ({data}) => {
+        ToastAndroid.show(data?.message, ToastAndroid.LONG);
+        navigation.goBack();
+      },
+      onError: err => {
+        console.log(err?.response?.data?.message, 'err');
+        ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+      },
+    });
 
   const uploadePhoto = async (path, mime) => {
     try {
@@ -218,13 +234,16 @@ const ViewBussiness = ({route, navigation}) => {
 
   return (
     <>
-      <Loader text="Uploading Image" open={changeBusinessLogoLoading || imageUploading} />
+      <Loader
+        text="Uploading Image"
+        open={changeBusinessLogoLoading || imageUploading}
+      />
       <Loader
         text="Adding Bussiness Partner"
         open={addBusinessPartnerlLoading}
       />
-      {/* <Loader text="Deleting Bussiness Partner" open={{}} />*/}
-      <Loader text="Updating..." open={updateBusinessPartnerLoading} /> 
+      <Loader text="Deleting Bussiness Partner" open={deleteBusinessLoading} />
+      <Loader text="Updating..." open={updateBusinessPartnerLoading} />
       <ActionSheet
         ref={actionSheetRef}
         closeOnTouchBackdrop={false}
@@ -247,6 +266,7 @@ const ViewBussiness = ({route, navigation}) => {
           getAllBusinessList_Data?.data?.obj?.businessName ?? 'My Bussiness'
         }
       />
+      
       <ScrollView
         refreshControl={
           <RefreshControl
@@ -378,7 +398,7 @@ const ViewBussiness = ({route, navigation}) => {
                       ...prev,
                       bussinessPartnerName: item?.name,
                       bussinessPartnerDessignation: item?.designation,
-                      bussinessPartnerPhoto: item?.photo
+                      bussinessPartnerPhoto: item?.photo,
                     }));
                   }}>
                   <FontAwesome name={'edit'} size={25} color={'#26A9E1'} />
@@ -410,14 +430,44 @@ const ViewBussiness = ({route, navigation}) => {
           </Text>
         </TouchableOpacity>
 
-        <CustomButton title={'Edit Bussiness'} onPress={() => {
-          navigation.navigate('Add Bussiness', {
-            businessId: businessId,
-            bussinessDetails: getAllBusinessList_Data?.data?.obj
-          });
-        }} 
-          customStyle={{marginBottom: 30}}
-        />
+        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+          <CustomButton
+            title={'Delete'}
+            onPress={() => {
+              Alert.alert(
+                'Delete Bussiness',
+                'Are you sure you want to delete this bussiness?',
+                [
+                  {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                  },
+                  {
+                    text: 'OK',
+                    onPress: () => {
+                      deleteBusinessMutate({bussinessDocId: businessId});
+                    },
+                  },
+                ],
+                {cancelable: false},
+              );
+            }}
+            width="40%"
+            customStyle={{backgroundColor: '#EA1C1C'}}
+          />
+          <CustomButton
+            title={'Edit'}
+            onPress={() => {
+              navigation.navigate('Add Bussiness', {
+                businessId: businessId,
+                bussinessDetails: getAllBusinessList_Data?.data?.obj,
+              });
+            }}
+            width="40%"
+            customStyle={{marginBottom: 30}}
+          />
+        </View>
       </ScrollView>
     </>
   );
