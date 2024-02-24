@@ -22,11 +22,15 @@ import images from '../../../../constants/images';
 import {useMutation} from '@tanstack/react-query';
 import {addBusinessPartner} from '../../../../services/userServices/bussiness.servies';
 
-const BussinessPartnerForm = ({bussinessTypeFormik}) => {
+const BussinessPartnerForm = ({bussinessTypeFormik , bussinessDetails}) => {
   const [profilePic, setprofilePic] = useState(
     bussinessTypeFormik?.values?.logo,
   );
-  const [bussinessPartner, setBussinessPartner] = useState([]);
+  const [bussinessPartnerDetails, setBussinessPartnerDetails] = useState();
+  // console.log(bussinessTypeFormik?.values?.bussinessPartner, 'bussiness partner')
+  const [bussinessPartner, setBussinessPartner] = useState(
+    bussinessTypeFormik?.values?.bussinessPartner ?? [],
+  );
 
   const bussinessPartnerDetailsFormik = useFormik({
     initialValues: {
@@ -153,6 +157,7 @@ const BussinessPartnerForm = ({bussinessTypeFormik}) => {
           backgroundColor: '#f5f5f5',
         }}>
         <AddBussinessPartnerSheet
+          bussinessPartnerDetails={bussinessPartnerDetails}
           onPressCross={onPressCross}
           bussinessTypeFormik={bussinessPartnerDetailsFormik}
           AddBussinessPartner={AddBussinessPartner}
@@ -212,61 +217,78 @@ const BussinessPartnerForm = ({bussinessTypeFormik}) => {
         </View>
 
         {/* BUSSINESS PARTNER   */}
-        <View style={{flex: 1, marginHorizontal: 10}}>
-          <Text style={{fontSize: 20, fontWeight: 'bold', marginTop: 20}}>
-            Bussiness Partner
-          </Text>
-          {bussinessPartner?.map((item, index) => (
-            <View key={index} style={styles.partnerCard}>
-              <View style={{flex: 0.2}}>
-                <Image
-                  source={
-                    item && item.bussinessPartnerPhoto
-                      ? {uri: item.bussinessPartnerPhoto}
-                      : images && images.profilePlaceholder
-                  }
-                  style={{width: 50, height: 50, borderRadius: 50}}
-                />
-              </View>
-              <View style={{flex: 0.6}}>
-                <Text style={{fontSize: 16, color: Colors.TEXT1}}>
-                  {item?.bussinessPartnerName}
-                </Text>
-                <Text style={{fontSize: 14, color: Colors.TEXT1}}>
-                  {item?.bussinessPartnerDessignation}
-                </Text>
-              </View>
-              <View style={{flex: 0.2, justifyContent: 'center'}}>
-                <TouchableOpacity
-                  onPress={() => {
-                    let temp = bussinessPartner;
-                    temp.splice(index, 1);
-                    setBussinessPartner(temp);
-                    bussinessTypeFormik.setValues(prev => ({
-                      ...prev,
-                      bussinessPartner: temp,
-                    }));
-                  }}>
-                  <Text style={{color: 'red'}}>Remove</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    actionSheetRef?.current?.show();
-                  }}>
-                  <Text style={{color: 'blue', fontStyle: 'italic'}}>Edit</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          ))}
-          <TouchableOpacity
-            onPress={() => {
-              actionSheetRef?.current?.show();
-            }}>
-            <Text style={{color: 'blue', fontStyle: 'italic'}}>
-              Add More Business Partner
+        {bussinessDetails ? null : (
+          <View style={{flex: 1, marginHorizontal: 10}}>
+            <Text style={{fontSize: 20, fontWeight: 'bold', marginTop: 20}}>
+              Bussiness Partner
             </Text>
-          </TouchableOpacity>
-        </View>
+            {bussinessPartner?.map((item, index) => (
+              <View key={index} style={styles.partnerCard}>
+                <View style={{flex: 0.2}}>
+                  <Image
+                    source={
+                      bussinessDetails?.businessPartnerList
+                        ? {uri: item?.photo}
+                        : item && item.bussinessPartnerPhoto
+                        ? {uri: item.bussinessPartnerPhoto}
+                        : images && images.profilePlaceholder
+                    }
+                    style={{width: 50, height: 50, borderRadius: 50}}
+                  />
+                </View>
+                <View style={{flex: 0.6}}>
+                  <Text style={{fontSize: 16, color: Colors.TEXT1}}>
+                    { bussinessDetails?.businessPartnerList
+                      ? item?.name
+                      : item?.bussinessPartnerName}
+                  </Text>
+                  <Text style={{fontSize: 14, color: Colors.TEXT1}}>
+                    { bussinessDetails?.businessPartnerList
+                      ? item?.designation
+                      : item?.bussinessPartnerDessignation}
+                  </Text>
+                </View>
+                <View style={{flex: 0.2, justifyContent: 'center'}}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      let temp = bussinessPartner;
+                      temp.splice(index, 1);
+                      setBussinessPartner(temp);
+                      bussinessTypeFormik.setValues(prev => ({
+                        ...prev,
+                        bussinessPartner: temp,
+                      }));
+                    }}>
+                    <Text style={{color: 'red'}}>Remove</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      actionSheetRef?.current?.show();
+                      setBussinessPartnerDetails(item);
+                      bussinessPartnerDetailsFormik.setValues(prev => ({
+                        ...prev,
+                        bussinessPartnerName: item?.name,
+                        bussinessPartnerDessignation: item?.designation,
+                        bussinessPartnerPhoto: item?.photo,
+                      }));
+                    }}>
+                    <Text style={{color: 'blue', fontStyle: 'italic'}}>
+                      Edit
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))}
+            <TouchableOpacity
+              onPress={() => {
+                actionSheetRef?.current?.show();
+              }}>
+              <Text style={{color: 'blue', fontStyle: 'italic'}}>
+                Add More Business Partner
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </ScrollView>
     </>
   );

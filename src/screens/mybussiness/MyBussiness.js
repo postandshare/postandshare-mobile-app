@@ -124,13 +124,13 @@ const MyBussiness = ({navigation, route}) => {
               image={item?.logo}
               userDocId={item?._id}
               lastUpdated={item?.lastUpdated ?? item?.createdOn}
-              edit={true}
-              onPressEdit={() =>
-                navigation.navigate('Edit Bussiness', {
-                  businessId: item?._id,
-                  businessType:item?.businessType,
-                })
-              }
+              // edit={true}
+              // onPressEdit={() =>
+              //   navigation.navigate('Edit Bussiness', {
+              //     businessId: item?._id,
+              //     businessType:item?.businessType,
+              //   })
+              // }
               onPress={() =>
                 picData
                   ? navigation.navigate('CustomSDK', {

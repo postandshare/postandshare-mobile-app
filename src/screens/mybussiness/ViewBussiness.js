@@ -36,12 +36,15 @@ import ImageCropPicker from 'react-native-image-crop-picker';
 import ActionSheet from 'react-native-actions-sheet';
 import AddBussinessPartnerSheet from './components/actionsheets/AddBussinessPartnerSheet';
 import Loader from '../../components/Loader';
+import CustomButton from '../../components/CustomButton';
 
 const ViewBussiness = ({route, navigation}) => {
   const {businessId, businessType} = route?.params;
   const [profilePic, setprofilePic] = useState('');
   const [imageUploading, setImageUploading] = useState(false);
   const [bussinessPartnerDetails, setBussinessPartnerDetails] = useState();
+
+  // console.log(bussinessPartnerDetails?._id);
 
   const bussinessPartnerDetailsFormik = useFormik({
     initialValues: {
@@ -65,52 +68,13 @@ const ViewBussiness = ({route, navigation}) => {
         businessDocId: businessId,
       };
       // setBussinessPartner(prev => [...prev, formValues]);
-      if (Object?.keys(bussinessPartnerDetails).length > 0) {
-        
-        updateBusinessPartnerMutate()
+      if (bussinessPartnerDetails && Object?.keys(bussinessPartnerDetails).length > 0) {
+        console.log("first")
+        temp.businessPartnerDocId = bussinessPartnerDetails?._id;
+        updateBusinessPartnerMutate(temp);
       } else {
         addBusinessPartnerlMutate(temp);
       }
-    },
-  });
-
-  const {
-    mutate: addBusinessPartnerlMutate,
-    isLoading: addBusinessPartnerlLoading,
-  } = useMutation(addBusinessPartner, {
-    onSuccess: ({data}) => {
-      ToastAndroid.show(data?.message, ToastAndroid.LONG);
-      bussinessPartnerDetailsFormik?.resetForm();
-    },
-    onError: err => {
-      console.log(err?.response?.data?.message, 'err');
-      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
-    },
-  });
-  const {
-    mutate: updateBusinessPartnerMutate,
-    isLoading: updateBusinessPartnerLoading,
-  } = useMutation(updateBusinessPartner, {
-    onSuccess: ({data}) => {
-      ToastAndroid.show(data?.message, ToastAndroid.LONG);
-      bussinessPartnerDetailsFormik?.resetForm();
-    },
-    onError: err => {
-      console.log(err?.response?.data?.message, 'err');
-      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
-    },
-  });
-  const {
-    mutate: changeBusinessLogoMutate,
-    isLoading: changeBusinessLogoLoading,
-  } = useMutation(changeBusinessLogo, {
-    onSuccess: ({data}) => {
-      ToastAndroid.show(data?.message, ToastAndroid.LONG);
-      bussinessPartnerDetailsFormik?.resetForm();
-    },
-    onError: err => {
-      console.log(err?.response?.data?.message, 'err');
-      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
   });
 
@@ -136,6 +100,50 @@ const ViewBussiness = ({route, navigation}) => {
     },
     enabled: false,
   });
+
+  const {
+    mutate: addBusinessPartnerlMutate,
+    isLoading: addBusinessPartnerlLoading,
+  } = useMutation(addBusinessPartner, {
+    onSuccess: ({data}) => {
+      ToastAndroid.show(data?.message, ToastAndroid.LONG);
+      bussinessPartnerDetailsFormik?.resetForm();
+      getAllBusinessListRefetch();
+    },
+    onError: err => {
+      console.log(err?.response?.data?.message, 'err');
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+  });
+  const {
+    mutate: updateBusinessPartnerMutate,
+    isLoading: updateBusinessPartnerLoading,
+  } = useMutation(updateBusinessPartner, {
+    onSuccess: ({data}) => {
+      ToastAndroid.show(data?.message, ToastAndroid.LONG);
+      bussinessPartnerDetailsFormik?.resetForm();
+      getAllBusinessListRefetch();
+    },
+    onError: err => {
+      console.log(err?.response?.data?.message, 'err');
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+  });
+  const {
+    mutate: changeBusinessLogoMutate,
+    isLoading: changeBusinessLogoLoading,
+  } = useMutation(changeBusinessLogo, {
+    onSuccess: ({data}) => {
+      ToastAndroid.show(data?.message, ToastAndroid.LONG);
+      getAllBusinessListRefetch();
+    },
+    onError: err => {
+      console.log(err?.response?.data?.message, 'err');
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+  });
+
+
 
   const uploadePhoto = async (path, mime) => {
     try {
@@ -210,13 +218,13 @@ const ViewBussiness = ({route, navigation}) => {
 
   return (
     <>
-      <Loader text="Uploading Image" open={changeBusinessLogoLoading} />
+      <Loader text="Uploading Image" open={changeBusinessLogoLoading || imageUploading} />
       <Loader
         text="Adding Bussiness Partner"
         open={addBusinessPartnerlLoading}
       />
-      {/* <Loader text="Deleting Bussiness Partner" open={{}} />
-      <Loader text="Updating..." open={{}} /> */}
+      {/* <Loader text="Deleting Bussiness Partner" open={{}} />*/}
+      <Loader text="Updating..." open={updateBusinessPartnerLoading} /> 
       <ActionSheet
         ref={actionSheetRef}
         closeOnTouchBackdrop={false}
@@ -386,7 +394,7 @@ const ViewBussiness = ({route, navigation}) => {
         {/* add bussiness partner more */}
         <TouchableOpacity
           style={{
-            marginBottom: 50,
+            marginBottom: 10,
           }}
           onPress={() => {
             actionSheetRef?.current?.show();
@@ -401,6 +409,15 @@ const ViewBussiness = ({route, navigation}) => {
             Add more bussiness
           </Text>
         </TouchableOpacity>
+
+        <CustomButton title={'Edit Bussiness'} onPress={() => {
+          navigation.navigate('Add Bussiness', {
+            businessId: businessId,
+            bussinessDetails: getAllBusinessList_Data?.data?.obj
+          });
+        }} 
+          customStyle={{marginBottom: 30}}
+        />
       </ScrollView>
     </>
   );

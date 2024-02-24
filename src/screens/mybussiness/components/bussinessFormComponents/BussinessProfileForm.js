@@ -28,6 +28,7 @@ const BussinessProfileForm = ({bussinessTypeFormik}) => {
           name={'bussinessDetail'}
           label={'Bussiness Detail'}
           numberOfLines={4}
+          maxLength={1000}
         />
       </View>
       {/* bussiness Email */}

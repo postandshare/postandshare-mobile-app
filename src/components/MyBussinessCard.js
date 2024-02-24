@@ -25,7 +25,7 @@ const MyBussinessCard = ({
       <View style={styles.profile_container}>
         {image ? (
           <Image
-            source={image ? {uri: image} : images.profilePlaceholder}
+            source={image ? {uri: image} : images?.profilePlaceholder}
             style={{
               height: Sizes.hp('8%'),
               width: Sizes.hp('8%'),

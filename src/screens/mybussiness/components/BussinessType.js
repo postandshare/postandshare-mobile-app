@@ -18,21 +18,21 @@ import {useFormik} from 'formik';
 import * as yup from 'yup';
 import BussinessProfileForm from './bussinessFormComponents/BussinessProfileForm';
 import BussinessPartnerForm from './bussinessFormComponents/BussinessPartnerForm';
-import {addBusiness} from '../../../services/userServices/bussiness.servies';
+import {addBusiness, updateBusiness} from '../../../services/userServices/bussiness.servies';
 import {useMutation} from '@tanstack/react-query';
 import NavigationScreenName from '../../../constants/NavigationScreenName';
 import {useNavigation} from '@react-navigation/native';
 import Loader from '../../../components/Loader';
 
-const BussinessType = ({}) => {
+const BussinessType = ({bussinessDetails}) => {
   const [formStep, setFormStep] = React.useState(1);
   const navigation = useNavigation();
 
   const bussinessTypeFormik = useFormik({
     initialValues: {
-      logo: '',
-      bussinessCategory: '',
-      bussinessSubCategory: '',
+      logo: bussinessDetails?.logo ?? '',
+      bussinessCategory: bussinessDetails?.category ?? '',
+      bussinessSubCategory: bussinessDetails?.subCategory ?? '',
     },
     validationSchema: yup.object({
       logo: yup.string().required('logo is required'),
@@ -51,15 +51,15 @@ const BussinessType = ({}) => {
   const bussinessProfileFormik = useFormik({
     initialValues: {
       // bussiness profile
-      bussinessName: '',
-      bussinessDetail: '',
-      bussinessEmail: '',
-      businessWebsite: '',
-      bussinessAddress: '',
-      bussinessPinCode: '',
-      bussinessTehsil: '',
-      bussinessDistrict: '',
-      bussinessState: '',
+      bussinessName: bussinessDetails?.businessName ?? '',
+      bussinessDetail: bussinessDetails?.description ?? '',
+      bussinessEmail: bussinessDetails?.email ?? '',
+      businessWebsite: bussinessDetails?.website ?? '',
+      bussinessAddress: bussinessDetails?.address?.address ?? '',
+      bussinessPinCode: bussinessDetails?.address?.pinCode ?? '',
+      bussinessTehsil: bussinessDetails?.address?.tehsil ?? '',
+      bussinessDistrict: bussinessDetails?.address?.dist ?? '',
+      bussinessState: bussinessDetails?.address?.state ?? '',
     },
     validationSchema: yup.object({
       bussinessName: yup.string().required('Bussiness Name is required'),
@@ -77,15 +77,9 @@ const BussinessType = ({}) => {
         .string()
         .matches(RegExp(/^[0-9]{6}$/), 'Invalid Pincode')
         .required(),
-      bussinessTehsil: yup
-        .string()
-        .required(),
-      bussinessDistrict: yup
-        .string()
-        .required(),
-      bussinessState: yup
-        .string()
-        .required(),
+      bussinessTehsil: yup.string().required(),
+      bussinessDistrict: yup.string().required(),
+      bussinessState: yup.string().required(),
     }),
     onSubmit: formValues => {
       console.log(formValues, 'in bussinessformik formik');
@@ -94,20 +88,18 @@ const BussinessType = ({}) => {
 
   const bussinessPartnerFormik = useFormik({
     initialValues: {
-      bussinessOwnerName: '',
-      bussinessOwnerPhone: '',
-      bussinessOwnerWhatsapp: '',
-      bussinessOwnerDessignation: '',
-      bussinessOwnerPhoto: '',
+      bussinessOwnerName: bussinessDetails?.ownerName ?? '',
+      bussinessOwnerPhone: bussinessDetails?.mobileNumber ?? '',
+      bussinessOwnerWhatsapp: bussinessDetails?.whatsappNumber ?? '',
+      bussinessOwnerDessignation: bussinessDetails?.designation ?? '',
+      bussinessOwnerPhoto: bussinessDetails?.ownerPhoto ?? '',
 
       //bussinessPartnerInfo
-      bussinessPartner: [],
+      bussinessPartner: bussinessDetails?.businessPartnerList ?? [],
     },
     validationSchema: yup.object({
       //bussinessPartner
-      bussinessOwnerName: yup
-        .string()
-        .required(),
+      bussinessOwnerName: yup.string().required(),
       bussinessOwnerPhone: yup
         .string()
         .matches(RegExp(/^[0-9]{10}$/), 'Invalid Phone')
@@ -116,9 +108,7 @@ const BussinessType = ({}) => {
         .string()
         .matches(RegExp(/^[0-9]{10}$/), 'Invalid Whatsapp')
         .optional(),
-      bussinessOwnerDessignation: yup
-        .string()
-        .required(),
+      bussinessOwnerDessignation: yup.string().required(),
     }),
     onSubmit: formValues => {
       console.log(formValues, 'in bussiness formik');
@@ -144,30 +134,70 @@ const BussinessType = ({}) => {
         ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
       },
     });
+  const {mutate: updateBusinessMutate, isLoading: updateBusinessLoading} =
+    useMutation(updateBusiness, {
+      onSuccess: ({data}) => {
+        ToastAndroid.show(data?.message, ToastAndroid.LONG);
+        bussinessTypeFormik?.resetForm();
+        bussinessProfileFormik?.resetForm();
+        bussinessPartnerFormik?.resetForm();
+        navigation.replace(NavigationScreenName?.MY_BUSSINESS);
+      },
+      onError: err => {
+        console.log(err?.response?.data?.message, 'err');
+        ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+      },
+    });
 
   const handleSubmition = () => {
-    addBusinesslMutate({
-      logo: bussinessTypeFormik?.values?.logo,
-      category: bussinessTypeFormik?.values?.bussinessCategory,
-      subCategory: bussinessTypeFormik?.values?.bussinessSubCategory,
-      businessName: bussinessProfileFormik?.values?.bussinessName,
-      description: bussinessProfileFormik?.values?.bussinessDetail,
-      email: bussinessProfileFormik?.values?.bussinessEmail,
-      website: bussinessProfileFormik?.values?.businessWebsite,
-      businessPartnerDetail: bussinessPartnerFormik?.values?.bussinessPartner,
-      address: {
-        address: bussinessProfileFormik?.values?.bussinessAddress,
-        pinCode: bussinessProfileFormik?.values?.bussinessPinCode,
-        tehsil: bussinessProfileFormik?.values?.bussinessTehsil,
-        dist: bussinessProfileFormik?.values?.bussinessDistrict,
-        state: bussinessProfileFormik?.values?.bussinessState,
-      },
-      ownerName: bussinessPartnerFormik?.values?.bussinessOwnerName,
-      mobileNumber: bussinessPartnerFormik?.values?.bussinessOwnerPhone,
-      whatsappNumber: bussinessPartnerFormik?.values?.bussinessOwnerWhatsapp,
-      designation: bussinessPartnerFormik?.values?.bussinessOwnerDessignation,
-      ownerPhoto: bussinessPartnerFormik?.values?.bussinessOwnerPhoto,
-    });
+    if (bussinessDetails?._id) {
+      updateBusinessMutate({
+        businessDocId:bussinessDetails?._id,
+        logo: bussinessTypeFormik?.values?.logo,
+        category: bussinessTypeFormik?.values?.bussinessCategory,
+        subCategory: bussinessTypeFormik?.values?.bussinessSubCategory,
+        businessName: bussinessProfileFormik?.values?.bussinessName,
+        description: bussinessProfileFormik?.values?.bussinessDetail,
+        email: bussinessProfileFormik?.values?.bussinessEmail,
+        website: bussinessProfileFormik?.values?.businessWebsite,
+        // businessPartnerDetail: bussinessPartnerFormik?.values?.bussinessPartner,
+        address: {
+          address: bussinessProfileFormik?.values?.bussinessAddress,
+          pinCode: bussinessProfileFormik?.values?.bussinessPinCode,
+          tehsil: bussinessProfileFormik?.values?.bussinessTehsil,
+          dist: bussinessProfileFormik?.values?.bussinessDistrict,
+          state: bussinessProfileFormik?.values?.bussinessState,
+        },
+        ownerName: bussinessPartnerFormik?.values?.bussinessOwnerName,
+        mobileNumber: bussinessPartnerFormik?.values?.bussinessOwnerPhone,
+        whatsappNumber: bussinessPartnerFormik?.values?.bussinessOwnerWhatsapp,
+        designation: bussinessPartnerFormik?.values?.bussinessOwnerDessignation,
+        ownerPhoto: bussinessPartnerFormik?.values?.bussinessOwnerPhoto,
+      });
+    } else {
+      addBusinesslMutate({
+        logo: bussinessTypeFormik?.values?.logo,
+        category: bussinessTypeFormik?.values?.bussinessCategory,
+        subCategory: bussinessTypeFormik?.values?.bussinessSubCategory,
+        businessName: bussinessProfileFormik?.values?.bussinessName,
+        description: bussinessProfileFormik?.values?.bussinessDetail,
+        email: bussinessProfileFormik?.values?.bussinessEmail,
+        website: bussinessProfileFormik?.values?.businessWebsite,
+        businessPartnerDetail: bussinessPartnerFormik?.values?.bussinessPartner,
+        address: {
+          address: bussinessProfileFormik?.values?.bussinessAddress,
+          pinCode: bussinessProfileFormik?.values?.bussinessPinCode,
+          tehsil: bussinessProfileFormik?.values?.bussinessTehsil,
+          dist: bussinessProfileFormik?.values?.bussinessDistrict,
+          state: bussinessProfileFormik?.values?.bussinessState,
+        },
+        ownerName: bussinessPartnerFormik?.values?.bussinessOwnerName,
+        mobileNumber: bussinessPartnerFormik?.values?.bussinessOwnerPhone,
+        whatsappNumber: bussinessPartnerFormik?.values?.bussinessOwnerWhatsapp,
+        designation: bussinessPartnerFormik?.values?.bussinessOwnerDessignation,
+        ownerPhoto: bussinessPartnerFormik?.values?.bussinessOwnerPhoto,
+      });
+    }
   };
 
   useEffect(() => {
@@ -313,7 +343,7 @@ const BussinessType = ({}) => {
       {/* bussiness partner form */}
       {formStep == 3 && (
         <ScrollView>
-          <BussinessPartnerForm bussinessTypeFormik={bussinessPartnerFormik} />
+          <BussinessPartnerForm bussinessTypeFormik={bussinessPartnerFormik} bussinessDetails={bussinessDetails}/>
           <View
             style={{
               flexDirection: 'row',

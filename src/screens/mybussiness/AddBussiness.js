@@ -6,8 +6,12 @@ import CustomButton from '../../components/CustomButton';
 import BussinessType from './components/BussinessType';
 import Colors from '../../constants/Colors';
 
-const AddBussiness = () => {
-  const [bussinessType, setBussinessType] = React.useState('Bussiness');
+const AddBussiness = ({route}) => {
+  const {businessId,  bussinessDetails} = route.params ?? {};
+  console.log(bussinessDetails?.businessType, 'bussinessId');
+  const [bussinessType, setBussinessType] = React.useState(
+    bussinessDetails?.businessType === 'bussiness' ? 'Bussiness' : 'Political',
+  );
   //org bussiness type is for orginal bussiness type
   const [orgBussinessType, setOrgBussinessType] = useState('');
   return (
@@ -36,7 +40,7 @@ const AddBussiness = () => {
         )}
 
         {orgBussinessType == 'Bussiness' ? (
-          <BussinessType/>
+          <BussinessType bussinessDetails={bussinessDetails}/>
         ) : orgBussinessType == 'Political' ? (
           <View>
             <Text>This is political bussiness</Text>

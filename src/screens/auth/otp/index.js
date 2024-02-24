@@ -154,6 +154,7 @@ const VerifyOTP = ({navigation, route}) => {
                 onChangeText={userData => setOtp(userData)}
                 value={otp}
                 ref={otpRef}
+                maxLength={4}
               />
               {Array(4)
                 .fill()

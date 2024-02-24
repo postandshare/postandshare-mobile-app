@@ -219,7 +219,7 @@ const Home = ({navigation}) => {
                             navigation.navigate(
                               NavigationScreenName.PHOTO_NAVIGATOR,
                               {
-                                initialRouteName: item
+                                initialRouteName: item,
                               },
                             )
                           }
