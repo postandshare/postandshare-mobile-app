@@ -15,7 +15,7 @@ const BussinessProfileForm = ({bussinessTypeFormik}) => {
       contentContainerStyle={styles.root}>
       {/* bussiness name */}
       <View style={styles.textInputField}>
-        <Text color={Colors.TEXT1}>Bussiness Name</Text>
+        <Text style={{color:Colors.TEXT1}}>Bussiness Name</Text>
         <CustomTextInputFormik
           formik={bussinessTypeFormik}
           name={'bussinessName'}
@@ -24,7 +24,7 @@ const BussinessProfileForm = ({bussinessTypeFormik}) => {
       </View>
       {/* bussiness detail */}
       <View style={styles.textInputField}>
-        <Text color={Colors.TEXT1}>Bussiness Detail</Text>
+        <Text style={{color:Colors.TEXT1}}>Bussiness Detail</Text>
         <CustomTextInputFormik
           formik={bussinessTypeFormik}
           name={'bussinessDetail'}
@@ -35,7 +35,7 @@ const BussinessProfileForm = ({bussinessTypeFormik}) => {
       </View>
       {/* bussiness Email */}
       <View style={styles.textInputField}>
-        <Text color={Colors.TEXT1}>Bussiness Email</Text>
+        <Text style={{color:Colors.TEXT1}}>Bussiness Email</Text>
         <CustomTextInputFormik
           formik={bussinessTypeFormik}
           name={'bussinessEmail'}
@@ -44,7 +44,7 @@ const BussinessProfileForm = ({bussinessTypeFormik}) => {
       </View>
       {/* bussiness Website */}
       <View style={styles.textInputField}>
-        <Text color={Colors.TEXT1}>Bussiness Website</Text>
+        <Text style={{color:Colors.TEXT1}}>Bussiness Website</Text>
         <CustomTextInputFormik
           formik={bussinessTypeFormik}
           name={'businessWebsite'}
@@ -53,7 +53,7 @@ const BussinessProfileForm = ({bussinessTypeFormik}) => {
       </View>
       {/* bussiness Address */}
       <View style={styles.textInputField}>
-        <Text color={Colors.TEXT1}>Bussiness Address</Text>
+        <Text style={{color:Colors.TEXT1}}>Bussiness Address</Text>
         <CustomTextInputFormik
           formik={bussinessTypeFormik}
           name={'bussinessAddress'}
@@ -62,7 +62,7 @@ const BussinessProfileForm = ({bussinessTypeFormik}) => {
       </View>
       {/* bussiness tehsil */}
       <View style={styles.textInputField}>
-        <Text color={Colors.TEXT1}>Bussiness Tehsil</Text>
+        <Text style={{color:Colors.TEXT1}}>Bussiness Tehsil</Text>
         <CustomTextInputFormik
           formik={bussinessTypeFormik}
           name={'bussinessTehsil'}
@@ -71,7 +71,7 @@ const BussinessProfileForm = ({bussinessTypeFormik}) => {
       </View>
       {/* bussiness PinCode */}
       <View style={styles.textInputField}>
-        <Text color={Colors.TEXT1}>Bussiness PinCode</Text>
+        <Text style={{color:Colors.TEXT1}}>Bussiness PinCode</Text>
         <CustomTextInputFormik
           formik={bussinessTypeFormik}
           name={'bussinessPinCode'}
@@ -85,7 +85,7 @@ const BussinessProfileForm = ({bussinessTypeFormik}) => {
           width: Sizes.wp('91%'),
           marginHorizontal: 8,
         }}>
-        <Text color={Colors.TEXT1}>Select State</Text>
+        <Text style={{color:Colors.TEXT1}}>Select State</Text>
         <Dropdown
           value={bussinessTypeFormik.values.bussinessState}
           label="Select State*"
@@ -114,7 +114,7 @@ const BussinessProfileForm = ({bussinessTypeFormik}) => {
           width: Sizes.wp('91%'),
           marginHorizontal: 8,
         }}>
-        <Text color={Colors.TEXT1}>Select District</Text>
+        <Text style={{color:Colors.TEXT1}}>Select District</Text>
         <Dropdown
           value={bussinessTypeFormik.values.bussinessDistrict}
           label="Select District*"

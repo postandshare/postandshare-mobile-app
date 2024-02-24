@@ -3,6 +3,7 @@ import {Canvas, Circle, Fill, useImage, Image} from '@shopify/react-native-skia'
 import {GestureDetector, Gesture} from 'react-native-gesture-handler';
 import {useSharedValue, withDecay} from 'react-native-reanimated';
 import TopHeader from '../components/TopHeader';
+import React from 'react';
 
 const Video = () => {
   const {width} = useWindowDimensions();

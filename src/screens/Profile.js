@@ -7,6 +7,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import TopHeader from '../components/TopHeader';
 import images from '../constants/images';
+import React from 'react';
 
 const END_POSITION = 200;
 

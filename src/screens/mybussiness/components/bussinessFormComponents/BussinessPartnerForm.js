@@ -186,7 +186,7 @@ const BussinessPartnerForm = ({bussinessTypeFormik , bussinessDetails}) => {
         </View>
         {/* desingnation */}
         <View style={styles.textInputField}>
-          <Text color={Colors.TEXT1}>Desingnation</Text>
+          <Text style={{color: Colors.TEXT1}}>Desingnation</Text>
           <CustomTextInputFormik
             formik={bussinessTypeFormik}
             name={'bussinessOwnerDessignation'}
@@ -195,7 +195,7 @@ const BussinessPartnerForm = ({bussinessTypeFormik , bussinessDetails}) => {
         </View>
         {/* mobile */}
         <View style={styles.textInputField}>
-          <Text color={Colors.TEXT1}>Mobile</Text>
+          <Text style={{color: Colors.TEXT1}}>Mobile</Text>
           <CustomTextInputFormik
             formik={bussinessTypeFormik}
             name={'bussinessOwnerPhone'}
@@ -206,7 +206,7 @@ const BussinessPartnerForm = ({bussinessTypeFormik , bussinessDetails}) => {
         </View>
         {/* whatsapp */}
         <View style={styles.textInputField}>
-          <Text color={Colors.TEXT1}>Whatsapp</Text>
+          <Text style={{color: Colors.TEXT1}}>Whatsapp</Text>
           <CustomTextInputFormik
             formik={bussinessTypeFormik}
             name={'bussinessOwnerWhatsapp'}
