@@ -1,7 +1,7 @@
 import {FlatList, Image, ScrollView, Text, View} from 'react-native';
 import React from 'react';
 import TopHeader from '../../components/TopHeader';
-import Images from '../../constants/images';
+import images from '../../constants/images';
 import styles from './style';
 import CustomCarousel from '../../components/CustomCarousel';
 import BirthRemaiderCard from '../../components/BirthRemaiderCard';
@@ -16,7 +16,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
       {
         id: '1',
@@ -24,7 +24,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
       {
         id: '1',
@@ -32,7 +32,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
       {
         id: '1',
@@ -40,7 +40,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
       {
         id: '1',
@@ -48,7 +48,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
       {
         id: '1',
@@ -56,7 +56,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
     ],
     id: '1',
@@ -71,7 +71,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
       {
         id: '1',
@@ -79,7 +79,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
       {
         id: '1',
@@ -87,7 +87,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
       {
         id: '1',
@@ -95,7 +95,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
       {
         id: '1',
@@ -103,7 +103,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
       {
         id: '1',
@@ -111,7 +111,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
     ],
   },
@@ -125,7 +125,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2022',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
     ],
   },
@@ -139,7 +139,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/13/2022',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
     ],
   },
@@ -153,7 +153,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '1/12/2022',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
     ],
   },
@@ -168,7 +168,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
       {
         id: '1',
@@ -176,7 +176,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
       {
         id: '1',
@@ -184,7 +184,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
       {
         id: '1',
@@ -192,7 +192,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
       {
         id: '1',
@@ -200,7 +200,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
       {
         id: '1',
@@ -208,7 +208,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
     ],
   },
@@ -222,7 +222,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2022',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
     ],
   },
@@ -236,7 +236,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/13/2022',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
     ],
   },
@@ -250,7 +250,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '1/12/2022',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
     ],
   },
@@ -264,7 +264,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
       {
         id: '1',
@@ -272,7 +272,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
       {
         id: '1',
@@ -280,7 +280,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
       {
         id: '1',
@@ -288,7 +288,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
       {
         id: '1',
@@ -296,7 +296,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
       {
         id: '1',
@@ -304,7 +304,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2021',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
     ],
   },
@@ -317,7 +317,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/12/2022',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
     ],
   },
@@ -330,7 +330,7 @@ const BirthdayRemainder_Data = [
         time: '10:00 AM',
         name: 'Rajesh',
         date: '12/13/2022',
-        image: Images.profile_placeholder1,
+        image: images.profile_placeholder1,
       },
     ],
   },
@@ -341,69 +341,22 @@ const BirthdayRemainder = ({navigation}) => {
     <>
       <TopHeader
         titile={'Birthday Remainder'}
-        icon={Images.add_birthday_icon}
+        icon={images.add_birthday_icon}
         onPress={() => navigation.navigate('AddRemainder')}
       />
-      
+
       <ScrollView
         contentContainerStyle={styles.root}
-        showsVerticalScrollIndicator={false}
-      >
-      <Text style={styles.title}>Today</Text>
-      {/* carousel for today birthday remainders */}
-      <View style={styles.today_carousel}>
-        <CustomCarousel />
-      </View>
-
-        {/* flat list for upcoming birthday list for the current month or further month list*/}
-        <View style={styles.container}>
-          <Text
-            style={
-              styles.title
-            }>{`Upcomig Birthday on ${new Date().toLocaleString('default', {
-            month: 'long',
-          })}`}</Text>
-
-          {BirthdayRemainder_Data?.map((item, index) => {
-            if (
-              item?.monthName ===
-              new Date().toLocaleString('default', {month: 'long'})
-            ) {
-              return item?.data?.map((it, idx) => (
-                <BirthRemaiderCard item={it} key={idx} />
-              ));
-            }
-          })}
-
-          {/* <FlatList
-            data={BirthdayRemainder_Data}
-            renderItem={({item}) => (
-              <View>
-                <Text style={styles.title}>{item?.monthName}</Text>
-                <FlatList
-                  data={item?.data}
-                  renderItem={({item}) => (
-                    <View style={styles.item_container}>
-                      <View style={styles.item_image_container}>
-                        <Image
-                          source={item?.image}
-                          style={styles.item_image}
-                          resizeMode="cover"
-                        />
-                      </View>
-                      <View style={styles.item_details_container}>
-                        <Text style={styles.item_name}>{item?.name}</Text>
-                        <Text style={styles.item_date}>{item?.date}</Text>
-                      </View>
-                    </View>
-                  )}
-                  keyExtractor={item => item?.id}
-                />
-              </View>
-            )}
-            keyExtractor={item => item}
-          /> */}
+        showsVerticalScrollIndicator={false}>
+        <Text style={styles.title}>Today</Text>
+        {/* carousel for today birthday remainders */}
+        <View style={styles.today_carousel}>
+          <CustomCarousel />
         </View>
+
+        <Text >Upcoming</Text>
+
+
       </ScrollView>
     </>
   );

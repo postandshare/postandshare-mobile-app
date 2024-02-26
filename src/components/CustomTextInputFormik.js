@@ -19,13 +19,15 @@ const CustomTextInputFormik = ({
           value={formik.values[name]}
           onChangeText={formik.handleChange(name)} // Removed parentheses
           onBlur={formik.handleBlur(name)}
-          style={{width: '95%'}}
+          style={{width: '100%'}}
           maxLength={maxLength}
           keyboardType={keyboardType}
           numberOfLines={numberOfLines}
           multiline={numberOfLines > 1}
         />
-        {formik.errors[name] && formik.touched[name] && (
+        {formik.errors[name] && 
+        // formik.touched[name] && 
+        (
           <Text style={globalStyles.error_text}>{formik.errors[name]}</Text>
         )}
       </>

@@ -4,6 +4,7 @@ import Colors from '../constants/Colors';
 import Sizes from '../constants/Sizes';
 
 const BirthRemaiderCard = ({item}) => {
+  
   return (
     <>
       <TouchableOpacity style={styles.item_container}>
