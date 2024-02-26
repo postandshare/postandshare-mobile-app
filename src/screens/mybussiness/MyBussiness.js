@@ -20,56 +20,7 @@ import {useQuery} from '@tanstack/react-query';
 import {getAllBusinessList} from '../../services/userServices/bussiness.servies';
 import {useFocusEffect} from '@react-navigation/native';
 
-const MyBussiness_Data = [
-  {
-    id: 1,
-    name: 'Dr A K Group of Institutions B.A|B.SC|B.COM|M.SC| M.COM| CBSE BOARD| UP BOARD| ANM',
-    EstblishmentDate: '20, Mar 2023',
-    image: Images.profile_placeholder1,
-    userDocId: '1',
-    lastUpdated: '20, Mar 2023',
-  },
-  {
-    id: 2,
-    name: 'Dr A K Group of Institutions B.A|B.SC|B.COM|M.SC| M.COM| CBSE BOARD| UP BOARD| ANM',
-    EstblishmentDate: '20, Mar 2023',
-    image: Images.profile_placeholder2,
-    userDocId: '2',
-    lastUpdated: '20, Mar 2023',
-  },
-  {
-    id: 3,
-    name: 'Dr A K Group of Institutions B.A|B.SC|B.COM|M.SC| M.COM| CBSE BOARD| UP BOARD| ANM',
-    EstblishmentDate: '20, Mar 2023',
-    image: Images.profile_placeholder1,
-    userDocId: '3',
-    lastUpdated: '20, Mar 2023',
-  },
-  {
-    id: 4,
-    name: 'Dr A K Group of Institutions B.A|B.SC|B.COM|M.SC| M.COM| CBSE BOARD| UP BOARD| ANM',
-    EstblishmentDate: '20, Mar 2023',
-    image: Images.profile_placeholder2,
-    userDocId: '4',
-    lastUpdated: '20, Mar 2023',
-  },
-  {
-    id: 5,
-    name: 'Dr A K Group of Institutions B.A|B.SC|B.COM|M.SC| M.COM| CBSE BOARD| UP BOARD| ANM',
-    EstblishmentDate: '20, Mar 2023',
-    image: Images.profile_placeholder1,
-    userDocId: '5',
-    lastUpdated: '20, Mar 2023',
-  },
-  {
-    id: 6,
-    name: 'Dr A K Group of Institutions B.A|B.SC|B.COM|M.SC| M.COM| CBSE BOARD| UP BOARD| ANM',
-    EstblishmentDate: '20, Mar 2023',
-    image: Images.profile_placeholder2,
-    userDocId: '6',
-    lastUpdated: '20, Mar 2023',
-  },
-];
+
 
 const MyBussiness = ({navigation, route}) => {
   const {picData} = route.params || {};

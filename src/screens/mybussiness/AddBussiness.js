@@ -5,6 +5,7 @@ import BussinessSelect from './components/BussinessSelect';
 import CustomButton from '../../components/CustomButton';
 import BussinessType from './components/BussinessType';
 import Colors from '../../constants/Colors';
+import PartySelect from './components/PartySelect';
 
 const AddBussiness = ({route}) => {
   const {businessId,  bussinessDetails} = route.params ?? {};
@@ -42,9 +43,7 @@ const AddBussiness = ({route}) => {
         {orgBussinessType == 'Bussiness' ? (
           <BussinessType bussinessDetails={bussinessDetails}/>
         ) : orgBussinessType == 'Political' ? (
-          <View>
-            <Text>This is political bussiness</Text>
-          </View>
+          <PartySelect/>
         ) : null}
       </View>
     </>

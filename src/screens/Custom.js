@@ -46,7 +46,7 @@ const Custom = () => {
   const rightBoundary = width;
   const translateX = useSharedValue(width / 2);
   const translateY = useSharedValue(40);
-  const [image, setImage] = useState();
+  // const [image, setImage] = useState();
   const [capturedImage, setCapturedImage] = useState('');
   const canvasRef = useCanvasRef();
   const [imagePosition, setImagePosition] = useState({x: 50, y: 10});
@@ -82,15 +82,15 @@ const Custom = () => {
       });
     });
 
-  useEffect(() => {
-    generateSkiaImage(
-      'https://images.unsplash.com/photo-1670272501077-c72d2d42f362?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
-    ).then(value => {
-      if (value) {
-        setImage(value);
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   generateSkiaImage(
+  //     'https://images.unsplash.com/photo-1670272501077-c72d2d42f362?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+  //   ).then(value => {
+  //     if (value) {
+  //       setImage(value);
+  //     }
+  //   });
+  // }, []);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -114,7 +114,7 @@ const Custom = () => {
         console.warn(err);
       });
   }
-  
+  const image = useImage(require("../assets/frames/Frame 6.png"));
   return (
     <>
       <TopHeader titile={'Custom'} />
@@ -123,14 +123,15 @@ const Custom = () => {
         <Fill color="white" />
           {image ? (
             <>
-              <Image
+              {/* <Image
                 image={image}
                 fit="contain"
                 x={0}
                 y={0}
                 width={500}
                 height={500}
-              />
+              /> */}
+               <Image image={image} fit="contain" x={0} y={0} width={256} height={256}/>
             </>
           ) : null}
           <Circle cx={translateX} cy={translateY} r={20} color="#3E3E" />
