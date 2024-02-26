@@ -91,11 +91,12 @@ const DragDrop = ({children, onDrag, onDrop, setShowModal, setBorderBox}) => {
             onGestureEvent={pinchGesture}>
             <Animated.View style={animatedStyleForPinch}>
               <Pressable
-                onPress={() => console.log('pressed')}
-                onLongPress={() => 
-                  // setBorderBox(true)
-                  setShowModal(true)
-                }>
+                // onPress={() => console.log('pressed')}
+                // onLongPress={() => 
+                //   // setBorderBox(true)
+                //   setShowModal(true)
+                // }
+                >
                 {children}
               </Pressable>
             </Animated.View>

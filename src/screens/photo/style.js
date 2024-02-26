@@ -54,6 +54,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
   },
+  noData: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noDataText: {
+    fontSize: 18,
+    color: Colors.PRIMARY,
+    textAlign: 'center',
+    padding: 10,
+  },
 });
 
 export default styles;

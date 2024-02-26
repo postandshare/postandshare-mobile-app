@@ -8,6 +8,7 @@ import TopHeader from '../../components/TopHeader';
 import {useQuery} from '@tanstack/react-query';
 import {getAllBusinessList} from '../../services/userServices/bussiness.servies';
 import {useFocusEffect} from '@react-navigation/native';
+import NavigationScreenName from '../../constants/NavigationScreenName';
 
 const SelectBussiness = ({route, navigation}) => {
   const {picData} = route?.params;
@@ -39,9 +40,25 @@ const SelectBussiness = ({route, navigation}) => {
 
   return (
     <>
-      <TopHeader titile={'Select Bussiness'} />
+      <TopHeader
+        titile={'Select Bussiness'}
+        add
+        onPress={() => navigation.navigate(NavigationScreenName.MY_BUSSINESS , {
+          screen: 'Add Bussiness'
+        })}
+      />
       <ScrollView contentContainerStyle={styles.root}>
         {/* card for the bussiness name and update */}
+
+        {getAllBusinessList_Data?.data?.list?.length === 0 && (
+          <View style={styles.noData}>
+            <Text style={styles.noDataText}>
+              You have not added any business yet {'\n'}
+              Please add a business to continue
+            </Text>
+          </View>
+        )}
+
         <View style={styles.container}>
           {getAllBusinessList_Data?.data?.list?.map((item, index) => (
             <MyBussinessCard
@@ -62,6 +79,7 @@ const SelectBussiness = ({route, navigation}) => {
                 picData
                   ? navigation.navigate('CustomSDK', {
                       picData: picData?.pic,
+                      businessDetails: item,
                     })
                   : navigation.navigate('View Bussiness', {
                       businessId: item?._id,

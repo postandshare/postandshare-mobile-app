@@ -25,8 +25,6 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import Images from '../../constants/images';
 import DragDrop from '../../components/DragDrop';
 import ViewShot from 'react-native-view-shot';
-import RNFS from 'react-native-fs';
-import Share from 'react-native-share';
 import {Button, Dialog, Portal, TextInput} from 'react-native-paper';
 import FontFamily from '../../constants/FontFamily';
 import ColorPicker, {
@@ -37,9 +35,55 @@ import ColorPicker, {
   HueSlider,
 } from 'reanimated-color-picker';
 
+const CustomColorChange = ({data}) => {
+  const [color, setColor] = useState('#fff');
+  const [showModal, setShowModal] = useState(false);
+  const onSelectColor = ({hex}) => {
+    // do something with the selected color.
+    console.log(hex);
+    setColor(hex);
+    // setTextColor(hex);
+    // setSDKTextColor(hex);
+  };
+  return (
+    <View>
+      <Portal>
+        {/* modal for color picker */}
+        <Dialog
+          visible={showModal}
+          animationType="slide"
+          contentContainerStyle={{}}>
+          <Dialog.Title>Choose Color</Dialog.Title>
+          <Dialog.Content
+            style={{alignContent: 'center', alignItems: 'center'}}>
+            <ColorPicker
+              style={{width: '70%'}}
+              value="red"
+              onComplete={onSelectColor}>
+              <Preview />
+              <Panel1 />
+              <HueSlider />
+              <OpacitySlider />
+              <Swatches />
+            </ColorPicker>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setShowModal(false)}>Done</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+
+      <Text onLongPress={() => setShowModal(true)} style={{color: color}}>
+        {data}
+      </Text>
+    </View>
+  );
+};
+
 const CustomSDK = ({route, navigation}) => {
-  const {picData} = route.params;
+  const {picData, businessDetails} = route.params || {};
   const imgData = picData;
+  const BusinessData = businessDetails;
   const [showSticker, setShowSticker] = useState(false);
   const [stickers, setStickers] = useState();
   const [picUrl, setPicUrl] = React.useState('');
@@ -209,21 +253,6 @@ const CustomSDK = ({route, navigation}) => {
     setShowFrame1(false);
     navigation.navigate('ShareSave', {picUrl: uri});
   };
-
-  // const shareImage = async () => {
-  //   const shareOptions = {
-  //     title: 'Share via',
-  //     message: 'some message',
-  //     url: picUrl,
-  //     social: Share.Social.WHATSAPP,
-  //   };
-  //   try {
-  //     const ShareResponse = await Share.open(shareOptions);
-  //     console.log(JSON.stringify(ShareResponse));
-  //   } catch (error) {
-  //     console.log('Error =>', error);
-  //   }
-  // };
 
   const hideDialog = () => setVisible(false);
   const hideDialogFontFamily = () => setShowFontFamily(false);
@@ -590,7 +619,11 @@ const CustomSDK = ({route, navigation}) => {
                   {state?.logo ? (
                     <DragDrop onDrag={drag} onDrop={drop}>
                       <Image
-                        source={Images.akSchoolIcon}
+                        source={
+                          BusinessData?.logo
+                            ? {uri: BusinessData?.logo}
+                            : Images.akSchoolIcon
+                        }
                         style={{
                           height: 50,
                           width: 50,
@@ -613,8 +646,9 @@ const CustomSDK = ({route, navigation}) => {
                     <DragDrop
                       onDrag={drag}
                       onDrop={drop}
-                      setShowModal={setShowModal}
-                      setBorderBox={setBorderBox}>
+                      // setShowModal={setShowModal}
+                      // setBorderBox={setBorderBox}
+                    >
                       {borderBox ? (
                         <TouchableOpacity
                           style={{
@@ -635,18 +669,29 @@ const CustomSDK = ({route, navigation}) => {
                               fontWeight: '700',
                               position: 'absolute',
                             }}>
-                            9876543210
+                            {BusinessData?.mobileNumber ??
+                              ToastAndroid.show(
+                                'Mobile Number is not available',
+                                ToastAndroid.LONG,
+                              )}
                           </Text>
                         </TouchableOpacity>
                       ) : (
                         <Text
                           style={{
-                            color: textColor,
                             fontSize: 18,
                             fontWeight: '700',
                             position: 'absolute',
                           }}>
-                          9876543210
+                          <CustomColorChange
+                            data={
+                              BusinessData?.mobileNumber ??
+                              ToastAndroid.show(
+                                'Mobile Number is not available',
+                                ToastAndroid.LONG,
+                              )
+                            }
+                          />
                         </Text>
                       )}
                     </DragDrop>
@@ -655,15 +700,24 @@ const CustomSDK = ({route, navigation}) => {
                     <DragDrop
                       onDrag={drag}
                       onDrop={drop}
-                      setShowModal={setShowModal}>
+                      // setShowModal={setShowModal}
+                    >
                       <Text
                         style={{
-                          color: textColor,
+                          // color: textColor,
                           fontSize: 18,
                           fontWeight: '700',
                           position: 'absolute',
                         }}>
-                        8957339512
+                        <CustomColorChange
+                          data={
+                            BusinessData?.whatsappNumber ??
+                            ToastAndroid.show(
+                              'Whatsapp Number is not available',
+                              ToastAndroid.LONG,
+                            )
+                          }
+                        />
                       </Text>
                     </DragDrop>
                   ) : null}
@@ -671,15 +725,24 @@ const CustomSDK = ({route, navigation}) => {
                     <DragDrop
                       onDrag={drag}
                       onDrop={drop}
-                      setShowModal={setShowModal}>
+                      // setShowModal={setShowModal}
+                    >
                       <Text
                         style={{
-                          color: textColor,
+                          // color: textColor,
                           fontSize: 18,
                           fontWeight: '700',
                           position: 'absolute',
                         }}>
-                        postandshare@gamilc.com
+                        <CustomColorChange
+                          data={
+                            BusinessData?.email ??
+                            ToastAndroid.show(
+                              'Email is not available',
+                              ToastAndroid.LONG,
+                            )
+                          }
+                        />
                       </Text>
                     </DragDrop>
                   ) : null}
@@ -687,15 +750,34 @@ const CustomSDK = ({route, navigation}) => {
                     <DragDrop
                       onDrag={drag}
                       onDrop={drop}
-                      setShowModal={setShowModal}>
+                      // setShowModal={setShowModal}
+                    >
                       <Text
                         style={{
-                          color: textColor,
+                          // color: textColor,
                           fontSize: 18,
                           fontWeight: '700',
                           position: 'absolute',
+                          textAlign: 'center',
                         }}>
-                        123, xyz street, abc city
+                        <CustomColorChange
+                          data={
+                            BusinessData?.address
+                              ? BusinessData?.address?.address +
+                                ' ' +
+                                BusinessData?.address?.dist +
+                                ' ' +
+                                BusinessData?.address?.state +
+                                ' ' +
+                                BusinessData?.address?.pinCode +
+                                ' ' +
+                                BusinessData?.address?.tehsil
+                              : ToastAndroid.show(
+                                  'Address is not available',
+                                  ToastAndroid.LONG,
+                                )
+                          }
+                        />
                       </Text>
                     </DragDrop>
                   ) : null}
@@ -1063,10 +1145,12 @@ const CustomSDK = ({route, navigation}) => {
                       />
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() => setTools(prev => ({
-                        ...prev,
-                        fontSize: prev.fontSize - 2,
-                      }))}
+                      onPress={() =>
+                        setTools(prev => ({
+                          ...prev,
+                          fontSize: prev.fontSize - 2,
+                        }))
+                      }
                       style={{
                         backgroundColor: Colors.PRIMARY,
                         padding: 10,
@@ -1081,7 +1165,6 @@ const CustomSDK = ({route, navigation}) => {
                       />
                     </TouchableOpacity>
                   </View>
-
 
                   {/* font color */}
                   <TouchableOpacity
