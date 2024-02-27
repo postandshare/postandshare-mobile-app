@@ -21,10 +21,12 @@ import NavigationScreenName from '../constants/NavigationScreenName';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch} from 'react-redux';
 import {setLoginState} from '../services/reducer/AuthSlice';
-import { setProfileUpdated } from '../services/reducer/CommonReducer';
+import {setProfileUpdated} from '../services/reducer/CommonReducer';
 
-const Item = ({icon, text, path, onPress = () => {}}) => (
-  <TouchableOpacity style={styles.item_root} onPress={onPress}>
+const Item = ({icon, text, path, onPress = () => {}, isActive}) => (
+  <TouchableOpacity
+    style={[styles.item_root, isActive ? styles.active_item : {}]}
+    onPress={onPress}>
     <View style={{flexDirection: 'row', alignItems: 'center'}}>
       {icon}
       <Text style={styles.text}>{text}</Text>
@@ -32,7 +34,7 @@ const Item = ({icon, text, path, onPress = () => {}}) => (
     <Feather name="chevron-right" style={styles.icon} />
   </TouchableOpacity>
 );
-const CustomDrawerLeft = ({navigation}) => {
+const CustomDrawerLeft = ({navigation, route}) => {
   const dispatch = useDispatch();
 
   const handlePressLogout = () => {
@@ -105,6 +107,7 @@ const CustomDrawerLeft = ({navigation}) => {
           text="My Post"
           path={NavigationScreenName.MY_POST}
           onPress={() => navigation.navigate(NavigationScreenName.MY_POST)}
+          isActive={route?.name === NavigationScreenName.MY_POST}
         />
         <Item
           icon={<Entypo name={'video'} style={styles.icon} />}
@@ -115,7 +118,7 @@ const CustomDrawerLeft = ({navigation}) => {
         <Item
           icon={<Entypo name={'share'} style={styles.icon} />}
           text="Share Us"
-          onPress={async() => {
+          onPress={async () => {
             await navigation.goBack(NavigationScreenName.HOME);
             ShareUs();
           }}
@@ -129,8 +132,10 @@ const CustomDrawerLeft = ({navigation}) => {
         <Item
           icon={<Entypo name={'info'} style={styles.icon} />}
           text="Help & Support"
-          // path={NavigationScreenName.PROFILE}
-          // onPress={() => navigation.navigate(NavigationScreenName.PROFILE)}
+          onPress={async () => {
+            // await navigation.goBack(NavigationScreenName.HOME);
+            // navigation.navigate(NavigationScreenName.HELPSUPPORT);
+          }}
         />
         <Item
           icon={<MaterialIcons name={'privacy-tip'} style={styles.icon} />}
@@ -151,7 +156,7 @@ const CustomDrawerLeft = ({navigation}) => {
         <Item
           icon={<AntDesign name={'logout'} style={styles.icon} />}
           text="Logout"
-          onPress={async() => {
+          onPress={async () => {
             await navigation.goBack(NavigationScreenName.HOME);
             handlePressLogout();
           }}
@@ -252,5 +257,11 @@ const styles = StyleSheet.create({
     color: 'rgba(12, 47, 73, 1)',
     fontSize: 17,
     fontWeight: '500',
+  },
+  active_item: {
+    backgroundColor: Colors.PRIMARY,
+  },
+  active_text: {
+    color: Colors.white,
   },
 });

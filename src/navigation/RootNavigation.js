@@ -24,6 +24,7 @@ import FeedBack from '../screens/FeedBack';
 import PhotoNavigator from '../screens/photo/PhotoNavigator';
 import CustomSDK from '../screens/customSDK';
 import ShareSave from '../screens/customSDK/ShareSave';
+import HelpSupport from '../screens/helpSupport';
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -133,6 +134,10 @@ const Routes = () => {
                 />
                 <Stack.Screen name="CustomSDK" component={CustomSDK} />
                 <Stack.Screen name="ShareSave" component={ShareSave} />
+                <Stack.Screen
+                  name={NavigationScreenName.HELPSUPPORT}
+                  component={HelpSupport}
+                />
               </>
             )
           ) : (

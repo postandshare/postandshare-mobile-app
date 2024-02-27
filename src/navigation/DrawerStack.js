@@ -1,21 +1,10 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-// import CustomDrawerRight from '../components/CustomDrawerRight';
-import NavigationScreenName from '../constants/NavigationScreenName';
 import BottomTab from './BottomTab';
-import PhotoStatus from '../screens/photo';
-import Events from '../screens/evemt';
-import Wallpaper from '../screens/wallpaper';
 import Colors from '../constants/Colors';
-import TermAndCondtion from '../screens/term&condition';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Privacy from '../screens/privacy';
-import Tutorial from '../screens/tutorials';
-import MyBussinessNavigator from '../screens/mybussiness';
 import BirthdayRemainderNavigator from '../screens/birthday';
 import PhotoSDK from '../screens/sdk';
-import CustomSDK from '../screens/customSDK';
-import LanguageSelection from '../screens/auth/languageSelect';
 import CustomDrawerLeft from '../components/CustomDrawerLeft';
 
 const LeftDrawer = createDrawerNavigator();
