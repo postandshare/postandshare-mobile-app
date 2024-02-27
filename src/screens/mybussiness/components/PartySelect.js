@@ -3,8 +3,15 @@ import React from 'react';
 import Colors from '../../../constants/Colors';
 import {RadioButton} from 'react-native-paper';
 import CustomTextInputFormik from '../../../components/CustomTextInputFormik';
-import { useFormik } from 'formik';
+import {useFormik} from 'formik';
 import * as Yup from 'yup';
+import CustomButton from '../../../components/CustomButton';
+import Sizes from '../../../constants/Sizes';
+import Dropdown from '../../../components/Dropdown';
+import {DISTRICTS, STATES} from '../../../constants';
+import globalStyles from '../../../styles/globalStyles';
+import NavigationScreenName from '../../../constants/NavigationScreenName';
+import {useNavigation} from '@react-navigation/native';
 
 const PartyData = [
   'BJP',
@@ -19,11 +26,12 @@ const PartyData = [
   'NCP',
 ];
 
-const PartySelect = () => {
+const PartySelect = ({}) => {
+  const navigation = useNavigation();
   const [checked, setChecked] = React.useState('BJP');
   const politicalFormik = useFormik({
     initialValues: {
-      party: '',
+      party: 'BJP',
       state: '',
       district: '',
       constituency: '',
@@ -35,9 +43,12 @@ const PartySelect = () => {
       constituency: Yup.string().required('Required'),
     }),
     onSubmit: values => {
-      console.log(values);
+      console.log(values, 'values');
+      navigation.navigate('Political Leader');
     },
   });
+
+  console.log(politicalFormik?.errors, 'errors');
   return (
     <>
       <ScrollView
@@ -45,6 +56,10 @@ const PartySelect = () => {
         contentContainerStyle={{
           flexGrow: 1,
           backgroundColor: Colors.Background,
+          bottom: 10,
+        }}
+        style={{
+          alignSelf: 'center',
         }}>
         {/* party selection */}
         <Text
@@ -78,11 +93,77 @@ const PartySelect = () => {
           })}
         </View>
 
-        <Text style={styles.label}>State</Text>
-        <CustomTextInputFormik
-          formik={politicalFormik}
-          name={'state'}
-          placeholder={'State'}
+        {/* for selecting the state for current address */}
+        <View
+          style={{
+            marginVertical: 5,
+            width: Sizes.wp('91%'),
+            marginHorizontal: 8,
+          }}>
+          <Text style={{color: Colors.TEXT1}}>Select State</Text>
+          <Dropdown
+            value={politicalFormik.values.state}
+            label="Select State*"
+            data={STATES?.map(item => ({label: item, value: item}))}
+            onChangeValue={res => {
+              console.log(res);
+              politicalFormik.setValues(prev => ({
+                ...prev,
+                state: res,
+              }));
+            }}
+          />
+        </View>
+
+        {politicalFormik.errors.state && politicalFormik.touched.state && (
+          <Text style={globalStyles.error_text}>
+            {politicalFormik.errors.state}
+          </Text>
+        )}
+
+        {/* for district */}
+        <View
+          style={{
+            marginVertical: 5,
+            width: Sizes.wp('91%'),
+            marginHorizontal: 8,
+          }}>
+          <Text style={{color: Colors.TEXT1}}>Select District</Text>
+          <Dropdown
+            value={politicalFormik.values.district}
+            label="Select District*"
+            data={DISTRICTS[
+              STATES.indexOf(politicalFormik.values.state) + 1
+            ]?.map(item => ({label: item, value: item}))}
+            onChangeValue={res => {
+              politicalFormik.setValues(prev => ({
+                ...prev,
+                district: res,
+              }));
+            }}
+          />
+        </View>
+        {politicalFormik.errors.district &&
+          politicalFormik.touched.district && (
+            <Text style={globalStyles.error_text}>
+              {politicalFormik.errors.district}
+            </Text>
+          )}
+
+        <Text style={styles.label}>Constituency</Text>
+        <View style={{marginHorizontal: 10}}>
+          <CustomTextInputFormik
+            formik={politicalFormik}
+            name={'constituency'}
+            label={'Constituency'}
+          />
+        </View>
+
+        <CustomButton
+          title={'Submit'}
+          onPress={() => {
+            politicalFormik?.handleSubmit();
+          }}
         />
       </ScrollView>
     </>

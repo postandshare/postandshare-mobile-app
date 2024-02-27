@@ -5,6 +5,9 @@ import MyBussiness from './MyBussiness';
 import AddBussiness from './AddBussiness';
 import EditBussiness from './EditBussiness';
 import ViewBussiness from './ViewBussiness';
+import SelectPartyLeader from './components/PoliticalComponents/SelectPartyLeader';
+import PoliticalVolunteer from './components/PoliticalComponents/PoliticalVolunteer';
+import ChangeLeader from './components/PoliticalComponents/ChangeLeader';
 
 const Stack = createStackNavigator();
 const MyBussinessNavigator = () => {
@@ -18,7 +21,16 @@ const MyBussinessNavigator = () => {
       <Stack.Group screenOptions={{presentation: 'modal'}}>
         <Stack.Screen name="Add Bussiness" component={AddBussiness} />
         <Stack.Screen name="Edit Bussiness" component={EditBussiness} />
-        <Stack.Screen name='View Bussiness' component={ViewBussiness} />
+        <Stack.Screen name="View Bussiness" component={ViewBussiness} />
+      </Stack.Group>
+
+      <Stack.Group screenOptions={{presentation: 'card'}}>
+        <Stack.Screen name={'Political Leader'} component={SelectPartyLeader} />
+        <Stack.Screen name={'Change Leader'} component={ChangeLeader} />
+        <Stack.Screen
+          name="PoliticalVolunteer"
+          component={PoliticalVolunteer}
+        />
       </Stack.Group>
     </Stack.Navigator>
   );
