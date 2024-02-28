@@ -17,6 +17,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Birthday',
       },
       {
         id: '1',
@@ -25,6 +26,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Anniversary',
       },
       {
         id: '1',
@@ -33,6 +35,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Birthday',
       },
       {
         id: '1',
@@ -41,6 +44,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Death Anniversary',
       },
       {
         id: '1',
@@ -49,6 +53,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Birthday',
       },
       {
         id: '1',
@@ -57,6 +62,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Birthday',
       },
     ],
     id: '1',
@@ -72,6 +78,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Birthday',
       },
       {
         id: '1',
@@ -80,6 +87,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Anniversary',
       },
       {
         id: '1',
@@ -88,6 +96,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Birthday',
       },
       {
         id: '1',
@@ -96,6 +105,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Death Anniversary',
       },
       {
         id: '1',
@@ -104,6 +114,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Jaynti',
       },
       {
         id: '1',
@@ -112,6 +123,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Birthday',
       },
     ],
   },
@@ -126,6 +138,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2022',
         image: images.profile_placeholder1,
+        event: 'Birthday',
       },
     ],
   },
@@ -140,6 +153,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/13/2022',
         image: images.profile_placeholder1,
+        event: 'Birthday',
       },
     ],
   },
@@ -154,6 +168,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '1/12/2022',
         image: images.profile_placeholder1,
+        event: 'Social Event',
       },
     ],
   },
@@ -169,6 +184,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Birthday',
       },
       {
         id: '1',
@@ -177,6 +193,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Birthday',
       },
       {
         id: '1',
@@ -185,6 +202,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Social Event',
       },
       {
         id: '1',
@@ -193,6 +211,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Celebtration',
       },
       {
         id: '1',
@@ -201,6 +220,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Ecological Event',
       },
       {
         id: '1',
@@ -209,6 +229,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Social Event',
       },
     ],
   },
@@ -223,6 +244,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2022',
         image: images.profile_placeholder1,
+        event: 'Birthday',
       },
     ],
   },
@@ -237,6 +259,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/13/2022',
         image: images.profile_placeholder1,
+        event: 'Birthday',
       },
     ],
   },
@@ -251,6 +274,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '1/12/2022',
         image: images.profile_placeholder1,
+        event: 'Social Event',
       },
     ],
   },
@@ -265,6 +289,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Birthday',
       },
       {
         id: '1',
@@ -273,6 +298,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Social Event',
       },
       {
         id: '1',
@@ -281,6 +307,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Birthday',
       },
       {
         id: '1',
@@ -289,6 +316,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Birthday',
       },
       {
         id: '1',
@@ -297,6 +325,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Social Event',
       },
       {
         id: '1',
@@ -305,6 +334,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2021',
         image: images.profile_placeholder1,
+        event: 'Birthday',
       },
     ],
   },
@@ -318,6 +348,7 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/12/2022',
         image: images.profile_placeholder1,
+        event: 'Birthday',
       },
     ],
   },
@@ -331,12 +362,44 @@ const BirthdayRemainder_Data = [
         name: 'Rajesh',
         date: '12/13/2022',
         image: images.profile_placeholder1,
+        event: 'Birthday',
       },
     ],
   },
 ];
 
 const BirthdayRemainder = ({navigation}) => {
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  const currentMonthIndex = new Date().getMonth();
+
+  // Sort the data so that the current month comes first and the following months come after
+  const sortedData = [...BirthdayRemainder_Data].sort((a, b) => {
+    const aIndex = monthNames.indexOf(a?.monthName);
+    const bIndex = monthNames.indexOf(b?.monthName);
+
+    if (aIndex >= currentMonthIndex && bIndex < currentMonthIndex) {
+      return -1;
+    }
+    if (bIndex >= currentMonthIndex && aIndex < currentMonthIndex) {
+      return 1;
+    }
+    return aIndex - bIndex;
+  });
+
   return (
     <>
       <TopHeader
@@ -354,9 +417,21 @@ const BirthdayRemainder = ({navigation}) => {
           <CustomCarousel />
         </View>
 
-        <Text >Upcoming</Text>
-
-
+        {/* list for the upcoming birthday details or events */}
+        <ScrollView contentContainerStyle={{}}>
+          {sortedData?.map((item, index) => {
+            return (
+              <View key={index} style={{marginVertical: 10}}>
+                <Text style={styles.title}>{item?.monthName}</Text>
+                <ScrollView contentContainerStyle={styles.root}>
+                  {item?.data?.map((item, index) => {
+                    return <BirthRemaiderCard key={index} item={item} navigation={navigation} />;
+                  })}
+                </ScrollView>
+              </View>
+            );
+          })}
+        </ScrollView>
       </ScrollView>
     </>
   );

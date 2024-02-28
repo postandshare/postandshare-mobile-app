@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
   },
   today_carousel: {
     alignSelf: 'center',
+    flex: 1,
   },
   title: {
     flex: 1,
@@ -71,6 +72,42 @@ const styles = StyleSheet.create({
   photo_button_text:{
     color: Colors.PRIMARY,
     fontSize: 15,
+    fontWeight: '500',
+  },
+  event_detail_container: {
+    flexDirection:'row',
+    justifyContent: 'space-between',
+    width: Sizes.wp('95%'),
+    alignSelf: 'center',
+    // backgroundColor: Colors.white,
+  },
+  image: {
+    flex: 1,
+    width: Sizes.wp('20%'),
+    height: Sizes.hp('10%'),
+    backgroundColor: '#3D398910',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 50 , 
+    borderColor: 'grey',
+    marginVertical: 5,
+  },
+  textsms_container: {
+    width: Sizes.wp('95%'),
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+  textsms_view: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+  },
+  textsms_text: {
+    fontSize: 15,
+    color: Colors.TEXT1,
     fontWeight: '500',
   },
 });
