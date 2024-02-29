@@ -5,6 +5,8 @@ import styles from './style';
 import images from '../../constants/images';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Feather from 'react-native-vector-icons/Feather';
+import CustomButton from '../../components/CustomButton';
 
 const BirthdayRemainderDetail = ({data, navigation}) => {
   const EVENT_DATA = {
@@ -18,7 +20,13 @@ const BirthdayRemainderDetail = ({data, navigation}) => {
   };
   return (
     <>
-      <TopHeader titile={'Birthday Remainder'}/>
+      <TopHeader
+        titile={'Birthday Remainder'}
+        IconProp={<Feather name="settings" size={30} color="white" />}
+        onPress={() => {
+          navigation.navigate('RemainderSetting');
+        }}
+      />
 
       <ScrollView style={{}}>
         <View style={{}}>
@@ -37,20 +45,21 @@ const BirthdayRemainderDetail = ({data, navigation}) => {
             <Text style={styles.title}>{EVENT_DATA?.time}</Text>
           </View>
 
-
           <View style={styles.textsms_container}>
             <View style={styles.textsms_view}>
               <Entypo name="message" size={24} color="black" />
               <Text style={styles.textsms_text}>+918957339512</Text>
-              <FontAwesome name='edit' size={24} color="black" />
+              <FontAwesome name="edit" size={24} color="black" />
             </View>
           </View>
-
-          <View style={{}}>
-
-          </View>
-
         </View>
+
+        <CustomButton
+          title={'Create Post'}
+          onPress={() => {
+            navigation.navigate('CreatePost');
+          }}
+        />
       </ScrollView>
     </>
   );

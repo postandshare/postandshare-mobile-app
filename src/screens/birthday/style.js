@@ -58,24 +58,24 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderRadius: 10 , 
+    borderRadius: 10,
     borderColor: 'grey',
     marginVertical: 5,
   },
-  photo_button_container:{
+  photo_button_container: {
     backgroundColor: Colors.white,
     borderWidth: 1,
-    borderRadius: 10 , 
+    borderRadius: 10,
     borderColor: Colors.PRIMARY,
     padding: 10,
   },
-  photo_button_text:{
+  photo_button_text: {
     color: Colors.PRIMARY,
     fontSize: 15,
     fontWeight: '500',
   },
   event_detail_container: {
-    flexDirection:'row',
+    flexDirection: 'row',
     justifyContent: 'space-between',
     width: Sizes.wp('95%'),
     alignSelf: 'center',
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderRadius: 50 , 
+    borderRadius: 50,
     borderColor: 'grey',
     marginVertical: 5,
   },
@@ -99,17 +99,36 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderWidth: 1,
     borderRadius: 10,
+    borderColor: Colors.TEXT1
   },
   textsms_view: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 10,
   },
+  textsms_option_border: {
+    flexDirection: 'row',
+    gap: 10,
+    padding: 10,
+    alignItems: 'center',
+  },
   textsms_text: {
     fontSize: 15,
     color: Colors.TEXT1,
     fontWeight: '500',
   },
+  //create post
+  container_textsms: {
+    flexDirection: 'row',
+    paddingHorizontal: 10
+  },
+  view_container: {
+    flex: 1,
+    flexDirection: 'row',
+    width: Sizes.wp('95%'),
+    alignSelf: 'center',
+    alignItems: 'center',
+  }
 });
 
 export default styles;

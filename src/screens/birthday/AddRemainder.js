@@ -86,10 +86,6 @@ const AddRemainder = ({navigation}) => {
     }
   };
 
-  console.log(
-    eventsAddFormik?.values?.eventPhoto,
-    'event photo in the adddress',
-  );
 
   const TakePhotofromGallery = async ({setValues, photo}) => {
     try {

@@ -34,16 +34,22 @@ import ColorPicker, {
   OpacitySlider,
   HueSlider,
 } from 'reanimated-color-picker';
+import {useQuery} from '@tanstack/react-query';
+import {getOrgFrame} from '../../services/userServices/frame.services';
+import {useFocusEffect} from '@react-navigation/native';
 
 const CustomColorChange = ({data}) => {
-  const [color, setColor] = useState('#fff');
+  const [color, setColor] = useState(Colors.PRIMARY);
   const [showModal, setShowModal] = useState(false);
+  const [fontWeight, setFontWeight] = useState('normal');
+  const [fontSize, setFontSize] = useState(10);
+  const [fontStyle, setFontStyle] = useState('normal');
+  const [textDecoration, setTextDecoration] = useState('none');
+  const [textAlign, setTextAlign] = useState('left');
+
   const onSelectColor = ({hex}) => {
-    // do something with the selected color.
     console.log(hex);
     setColor(hex);
-    // setTextColor(hex);
-    // setSDKTextColor(hex);
   };
   return (
     <View>
@@ -56,16 +62,63 @@ const CustomColorChange = ({data}) => {
           <Dialog.Title>Choose Color</Dialog.Title>
           <Dialog.Content
             style={{alignContent: 'center', alignItems: 'center'}}>
+            {/* text which is going to be editiable */}
+            <Text
+              style={{
+                color: color,
+                marginVertical: 10,
+                fontSize: fontSize,
+                fontWeight: fontWeight,
+                textAlign: textAlign,
+              }}>
+              {data}
+            </Text>
+            {/* color picker */}
             <ColorPicker
               style={{width: '70%'}}
-              value="red"
+              value={color}
               onComplete={onSelectColor}>
-              <Preview />
+              {/* <Preview /> */}
               <Panel1 />
               <HueSlider />
               <OpacitySlider />
-              <Swatches />
+              {/* <Swatches /> */}
             </ColorPicker>
+            {/* font size and font weight and many more change able here by showing tools */}
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                width: '70%',
+                marginVertical: 10,
+              }}>
+              <TouchableOpacity
+                onPress={() => setFontSize(prev => prev + 1)}
+                style={{
+                  backgroundColor: Colors.PRIMARY,
+                  borderRadius: 5,
+                  padding: 5,
+                }}>
+                <MaterialCommunityIcons
+                  name="format-font-size-increase"
+                  size={20}
+                  color={Colors.white}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setFontSize(prev => prev - 1)}
+                style={{
+                  backgroundColor: Colors.PRIMARY,
+                  borderRadius: 5,
+                  padding: 5,
+                }}>
+                <MaterialCommunityIcons
+                  name="format-font-size-decrease"
+                  size={20}
+                  color={Colors.white}
+                />
+              </TouchableOpacity>
+            </View>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={() => setShowModal(false)}>Done</Button>
@@ -73,10 +126,48 @@ const CustomColorChange = ({data}) => {
         </Dialog>
       </Portal>
 
-      <Text onLongPress={() => setShowModal(true)} style={{color: color}}>
+      <Text
+        onLongPress={() => setShowModal(true)}
+        style={{color: color, fontSize: fontSize, fontWeight: fontWeight}}>
         {data}
       </Text>
     </View>
+  );
+};
+
+const FrameSelection = ({
+  setFrameImg,
+  setShowFrameImg,
+  setShowFrame2,
+  setShowFrame1,
+  setShowFrame3,
+  setFrame,
+  item,
+  setSelectedIndex,
+  selectedIndex,
+  index,
+}) => {
+  const isSelected = selectedIndex === index;
+
+  return (
+    <TouchableOpacity
+      style={[
+        isSelected
+          ? {backgroundColor: Colors.PRIMARY}
+          : {backgroundColor: Colors.white},
+        styles.frame,
+      ]}
+      onPress={() => {
+        setShowFrame1(false);
+        setShowFrame2(false);
+        setShowFrame3(false);
+        setFrame(false);
+        setShowFrameImg(true);
+        setFrameImg(item?.framePic);
+        setSelectedIndex(index);
+      }}>
+      <Text style={styles.frameText}>{item?.frameCode}</Text>
+    </TouchableOpacity>
   );
 };
 
@@ -84,6 +175,7 @@ const CustomSDK = ({route, navigation}) => {
   const {picData, businessDetails} = route.params || {};
   const imgData = picData;
   const BusinessData = businessDetails;
+  const [selectedIndex, setSelectedIndex] = useState(null);
   const [showSticker, setShowSticker] = useState(false);
   const [stickers, setStickers] = useState();
   const [picUrl, setPicUrl] = React.useState('');
@@ -95,6 +187,10 @@ const CustomSDK = ({route, navigation}) => {
   const [showFrame, setFrame] = useState(false);
   const [showFrame1, setShowFrame1] = useState(true);
   const [showFrame2, setShowFrame2] = useState(false);
+  const [showFrame3, setShowFrame3] = useState(false);
+  // from backend image it should be shown
+  const [framImg, setFrameImg] = useState('');
+  const [showFrameImg, setShowFrameImg] = useState(false);
   const [textAlignment, setTextAlignment] = useState('left');
   const [fontFamily, setFontFamily] = useState('Arial');
   const [showFontFamily, setShowFontFamily] = useState(false);
@@ -111,7 +207,6 @@ const CustomSDK = ({route, navigation}) => {
   const [controls, setControls] = useState({
     open: false,
   });
-
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
   const [borderBox, setBorderBox] = useState(false);
@@ -262,6 +357,31 @@ const CustomSDK = ({route, navigation}) => {
     setTextColor(hex);
     setSDKTextColor(hex);
   };
+
+  const {
+    isLoading: getOrgFrameLoading,
+    isFetching: getOrgFrameFetching,
+    refetch: getOrgFrameRefetch,
+    data: getOrgFrame_Data,
+    isError: getOrgFrame_isError,
+  } = useQuery({
+    queryKey: ['getOrgFrame'],
+    queryFn: () => getOrgFrame(),
+    onSuccess: async success => {
+      // console.log(success?.data, 'in success');
+    },
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getOrgFrameRefetch();
+    }, []),
+  );
+
   return (
     <>
       <TopHeader titile={'Custom SDK'} next={'Next'} onPress={onCapture} />
@@ -615,6 +735,7 @@ const CustomSDK = ({route, navigation}) => {
                   width: '100%',
                   justifyContent: 'center',
                 }}>
+                {/* logo and other things that needs to be implemented */}
                 <View style={{zIndex: 3}}>
                   {state?.logo ? (
                     <DragDrop onDrag={drag} onDrop={drop}>
@@ -765,12 +886,16 @@ const CustomSDK = ({route, navigation}) => {
                             BusinessData?.address
                               ? BusinessData?.address?.address +
                                 ' ' +
+                                '||' +
                                 BusinessData?.address?.dist +
                                 ' ' +
+                                '\n' +
                                 BusinessData?.address?.state +
                                 ' ' +
+                                '\n' +
                                 BusinessData?.address?.pinCode +
                                 ' ' +
+                                '||' +
                                 BusinessData?.address?.tehsil
                               : ToastAndroid.show(
                                   'Address is not available',
@@ -800,13 +925,24 @@ const CustomSDK = ({route, navigation}) => {
                     </DragDrop>
                   ) : null}
                 </View>
-
+                {/* frames of the images */}
                 <View style={{zIndex: 2}}>
                   {showFrame ? (
                     <Image
-                      source={Images.frame1}
+                      source={Images.frame_3}
                       style={{
-                        transform: [{rotate: '90deg'}],
+                        height: 315,
+                        width: '100%',
+                        alignSelf: 'center',
+                      }}
+                    />
+                  ) : null}
+                  {showFrameImg ? (
+                    <Image
+                      source={{uri: framImg}}
+                      style={{
+                        height: '100%',
+                        width: '100%',
                       }}
                     />
                   ) : null}
@@ -825,7 +961,15 @@ const CustomSDK = ({route, navigation}) => {
                       style={{
                         height: '100%',
                         width: '100%',
-                        top: -20,
+                      }}
+                    />
+                  ) : null}
+                  {showFrame3 ? (
+                    <ImageBackground
+                      source={Images.frame_4}
+                      style={{
+                        height: '100%',
+                        width: '100%',
                       }}
                     />
                   ) : null}
@@ -964,6 +1108,23 @@ const CustomSDK = ({route, navigation}) => {
           horizontal
           contentContainerStyle={styles.frameContainer}
           showsHorizontalScrollIndicator={false}>
+          {getOrgFrame_Data?.data?.list?.map((item, index) => (
+            <FrameSelection
+              setFrameImg={setFrameImg}
+              setShowFrameImg={setShowFrameImg}
+              showFrameImg={showFrameImg}
+              item={item}
+              setSelectedIndex={setSelectedIndex}
+              selectedIndex={selectedIndex}
+              index={index}
+              setShowFrame1={setShowFrame1}
+              setShowFrame2={setShowFrame2}
+              setShowFrame3={setShowFrame3}
+              setFrame={setFrame}
+              key={index}
+            />
+          ))}
+
           <TouchableOpacity
             style={[
               showFrame
@@ -975,6 +1136,8 @@ const CustomSDK = ({route, navigation}) => {
               setFrame(!showFrame);
               setShowFrame1(false);
               setShowFrame2(false);
+              setShowFrame3(false);
+              setShowFrameImg(false);
             }}>
             <Text style={styles.frameText}>Frame 1</Text>
           </TouchableOpacity>
@@ -989,6 +1152,8 @@ const CustomSDK = ({route, navigation}) => {
               setFrame(false);
               setShowFrame1(!showFrame1);
               setShowFrame2(false);
+              setShowFrame3(false);
+              setShowFrameImg(false);
             }}>
             <Text style={styles.frameText}>Frame 2</Text>
           </TouchableOpacity>
@@ -1003,12 +1168,27 @@ const CustomSDK = ({route, navigation}) => {
               setFrame(false);
               setShowFrame1(false);
               setShowFrame2(!showFrame2);
+              setShowFrame3(false);
+              setShowFrameImg(false);
             }}>
             <Text style={styles.frameText}>Frame 3</Text>
           </TouchableOpacity>
-          <View style={styles.frame}>
+          <TouchableOpacity
+            style={[
+              showFrame3
+                ? {backgroundColor: Colors.PRIMARY}
+                : {backgroundColor: Colors.white},
+              styles.frame,
+            ]}
+            onPress={() => {
+              setFrame(false);
+              setShowFrame1(false);
+              setShowFrame2(false);
+              setShowFrame3(!showFrame3);
+              setShowFrameImg(false);
+            }}>
             <Text style={styles.frameText}>Frame 4</Text>
-          </View>
+          </TouchableOpacity>
           <View style={styles.frame}>
             <Text style={styles.frameText}>Frame 5</Text>
           </View>
