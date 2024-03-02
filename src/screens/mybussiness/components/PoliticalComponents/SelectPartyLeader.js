@@ -1,6 +1,7 @@
 import {
   Image,
   PermissionsAndroid,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -8,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import TopHeader from '../../../../components/TopHeader';
 import Colors from '../../../../constants/Colors';
 import ProfilePic from '../../../../components/ProfilePic';
@@ -16,6 +17,9 @@ import uploadFile from '../../../../utils/uploadFile';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import CustomButton from '../../../../components/CustomButton';
 import Loader from '../../../../components/Loader';
+import {useQuery} from '@tanstack/react-query';
+import {getAllPartyDetails} from '../../../../services/userServices/political.services';
+import {useFocusEffect} from '@react-navigation/native';
 
 const SelectedLeader = [
   {
@@ -62,7 +66,9 @@ const SelectedLeader = [
   },
 ];
 
-const SelectPartyLeader = ({navigation}) => {
+const SelectPartyLeader = ({route, navigation}) => {
+  const {partyDocId} = route?.params || {};
+  console.log(partyDocId, 'in select party leader');
   const [profilePic, setprofilePic] = useState('');
   const [imageUploading, setImageUploading] = useState(false);
 
@@ -116,12 +122,52 @@ const SelectPartyLeader = ({navigation}) => {
       ToastAndroid.show('Permission Denied', ToastAndroid.LONG);
     }
   };
+
+  const {
+    isLoading: getAllPartyDetailsLoading,
+    isFetching: getAllPartyDetailsFetching,
+    refetch: getAllPartyDetailsRefetch,
+    data: getAllPartyDetails_Data,
+    isError: getAllPartyDetails_isError,
+  } = useQuery({
+    queryKey: ['getAllPartyDetails'],
+    queryFn: () =>
+      getAllPartyDetails({
+        // params
+        partyDocId: partyDocId,
+      }),
+    onSuccess: async success => {
+      setprofilePic(success?.data?.obj?.fetchParty?.electionSymbol);
+      // console.log(success?.data, 'in success');
+    },
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
+
+  useFocusEffect(
+    useCallback(
+      () => {
+        getAllPartyDetailsRefetch();
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [],
+    ),
+  );
+
   return (
     <>
       <TopHeader titile={'Select Party Leader'} />
       <Loader open={imageUploading} text="Uploading Image" />
       <ScrollView
         nestedScrollEnabled={true}
+        refreshControl={
+          <RefreshControl
+            refreshing={getAllPartyDetailsFetching}
+            onRefresh={getAllPartyDetailsRefetch}
+          />
+        }
         contentContainerStyle={styles.root}>
         {/* party selection name */}
         <View style={styles.partyLogoContainer}>
@@ -131,7 +177,9 @@ const SelectPartyLeader = ({navigation}) => {
           />
           <View style={styles.partyNameCotainer}>
             <Text style={styles.label}>Party Name</Text>
-            <Text style={styles.title}>BJP</Text>
+            <Text style={styles.title}>
+              {getAllPartyDetails_Data?.data?.obj?.fetchParty?.partyName}
+            </Text>
             {/* from the prev screen */}
           </View>
         </View>
@@ -140,36 +188,45 @@ const SelectPartyLeader = ({navigation}) => {
         <View style={styles.partyLeaderContainer}>
           <View style={styles.row_text_container}>
             <Text style={styles.title}>Selected Leader</Text>
-            <TouchableOpacity onPress={() => {
-                navigation.navigate('Change Leader');
-            }}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Change Leader', {
+                  partyDocId: partyDocId,
+                });
+              }}>
               <Text style={styles.changeLeader_text}>Change</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.imageWrap}>
-            {SelectedLeader.map((item, index) => {
-              return (
-                <View
-                  key={index}
-                  style={{
-                    margin: 10,
-                    alignItems: 'center',
-                  }}>
-                  <Image
-                    source={item.pic}
-                    style={{width: 100, height: 100, borderRadius: 5}}
-                  />
-                  <Text
+            {getAllPartyDetails_Data?.data?.obj?.fetchAllPoliticalLeader?.map(
+              (item, index) => {
+                return (
+                  <View
+                    key={index}
                     style={{
-                      fontSize: 14,
-                      fontWeight: '500',
-                      color: Colors.TEXT1,
+                      margin: 5,
+                      alignItems: 'center',
                     }}>
-                    {item.name}
-                  </Text>
-                </View>
-              );
-            })}
+                    <Image
+                      source={{uri: item?.leaderPhoto}}
+                      style={{
+                        height: 100,
+                        width: 100,
+                        //backgroundColor: 'red'
+                      }}
+                    />
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        fontWeight: '500',
+                        color: Colors.TEXT1,
+                      }}>
+                      {item?.leaderName}
+                    </Text>
+                  </View>
+                );
+              },
+            )}
           </View>
         </View>
 

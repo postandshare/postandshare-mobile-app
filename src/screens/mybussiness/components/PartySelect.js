@@ -1,5 +1,5 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {RefreshControl, ScrollView, StyleSheet, Text, ToastAndroid, View} from 'react-native';
+import React, { useCallback, useState } from 'react';
 import Colors from '../../../constants/Colors';
 import {RadioButton} from 'react-native-paper';
 import CustomTextInputFormik from '../../../components/CustomTextInputFormik';
@@ -10,28 +10,17 @@ import Sizes from '../../../constants/Sizes';
 import Dropdown from '../../../components/Dropdown';
 import {DISTRICTS, STATES} from '../../../constants';
 import globalStyles from '../../../styles/globalStyles';
-import NavigationScreenName from '../../../constants/NavigationScreenName';
-import {useNavigation} from '@react-navigation/native';
-
-const PartyData = [
-  'BJP',
-  'Congress',
-  'AAP',
-  'Samajwadi Party',
-  'BSP',
-  'JDU',
-  'RJD',
-  'TMC',
-  'Shiv Sena',
-  'NCP',
-];
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import { useQuery } from '@tanstack/react-query';
+import { getAllPartyDetails } from '../../../services/userServices/political.services';
 
 const PartySelect = ({}) => {
   const navigation = useNavigation();
-  const [checked, setChecked] = React.useState('BJP');
+  const [checked, setChecked] = React.useState('Bharatiya Janata Party');
+  const [partyDocId , setPartyDocId] = useState('');
   const politicalFormik = useFormik({
     initialValues: {
-      party: 'BJP',
+      party: 'Bharatiya Janata Party',
       state: '',
       district: '',
       constituency: '',
@@ -44,15 +33,48 @@ const PartySelect = ({}) => {
     }),
     onSubmit: values => {
       console.log(values, 'values');
-      navigation.navigate('Political Leader');
+      navigation.navigate('Political Leader', {
+        partyDocId : partyDocId
+      });
     },
   });
 
-  console.log(politicalFormik?.errors, 'errors');
+  const {
+    isLoading: getAllPartyDetailsLoading,
+    isFetching: getAllPartyDetailsFetching,
+    refetch: getAllPartyDetailsRefetch,
+    data: getAllPartyDetails_Data,
+    isError: getAllPartyDetails_isError,
+  } = useQuery({
+    queryKey: ['getAllPartyDetails'],
+    queryFn: () => getAllPartyDetails(),
+    onSuccess: async success => {
+      // console.log(success?.data, 'in success');
+    },
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
+
+  useFocusEffect(
+    useCallback(() => {
+      getAllPartyDetailsRefetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []),
+  );
+
+
   return (
     <>
       <ScrollView
         nestedScrollEnabled={true}
+        refreshControl={
+          <RefreshControl
+            refreshing={getAllPartyDetailsFetching}
+            onRefresh={getAllPartyDetailsRefetch}
+          /> 
+        }
         contentContainerStyle={{
           flexGrow: 1,
           backgroundColor: Colors.Background,
@@ -67,7 +89,7 @@ const PartySelect = ({}) => {
           Select Party
         </Text>
         <View style={styles.partySelection_container}>
-          {PartyData.map((item, index) => {
+          {getAllPartyDetails_Data?.data?.list?.map((item, index) => {
             return (
               <View
                 key={index}
@@ -77,7 +99,8 @@ const PartySelect = ({}) => {
                   status={checked === item ? 'checked' : 'unchecked'}
                   onPress={() => {
                     setChecked(item);
-                    politicalFormik.setFieldValue('party', item);
+                    setPartyDocId(item?._id);
+                    politicalFormik.setFieldValue('party', item?.partyName);
                   }}
                 />
                 <Text
@@ -86,7 +109,7 @@ const PartySelect = ({}) => {
                     fontWeight: '500',
                     color: Colors.TEXT1,
                   }}>
-                  {item}
+                  {item?.partyName}
                 </Text>
               </View>
             );

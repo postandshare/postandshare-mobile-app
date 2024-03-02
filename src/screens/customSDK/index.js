@@ -5,7 +5,6 @@ import {
   ImageBackground,
   Keyboard,
   PermissionsAndroid,
-  Platform,
   ScrollView,
   Text,
   ToastAndroid,
@@ -145,6 +144,7 @@ const FrameSelection = ({
   item,
   setSelectedIndex,
   selectedIndex,
+  showFrameImg,
   index,
 }) => {
   const isSelected = selectedIndex === index;
@@ -152,7 +152,7 @@ const FrameSelection = ({
   return (
     <TouchableOpacity
       style={[
-        isSelected
+        isSelected && showFrameImg
           ? {backgroundColor: Colors.PRIMARY}
           : {backgroundColor: Colors.white},
         styles.frame,
@@ -304,14 +304,16 @@ const CustomSDK = ({route, navigation}) => {
   };
 
   const drag = (x, y) => {
-    console.log('Dragging', x, y);
+    // console.log('Dragging', x, y);
   };
   const drop = (x, y) => {
     if (y > Dimensions.get('screen').height - 150) {
       console.log('Drop in the pit');
     }
-    console.log('Dropping', x, y);
+    // console.log('Dropping', x, y);
   };
+
+  console.log(showFrameImg, 'showframeimg');
 
   async function requestStoragePermission() {
     try {
@@ -379,6 +381,7 @@ const CustomSDK = ({route, navigation}) => {
   useFocusEffect(
     React.useCallback(() => {
       getOrgFrameRefetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []),
   );
 
@@ -927,51 +930,63 @@ const CustomSDK = ({route, navigation}) => {
                 </View>
                 {/* frames of the images */}
                 <View style={{zIndex: 2}}>
-                  {showFrame ? (
-                    <Image
-                      source={Images.frame_3}
-                      style={{
-                        height: 315,
-                        width: '100%',
-                        alignSelf: 'center',
-                      }}
-                    />
-                  ) : null}
                   {showFrameImg ? (
                     <Image
-                      source={{uri: framImg}}
+                      source={
+                        framImg
+                          ? {uri: framImg}
+                          : ToastAndroid.show(
+                              'Frame is not available please provide better link',
+                              ToastAndroid.LONG,
+                            )
+                      }
                       style={{
                         height: '100%',
+                        alignSelf: 'center',
                         width: '100%',
                       }}
                     />
                   ) : null}
-                  {showFrame1 ? (
-                    <Image
-                      source={Images.frame_1}
-                      style={{
-                        height: '100%',
-                        width: '100%',
-                      }}
-                    />
-                  ) : null}
-                  {showFrame2 ? (
-                    <ImageBackground
-                      source={Images.frame_2}
-                      style={{
-                        height: '100%',
-                        width: '100%',
-                      }}
-                    />
-                  ) : null}
-                  {showFrame3 ? (
-                    <ImageBackground
-                      source={Images.frame_4}
-                      style={{
-                        height: '100%',
-                        width: '100%',
-                      }}
-                    />
+                  {!getOrgFrame_Data?.data?.list?.length > 0 ? (
+                    <>
+                      {showFrame ? (
+                        <Image
+                          source={Images.frame_3}
+                          style={{
+                            height: 315,
+                            width: '100%',
+                            alignSelf: 'center',
+                          }}
+                        />
+                      ) : null}
+                      {showFrame1 ? (
+                        <Image
+                          source={Images.frame_1}
+                          style={{
+                            height: '100%',
+                            width: '100%',
+                          }}
+                        />
+                      ) : null}
+                      {showFrame2 ? (
+                        <ImageBackground
+                          source={Images.frame_2}
+                          style={{
+                            height: '100%',
+                            width: '100%',
+                          }}
+                        />
+                      ) : null}
+                      {showFrame3 ? (
+                        <ImageBackground
+                          source={Images.frame_4}
+                          style={{
+                            height: '100%',
+                            width: '100%',
+                          }}
+                        />
+                      ) : null}
+                    </>
                   ) : null}
                 </View>
                 {showCross ? (
@@ -1125,88 +1140,92 @@ const CustomSDK = ({route, navigation}) => {
             />
           ))}
 
-          <TouchableOpacity
-            style={[
-              showFrame
-                ? {backgroundColor: Colors.PRIMARY}
-                : {backgroundColor: Colors.white},
-              styles.frame,
-            ]}
-            onPress={() => {
-              setFrame(!showFrame);
-              setShowFrame1(false);
-              setShowFrame2(false);
-              setShowFrame3(false);
-              setShowFrameImg(false);
-            }}>
-            <Text style={styles.frameText}>Frame 1</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              showFrame1
-                ? {backgroundColor: Colors.PRIMARY}
-                : {backgroundColor: Colors.white},
-              styles.frame,
-            ]}
-            onPress={() => {
-              setFrame(false);
-              setShowFrame1(!showFrame1);
-              setShowFrame2(false);
-              setShowFrame3(false);
-              setShowFrameImg(false);
-            }}>
-            <Text style={styles.frameText}>Frame 2</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              showFrame2
-                ? {backgroundColor: Colors.PRIMARY}
-                : {backgroundColor: Colors.white},
-              styles.frame,
-            ]}
-            onPress={() => {
-              setFrame(false);
-              setShowFrame1(false);
-              setShowFrame2(!showFrame2);
-              setShowFrame3(false);
-              setShowFrameImg(false);
-            }}>
-            <Text style={styles.frameText}>Frame 3</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              showFrame3
-                ? {backgroundColor: Colors.PRIMARY}
-                : {backgroundColor: Colors.white},
-              styles.frame,
-            ]}
-            onPress={() => {
-              setFrame(false);
-              setShowFrame1(false);
-              setShowFrame2(false);
-              setShowFrame3(!showFrame3);
-              setShowFrameImg(false);
-            }}>
-            <Text style={styles.frameText}>Frame 4</Text>
-          </TouchableOpacity>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>Frame 5</Text>
-          </View>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>Frame 6</Text>
-          </View>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>Frame 7</Text>
-          </View>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>Frame 8</Text>
-          </View>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>Frame 9</Text>
-          </View>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>Frame 10</Text>
-          </View>
+          {!getOrgFrame_Data?.data?.list?.length > 0 ? (
+            <>
+              <TouchableOpacity
+                style={[
+                  showFrame
+                    ? {backgroundColor: Colors.PRIMARY}
+                    : {backgroundColor: Colors.white},
+                  styles.frame,
+                ]}
+                onPress={() => {
+                  setFrame(!showFrame);
+                  setShowFrame1(false);
+                  setShowFrame2(false);
+                  setShowFrame3(false);
+                  setShowFrameImg(false);
+                }}>
+                <Text style={styles.frameText}>Frame 1</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  showFrame1
+                    ? {backgroundColor: Colors.PRIMARY}
+                    : {backgroundColor: Colors.white},
+                  styles.frame,
+                ]}
+                onPress={() => {
+                  setFrame(false);
+                  setShowFrame1(!showFrame1);
+                  setShowFrame2(false);
+                  setShowFrame3(false);
+                  setShowFrameImg(false);
+                }}>
+                <Text style={styles.frameText}>Frame 2</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  showFrame2
+                    ? {backgroundColor: Colors.PRIMARY}
+                    : {backgroundColor: Colors.white},
+                  styles.frame,
+                ]}
+                onPress={() => {
+                  setFrame(false);
+                  setShowFrame1(false);
+                  setShowFrame2(!showFrame2);
+                  setShowFrame3(false);
+                  setShowFrameImg(false);
+                }}>
+                <Text style={styles.frameText}>Frame 3</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  showFrame3
+                    ? {backgroundColor: Colors.PRIMARY}
+                    : {backgroundColor: Colors.white},
+                  styles.frame,
+                ]}
+                onPress={() => {
+                  setFrame(false);
+                  setShowFrame1(false);
+                  setShowFrame2(false);
+                  setShowFrame3(!showFrame3);
+                  setShowFrameImg(false);
+                }}>
+                <Text style={styles.frameText}>Frame 4</Text>
+              </TouchableOpacity>
+              <View style={styles.frame}>
+                <Text style={styles.frameText}>Frame 5</Text>
+              </View>
+              <View style={styles.frame}>
+                <Text style={styles.frameText}>Frame 6</Text>
+              </View>
+              <View style={styles.frame}>
+                <Text style={styles.frameText}>Frame 7</Text>
+              </View>
+              <View style={styles.frame}>
+                <Text style={styles.frameText}>Frame 8</Text>
+              </View>
+              <View style={styles.frame}>
+                <Text style={styles.frameText}>Frame 9</Text>
+              </View>
+              <View style={styles.frame}>
+                <Text style={styles.frameText}>Frame 10</Text>
+              </View>
+            </>
+          ) : null}
         </ScrollView>
 
         {borderBox ? (

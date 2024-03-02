@@ -35,7 +35,7 @@ authAxiosInstance.interceptors.request.use(async req => {
       req.headers['Authorization'] = `Bearer ${data?.accessToken?.token}`;
       return req;
     }
-    console.log("working");
+    // console.log("working");
   } catch (error) {
     const {dispatch} = store;
     dispatch(setLogout());
