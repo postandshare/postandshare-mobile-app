@@ -1,26 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-  Pressable,
-  RefreshControl,
-  ScrollView,
-  Text,
-  ToastAndroid,
-  View,
-} from 'react-native';
-import React, {useCallback, useReducer} from 'react';
+import {RefreshControl, ScrollView, ToastAndroid, View} from 'react-native';
+import React, {useCallback} from 'react';
 import TopHeader from '../../components/TopHeader';
 import styles from './style';
 import MyBussinessCard from '../../components/MyBussinessCard';
-import Images from '../../constants/images';
 import CustomButton from '../../components/CustomButton';
-import NavigationScreenName from '../../constants/NavigationScreenName';
-import {MotiView} from 'moti';
-import {Skeleton} from 'moti/skeleton';
 import {useQuery} from '@tanstack/react-query';
 import {getAllBusinessList} from '../../services/userServices/bussiness.servies';
 import {useFocusEffect} from '@react-navigation/native';
-
-
 
 const MyBussiness = ({navigation, route}) => {
   const {picData} = route.params || {};
@@ -70,9 +57,9 @@ const MyBussiness = ({navigation, route}) => {
           {getAllBusinessList_Data?.data?.list?.map((item, index) => (
             <MyBussinessCard
               key={index}
-              name={item?.businessName}
+              name={item?.businessName ?? item?.volunteerName}
               EstblishmentDate={item?.createdOn}
-              image={item?.logo}
+              image={item?.logo ?? item?.partyLogo}
               userDocId={item?._id}
               lastUpdated={item?.lastUpdated ?? item?.createdOn}
               // edit={true}
@@ -87,9 +74,14 @@ const MyBussiness = ({navigation, route}) => {
                   ? navigation.navigate('CustomSDK', {
                       picData: PhotoData,
                     })
+                  : item?.businessType === 'political'
+                  ? navigation.navigate('View Political', {
+                      businessId: item?._id,
+                      businessType: item?.businessType,
+                    })
                   : navigation.navigate('View Bussiness', {
                       businessId: item?._id,
-                      businessType:item?.businessType,
+                      businessType: item?.businessType,
                     })
               }
             />
@@ -107,8 +99,3 @@ const MyBussiness = ({navigation, route}) => {
 };
 
 export default MyBussiness;
-
-{
-  /* <Button onPress={()=> navigation.navigate('Add Bussiness')}>Add Bussiness</Button>
-<Button onPress={()=> navigation.navigate('Edit Bussiness')}>Edit Bussiness</Button> */
-}

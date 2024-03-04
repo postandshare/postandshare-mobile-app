@@ -17,10 +17,22 @@ import * as Yup from 'yup';
 import CustomTextInputFormik from '../../../../components/CustomTextInputFormik';
 import Loader from '../../../../components/Loader';
 import CustomButton from '../../../../components/CustomButton';
+import {useMutation} from '@tanstack/react-query';
+import {addPoliticalBusiness} from '../../../../services/userServices/political.services';
+import NavigationScreenName from '../../../../constants/NavigationScreenName';
 
-const PoliticalVolunteer = () => {
+const PoliticalVolunteer = ({route, navigation}) => {
+  const {
+    selectedLeaderDocId,
+    partyDocId,
+    partyLogo,
+    PoliticalBussinessDocId,
+    politicalData,
+  } = route?.params || {};
   const [profilePic, setprofilePic] = useState('');
   const [imageUploading, setImageUploading] = useState(false);
+
+  console.log(selectedLeaderDocId , partyDocId , partyLogo, politicalData, 'in the political volunteer');
 
   const profileVolunteerFormik = useFormik({
     initialValues: {
@@ -39,7 +51,36 @@ const PoliticalVolunteer = () => {
       profilePic: Yup.string().required('Required'),
     }),
     onSubmit: values => {
-      console.log(values, 'values');
+      // console.log(values, 'values');
+      addPoliticalBusinessMuatate({
+        partyDocId: partyDocId,
+        partyLogo: partyLogo,
+        state: politicalData?.state,
+        district: politicalData?.district,
+        legislativeAssembly: politicalData?.constituency,
+        politicalLeaderDetail: selectedLeaderDocId,
+        volunteerName: values?.name,
+        volunteerPhoto: profilePic,
+        designation: values?.desingation,
+        mobileNumber: values?.mobile,
+        whatsappNumber: values?.whatsappNumber,
+        volunteerDetail: values?.aboutYourself,
+      });
+    },
+  });
+
+  console.log(profileVolunteerFormik?.errors, 'errors');
+
+  const {
+    mutate: addPoliticalBusinessMuatate,
+    isLoading: addPoliticalBusinessLoading,
+  } = useMutation(addPoliticalBusiness, {
+    onSuccess: async success => {
+      ToastAndroid.show(success?.data?.message, ToastAndroid.LONG);
+      await   navigation.replace(NavigationScreenName?.MY_BUSSINESS);
+    },
+    onError: error => {
+      ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
     },
   });
 
@@ -54,10 +95,10 @@ const PoliticalVolunteer = () => {
       });
       setImageUploading(false);
       console.log(uplode?.fileURL, 'uplode file url');
-      // bussinessTypeFormik.setValues(prev => ({
-      //   ...prev,
-      //   logo: uplode?.fileURL,
-      // }));
+      profileVolunteerFormik?.setValues(prev => ({
+        ...prev,
+        profilePic: uplode?.fileURL,
+      }));
       setprofilePic(uplode?.fileURL);
     } catch (error) {
       setImageUploading(false);
@@ -93,10 +134,15 @@ const PoliticalVolunteer = () => {
       ToastAndroid.show('Permission Denied', ToastAndroid.LONG);
     }
   };
+
   return (
     <>
       <TopHeader titile={'Political Volunteer'} />
       <Loader open={imageUploading} text="Uploading Image" />
+      <Loader
+        open={addPoliticalBusinessLoading}
+        text="Adding Political Bussiness"
+      />
       <ScrollView contentContainerStyle={styles.root}>
         {/* profile pic container */}
         <View style={styles.image_wrap}>

@@ -1,5 +1,12 @@
-import {RefreshControl, ScrollView, StyleSheet, Text, ToastAndroid, View} from 'react-native';
-import React, { useCallback, useState } from 'react';
+import {
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  View,
+} from 'react-native';
+import React, {useCallback, useState} from 'react';
 import Colors from '../../../constants/Colors';
 import {RadioButton} from 'react-native-paper';
 import CustomTextInputFormik from '../../../components/CustomTextInputFormik';
@@ -11,19 +18,28 @@ import Dropdown from '../../../components/Dropdown';
 import {DISTRICTS, STATES} from '../../../constants';
 import globalStyles from '../../../styles/globalStyles';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import { useQuery } from '@tanstack/react-query';
-import { getAllPartyDetails } from '../../../services/userServices/political.services';
+import {useQuery} from '@tanstack/react-query';
+import {getAllPartyDetails} from '../../../services/userServices/political.services';
 
-const PartySelect = ({}) => {
+const PartySelect = ({route, businessId, bussinessDetails}) => {
+  // bussinessDetails and businessId is for the updating the bussiness details
+
   const navigation = useNavigation();
   const [checked, setChecked] = React.useState('Bharatiya Janata Party');
-  const [partyDocId , setPartyDocId] = useState('');
+  const [partyDocId, setPartyDocId] = useState('');
+
   const politicalFormik = useFormik({
     initialValues: {
       party: 'Bharatiya Janata Party',
-      state: '',
-      district: '',
-      constituency: '',
+      state: businessId
+        ? bussinessDetails?.fetchExistingPoliticalBusiness?.state
+        : '',
+      district: businessId
+        ? bussinessDetails?.fetchExistingPoliticalBusiness?.district
+        : '',
+      constituency: businessId
+        ? bussinessDetails?.fetchExistingPoliticalBusiness?.legislativeAssembly
+        : '',
     },
     validationSchema: Yup.object({
       party: Yup.string().required('Required'),
@@ -34,7 +50,12 @@ const PartySelect = ({}) => {
     onSubmit: values => {
       console.log(values, 'values');
       navigation.navigate('Political Leader', {
-        partyDocId : partyDocId
+        // businessId ? 
+        //   businessId: businessId,
+        //   bussinessDetails: bussinessDetails,
+        // :
+        partyDocId: partyDocId,
+        politicalData: values,
       });
     },
   });
@@ -60,10 +81,9 @@ const PartySelect = ({}) => {
   useFocusEffect(
     useCallback(() => {
       getAllPartyDetailsRefetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []),
   );
-
 
   return (
     <>
@@ -73,7 +93,7 @@ const PartySelect = ({}) => {
           <RefreshControl
             refreshing={getAllPartyDetailsFetching}
             onRefresh={getAllPartyDetailsRefetch}
-          /> 
+          />
         }
         contentContainerStyle={{
           flexGrow: 1,

@@ -39,13 +39,13 @@ import ActionSheet from 'react-native-actions-sheet';
 import AddBussinessPartnerSheet from './components/actionsheets/AddBussinessPartnerSheet';
 import Loader from '../../components/Loader';
 import CustomButton from '../../components/CustomButton';
+import {getPoliticalPartyDetails} from '../../services/userServices/political.services';
 
 const ViewBussiness = ({route, navigation}) => {
   const {businessId, businessType} = route?.params;
   const [profilePic, setprofilePic] = useState('');
   const [imageUploading, setImageUploading] = useState(false);
   const [bussinessPartnerDetails, setBussinessPartnerDetails] = useState();
-
 
   const bussinessPartnerDetailsFormik = useFormik({
     initialValues: {
@@ -104,6 +104,7 @@ const ViewBussiness = ({route, navigation}) => {
     },
     enabled: false,
   });
+
 
   const {
     mutate: addBusinessPartnerlMutate,
@@ -266,7 +267,7 @@ const ViewBussiness = ({route, navigation}) => {
           getAllBusinessList_Data?.data?.obj?.businessName ?? 'My Bussiness'
         }
       />
-      
+
       <ScrollView
         refreshControl={
           <RefreshControl

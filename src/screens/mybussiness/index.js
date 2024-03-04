@@ -8,8 +8,11 @@ import ViewBussiness from './ViewBussiness';
 import SelectPartyLeader from './components/PoliticalComponents/SelectPartyLeader';
 import PoliticalVolunteer from './components/PoliticalComponents/PoliticalVolunteer';
 import ChangeLeader from './components/PoliticalComponents/ChangeLeader';
+import ViewPoliticalBussiness from './ViewPoliticalBussiness';
 
 const Stack = createStackNavigator();
+
+
 const MyBussinessNavigator = () => {
   return (
     <Stack.Navigator
@@ -25,6 +28,10 @@ const MyBussinessNavigator = () => {
       </Stack.Group>
 
       <Stack.Group screenOptions={{presentation: 'card'}}>
+        <Stack.Screen
+          name="View Political"
+          component={ViewPoliticalBussiness}
+        />
         <Stack.Screen name={'Political Leader'} component={SelectPartyLeader} />
         <Stack.Screen name={'Change Leader'} component={ChangeLeader} />
         <Stack.Screen

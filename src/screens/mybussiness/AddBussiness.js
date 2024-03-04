@@ -8,8 +8,8 @@ import Colors from '../../constants/Colors';
 import PartySelect from './components/PartySelect';
 
 const AddBussiness = ({route}) => {
-  const {businessId,  bussinessDetails} = route.params ?? {};
-  console.log(bussinessDetails?.businessType, 'bussinessId');
+  const {businessId, bussinessDetails} = route.params ?? {};
+  // console.log(bussinessDetails?.businessType, 'bussinessId');
   const [bussinessType, setBussinessType] = React.useState(
     bussinessDetails?.businessType === 'bussiness' ? 'Bussiness' : 'Political',
   );
@@ -24,7 +24,13 @@ const AddBussiness = ({route}) => {
           <>
             {/* selection for bussiness */}
             <View style={{flex: 0.91}}>
-              <Text style={{fontSize: 20, marginTop: 20, margin: 5, color: Colors.TEXT1}}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  marginTop: 20,
+                  margin: 5,
+                  color: Colors.TEXT1,
+                }}>
                 Select Bussiness Type
               </Text>
               <BussinessSelect
@@ -41,9 +47,12 @@ const AddBussiness = ({route}) => {
         )}
 
         {orgBussinessType == 'Bussiness' ? (
-          <BussinessType bussinessDetails={bussinessDetails}/>
+          <BussinessType bussinessDetails={bussinessDetails} />
         ) : orgBussinessType == 'Political' ? (
-          <PartySelect/>
+          <PartySelect
+            businessId={businessId}
+            bussinessDetails={bussinessDetails}
+          />
         ) : null}
       </View>
     </>

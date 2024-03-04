@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import TopHeader from '../../../../components/TopHeader';
 import Colors from '../../../../constants/Colors';
 import ProfilePic from '../../../../components/ProfilePic';
@@ -17,61 +17,22 @@ import uploadFile from '../../../../utils/uploadFile';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import CustomButton from '../../../../components/CustomButton';
 import Loader from '../../../../components/Loader';
-import {useQuery} from '@tanstack/react-query';
-import {getAllPartyDetails} from '../../../../services/userServices/political.services';
+import {useMutation, useQuery} from '@tanstack/react-query';
+import {
+  getAllPartyDetails,
+  updatePoliticalBusinessLogo,
+} from '../../../../services/userServices/political.services';
 import {useFocusEffect} from '@react-navigation/native';
 
-const SelectedLeader = [
-  {
-    _id: 1,
-    date: '2021-05-01',
-    pic: require('../../../../assets/uploadPic/pic1.png'),
-    name: 'Rahul Gandhi',
-  },
-  {
-    _id: 2,
-    date: '2021-05-02',
-    pic: require('../../../../assets/uploadPic/pic2.png'),
-    name: 'Narendra Modi',
-  },
-  {
-    _id: 3,
-    date: '2021-05-03',
-    pic: require('../../../../assets/uploadPic/pic7.png'),
-    name: 'Amit Shah',
-  },
-  {
-    _id: 4,
-    date: '2021-05-04',
-    pic: require('../../../../assets/uploadPic/pic4.png'),
-    name: 'Sonia Gandhi',
-  },
-  {
-    _id: 5,
-    date: '2021-05-05',
-    pic: require('../../../../assets/uploadPic/pic5.png'),
-    name: 'Manmohan Singh',
-  },
-  {
-    _id: 6,
-    date: '2021-05-06',
-    pic: require('../../../../assets/uploadPic/pic6.png'),
-    name: 'Rajnath Singh',
-  },
-  {
-    _id: 7,
-    date: '2021-05-07',
-    pic: require('../../../../assets/uploadPic/pic7.png'),
-    name: 'Arun Jaitley',
-  },
-];
-
 const SelectPartyLeader = ({route, navigation}) => {
-  const {partyDocId} = route?.params || {};
-  console.log(partyDocId, 'in select party leader');
+  const {partyDocId, PoliticalBussinessDocId, politicalData , bussinessDetails , businessId} =
+    route?.params || {};
+
+    // bussinessDetails and businessId is for the updating the bussiness details
   const [profilePic, setprofilePic] = useState('');
   const [imageUploading, setImageUploading] = useState(false);
-
+  const [selectedLeader, setSelectedLeader] = useState([]);
+  const [selectedLeaderDocId, setSlectedLeaderDocId] = useState([]);
   const uploadePhoto = async (path, mime) => {
     try {
       console.log(path, 'in uploade photo');
@@ -83,10 +44,10 @@ const SelectPartyLeader = ({route, navigation}) => {
       });
       setImageUploading(false);
       console.log(uplode?.fileURL, 'uplode file url');
-      // bussinessTypeFormik.setValues(prev => ({
-      //   ...prev,
-      //   logo: uplode?.fileURL,
-      // }));
+      updatePoliticalBusinessLogoMuatate({
+        politicalBusinessDocId: partyDocId,
+        partyLogo: uplode?.fileURL,
+      });
       setprofilePic(uplode?.fileURL);
     } catch (error) {
       setImageUploading(false);
@@ -138,7 +99,19 @@ const SelectPartyLeader = ({route, navigation}) => {
       }),
     onSuccess: async success => {
       setprofilePic(success?.data?.obj?.fetchParty?.electionSymbol);
-      // console.log(success?.data, 'in success');
+      // eslint-disable-next-line no-lone-blocks
+      {
+        await success?.data?.obj?.fetchAllPoliticalLeader?.map(item => {
+          setSelectedLeader(prev => {
+            // Check if the item already exists in the array based on _id
+            if (!prev.some(existingItem => existingItem._id === item._id)) {
+              return [...prev, item]; // If it doesn't exist, add it to the array
+            } else {
+              return prev; // If it exists, return the previous array
+            }
+          });
+        });
+      }
     },
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
@@ -146,20 +119,45 @@ const SelectPartyLeader = ({route, navigation}) => {
     enabled: false,
   });
 
+  useEffect(() => {
+    const fetchData = () => {
+      const ids = [];
+      getAllPartyDetails_Data?.data?.obj?.fetchAllPoliticalLeader?.forEach(
+        item => {
+          ids.push(item._id);
+        },
+      );
+      setSlectedLeaderDocId([...new Set(ids)]);
+    };
+    fetchData();
+  }, [getAllPartyDetails_Data]);
+
+  const {
+    mutate: updatePoliticalBusinessLogoMuatate,
+    isLoading: updatePoliticalBusinessLogoLoading,
+  } = useMutation(updatePoliticalBusinessLogo, {
+    onSuccess: success => {
+      console.log(success?.data, 'success');
+    },
+    onError: error => {
+      ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
+    },
+  });
+
   useFocusEffect(
-    useCallback(
-      () => {
-        getAllPartyDetailsRefetch();
-      },
+    useCallback(() => {
+      getAllPartyDetailsRefetch();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [],
-    ),
+    }, []),
   );
 
   return (
     <>
       <TopHeader titile={'Select Party Leader'} />
-      <Loader open={imageUploading} text="Uploading Image" />
+      <Loader
+        open={imageUploading || updatePoliticalBusinessLogoLoading}
+        text="Uploading Image"
+      />
       <ScrollView
         nestedScrollEnabled={true}
         refreshControl={
@@ -173,12 +171,25 @@ const SelectPartyLeader = ({route, navigation}) => {
         <View style={styles.partyLogoContainer}>
           <ProfilePic
             imageUrl={profilePic}
-            TakePhotofromGallery={TakePhotofromGallery}
+            TakePhotofromGallery={
+              businessId
+                ? TakePhotofromGallery
+                : () =>
+                    ToastAndroid.show(
+                      'You can not change the logo' +
+                        '\n' +
+                        'until the bussiness is registered.',
+                      ToastAndroid.LONG,
+                    )
+            }
           />
           <View style={styles.partyNameCotainer}>
             <Text style={styles.label}>Party Name</Text>
             <Text style={styles.title}>
-              {getAllPartyDetails_Data?.data?.obj?.fetchParty?.partyName}
+              {businessId ? 
+              bussinessDetails?.fetchExistingPoliticalBusiness
+              : getAllPartyDetails_Data?.data?.obj?.fetchParty?.partyName
+            }
             </Text>
             {/* from the prev screen */}
           </View>
@@ -188,52 +199,61 @@ const SelectPartyLeader = ({route, navigation}) => {
         <View style={styles.partyLeaderContainer}>
           <View style={styles.row_text_container}>
             <Text style={styles.title}>Selected Leader</Text>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Change Leader', {
-                  partyDocId: partyDocId,
-                });
-              }}>
-              <Text style={styles.changeLeader_text}>Change</Text>
-            </TouchableOpacity>
+            {PoliticalBussinessDocId && (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Change Leader', {
+                    partyDocId: partyDocId,
+                    setSelectedLeader: setSelectedLeader,
+                    selectedLeader: selectedLeader,
+                    selectedLeaderDocId: selectedLeaderDocId,
+                    setSlectedLeaderDocId: setSlectedLeaderDocId,
+                  });
+                }}>
+                <Text style={styles.changeLeader_text}>Change</Text>
+              </TouchableOpacity>
+            )}
           </View>
           <View style={styles.imageWrap}>
-            {getAllPartyDetails_Data?.data?.obj?.fetchAllPoliticalLeader?.map(
-              (item, index) => {
-                return (
-                  <View
-                    key={index}
+            {selectedLeader?.map((item, index) => {
+              return (
+                <View
+                  key={index}
+                  style={{
+                    margin: 5,
+                    alignItems: 'center',
+                  }}>
+                  <Image
+                    source={{uri: item?.leaderPhoto}}
                     style={{
-                      margin: 5,
-                      alignItems: 'center',
+                      height: 100,
+                      width: 100,
+                      //backgroundColor: 'red'
+                    }}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontWeight: '500',
+                      color: Colors.TEXT1,
                     }}>
-                    <Image
-                      source={{uri: item?.leaderPhoto}}
-                      style={{
-                        height: 100,
-                        width: 100,
-                        //backgroundColor: 'red'
-                      }}
-                    />
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        fontWeight: '500',
-                        color: Colors.TEXT1,
-                      }}>
-                      {item?.leaderName}
-                    </Text>
-                  </View>
-                );
-              },
-            )}
+                    {item?.leaderName}
+                  </Text>
+                </View>
+              );
+            })}
           </View>
         </View>
 
         <CustomButton
           title={'Next'}
           onPress={() => {
-            navigation.navigate('PoliticalVolunteer');
+            navigation.navigate('PoliticalVolunteer', {
+              partyDocId: partyDocId,
+              selectedLeaderDocId: selectedLeaderDocId,
+              politicalData: politicalData,
+              partyLogo: profilePic,
+            });
           }}
         />
       </ScrollView>

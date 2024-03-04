@@ -8,20 +8,19 @@ export const getAllPartyDetails = params => {
     params,
   });
 };
+
 export const getLeaderDetail = params => {
   return authAxiosInstance.get(`${political_route}/getLeaderDetail`, {
     params,
   });
 };
+
 export const getPoliticalPartyDetails = params => {
   return authAxiosInstance.get(`${political_route}/getPoliticalPartyDetails`, {
     params,
   });
 };
 
-export const addPoliticalParty = body => {
-  return authAxiosInstance.post(`${political_route}/addPoliticalParty`, body);
-};
 export const addPoliticalBusiness = body => {
   return authAxiosInstance.post(
     `${political_route}/addPoliticalBusiness`,
@@ -32,27 +31,32 @@ export const addPoliticalBusiness = body => {
 export const updatePoliticalParty = body => {
   return authAxiosInstance.put(`${political_route}/updatePoliticalParty`, body);
 };
+
 export const updatePoliticalLeader = body => {
   return authAxiosInstance.put(
     `${political_route}/updatePoliticalLeader`,
     body,
   );
 };
+
 export const updateStatusOfLeader = body => {
   return authAxiosInstance.put(`${political_route}/updateStatusOfLeader`, body);
 };
+
 export const updatePoliticalBusiness = body => {
   return authAxiosInstance.put(
     `${political_route}/updatePoliticalBusiness`,
     body,
   );
 };
+
 export const updatePoliticalBusinessLogo = body => {
   return authAxiosInstance.put(
     `${political_route}/updatePoliticalBusinessLogo`,
     body,
   );
 };
+
 export const updatePoliticalBusinessLeader = body => {
   return authAxiosInstance.put(
     `${political_route}/updatePoliticalBusinessLeader`,
@@ -60,26 +64,15 @@ export const updatePoliticalBusinessLeader = body => {
   );
 };
 
-export const updatePartyFlag = body => {
-  return authAxiosInstance.put(`${political_route}/updatePartyFlag`, body);
-};
-
-export const updatePartySymbol = body => {
-  return authAxiosInstance.put(`${political_route}/updatePartySymbol`, body);
-};
-
 export const deletePoliticalParty = body => {
   return authAxiosInstance.delete(
     `${political_route}/deletePoliticalParty/${body?.languageDocId}`,
   );
 };
+
 export const DeletePoliticalLeader = body => {
   return authAxiosInstance.delete(
     `${political_route}/DeletePoliticalLeader/${body?.languageDocId}`,
   );
 };
 
-//   politcal leader
-export const addPoliticalLeader = body => {
-  return authAxiosInstance.post(`${political_route}/addPoliticalLeader`, body);
-};

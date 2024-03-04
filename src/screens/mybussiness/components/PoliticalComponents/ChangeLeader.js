@@ -15,90 +15,33 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import CustomButton from '../../../../components/CustomButton';
 import ActionSheet from 'react-native-actions-sheet';
 import AddLeaderSheet from '../actionsheets/AddLeaderSheet';
-import {useQuery} from '@tanstack/react-query';
-import {getLeaderDetail} from '../../../../services/userServices/political.services';
+import {useMutation, useQuery} from '@tanstack/react-query';
+import {
+  getLeaderDetail,
+  updatePoliticalBusinessLeader,
+} from '../../../../services/userServices/political.services';
 import {useFocusEffect} from '@react-navigation/native';
-
-const SelectedLeader = [
-  {
-    _id: 1,
-    date: '2021-05-01',
-    pic: require('../../../../assets/uploadPic/pic1.png'),
-    name: 'Rahul Gandhi',
-  },
-  {
-    _id: 2,
-    date: '2021-05-02',
-    pic: require('../../../../assets/uploadPic/pic2.png'),
-    name: 'Narendra Modi',
-  },
-  {
-    _id: 3,
-    date: '2021-05-03',
-    pic: require('../../../../assets/uploadPic/pic7.png'),
-    name: 'Amit Shah',
-  },
-  {
-    _id: 4,
-    date: '2021-05-04',
-    pic: require('../../../../assets/uploadPic/pic4.png'),
-    name: 'Sonia Gandhi',
-  },
-  {
-    _id: 5,
-    date: '2021-05-05',
-    pic: require('../../../../assets/uploadPic/pic5.png'),
-    name: 'Manmohan Singh',
-  },
-  {
-    _id: 6,
-    date: '2021-05-06',
-    pic: require('../../../../assets/uploadPic/pic6.png'),
-    name: 'Rajnath Singh',
-  },
-  {
-    _id: 7,
-    date: '2021-05-07',
-    pic: require('../../../../assets/uploadPic/pic7.png'),
-    name: 'Arun Jaitley',
-  },
-];
-
-const LocalLeader = [
-  {
-    _id: 1,
-    date: '2021-05-01',
-    pic: require('../../../../assets/uploadPic/pic1.png'),
-    name: 'Rahul Gandhi',
-  },
-  {
-    _id: 2,
-    date: '2021-05-02',
-    pic: require('../../../../assets/uploadPic/pic2.png'),
-    name: 'Narendra Modi',
-  },
-  {
-    _id: 3,
-    date: '2021-05-03',
-    pic: require('../../../../assets/uploadPic/pic7.png'),
-    name: 'Amit Shah',
-  },
-  {
-    _id: 4,
-    date: '2021-05-03',
-    pic: require('../../../../assets/uploadPic/pic7.png'),
-    name: 'Rajiv Gandhi',
-  },
-];
+import Loader from '../../../../components/Loader';
 
 const ChangeLeader = ({route, navigation}) => {
-  const {partyDocId} = route?.params || {};
+  const {partyDocId, bussinessDocId} = route?.params || {};
+
+  const [choosenLeader, setChoosenLeader] = useState([]);
+  const [choosenLeaderDocId, setChoosenLeaderDocId] = useState([]);
   const actionSheetRef = useRef(null);
   const onPressCross = () => {
     actionSheetRef?.current?.hide();
   };
-  // leaders array
-  const [leaders , setLeaders] = useState([]);
+
+  const handleImagePress = item => {
+    if (choosenLeader.includes(item?._id)) {
+      setChoosenLeader(choosenLeader.filter(i => i !== item?._id));
+      setChoosenLeaderDocId(choosenLeaderDocId.filter(i => i !== item?._id));
+    } else {
+      setChoosenLeaderDocId([...choosenLeaderDocId, item?._id]);
+      setChoosenLeader([...choosenLeader, item?._id]);
+    }
+  };
 
   const {
     isLoading: getLeaderDetailLoading,
@@ -113,19 +56,31 @@ const ChangeLeader = ({route, navigation}) => {
         // params
         partyDocId: partyDocId,
       }),
-    onSuccess: async success => {
-      // setprofilePic(success?.data?.obj?.fetchParty?.electionSymbol);
-      // console.log(success?.data, 'in success');
-    },
+    onSuccess: async success => {},
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
     enabled: false,
   });
 
+  const {
+    mutate: updatePoliticalBusinessLeaderMutate,
+    isLoading: updatePoliticalBusinessLeaderLoading,
+  } = useMutation(updatePoliticalBusinessLeader, {
+    onSuccess: ({data}) => {
+      ToastAndroid.show(data?.message, ToastAndroid.LONG);
+      navigation.goBack();
+    },
+    onError: err => {
+      console.log(err?.response?.data?.message, 'err');
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+  });
+
   useFocusEffect(
     React.useCallback(() => {
       getLeaderDetailRefetch();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []),
   );
 
@@ -135,6 +90,7 @@ const ChangeLeader = ({route, navigation}) => {
         <AddLeaderSheet onPressCross={onPressCross} />
       </ActionSheet>
       <TopHeader titile={'Change Leader'} />
+      <Loader open={updatePoliticalBusinessLeaderLoading} text="Updating..." />
       <ScrollView
         refreshControl={
           <RefreshControl
@@ -155,15 +111,32 @@ const ChangeLeader = ({route, navigation}) => {
               getLeaderDetail_Data?.data?.list?.greatLeader?.map(
                 (item, index) => {
                   return (
-                    <View key={index} style={styles.imageContainer}>
-                      <View style={styles.image}>
+                    <TouchableOpacity
+                      onPress={() => handleImagePress(item)}
+                      key={index}
+                      style={styles.imageContainer}>
+                      <View
+                        style={[
+                          styles.image,
+                          choosenLeader.includes(item?._id)
+                            ? {borderColor: 'green'}
+                            : {},
+                        ]}>
                         <Image
                           source={{uri: item?.leaderPhoto}}
                           style={styles.imageStyle}
                         />
                       </View>
-                      <Text style={styles.name}>{item?.leaderName}</Text>
-                    </View>
+                      <Text
+                        style={[
+                          styles.name,
+                          choosenLeader.includes(item?._id)
+                            ? {color: 'green'}
+                            : {color: Colors.TEXT1},
+                        ]}>
+                        {item?.leaderName}
+                      </Text>
+                    </TouchableOpacity>
                   );
                 },
               )}
@@ -177,15 +150,26 @@ const ChangeLeader = ({route, navigation}) => {
             {getLeaderDetail_Data?.data?.list?.seniorLeaderInCountry?.map(
               (item, index) => {
                 return (
-                  <View key={index} style={styles.imageContainer}>
+                  <TouchableOpacity
+                    onPress={() => handleImagePress(item)}
+                    key={index}
+                    style={styles.imageContainer}>
                     <View style={styles.image}>
                       <Image
                         source={{uri: item?.leaderPhoto}}
                         style={styles.imageStyle}
                       />
                     </View>
-                    <Text style={styles.name}>{item?.leaderName}</Text>
-                  </View>
+                    <Text
+                      style={[
+                        styles.name,
+                        choosenLeader.includes(item?._id)
+                          ? {color: 'green'}
+                          : {},
+                      ]}>
+                      {item?.leaderName}
+                    </Text>
+                  </TouchableOpacity>
                 );
               },
             )}
@@ -199,15 +183,26 @@ const ChangeLeader = ({route, navigation}) => {
             {getLeaderDetail_Data?.data?.list?.seniorLeaderInState?.map(
               (item, index) => {
                 return (
-                  <View key={index} style={styles.imageContainer}>
+                  <TouchableOpacity
+                    onPress={() => handleImagePress(item)}
+                    key={index}
+                    style={styles.imageContainer}>
                     <View style={styles.image}>
                       <Image
                         source={{uri: item?.leaderPhoto}}
                         style={styles.imageStyle}
                       />
                     </View>
-                    <Text style={styles.name}>{item?.leaderName}</Text>
-                  </View>
+                    <Text
+                      style={[
+                        styles.name,
+                        choosenLeader.includes(item?._id)
+                          ? {color: 'green'}
+                          : {},
+                      ]}>
+                      {item?.leaderName}
+                    </Text>
+                  </TouchableOpacity>
                 );
               },
             )}
@@ -221,15 +216,26 @@ const ChangeLeader = ({route, navigation}) => {
             {getLeaderDetail_Data?.data?.list?.localLeader?.map(
               (item, index) => {
                 return (
-                  <View key={index} style={styles.imageContainer}>
+                  <TouchableOpacity
+                    onPress={() => handleImagePress(item)}
+                    key={index}
+                    style={styles.imageContainer}>
                     <View style={styles.image}>
                       <Image
                         source={{uri: item?.leaderPhoto}}
                         style={styles.imageStyle}
                       />
                     </View>
-                    <Text style={styles.name}>{item?.leaderName}</Text>
-                  </View>
+                    <Text
+                      style={[
+                        styles.name,
+                        choosenLeader.includes(item?._id)
+                          ? {color: 'green'}
+                          : {},
+                      ]}>
+                      {item?.leaderName}
+                    </Text>
+                  </TouchableOpacity>
                 );
               },
             )}
@@ -246,7 +252,15 @@ const ChangeLeader = ({route, navigation}) => {
           </View>
         </ScrollView>
 
-        <CustomButton title={'Confirm'} onPress={() => {}} />
+        <CustomButton
+          title={'Confirm'}
+          onPress={() => {
+            updatePoliticalBusinessLeaderMutate({
+              politicalBusinessDocId: bussinessDocId,
+              politicalLeaderDetail: choosenLeaderDocId,
+            });
+          }}
+        />
       </ScrollView>
     </>
   );
