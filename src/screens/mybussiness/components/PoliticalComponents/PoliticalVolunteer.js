@@ -1,12 +1,13 @@
 import {
   PermissionsAndroid,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
   ToastAndroid,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import TopHeader from '../../../../components/TopHeader';
 import Colors from '../../../../constants/Colors';
 import uploadFile from '../../../../utils/uploadFile';
@@ -17,22 +18,66 @@ import * as Yup from 'yup';
 import CustomTextInputFormik from '../../../../components/CustomTextInputFormik';
 import Loader from '../../../../components/Loader';
 import CustomButton from '../../../../components/CustomButton';
-import {useMutation} from '@tanstack/react-query';
-import {addPoliticalBusiness} from '../../../../services/userServices/political.services';
+import {useMutation, useQuery} from '@tanstack/react-query';
+import {
+  addPoliticalBusiness,
+  getPoliticalPartyDetails,
+  updatePoliticalBusiness,
+} from '../../../../services/userServices/political.services';
 import NavigationScreenName from '../../../../constants/NavigationScreenName';
+import {useFocusEffect} from '@react-navigation/native';
 
 const PoliticalVolunteer = ({route, navigation}) => {
   const {
     selectedLeaderDocId,
     partyDocId,
     partyLogo,
-    PoliticalBussinessDocId,
     politicalData,
+    businessId,
   } = route?.params || {};
-  const [profilePic, setprofilePic] = useState('');
+  const [profilePic, setprofilePic] = useState(
+    getPoliticalPartyDetails_Data?.data?.obj?.fetchExistingPoliticalBusiness
+      ?.volunteerPhoto ?? '',
+  );
   const [imageUploading, setImageUploading] = useState(false);
 
-  console.log(selectedLeaderDocId , partyDocId , partyLogo, politicalData, 'in the political volunteer');
+  const {
+    isLoading: getPoliticalPartyDetailsLoading,
+    isFetching: getPoliticalPartyDetailsFetching,
+    refetch: getPoliticalPartyDetailsRefetch,
+    data: getPoliticalPartyDetails_Data,
+    isError: getPoliticalPartyDetails_isError,
+  } = useQuery({
+    queryKey: ['getPoliticalPartyDetails'],
+    queryFn: () =>
+      getPoliticalPartyDetails({
+        politicalBusinessDocId: businessId,
+      }),
+    onSuccess: success => {
+      setprofilePic(
+        success?.data?.obj?.fetchExistingPoliticalBusiness?.volunteerPhoto,
+      );
+      profileVolunteerFormik?.setValues({
+        name: success?.data?.obj?.fetchExistingPoliticalBusiness?.volunteerName,
+        mobile:
+          success?.data?.obj?.fetchExistingPoliticalBusiness?.mobileNumber,
+        desingation:
+          success?.data?.obj?.fetchExistingPoliticalBusiness?.designation,
+        whatsappNumber:
+          success?.data?.obj?.fetchExistingPoliticalBusiness?.whatsappNumber,
+        aboutYourself:
+          success?.data?.obj?.fetchExistingPoliticalBusiness?.volunteerDetail,
+        profilePic:
+          success?.data?.obj?.fetchExistingPoliticalBusiness?.volunteerPhoto,
+      });
+
+      //console.log(success?.data , "success in my bussiness")
+    },
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
 
   const profileVolunteerFormik = useFormik({
     initialValues: {
@@ -52,24 +97,45 @@ const PoliticalVolunteer = ({route, navigation}) => {
     }),
     onSubmit: values => {
       // console.log(values, 'values');
-      addPoliticalBusinessMuatate({
-        partyDocId: partyDocId,
-        partyLogo: partyLogo,
-        state: politicalData?.state,
-        district: politicalData?.district,
-        legislativeAssembly: politicalData?.constituency,
-        politicalLeaderDetail: selectedLeaderDocId,
-        volunteerName: values?.name,
-        volunteerPhoto: profilePic,
-        designation: values?.desingation,
-        mobileNumber: values?.mobile,
-        whatsappNumber: values?.whatsappNumber,
-        volunteerDetail: values?.aboutYourself,
-      });
+      businessId
+        ? updatePoliticalBusinessMuatate({
+            politicalBusinessDocId: businessId,
+            partyDocId: partyDocId,
+            partyLogo:
+              getPoliticalPartyDetails_Data?.data?.obj
+                ?.fetchExistingPoliticalBusiness?.partyLogo,
+            state:
+              getPoliticalPartyDetails_Data?.data?.obj
+                ?.fetchExistingPoliticalBusiness?.state,
+            district:
+              getPoliticalPartyDetails_Data?.data?.obj
+                ?.fetchExistingPoliticalBusiness?.district,
+            legislativeAssembly:
+              getPoliticalPartyDetails_Data?.data?.obj
+                ?.fetchExistingPoliticalBusiness?.constituency,
+            volunteerName: values?.name,
+            volunteerPhoto: profilePic,
+            designation: values?.desingation,
+            mobileNumber: values?.mobile,
+            whatsappNumber: values?.whatsappNumber,
+            volunteerDetail: values?.aboutYourself,
+          })
+        : addPoliticalBusinessMuatate({
+            partyDocId: partyDocId,
+            partyLogo: partyLogo,
+            state: politicalData?.state,
+            district: politicalData?.district,
+            legislativeAssembly: politicalData?.constituency,
+            politicalLeaderDetail: selectedLeaderDocId,
+            volunteerName: values?.name,
+            volunteerPhoto: profilePic,
+            designation: values?.desingation,
+            mobileNumber: values?.mobile,
+            whatsappNumber: values?.whatsappNumber,
+            volunteerDetail: values?.aboutYourself,
+          });
     },
   });
-
-  console.log(profileVolunteerFormik?.errors, 'errors');
 
   const {
     mutate: addPoliticalBusinessMuatate,
@@ -77,7 +143,21 @@ const PoliticalVolunteer = ({route, navigation}) => {
   } = useMutation(addPoliticalBusiness, {
     onSuccess: async success => {
       ToastAndroid.show(success?.data?.message, ToastAndroid.LONG);
-      await   navigation.replace(NavigationScreenName?.MY_BUSSINESS);
+      profileVolunteerFormik?.resetForm();
+      await navigation.replace(NavigationScreenName?.MY_BUSSINESS);
+    },
+    onError: error => {
+      ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
+    },
+  });
+  const {
+    mutate: updatePoliticalBusinessMuatate,
+    isLoading: updatePoliticalBusinessLoading,
+  } = useMutation(updatePoliticalBusiness, {
+    onSuccess: async success => {
+      ToastAndroid.show(success?.data?.message, ToastAndroid.LONG);
+      profileVolunteerFormik?.resetForm();
+      await navigation.replace(NavigationScreenName?.MY_BUSSINESS);
     },
     onError: error => {
       ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
@@ -135,6 +215,13 @@ const PoliticalVolunteer = ({route, navigation}) => {
     }
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      businessId && getPoliticalPartyDetailsRefetch();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []),
+  );
+
   return (
     <>
       <TopHeader titile={'Political Volunteer'} />
@@ -143,13 +230,30 @@ const PoliticalVolunteer = ({route, navigation}) => {
         open={addPoliticalBusinessLoading}
         text="Adding Political Bussiness"
       />
-      <ScrollView contentContainerStyle={styles.root}>
+      <Loader
+        open={updatePoliticalBusinessLoading}
+        text="Updating Political Bussiness"
+      />
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={getPoliticalPartyDetailsFetching}
+            onRefresh={getPoliticalPartyDetailsRefetch}
+          />
+        }
+        contentContainerStyle={styles.root}>
         {/* profile pic container */}
         <View style={styles.image_wrap}>
           <ProfilePic
             imageUrl={profilePic}
             TakePhotofromGallery={TakePhotofromGallery}
           />
+          {profileVolunteerFormik?.errors?.profilePic &&
+            profileVolunteerFormik?.touched?.profilePic && (
+              <Text style={{color: 'red'}}>
+                {profileVolunteerFormik?.errors?.profilePic}
+              </Text>
+            )}
           <Text style={styles.tittle}>Upload Your ProfilePic</Text>
         </View>
         {/* your name */}

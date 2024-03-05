@@ -24,13 +24,14 @@ import {addBusinessPartner} from '../../../../services/userServices/bussiness.se
 
 const BussinessPartnerForm = ({bussinessTypeFormik , bussinessDetails}) => {
   const [profilePic, setprofilePic] = useState(
-    bussinessTypeFormik?.values?.logo,
+    bussinessTypeFormik?.values?.bussinessOwnerPhoto,
   );
   const [bussinessPartnerDetails, setBussinessPartnerDetails] = useState();
   // console.log(bussinessTypeFormik?.values?.bussinessPartner, 'bussiness partner')
   const [bussinessPartner, setBussinessPartner] = useState(
     bussinessTypeFormik?.values?.bussinessPartner ?? [],
   );
+
 
   const bussinessPartnerDetailsFormik = useFormik({
     initialValues: {

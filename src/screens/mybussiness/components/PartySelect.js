@@ -50,12 +50,10 @@ const PartySelect = ({route, businessId, bussinessDetails}) => {
     onSubmit: values => {
       console.log(values, 'values');
       navigation.navigate('Political Leader', {
-        // businessId ? 
-        //   businessId: businessId,
-        //   bussinessDetails: bussinessDetails,
-        // :
         partyDocId: partyDocId,
         politicalData: values,
+        // bussinessDetails: bussinessDetails,
+        businessId: businessId,
       });
     },
   });

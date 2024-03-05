@@ -13,8 +13,11 @@ const AddBussiness = ({route}) => {
   const [bussinessType, setBussinessType] = React.useState(
     bussinessDetails?.businessType === 'bussiness' ? 'Bussiness' : 'Political',
   );
+  console.log(bussinessDetails?.fetchExistingPoliticalBusiness?.businessType);
   //org bussiness type is for orginal bussiness type
-  const [orgBussinessType, setOrgBussinessType] = useState('');
+  const [orgBussinessType, setOrgBussinessType] = useState(
+    bussinessDetails?.fetchExistingPoliticalBusiness?.businessType ? bussinessDetails?.fetchExistingPoliticalBusiness?.businessType : '',
+  );
   return (
     <>
       <TopHeader titile={'AddBussiness'} />
@@ -48,7 +51,7 @@ const AddBussiness = ({route}) => {
 
         {orgBussinessType == 'Bussiness' ? (
           <BussinessType bussinessDetails={bussinessDetails} />
-        ) : orgBussinessType == 'Political' ? (
+        ) : orgBussinessType == 'political' ? (
           <PartySelect
             businessId={businessId}
             bussinessDetails={bussinessDetails}

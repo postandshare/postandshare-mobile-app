@@ -27,16 +27,16 @@ const BussinessSelect = ({bussinessType, setBussinessType}) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => setBussinessType('Political')}
+          onPress={() => setBussinessType('political')}
           style={[
-            bussinessType === 'Political'
+            bussinessType === 'political'
               ? {backgroundColor: Colors.PRIMARY}
               : {backgroundColor: 'grey'},
             styles.buttonContainer,
           ]}>
           <Text
             style={[
-              bussinessType === 'Political'
+              bussinessType === 'political'
                 ? {color: '#fff'}
                 : null,
               styles.buttonText,

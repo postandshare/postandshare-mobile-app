@@ -12,8 +12,11 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import TopHeader from '../../components/TopHeader';
-import {getPoliticalPartyDetails} from '../../services/userServices/political.services';
-import {useQuery} from '@tanstack/react-query';
+import {
+  getPoliticalPartyDetails,
+  updatePoliticalBusinessLogo,
+} from '../../services/userServices/political.services';
+import {useMutation, useQuery} from '@tanstack/react-query';
 import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
 import CustomButton from '../../components/CustomButton';
@@ -52,6 +55,16 @@ const ViewPoliticalBussiness = ({route, navigation}) => {
     enabled: false,
   });
 
+  const {
+    mutate: updatePoliticalBusinessLogoMuatate,
+    isLoading: updatePoliticalBusinessLogoLoading,
+  } = useMutation(updatePoliticalBusinessLogo, {
+    onSuccess: success => {},
+    onError: error => {
+      ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
+    },
+  });
+
   const uploadePhoto = async (path, mime) => {
     try {
       console.log(path, 'in uploade photo');
@@ -63,10 +76,10 @@ const ViewPoliticalBussiness = ({route, navigation}) => {
       });
       setImageUploading(false);
       console.log(uplode?.fileURL, 'uplode file url');
-      //   changeBusinessLogo({
-      //     businessDocId: businessId,
-      //     logo: uplode?.fileURL,
-      //   });
+        updatePoliticalBusinessLogoMuatate({
+          businessDocId: businessId,
+          logo: uplode?.fileURL,
+        });
 
       setprofilePic(uplode?.fileURL);
     } catch (error) {
@@ -244,12 +257,14 @@ const ViewPoliticalBussiness = ({route, navigation}) => {
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
-          <Text style={styles.bussinessPartnerText}>Bussiness Partner</Text>
+          <Text style={styles.bussinessPartnerText}>Selected Leader</Text>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('Change Leader' ,{
+              navigation.navigate('Change Leader', {
                 bussinessDocId: businessId,
-                partyDocId: getPoliticalPartyDetails_Data?.data?.obj?.fetchExistingPoliticalBusiness?.partyDocId,
+                partyDocId:
+                  getPoliticalPartyDetails_Data?.data?.obj
+                    ?.fetchExistingPoliticalBusiness?.partyDocId,
               });
             }}>
             <Text

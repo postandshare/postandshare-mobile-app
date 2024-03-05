@@ -20,15 +20,18 @@ import Loader from '../../../../components/Loader';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {
   getAllPartyDetails,
+  getPoliticalPartyDetails,
   updatePoliticalBusinessLogo,
 } from '../../../../services/userServices/political.services';
 import {useFocusEffect} from '@react-navigation/native';
 
 const SelectPartyLeader = ({route, navigation}) => {
-  const {partyDocId, PoliticalBussinessDocId, politicalData , bussinessDetails , businessId} =
+  const {partyDocId, PoliticalBussinessDocId, politicalData, businessId} =
     route?.params || {};
 
-    // bussinessDetails and businessId is for the updating the bussiness details
+  // bussinessDetails and businessId is for the updating the bussiness details
+
+  // console.log(businessId, 'bussinessId');
   const [profilePic, setprofilePic] = useState('');
   const [imageUploading, setImageUploading] = useState(false);
   const [selectedLeader, setSelectedLeader] = useState([]);
@@ -45,7 +48,7 @@ const SelectPartyLeader = ({route, navigation}) => {
       setImageUploading(false);
       console.log(uplode?.fileURL, 'uplode file url');
       updatePoliticalBusinessLogoMuatate({
-        politicalBusinessDocId: partyDocId,
+        politicalBusinessDocId: businessId,
         partyLogo: uplode?.fileURL,
       });
       setprofilePic(uplode?.fileURL);
@@ -137,16 +140,40 @@ const SelectPartyLeader = ({route, navigation}) => {
     isLoading: updatePoliticalBusinessLogoLoading,
   } = useMutation(updatePoliticalBusinessLogo, {
     onSuccess: success => {
-      console.log(success?.data, 'success');
+      ToastAndroid.show(success?.data?.message, ToastAndroid.SHORT);
+      getPoliticalPartyDetailsRefetch();
     },
     onError: error => {
       ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
     },
   });
 
+  const {
+    isLoading: getPoliticalPartyDetailsLoading,
+    isFetching: getPoliticalPartyDetailsFetching,
+    refetch: getPoliticalPartyDetailsRefetch,
+    data: getPoliticalPartyDetails_Data,
+    isError: getPoliticalPartyDetails_isError,
+  } = useQuery({
+    queryKey: ['getPoliticalPartyDetails'],
+    queryFn: () =>
+      getPoliticalPartyDetails({
+        politicalBusinessDocId: businessId,
+      }),
+    onSuccess: success => {
+      //console.log(success?.data , "success in my bussiness")
+    },
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
+
   useFocusEffect(
     useCallback(() => {
-      getAllPartyDetailsRefetch();
+      businessId
+        ? getPoliticalPartyDetailsRefetch()
+        : getAllPartyDetailsRefetch();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []),
   );
@@ -170,7 +197,12 @@ const SelectPartyLeader = ({route, navigation}) => {
         {/* party selection name */}
         <View style={styles.partyLogoContainer}>
           <ProfilePic
-            imageUrl={profilePic}
+            imageUrl={
+              businessId
+                ? getPoliticalPartyDetails_Data?.data?.obj
+                    ?.fetchExistingPoliticalBusiness?.partyLogo
+                : profilePic
+            }
             TakePhotofromGallery={
               businessId
                 ? TakePhotofromGallery
@@ -186,10 +218,10 @@ const SelectPartyLeader = ({route, navigation}) => {
           <View style={styles.partyNameCotainer}>
             <Text style={styles.label}>Party Name</Text>
             <Text style={styles.title}>
-              {businessId ? 
-              bussinessDetails?.fetchExistingPoliticalBusiness
-              : getAllPartyDetails_Data?.data?.obj?.fetchParty?.partyName
-            }
+              {businessId
+                ? getPoliticalPartyDetails_Data?.data?.obj
+                    ?.fetchExistingPoliticalBusiness?.partyName ?? 'Party Name'
+                : getAllPartyDetails_Data?.data?.obj?.fetchParty?.partyName}
             </Text>
             {/* from the prev screen */}
           </View>
@@ -199,15 +231,12 @@ const SelectPartyLeader = ({route, navigation}) => {
         <View style={styles.partyLeaderContainer}>
           <View style={styles.row_text_container}>
             <Text style={styles.title}>Selected Leader</Text>
-            {PoliticalBussinessDocId && (
+            {businessId && (
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate('Change Leader', {
                     partyDocId: partyDocId,
-                    setSelectedLeader: setSelectedLeader,
-                    selectedLeader: selectedLeader,
-                    selectedLeaderDocId: selectedLeaderDocId,
-                    setSlectedLeaderDocId: setSlectedLeaderDocId,
+                    bussinessDocId: businessId,
                   });
                 }}>
                 <Text style={styles.changeLeader_text}>Change</Text>
@@ -215,33 +244,63 @@ const SelectPartyLeader = ({route, navigation}) => {
             )}
           </View>
           <View style={styles.imageWrap}>
-            {selectedLeader?.map((item, index) => {
-              return (
-                <View
-                  key={index}
-                  style={{
-                    margin: 5,
-                    alignItems: 'center',
-                  }}>
-                  <Image
-                    source={{uri: item?.leaderPhoto}}
-                    style={{
-                      height: 100,
-                      width: 100,
-                      //backgroundColor: 'red'
-                    }}
-                  />
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      fontWeight: '500',
-                      color: Colors.TEXT1,
-                    }}>
-                    {item?.leaderName}
-                  </Text>
-                </View>
-              );
-            })}
+            {businessId
+              ? getPoliticalPartyDetails_Data?.data?.obj?.fetchPoliticalLeaders?.map(
+                  (item, index) => {
+                    return (
+                      <View
+                        key={index}
+                        style={{
+                          margin: 5,
+                          alignItems: 'center',
+                        }}>
+                        <Image
+                          source={{uri: item?.leaderDocId?.leaderPhoto}}
+                          style={{
+                            height: 100,
+                            width: 100,
+                            //backgroundColor: 'red'
+                          }}
+                        />
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            fontWeight: '500',
+                            color: Colors.TEXT1,
+                          }}>
+                          {item?.leaderDocId?.leaderName}
+                        </Text>
+                      </View>
+                    );
+                  },
+                )
+              : selectedLeader?.map((item, index) => {
+                  return (
+                    <View
+                      key={index}
+                      style={{
+                        margin: 5,
+                        alignItems: 'center',
+                      }}>
+                      <Image
+                        source={{uri: item?.leaderPhoto}}
+                        style={{
+                          height: 100,
+                          width: 100,
+                          //backgroundColor: 'red'
+                        }}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          fontWeight: '500',
+                          color: Colors.TEXT1,
+                        }}>
+                        {item?.leaderName}
+                      </Text>
+                    </View>
+                  );
+                })}
           </View>
         </View>
 
@@ -253,6 +312,7 @@ const SelectPartyLeader = ({route, navigation}) => {
               selectedLeaderDocId: selectedLeaderDocId,
               politicalData: politicalData,
               partyLogo: profilePic,
+              businessId: businessId,
             });
           }}
         />
