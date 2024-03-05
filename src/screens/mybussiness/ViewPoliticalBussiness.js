@@ -120,6 +120,7 @@ const ViewPoliticalBussiness = ({route, navigation}) => {
   useFocusEffect(
     React.useCallback(() => {
       getPoliticalPartyDetailsRefetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [getPoliticalPartyDetailsRefetch, navigation]),
   );
 

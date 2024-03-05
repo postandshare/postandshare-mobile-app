@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {ScrollView, StyleSheet, Text, ToastAndroid, View} from 'react-native';
+import {ScrollView, Text, ToastAndroid, View} from 'react-native';
 import React, {useCallback} from 'react';
 import MyBussinessCard from '../../components/MyBussinessCard';
 import images from '../../constants/images';
@@ -43,9 +43,11 @@ const SelectBussiness = ({route, navigation}) => {
       <TopHeader
         titile={'Select Bussiness'}
         add
-        onPress={() => navigation.navigate(NavigationScreenName.MY_BUSSINESS , {
-          screen: 'Add Bussiness'
-        })}
+        onPress={() =>
+          navigation.navigate(NavigationScreenName.MY_BUSSINESS, {
+            screen: 'Add Bussiness',
+          })
+        }
       />
       <ScrollView contentContainerStyle={styles.root}>
         {/* card for the bussiness name and update */}
@@ -63,9 +65,9 @@ const SelectBussiness = ({route, navigation}) => {
           {getAllBusinessList_Data?.data?.list?.map((item, index) => (
             <MyBussinessCard
               key={index}
-              name={item?.businessName}
+              name={item?.businessName ?? item?.volunteerName}
               EstblishmentDate={item?.createdOn}
-              image={item?.logo}
+              image={item?.logo ?? item?.partyLogo}
               userDocId={item?._id}
               lastUpdated={item?.lastUpdated ?? item?.createdOn}
               // edit={true}

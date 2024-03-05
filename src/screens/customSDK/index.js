@@ -173,6 +173,8 @@ const FrameSelection = ({
 
 const CustomSDK = ({route, navigation}) => {
   const {picData, businessDetails} = route.params || {};
+
+  // console.log(businessDetails, 'in business details')
   const imgData = picData;
   const BusinessData = businessDetails;
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -313,8 +315,6 @@ const CustomSDK = ({route, navigation}) => {
     // console.log('Dropping', x, y);
   };
 
-  console.log(showFrameImg, 'showframeimg');
-
   async function requestStoragePermission() {
     try {
       const granted = await PermissionsAndroid.request(
@@ -381,7 +381,7 @@ const CustomSDK = ({route, navigation}) => {
   useFocusEffect(
     React.useCallback(() => {
       getOrgFrameRefetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []),
   );
 
@@ -744,8 +744,12 @@ const CustomSDK = ({route, navigation}) => {
                     <DragDrop onDrag={drag} onDrop={drop}>
                       <Image
                         source={
-                          BusinessData?.logo
-                            ? {uri: BusinessData?.logo}
+                          BusinessData
+                            ? {
+                                uri:
+                                  BusinessData?.logo ??
+                                  businessDetails?.partyLogo,
+                              }
                             : Images.akSchoolIcon
                         }
                         style={{
@@ -794,6 +798,7 @@ const CustomSDK = ({route, navigation}) => {
                               position: 'absolute',
                             }}>
                             {BusinessData?.mobileNumber ??
+                              businessDetails?.mobileNumber ??
                               ToastAndroid.show(
                                 'Mobile Number is not available',
                                 ToastAndroid.LONG,
@@ -810,6 +815,7 @@ const CustomSDK = ({route, navigation}) => {
                           <CustomColorChange
                             data={
                               BusinessData?.mobileNumber ??
+                              businessDetails?.mobileNumber ??
                               ToastAndroid.show(
                                 'Mobile Number is not available',
                                 ToastAndroid.LONG,
@@ -836,6 +842,7 @@ const CustomSDK = ({route, navigation}) => {
                         <CustomColorChange
                           data={
                             BusinessData?.whatsappNumber ??
+                            businessDetails?.whatsappNumber ??
                             ToastAndroid.show(
                               'Whatsapp Number is not available',
                               ToastAndroid.LONG,
@@ -861,6 +868,7 @@ const CustomSDK = ({route, navigation}) => {
                         <CustomColorChange
                           data={
                             BusinessData?.email ??
+                            businessDetails?.email ??
                             ToastAndroid.show(
                               'Email is not available',
                               ToastAndroid.LONG,
@@ -900,6 +908,14 @@ const CustomSDK = ({route, navigation}) => {
                                 ' ' +
                                 '||' +
                                 BusinessData?.address?.tehsil
+                              : BusinessData?.state
+                              ? BusinessData?.state +
+                                ' ' +
+                                '||' +
+                                BusinessData?.district +
+                                ' ' +
+                                '\n' +
+                                BusinessData?.legislativeAssembly
                               : ToastAndroid.show(
                                   'Address is not available',
                                   ToastAndroid.LONG,
