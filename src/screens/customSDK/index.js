@@ -280,6 +280,8 @@ const CustomSDK = ({route, navigation}) => {
       ToastAndroid.show('Something went wrong', ToastAndroid.LONG);
     }
   };
+
+
   const TakeStickerfromGallery = async () => {
     try {
       await PermissionsAndroid.request(
@@ -308,6 +310,7 @@ const CustomSDK = ({route, navigation}) => {
   const drag = (x, y) => {
     // console.log('Dragging', x, y);
   };
+  
   const drop = (x, y) => {
     if (y > Dimensions.get('screen').height - 150) {
       console.log('Drop in the pit');

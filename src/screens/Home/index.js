@@ -1,8 +1,8 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   FlatList,
   Image,
   ScrollView,
-  StatusBar,
   Text,
   TouchableOpacity,
   View,
@@ -17,7 +17,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import moment from 'moment';
 import NavigationScreenName from '../../constants/NavigationScreenName';
 import CustomCarousel from '../../components/CustomCarousel';
-import {SegmentedButtons} from 'react-native-paper';
+
 
 const Home = ({navigation}) => {
   const [value, setValue] = React.useState('photo');
@@ -254,9 +254,9 @@ const Home = ({navigation}) => {
               )}
             </>
           ) : screenName === 'remainder' ? (
-            <Text  color={Colors.TEXT1}>Remainder</Text>
+            <Text  style={styles.box_tittle}>Remainder</Text>
           ) : screenName === 'wallpaper' ? (
-            <Text  color={Colors.TEXT1}>Wallpaper</Text>
+            <Text  style={styles.box_tittle}>Wallpaper</Text>
           ) : null}
         </View>
       </ScrollView>

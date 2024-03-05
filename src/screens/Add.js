@@ -1,35 +1,44 @@
 import {Dimensions, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import TopHeader from '../components/TopHeader';
 import DragDrop from '../components/DragDrop';
+import DashboardTopHeader from '../components/DashboardTopHeader';
 
-const Add = () => {
-  const [dropInThePit, setDropInThePit] = React.useState(false);  
+const Add = ({navigation}) => {
+  const [dropInThePit, setDropInThePit] = React.useState(false);
   const drag = (x, y) => {
     console.log('Dragging', x, y);
   };
   const drop = (x, y) => {
-    if(y > Dimensions.get('screen').height - 150){
+    if (y > Dimensions.get('screen').height - 150) {
       console.log('Drop in the pit');
     }
     console.log('Dropping', x, y);
   };
+
+  const onPressMenu = () => {
+    navigation.getParent('leftDrawer').openDrawer();
+  };
+
+  const onPressNotification = () => {
+    // navigation.navigate('Notification');
+  };
+
+  const onPresProfile = () => {
+    navigation.getParent('rightDrawer').openDrawer();
+  };
   return (
     <>
-      <TopHeader titile={'ADD PHOTOS'} />
+      <DashboardTopHeader
+        onPressMenu={onPressMenu}
+        onPressNotification={onPressNotification}
+        onPresProfile={onPresProfile}
+      />
       <SafeAreaView style={styles.screen}>
-        <DragDrop
-          onDrag={drag}
-          onDrop={drop}
-        >
+        <DragDrop onDrag={drag} onDrop={drop}>
           <View style={styles.balls} />
         </DragDrop>
-        <DragDrop
-          onDrag={drag}
-          onDrop={drop}
-        >
-
-        <Text>Hi I am Alok Rawat</Text>
+        <DragDrop onDrag={drag} onDrop={drop}>
+          <Text>Hi I am Alok Rawat</Text>
         </DragDrop>
         <View style={styles.pit}>
           <Text style={styles.text}>pit</Text>

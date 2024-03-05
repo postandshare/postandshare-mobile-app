@@ -56,7 +56,7 @@ export default {
     // frame: require('../assets/frames/frame.png'),
     frame_1: require('../assets/frames/frame_1.png'),
     frame_2: require('../assets/frames/frame_2.png'),
-    frame_3: require('../assets/frames/frame_3.png'),
+    frame_3: require('../assets/frames/frame_1.png'),
     frame_4: require('../assets/frames/frame_4.png'),
   };
 

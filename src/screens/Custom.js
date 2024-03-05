@@ -33,6 +33,7 @@ import Animated, {
   withDecay,
 } from 'react-native-reanimated';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
+import DashboardTopHeader from '../components/DashboardTopHeader';
 
 const generateSkiaImage = async path => {
   return await Skia.Data.fromURI(path).then(data =>
@@ -40,7 +41,7 @@ const generateSkiaImage = async path => {
   );
 };
 
-const Custom = () => {
+const Custom = ({navigation}) => {
   const {width} = useWindowDimensions();
   const leftBoundary = 0;
   const rightBoundary = width;
@@ -114,10 +115,26 @@ const Custom = () => {
         console.warn(err);
       });
   }
+
+  const onPressMenu = () => {
+    navigation.getParent('leftDrawer').openDrawer();
+  };
+
+  const onPressNotification = () => {
+    // navigation.navigate('Notification');
+  };
+
+  const onPresProfile = () => {
+    navigation.getParent('rightDrawer').openDrawer();
+  };
   // const image = useImage(require("../assets/frames/Frame 6.png"));
   return (
     <>
-      <TopHeader titile={'Custom'} />
+      <DashboardTopHeader
+        onPressMenu={onPressMenu}
+        onPressNotification={onPressNotification}
+        onPresProfile={onPresProfile}
+      />
       <GestureDetector gesture={gesture}>
         <Canvas ref={canvasRef} style={{flex: 1}}>
         <Fill color="white" />

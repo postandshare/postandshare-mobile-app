@@ -12,9 +12,11 @@ import Video from '../screens/Video';
 import Add from '../screens/Add';
 import Custom from '../screens/Custom';
 import Profile from '../screens/Profile';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
+
 const Tab = createBottomTabNavigator();
 const BottomTab = () => {
-  //const {schoolDocId} = useSelector(store => store.commonStore);
   return (
     <Tab.Navigator
       screenOptions={{
@@ -22,9 +24,7 @@ const BottomTab = () => {
         tabBarActiveTintColor: '#0A85FE',
         tabBarInactiveTintColor: '#0B1F32',
         tabBarStyle: {
-          display: 
-        //   !schoolDocId ? 'none' :
-           'flex',
+          display: 'flex',
           backgroundColor: '#fff',
           height: Sizes.hp('8%'),
           paddingBottom: Sizes.hp('1%'),
@@ -37,46 +37,28 @@ const BottomTab = () => {
         options={{
           title: 'Home',
           tabBarIcon: ({focused}) => (
-            <Image
-              source={
-                focused ? Images.bottomHomeActive : Images.bottomHomeInactive
-              }
-              style={styles.ic_img}
-            />
+            <AntDesign name="home" size={focused ? 26 : 24} color={focused ? '#0A85FE' : '#0B1F32'} />
           ),
         }}
       />
-      <Tab.Screen
+      {/* video screen for the future release */}
+      {/* <Tab.Screen
         name={NavigationScreenName.VIDEO}
         component={Video}
         options={{
           title: 'Video',
           tabBarIcon: ({focused}) => (
-            <Image
-              source={
-                focused
-                  ? Images.bottomVideoActive
-                  : Images.bottomVideoInactive
-              }
-              style={styles.ic_img}
-            />
+            <AntDesign name="videocamera" size={focused ? 26 : 24} color={focused ? '#0A85FE' : '#0B1F32'} />
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name={NavigationScreenName.ADD}
         component={Add}
         options={{
           title: 'Add',
           tabBarIcon: ({focused}) => (
-            <Image
-              source={
-                focused
-                  ? Images.bottomAdd
-                  : Images.bottomAdd
-              }
-              style={styles.ic_img}
-            />
+           <AntDesign name="pluscircleo" size={focused ? 26 : 24} color={focused ? '#0A85FE' : '#0B1F32'} />
           ),
         }}
       />
@@ -86,18 +68,11 @@ const BottomTab = () => {
         options={{
           title: 'Custom',
           tabBarIcon: ({focused}) => (
-            <Image
-              source={
-                focused
-                  ? Images.bottomCustomActive
-                  : Images.bottomCustomInactive
-              }
-              style={styles.ic_img}
-            />
+           <AntDesign name="appstore-o" size={focused ? 26 : 24} color={focused ? '#0A85FE' : '#0B1F32'} />
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name={NavigationScreenName.PROFILE}
         component={Profile}
         options={{
@@ -113,7 +88,7 @@ const BottomTab = () => {
             />
           ),
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 };
