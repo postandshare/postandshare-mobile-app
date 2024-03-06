@@ -5,7 +5,7 @@ export default {
     loginTop: require('../assets/images/login.png'),
     splashTop: require('../assets/images/splash-top.png'),
     splashBottom: require('../assets/images/splash-bottom.png'),
-    
+
     //bottom tab icons
     bottomHomeActive: require('../assets/icons/Home_active.png'),
     bottomHomeInactive: require('../assets/icons/Home_inactive.png'),
@@ -17,9 +17,6 @@ export default {
     bottomProfileInactive: require('../assets/icons/profile_inactive.png'),
     bottomAdd: require('../assets/icons/add_icon.png'),
 
-    
-
-
     //icons
     photo_video_icon: require('../assets/icons/photos_and_video.png'),
     remainder_icon: require('../assets/icons/remainder.png'),
@@ -28,11 +25,11 @@ export default {
     otp_icon: require('../assets/icons/otpIcon.png'),
     add_birthday_icon: require('../assets/icons/addbirthday.png'),
     akSchoolIcon: require('../assets/icons/download.png'),
+
     //placeholder
     profile_placeholder1: require('../assets/placeholder/placeholder1.png'),
     profile_placeholder2: require('../assets/placeholder/placeholder2.png'),
     profilePlaceholder: require('../assets/images/profile-placeholder.png'),
-
 
     //frames
     frame1: require('../assets/frames/Frame 1.png'),

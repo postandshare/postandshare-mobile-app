@@ -14,6 +14,12 @@ export const updateBusinessPartner = body => {
     body,
   );
 };
+export const deleteBusinessPartner = body => {
+  return authAxiosInstance.put(
+    `${bussiness_route}/deleteBusinessPartner`,
+    body,
+  );
+};
 export const addBusiness = body => {
   return authAxiosInstance.post(`${bussiness_route}/addBusiness`, body);
 };
@@ -38,5 +44,3 @@ export const addBusinessPartner = body => {
 export const updateBusiness = body => {
   return authAxiosInstance.put(`${bussiness_route}/updateBusiness`, body);
 };
-
-

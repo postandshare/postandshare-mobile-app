@@ -19,6 +19,7 @@ import {
   addBusinessPartner,
   changeBusinessLogo,
   deleteBusiness,
+  deleteBusinessPartner,
   getAllBusinessList,
   updateBusinessPartner,
 } from '../../services/userServices/bussiness.servies';
@@ -93,7 +94,7 @@ const ViewBussiness = ({route, navigation}) => {
     queryFn: () =>
       getAllBusinessList({
         businessDocId: businessId,
-        businessType: businessType,
+        // businessType: businessType,
       }),
     onSuccess: success => {
       setprofilePic(success?.data?.obj?.ownerPhoto);
@@ -104,7 +105,6 @@ const ViewBussiness = ({route, navigation}) => {
     },
     enabled: false,
   });
-
 
   const {
     mutate: addBusinessPartnerlMutate,
@@ -161,6 +161,19 @@ const ViewBussiness = ({route, navigation}) => {
         ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
       },
     });
+  const {
+    mutate: deleteBusinessPartnerMutate,
+    isLoading: deleteBusinessPartnerLoading,
+  } = useMutation(deleteBusinessPartner, {
+    onSuccess: ({data}) => {
+      ToastAndroid.show(data?.message, ToastAndroid.LONG);
+      getAllBusinessListRefetch();
+    },
+    onError: err => {
+      console.log(err?.response?.data?.message, 'err');
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+  });
 
   const uploadePhoto = async (path, mime) => {
     try {
@@ -243,7 +256,11 @@ const ViewBussiness = ({route, navigation}) => {
         text="Adding Bussiness Partner"
         open={addBusinessPartnerlLoading}
       />
-      <Loader text="Deleting Bussiness Partner" open={deleteBusinessLoading} />
+      <Loader text="Deleting Bussiness..." open={deleteBusinessLoading} />
+      <Loader
+        text="Deleting Bussiness Partner"
+        open={deleteBusinessPartnerLoading}
+      />
       <Loader text="Updating..." open={updateBusinessPartnerLoading} />
       <ActionSheet
         ref={actionSheetRef}
@@ -404,7 +421,30 @@ const ViewBussiness = ({route, navigation}) => {
                   }}>
                   <FontAwesome name={'edit'} size={25} color={'#26A9E1'} />
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    Alert.alert(
+                      'Delete Bussiness Partner',
+                      'Are you sure you want to delete this bussiness partner?',
+                      [
+                        {
+                          text: 'Cancel',
+                          onPress: () => console.log('Cancel Pressed'),
+                          style: 'cancel',
+                        },
+                        {
+                          text: 'OK',
+                          onPress: () => {
+                            deleteBusinessPartnerMutate({
+                              businessPartnerDocId: item?._id,
+                              businessDocId: businessId,
+                            });
+                          },
+                        },
+                      ],
+                      {cancelable: false},
+                    );
+                  }}>
                   <AntDesign name={'delete'} size={25} color={'#EA1C1C'} />
                 </TouchableOpacity>
               </View>

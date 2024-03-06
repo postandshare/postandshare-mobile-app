@@ -56,6 +56,12 @@ export const updatePoliticalBusinessLogo = body => {
     body,
   );
 };
+export const updatePoliticalVolunteerPhoto = body => {
+  return authAxiosInstance.put(
+    `${political_route}/updatePoliticalVolunteerPhoto`,
+    body,
+  );
+};
 
 export const updatePoliticalBusinessLeader = body => {
   return authAxiosInstance.put(

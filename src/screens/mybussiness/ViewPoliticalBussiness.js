@@ -15,6 +15,7 @@ import TopHeader from '../../components/TopHeader';
 import {
   getPoliticalPartyDetails,
   updatePoliticalBusinessLogo,
+  updatePoliticalVolunteerPhoto,
 } from '../../services/userServices/political.services';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import Colors from '../../constants/Colors';
@@ -28,6 +29,8 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import uploadFile from '../../utils/uploadFile';
 import {useFocusEffect} from '@react-navigation/native';
+import {deleteBusiness} from '../../services/userServices/bussiness.servies';
+import Loader from '../../components/Loader';
 
 const ViewPoliticalBussiness = ({route, navigation}) => {
   const {businessId, businessType} = route?.params;
@@ -65,6 +68,18 @@ const ViewPoliticalBussiness = ({route, navigation}) => {
     },
   });
 
+  const {
+    mutate: updatePoliticalVolunteerPhotoMuatate,
+    isLoading: updatePoliticalVolunteerPhotoLoading,
+  } = useMutation(updatePoliticalVolunteerPhoto, {
+    onSuccess: success => {
+      getPoliticalPartyDetailsRefetch();
+    },
+    onError: error => {
+      ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
+    },
+  });
+
   const uploadePhoto = async (path, mime) => {
     try {
       console.log(path, 'in uploade photo');
@@ -76,10 +91,10 @@ const ViewPoliticalBussiness = ({route, navigation}) => {
       });
       setImageUploading(false);
       console.log(uplode?.fileURL, 'uplode file url');
-        updatePoliticalBusinessLogoMuatate({
-          businessDocId: businessId,
-          logo: uplode?.fileURL,
-        });
+      updatePoliticalVolunteerPhotoMuatate({
+        politicalBusinessDocId: businessId,
+        volunteerPhoto: uplode?.fileURL,
+      });
 
       setprofilePic(uplode?.fileURL);
     } catch (error) {
@@ -117,10 +132,22 @@ const ViewPoliticalBussiness = ({route, navigation}) => {
     }
   };
 
+  const {mutate: deleteBusinessMutate, isLoading: deleteBusinessLoading} =
+    useMutation(deleteBusiness, {
+      onSuccess: ({data}) => {
+        ToastAndroid.show(data?.message, ToastAndroid.LONG);
+        navigation.goBack();
+      },
+      onError: err => {
+        console.log(err?.response?.data?.message, 'err');
+        ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+      },
+    });
+
   useFocusEffect(
     React.useCallback(() => {
       getPoliticalPartyDetailsRefetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [getPoliticalPartyDetailsRefetch, navigation]),
   );
 
@@ -129,8 +156,15 @@ const ViewPoliticalBussiness = ({route, navigation}) => {
       <TopHeader
         titile={
           getPoliticalPartyDetails_Data?.data?.obj
-            ?.fetchExistingPoliticalBusiness?.volunteerName ?? 'Party Name'
+            ?.fetchExistingPoliticalBusiness?.partyDocId?.partyName ??
+          'Party Name'
         }
+      />
+
+      <Loader open={deleteBusinessLoading} text="Deleting Bussiness..." />
+      <Loader
+        open={updatePoliticalVolunteerPhotoLoading || imageUploading}
+        text="Uploading Image..."
       />
 
       <ScrollView
@@ -340,7 +374,7 @@ const ViewPoliticalBussiness = ({route, navigation}) => {
                   {
                     text: 'OK',
                     onPress: () => {
-                      //   deleteBusinessMutate({bussinessDocId: businessId});
+                      deleteBusinessMutate({bussinessDocId: businessId});
                     },
                   },
                 ],
