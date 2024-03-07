@@ -27,6 +27,12 @@ export const addPoliticalBusiness = body => {
     body,
   );
 };
+export const addPoliticalLeader = body => {
+  return authAxiosInstance.post(
+    `${political_route}/addPoliticalLeader`,
+    body,
+  );
+};
 
 export const updatePoliticalParty = body => {
   return authAxiosInstance.put(`${political_route}/updatePoliticalParty`, body);
@@ -73,6 +79,11 @@ export const updatePoliticalBusinessLeader = body => {
 export const deletePoliticalParty = body => {
   return authAxiosInstance.delete(
     `${political_route}/deletePoliticalParty/${body?.languageDocId}`,
+  );
+};
+export const deletePoliticalBusiness = body => {
+  return authAxiosInstance.delete(
+    `${political_route}/deletePoliticalBusiness/${body?.businessDocId}`,
   );
 };
 

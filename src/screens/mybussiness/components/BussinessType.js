@@ -18,7 +18,10 @@ import {useFormik} from 'formik';
 import * as yup from 'yup';
 import BussinessProfileForm from './bussinessFormComponents/BussinessProfileForm';
 import BussinessPartnerForm from './bussinessFormComponents/BussinessPartnerForm';
-import {addBusiness, updateBusiness} from '../../../services/userServices/bussiness.servies';
+import {
+  addBusiness,
+  updateBusiness,
+} from '../../../services/userServices/bussiness.servies';
 import {useMutation} from '@tanstack/react-query';
 import NavigationScreenName from '../../../constants/NavigationScreenName';
 import {useNavigation} from '@react-navigation/native';
@@ -30,9 +33,9 @@ const BussinessType = ({bussinessDetails}) => {
 
   const bussinessTypeFormik = useFormik({
     initialValues: {
-      logo: bussinessDetails?.logo ?? '',
-      bussinessCategory: bussinessDetails?.category ?? '',
-      bussinessSubCategory: bussinessDetails?.subCategory ?? '',
+      logo: bussinessDetails?.fetchBusiness?.logo ?? '',
+      bussinessCategory: bussinessDetails?.fetchBusiness?.category ?? '',
+      bussinessSubCategory: bussinessDetails?.fetchBusiness?.subCategory ?? '',
     },
     validationSchema: yup.object({
       logo: yup.string().required('logo is required'),
@@ -51,15 +54,15 @@ const BussinessType = ({bussinessDetails}) => {
   const bussinessProfileFormik = useFormik({
     initialValues: {
       // bussiness profile
-      bussinessName: bussinessDetails?.businessName ?? '',
-      bussinessDetail: bussinessDetails?.description ?? '',
-      bussinessEmail: bussinessDetails?.email ?? '',
-      businessWebsite: bussinessDetails?.website ?? '',
-      bussinessAddress: bussinessDetails?.address?.address ?? '',
-      bussinessPinCode: bussinessDetails?.address?.pinCode ?? '',
-      bussinessTehsil: bussinessDetails?.address?.tehsil ?? '',
-      bussinessDistrict: bussinessDetails?.address?.dist ?? '',
-      bussinessState: bussinessDetails?.address?.state ?? '',
+      bussinessName: bussinessDetails?.fetchBusiness?.businessName ?? '',
+      bussinessDetail: bussinessDetails?.fetchBusiness?.description ?? '',
+      bussinessEmail: bussinessDetails?.fetchBusiness?.email ?? '',
+      businessWebsite: bussinessDetails?.fetchBusiness?.website ?? '',
+      bussinessAddress: bussinessDetails?.fetchBusiness?.address?.address ?? '',
+      bussinessPinCode: bussinessDetails?.fetchBusiness?.address?.pinCode ?? '',
+      bussinessTehsil: bussinessDetails?.fetchBusiness?.address?.tehsil ?? '',
+      bussinessDistrict: bussinessDetails?.fetchBusiness?.address?.dist ?? '',
+      bussinessState: bussinessDetails?.fetchBusiness?.address?.state ?? '',
     },
     validationSchema: yup.object({
       bussinessName: yup.string().required('Bussiness Name is required'),
@@ -88,11 +91,13 @@ const BussinessType = ({bussinessDetails}) => {
 
   const bussinessPartnerFormik = useFormik({
     initialValues: {
-      bussinessOwnerName: bussinessDetails?.ownerName ?? '',
-      bussinessOwnerPhone: bussinessDetails?.mobileNumber ?? '',
-      bussinessOwnerWhatsapp: bussinessDetails?.whatsappNumber ?? '',
-      bussinessOwnerDessignation: bussinessDetails?.designation ?? '',
-      bussinessOwnerPhoto: bussinessDetails?.ownerPhoto ?? '',
+      bussinessOwnerName: bussinessDetails?.fetchBusiness?.ownerName ?? '',
+      bussinessOwnerPhone: bussinessDetails?.fetchBusiness?.mobileNumber ?? '',
+      bussinessOwnerWhatsapp:
+        bussinessDetails?.fetchBusiness?.whatsappNumber ?? '',
+      bussinessOwnerDessignation:
+        bussinessDetails?.fetchBusiness?.designation ?? '',
+      bussinessOwnerPhoto: bussinessDetails?.fetchBusiness?.ownerPhoto ?? '',
 
       //bussinessPartnerInfo
       bussinessPartner: bussinessDetails?.businessPartnerList ?? [],
@@ -150,9 +155,9 @@ const BussinessType = ({bussinessDetails}) => {
     });
 
   const handleSubmition = () => {
-    if (bussinessDetails?._id) {
+    if (bussinessDetails?.fetchBusiness?._id) {
       updateBusinessMutate({
-        businessDocId:bussinessDetails?._id,
+        businessDocId: bussinessDetails?.fetchBusiness?._id,
         logo: bussinessTypeFormik?.values?.logo,
         category: bussinessTypeFormik?.values?.bussinessCategory,
         subCategory: bussinessTypeFormik?.values?.bussinessSubCategory,
@@ -232,7 +237,11 @@ const BussinessType = ({bussinessDetails}) => {
               formStep === 1 ? {backgroundColor: Colors.PRIMARY} : null,
               styles.container,
             ]}>
-            <Entypo name="user" size={20} color={formStep === 1 ? 'white': Colors.TEXT1}/>
+            <Entypo
+              name="user"
+              size={20}
+              color={formStep === 1 ? 'white' : Colors.TEXT1}
+            />
           </View>
           <Text style={{color: Colors.TEXT1}}>BussinessType</Text>
         </View>
@@ -243,7 +252,11 @@ const BussinessType = ({bussinessDetails}) => {
               formStep === 2 ? {backgroundColor: Colors.PRIMARY} : null,
               styles.container,
             ]}>
-            <FontAwesome5 name="hand-holding-usd" size={20} color={formStep === 2 ? 'white': Colors.TEXT1}/>
+            <FontAwesome5
+              name="hand-holding-usd"
+              size={20}
+              color={formStep === 2 ? 'white' : Colors.TEXT1}
+            />
           </View>
           <Text style={{color: Colors.TEXT1}}>Bussiness Profile</Text>
         </View>
@@ -255,7 +268,11 @@ const BussinessType = ({bussinessDetails}) => {
               formStep === 3 ? {backgroundColor: Colors.PRIMARY} : null,
               styles.container,
             ]}>
-            <Ionicons name="people" size={20} color={formStep === 3 ? 'white': Colors.TEXT1}/>
+            <Ionicons
+              name="people"
+              size={20}
+              color={formStep === 3 ? 'white' : Colors.TEXT1}
+            />
           </View>
           <Text style={{color: Colors.TEXT1}}>Bussiness Partner</Text>
         </View>
@@ -343,7 +360,10 @@ const BussinessType = ({bussinessDetails}) => {
       {/* bussiness partner form */}
       {formStep == 3 && (
         <ScrollView>
-          <BussinessPartnerForm bussinessTypeFormik={bussinessPartnerFormik} bussinessDetails={bussinessDetails}/>
+          <BussinessPartnerForm
+            bussinessTypeFormik={bussinessPartnerFormik}
+            bussinessDetails={bussinessDetails}
+          />
           <View
             style={{
               flexDirection: 'row',

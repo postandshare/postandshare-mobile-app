@@ -13,10 +13,18 @@ import ImageCropPicker from 'react-native-image-crop-picker';
 import Colors from '../../../../constants/Colors';
 import globalStyles from '../../../../styles/globalStyles';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {TextInput} from 'react-native-paper';
+import {ActivityIndicator, TextInput} from 'react-native-paper';
 import CustomButton from '../../../../components/CustomButton';
+import Loader from '../../../../components/Loader';
 
-const AddLeaderSheet = ({onPressCross}) => {
+const AddLeaderSheet = ({
+  onPressCross,
+  addPoliticalLeaderMutate,
+  partyDocId,
+  state,
+  district,
+  legislativeAssembly,
+}) => {
   const [imageUploading, setImageUploading] = useState(false);
   const [profilePic, setprofilePic] = useState('');
   const [leaderName, setLeaderName] = useState('');
@@ -32,13 +40,7 @@ const AddLeaderSheet = ({onPressCross}) => {
       });
       setImageUploading(false);
       console.log(uplode?.fileURL, 'uplode file url');
-      //   updateSelfPhotoMutate({
-      //     profilePic: uplode?.fileURL,
-      //   //   });
-      //   bussinessTypeFormik.setValues(prev => ({
-      //     ...prev,
-      //     bussinessPartnerPhoto: uplode?.fileURL,
-      //   }));
+      setprofilePic(uplode?.fileURL);
       setprofilePic(uplode?.fileURL);
     } catch (error) {
       setImageUploading(false);
@@ -74,8 +76,10 @@ const AddLeaderSheet = ({onPressCross}) => {
       ToastAndroid.show('Permission Denied', ToastAndroid.LONG);
     }
   };
+
   return (
     <>
+      <Loader open={imageUploading} text="Image Uploading..." />
       {/* header */}
       <View style={globalStyles.actionSheet_header}>
         <Text style={globalStyles.actionSheet_header_left_text}>
@@ -106,8 +110,8 @@ const AddLeaderSheet = ({onPressCross}) => {
             style={{backgroundColor: 'white'}}
             placeholder="Leader Desingation"
             value={leaderDesingation}
-            onChange={text => {
-              () => setLeaderDesingation(text);
+            onChangeText={text => {
+              setLeaderDesingation(text);
             }}
           />
         </View>
@@ -119,8 +123,8 @@ const AddLeaderSheet = ({onPressCross}) => {
             style={{backgroundColor: 'white'}}
             placeholder="Leader Name"
             value={leaderName}
-            onChange={text => {
-              () => setLeaderName(text);
+            onChangeText={text => {
+              setLeaderName(text);
             }}
           />
         </View>
@@ -133,15 +137,29 @@ const AddLeaderSheet = ({onPressCross}) => {
           }}>
           {profilePic ? (
             <Image
+              loadingIndicatorSource={ActivityIndicator}
               source={{uri: profilePic}}
               style={{width: '100%', height: '100%', borderRadius: 10}}
             />
           ) : (
-            <Text color={Colors.TEXT1}>Add Photo</Text>
+            <Text style={{color: Colors.TEXT1}}>Add Photo</Text>
           )}
         </TouchableOpacity>
 
-        <CustomButton title={'Add'} onPress={() => {}} />
+        <CustomButton
+          title={'Add'}
+          onPress={() => {
+            addPoliticalLeaderMutate({
+              partyDocId: partyDocId?._id,
+              leaderName: leaderName,
+              designation: leaderDesingation,
+              leaderPhoto: profilePic,
+              state: state,
+              district: district,
+              legislativeAssembly: legislativeAssembly,
+            });
+          }}
+        />
       </View>
     </>
   );

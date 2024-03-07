@@ -36,6 +36,7 @@ import ColorPicker, {
 import {useQuery} from '@tanstack/react-query';
 import {getOrgFrame} from '../../services/userServices/frame.services';
 import {useFocusEffect} from '@react-navigation/native';
+import Loader from '../../components/Loader';
 
 const CustomColorChange = ({data}) => {
   const [color, setColor] = useState(Colors.PRIMARY);
@@ -281,7 +282,6 @@ const CustomSDK = ({route, navigation}) => {
     }
   };
 
-
   const TakeStickerfromGallery = async () => {
     try {
       await PermissionsAndroid.request(
@@ -310,7 +310,7 @@ const CustomSDK = ({route, navigation}) => {
   const drag = (x, y) => {
     // console.log('Dragging', x, y);
   };
-  
+
   const drop = (x, y) => {
     if (y > Dimensions.get('screen').height - 150) {
       console.log('Drop in the pit');
@@ -391,7 +391,7 @@ const CustomSDK = ({route, navigation}) => {
   return (
     <>
       <TopHeader titile={'Custom SDK'} next={'Next'} onPress={onCapture} />
-
+      <Loader open={getOrgFrameLoading || getOrgFrameFetching} text="Loading..." />
       {/* dialogue for adding the text on the image */}
       <Portal>
         <Dialog dismissable={false} visible={visible} onDismiss={hideDialog}>

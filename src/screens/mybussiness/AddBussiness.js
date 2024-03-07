@@ -11,9 +11,9 @@ const AddBussiness = ({route}) => {
   const {businessId, bussinessDetails} = route.params ?? {};
   // console.log(bussinessDetails?.businessType, 'bussinessId');
   const [bussinessType, setBussinessType] = React.useState(
-    bussinessDetails?.businessType === 'bussiness' ? 'Bussiness' : 'Political',
+    bussinessDetails?.fetchBusiness?.businessType === 'business' ? 'Bussiness' : 'Political',
   );
-  console.log(bussinessDetails?.fetchExistingPoliticalBusiness?.businessType);
+
   //org bussiness type is for orginal bussiness type
   const [orgBussinessType, setOrgBussinessType] = useState(
     bussinessDetails?.fetchExistingPoliticalBusiness?.businessType ? bussinessDetails?.fetchExistingPoliticalBusiness?.businessType : '',

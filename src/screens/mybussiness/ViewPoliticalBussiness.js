@@ -13,6 +13,7 @@ import {
 import React, {useState} from 'react';
 import TopHeader from '../../components/TopHeader';
 import {
+  deletePoliticalBusiness,
   getPoliticalPartyDetails,
   updatePoliticalBusinessLogo,
   updatePoliticalVolunteerPhoto,
@@ -23,13 +24,12 @@ import Sizes from '../../constants/Sizes';
 import CustomButton from '../../components/CustomButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import uploadFile from '../../utils/uploadFile';
 import {useFocusEffect} from '@react-navigation/native';
-import {deleteBusiness} from '../../services/userServices/bussiness.servies';
+
 import Loader from '../../components/Loader';
 
 const ViewPoliticalBussiness = ({route, navigation}) => {
@@ -132,17 +132,19 @@ const ViewPoliticalBussiness = ({route, navigation}) => {
     }
   };
 
-  const {mutate: deleteBusinessMutate, isLoading: deleteBusinessLoading} =
-    useMutation(deleteBusiness, {
-      onSuccess: ({data}) => {
-        ToastAndroid.show(data?.message, ToastAndroid.LONG);
-        navigation.goBack();
-      },
-      onError: err => {
-        console.log(err?.response?.data?.message, 'err');
-        ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
-      },
-    });
+  const {
+    mutate: deletePoliticalBusinessMutate,
+    isLoading: deletePoliticalBusinessLoading,
+  } = useMutation(deletePoliticalBusiness, {
+    onSuccess: ({data}) => {
+      ToastAndroid.show(data?.message, ToastAndroid.LONG);
+      navigation.goBack();
+    },
+    onError: err => {
+      console.log(err?.response?.data?.message, 'err');
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+  });
 
   useFocusEffect(
     React.useCallback(() => {
@@ -161,7 +163,10 @@ const ViewPoliticalBussiness = ({route, navigation}) => {
         }
       />
 
-      <Loader open={deleteBusinessLoading} text="Deleting Bussiness..." />
+      <Loader
+        open={deletePoliticalBusinessLoading}
+        text="Deleting Bussiness..."
+      />
       <Loader
         open={updatePoliticalVolunteerPhotoLoading || imageUploading}
         text="Uploading Image..."
@@ -297,6 +302,15 @@ const ViewPoliticalBussiness = ({route, navigation}) => {
             onPress={() => {
               navigation.navigate('Change Leader', {
                 bussinessDocId: businessId,
+                state:
+                  getPoliticalPartyDetails_Data?.data?.obj
+                    ?.fetchExistingPoliticalBusiness?.state,
+                district:
+                  getPoliticalPartyDetails_Data?.data?.obj
+                    ?.fetchExistingPoliticalBusiness?.district,
+                legislativeAssembly:
+                  getPoliticalPartyDetails_Data?.data?.obj
+                    ?.fetchExistingPoliticalBusiness?.legislativeAssembly,
                 partyDocId:
                   getPoliticalPartyDetails_Data?.data?.obj
                     ?.fetchExistingPoliticalBusiness?.partyDocId,
@@ -374,7 +388,9 @@ const ViewPoliticalBussiness = ({route, navigation}) => {
                   {
                     text: 'OK',
                     onPress: () => {
-                      deleteBusinessMutate({bussinessDocId: businessId});
+                      deletePoliticalBusinessMutate({
+                        businessDocId: businessId,
+                      });
                     },
                   },
                 ],

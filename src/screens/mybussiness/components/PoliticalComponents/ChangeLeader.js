@@ -17,6 +17,7 @@ import ActionSheet from 'react-native-actions-sheet';
 import AddLeaderSheet from '../actionsheets/AddLeaderSheet';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {
+  addPoliticalLeader,
   getLeaderDetail,
   updatePoliticalBusinessLeader,
 } from '../../../../services/userServices/political.services';
@@ -24,7 +25,14 @@ import {useFocusEffect} from '@react-navigation/native';
 import Loader from '../../../../components/Loader';
 
 const ChangeLeader = ({route, navigation}) => {
-  const {partyDocId, bussinessDocId} = route?.params || {};
+  const {
+    partyDocId,
+    bussinessDocId,
+    politicalData,
+    state,
+    district,
+    legislativeAssembly,
+  } = route?.params || {};
 
   const [choosenLeader, setChoosenLeader] = useState([]);
   const [choosenLeaderDocId, setChoosenLeaderDocId] = useState([]);
@@ -76,6 +84,19 @@ const ChangeLeader = ({route, navigation}) => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
   });
+  const {
+    mutate: addPoliticalLeaderMutate,
+    isLoading: addPoliticalLeaderLoading,
+  } = useMutation(addPoliticalLeader, {
+    onSuccess: ({data}) => {
+      ToastAndroid.show(data?.message, ToastAndroid.LONG);
+      navigation.goBack();
+    },
+    onError: err => {
+      console.log(err?.response?.data?.message, 'err');
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+  });
 
   useFocusEffect(
     React.useCallback(() => {
@@ -87,10 +108,18 @@ const ChangeLeader = ({route, navigation}) => {
   return (
     <>
       <ActionSheet ref={actionSheetRef}>
-        <AddLeaderSheet onPressCross={onPressCross} />
+        <AddLeaderSheet
+          onPressCross={onPressCross}
+          addPoliticalLeaderMutate={addPoliticalLeaderMutate}
+          partyDocId={partyDocId}
+          state={state}
+          district={district}
+          legislativeAssembly={legislativeAssembly}
+        />
       </ActionSheet>
       <TopHeader titile={'Change Leader'} />
       <Loader open={updatePoliticalBusinessLeaderLoading} text="Updating..." />
+      <Loader open={addPoliticalLeaderLoading} text="Adding..." />
       <ScrollView
         refreshControl={
           <RefreshControl

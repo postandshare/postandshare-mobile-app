@@ -18,11 +18,11 @@ import ImageCropPicker from 'react-native-image-crop-picker';
 
 const AddBussinessPartnerSheet = ({
   onPressCross,
+  addBusinessPartner,
   bussinessTypeFormik,
-  AddBussinessPartner,
 }) => {
   const [profilePic, setprofilePic] = useState(
-    bussinessTypeFormik?.values?.bussinessPartnerPhoto??'',
+    bussinessTypeFormik?.values?.bussinessPartnerPhoto ?? '',
   );
 
   const [imageUploading, setImageUploading] = useState(false);
@@ -81,8 +81,6 @@ const AddBussinessPartnerSheet = ({
     }
   };
 
-
-
   return (
     <>
       {/* header */}
@@ -108,7 +106,7 @@ const AddBussinessPartnerSheet = ({
       {/* body */}
       <View style={styles.container}>
         <View style={styles.textInputField}>
-          <Text  color={Colors.TEXT1}>Partner Name</Text>
+          <Text color={Colors.TEXT1}>Partner Name</Text>
           <CustomTextInputFormik
             formik={bussinessTypeFormik}
             name={'bussinessPartnerName'}
@@ -136,14 +134,14 @@ const AddBussinessPartnerSheet = ({
               style={{width: '100%', height: '100%', borderRadius: 10}}
             />
           ) : (
-            <Text  color={Colors.TEXT1}>Add Photo</Text>
+            <Text color={Colors.TEXT1}>Add Photo</Text>
           )}
         </TouchableOpacity>
 
         <CustomButton
           title={'Add'}
           onPress={() => {
-            AddBussinessPartner();
+            addBusinessPartner();
           }}
         />
       </View>

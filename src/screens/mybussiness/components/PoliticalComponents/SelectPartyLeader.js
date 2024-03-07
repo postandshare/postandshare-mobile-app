@@ -237,6 +237,7 @@ const SelectPartyLeader = ({route, navigation}) => {
                   navigation.navigate('Change Leader', {
                     partyDocId: partyDocId,
                     bussinessDocId: businessId,
+                    buinessDtata: politicalData,
                   });
                 }}>
                 <Text style={styles.changeLeader_text}>Change</Text>

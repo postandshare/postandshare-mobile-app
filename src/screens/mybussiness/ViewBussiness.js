@@ -47,7 +47,6 @@ const ViewBussiness = ({route, navigation}) => {
   const [profilePic, setprofilePic] = useState('');
   const [imageUploading, setImageUploading] = useState(false);
   const [bussinessPartnerDetails, setBussinessPartnerDetails] = useState();
-
   const bussinessPartnerDetailsFormik = useFormik({
     initialValues: {
       bussinessPartnerName: '',
@@ -94,7 +93,7 @@ const ViewBussiness = ({route, navigation}) => {
     queryFn: () =>
       getAllBusinessList({
         businessDocId: businessId,
-        // businessType: businessType,
+        businessType: businessType,
       }),
     onSuccess: success => {
       setprofilePic(success?.data?.obj?.ownerPhoto);
@@ -246,6 +245,8 @@ const ViewBussiness = ({route, navigation}) => {
     bussinessPartnerDetailsFormik.handleSubmit();
   };
 
+  const BussinessData = getAllBusinessList_Data?.data?.obj;
+
   return (
     <>
       <Loader
@@ -274,15 +275,13 @@ const ViewBussiness = ({route, navigation}) => {
         <AddBussinessPartnerSheet
           bussinessPartnerDetails={bussinessPartnerDetails}
           onPressCross={onPressCross}
+          addBusinessPartner={AddBussinessPartner}
           bussinessTypeFormik={bussinessPartnerDetailsFormik}
-          AddBussinessPartner={AddBussinessPartner}
         />
       </ActionSheet>
 
       <TopHeader
-        titile={
-          getAllBusinessList_Data?.data?.obj?.businessName ?? 'My Bussiness'
-        }
+        titile={BussinessData?.fetchBusiness?.businessName ?? 'My Bussiness'}
       />
 
       <ScrollView
@@ -300,19 +299,19 @@ const ViewBussiness = ({route, navigation}) => {
           <View style={styles.logo_container}>
             <Image
               // source={images.profilePlaceholder}
-              source={{uri: getAllBusinessList_Data?.data?.obj?.logo ?? ''}}
+              source={{uri: BussinessData?.fetchBusiness?.logo ?? ''}}
               style={styles.logo}
             />
           </View>
           <View style={{flex: 0.6}}>
             <Text style={styles.logo_text}>
-              {getAllBusinessList_Data?.data?.obj?.businessName ?? '--'}
+              {BussinessData?.fetchBusiness?.businessName ?? '--'}
             </Text>
             <Text style={styles.logo_text_subtitle}>
-              {getAllBusinessList_Data?.data?.obj?.category ?? '--'} ||{' '}
-              {getAllBusinessList_Data?.data?.obj?.subCategory ?? '--'} ||{' '}
+              {BussinessData?.fetchBusiness?.category ?? '--'} ||{' '}
+              {BussinessData?.fetchBusiness?.subCategory ?? '--'} ||{' '}
               <Text style={{color: 'green', fontStyle: 'italic'}}>
-                {getAllBusinessList_Data?.data?.obj?.businessStatus ?? '--'}
+                {BussinessData?.fetchBusiness?.businessStatus ?? '--'}
               </Text>
             </Text>
           </View>
@@ -327,42 +326,42 @@ const ViewBussiness = ({route, navigation}) => {
         <View style={styles.card_container}>
           <AntDesign name={'user'} size={25} color={Colors.PRIMARY} />
           <Text style={styles.card_text}>
-            {getAllBusinessList_Data?.data?.obj?.ownerName ?? '--'} (
-            {getAllBusinessList_Data?.data?.obj?.designation ?? '--'})
+            {BussinessData?.fetchBusiness?.ownerName ?? '--'} (
+            {BussinessData?.fetchBusiness?.designation ?? '--'})
           </Text>
         </View>
         {/* mobile number */}
         <View style={styles.card_container}>
           <AntDesign name={'mobile1'} size={25} color={Colors.PRIMARY} />
           <Text style={styles.card_text}>
-            {getAllBusinessList_Data?.data?.obj?.mobileNumber ?? '--'}
+            {BussinessData?.fetchBusiness?.mobileNumber ?? '--'}
           </Text>
         </View>
         {/* whatsapp number */}
         <View style={styles.card_container}>
           <FontAwesome name={'whatsapp'} size={25} color={Colors.PRIMARY} />
           <Text style={styles.card_text}>
-            {getAllBusinessList_Data?.data?.obj?.whatsappNumber ?? '--'}
+            {BussinessData?.fetchBusiness?.whatsappNumber ?? '--'}
           </Text>
         </View>
         {/* mail */}
         <View style={styles.card_container}>
           <AntDesign name={'mail'} size={25} color={Colors.PRIMARY} />
           <Text style={styles.card_text}>
-            {getAllBusinessList_Data?.data?.obj?.email ?? '--'}
+            {BussinessData?.fetchBusiness?.email ?? '--'}
           </Text>
         </View>
         {/* address */}
         <View style={styles.card_container}>
           <Entypo name={'location'} size={25} color={Colors.PRIMARY} />
           <Text style={styles.card_text}>
-            {getAllBusinessList_Data?.data?.obj?.address?.address ?? '--'}
+            {BussinessData?.fetchBusiness?.address?.address ?? '--'}
             {'\n'}
-            {getAllBusinessList_Data?.data?.obj?.address?.dist ?? '--'}
+            {BussinessData?.fetchBusiness?.address?.dist ?? '--'}
             {'\n'}
-            {getAllBusinessList_Data?.data?.obj?.address?.state ?? '--'}
+            {BussinessData?.fetchBusiness?.address?.state ?? '--'}
             {'\n'}
-            {getAllBusinessList_Data?.data?.obj?.address?.pinCode ?? '--'}
+            {BussinessData?.fetchBusiness?.address?.pinCode ?? '--'}
           </Text>
         </View>
         {/* website */}
@@ -373,7 +372,7 @@ const ViewBussiness = ({route, navigation}) => {
             color={Colors.PRIMARY}
           />
           <Text style={styles.card_text}>
-            {getAllBusinessList_Data?.data?.obj?.website ?? '--'}
+            {BussinessData?.fetchBusiness?.website ?? '--'}
           </Text>
         </View>
         {/* description */}
@@ -384,7 +383,7 @@ const ViewBussiness = ({route, navigation}) => {
             color={Colors.PRIMARY}
           />
           <Text style={styles.card_text}>
-            {getAllBusinessList_Data?.data?.obj?.description ?? '--'}
+            {BussinessData?.fetchBusiness?.description ?? '--'}
           </Text>
         </View>
 
@@ -458,6 +457,7 @@ const ViewBussiness = ({route, navigation}) => {
             marginBottom: 10,
           }}
           onPress={() => {
+            bussinessPartnerDetailsFormik?.resetForm();
             actionSheetRef?.current?.show();
           }}>
           <Text
