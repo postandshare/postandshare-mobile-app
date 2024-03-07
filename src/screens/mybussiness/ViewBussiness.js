@@ -457,6 +457,7 @@ const ViewBussiness = ({route, navigation}) => {
             marginBottom: 10,
           }}
           onPress={() => {
+            setBussinessPartnerDetails({});
             bussinessPartnerDetailsFormik?.resetForm();
             actionSheetRef?.current?.show();
           }}>

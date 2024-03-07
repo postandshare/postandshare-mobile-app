@@ -161,7 +161,7 @@ const BussinessPartnerForm = ({bussinessTypeFormik , bussinessDetails}) => {
           bussinessPartnerDetails={bussinessPartnerDetails}
           onPressCross={onPressCross}
           bussinessTypeFormik={bussinessPartnerDetailsFormik}
-          AddBussinessPartner={AddBussinessPartner}
+          addBusinessPartner={AddBussinessPartner}
         />
       </ActionSheet>
 
@@ -284,7 +284,7 @@ const BussinessPartnerForm = ({bussinessTypeFormik , bussinessDetails}) => {
               onPress={() => {
                 actionSheetRef?.current?.show();
               }}>
-              <Text style={{color: 'blue', fontStyle: 'italic'}}>
+              <Text style={{color: 'blue', fontStyle: 'italic' ,marginBottom: 5}}>
                 Add More Business Partner
               </Text>
             </TouchableOpacity>

@@ -253,7 +253,9 @@ const SelectPartyLeader = ({route, navigation}) => {
                         key={index}
                         style={{
                           margin: 5,
-                          alignItems: 'center',
+                          color: Colors.TEXT1,
+                          width: 100,
+                          textAlign: 'center',
                         }}>
                         <Image
                           source={{uri: item?.leaderDocId?.leaderPhoto}}
@@ -268,6 +270,7 @@ const SelectPartyLeader = ({route, navigation}) => {
                             fontSize: 14,
                             fontWeight: '500',
                             color: Colors.TEXT1,
+                            width: 100,
                           }}>
                           {item?.leaderDocId?.leaderName}
                         </Text>
@@ -296,7 +299,10 @@ const SelectPartyLeader = ({route, navigation}) => {
                           fontSize: 14,
                           fontWeight: '500',
                           color: Colors.TEXT1,
+                          width: 100,
+                          textAlign: 'center',
                         }}>
+                        {item?.leaderName}
                         {item?.leaderName}
                       </Text>
                     </View>
@@ -362,6 +368,6 @@ const styles = StyleSheet.create({
   imageWrap: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    // justifyContent: 'center',
+    justifyContent: 'center',
   },
 });

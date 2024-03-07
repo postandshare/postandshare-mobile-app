@@ -42,6 +42,13 @@ const ChangeLeader = ({route, navigation}) => {
   };
 
   const handleImagePress = item => {
+    if (choosenLeader.length >= 8) {
+      return ToastAndroid.show(
+        'You can select only 8 leaders',
+        ToastAndroid.LONG,
+      );
+    }
+
     if (choosenLeader.includes(item?._id)) {
       setChoosenLeader(choosenLeader.filter(i => i !== item?._id));
       setChoosenLeaderDocId(choosenLeaderDocId.filter(i => i !== item?._id));
@@ -314,6 +321,7 @@ const styles = StyleSheet.create({
   imageWrap: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
   imageContainer: {
     margin: 8,
@@ -334,6 +342,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     color: Colors.TEXT1,
+    width: 100,
+    textAlign: 'center',
   },
   uploadContainer: {
     width: 100,

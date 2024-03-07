@@ -38,7 +38,7 @@ import {getOrgFrame} from '../../services/userServices/frame.services';
 import {useFocusEffect} from '@react-navigation/native';
 import Loader from '../../components/Loader';
 
-const CustomColorChange = ({data}) => {
+const CustomColorChange = ({data, setShowBorderBox, showBorderBox}) => {
   const [color, setColor] = useState(Colors.PRIMARY);
   const [showModal, setShowModal] = useState(false);
   const [fontWeight, setFontWeight] = useState('normal');
@@ -46,6 +46,7 @@ const CustomColorChange = ({data}) => {
   const [fontStyle, setFontStyle] = useState('normal');
   const [textDecoration, setTextDecoration] = useState('none');
   const [textAlign, setTextAlign] = useState('left');
+  const [showTools, setShowTools] = useState(false);
 
   const onSelectColor = ({hex}) => {
     console.log(hex);
@@ -125,12 +126,28 @@ const CustomColorChange = ({data}) => {
           </Dialog.Actions>
         </Dialog>
       </Portal>
-
-      <Text
-        onLongPress={() => setShowModal(true)}
-        style={{color: color, fontSize: fontSize, fontWeight: fontWeight}}>
-        {data}
-      </Text>
+      {showTools ? (
+        <View
+          style={{
+            borderWidth: 1,
+            borderRadius: 5,
+            borderColor: 'red',
+          }}>
+          <Text
+            onLongPress={() => setShowModal(true)}
+            onPress={() => setShowTools(!showTools)}
+            style={{color: color, fontSize: fontSize, fontWeight: fontWeight}}>
+            {data}
+          </Text>
+        </View>
+      ) : (
+        <Text
+          onLongPress={() => setShowModal(true)}
+          // onPress={() => setShowTools(!showTools)}
+          style={{color: color, fontSize: fontSize, fontWeight: fontWeight}}>
+          {data}
+        </Text>
+      )}
     </View>
   );
 };
@@ -175,7 +192,8 @@ const FrameSelection = ({
 const CustomSDK = ({route, navigation}) => {
   const {picData, businessDetails} = route.params || {};
 
-  // console.log(businessDetails, 'in business details')
+  const [showBorderBox, setShowBorderBox] = useState(false);
+
   const imgData = picData;
   const BusinessData = businessDetails;
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -198,21 +216,9 @@ const CustomSDK = ({route, navigation}) => {
   const [fontFamily, setFontFamily] = useState('Arial');
   const [showFontFamily, setShowFontFamily] = useState(false);
   const [showCross, setShowCross] = useState(true);
-  const [tools, setTools] = useState({
-    rotate: '',
-    flip: '',
-    fontSize: 10,
-    fontFamily: 'normal',
-    color: '',
-    fontWeight: '',
-    fontStyle: '',
-  });
-  const [controls, setControls] = useState({
-    open: false,
-  });
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
-  const [borderBox, setBorderBox] = useState(false);
+
   const [state, setState] = useState({
     location: false,
     logo: false,
@@ -357,8 +363,6 @@ const CustomSDK = ({route, navigation}) => {
   const hideDialog = () => setVisible(false);
   const hideDialogFontFamily = () => setShowFontFamily(false);
   const onSelectColor = ({hex}) => {
-    // do something with the selected color.
-    console.log(hex);
     setTextColor(hex);
     setSDKTextColor(hex);
   };
@@ -391,7 +395,10 @@ const CustomSDK = ({route, navigation}) => {
   return (
     <>
       <TopHeader titile={'Custom SDK'} next={'Next'} onPress={onCapture} />
-      <Loader open={getOrgFrameLoading || getOrgFrameFetching} text="Loading..." />
+      <Loader
+        open={getOrgFrameLoading || getOrgFrameFetching}
+        text="Loading..."
+      />
       {/* dialogue for adding the text on the image */}
       <Portal>
         <Dialog dismissable={false} visible={visible} onDismiss={hideDialog}>
@@ -774,67 +781,30 @@ const CustomSDK = ({route, navigation}) => {
                     </DragDrop>
                   ) : null}
                   {state?.mobile ? (
-                    <DragDrop
-                      onDrag={drag}
-                      onDrop={drop}
-                      // setShowModal={setShowModal}
-                      // setBorderBox={setBorderBox}
-                    >
-                      {borderBox ? (
-                        <TouchableOpacity
-                          style={{
-                            borderWidth: 1,
-                            borderColor: Colors.PRIMARY,
-                            padding: 5,
-                            borderRadius: 5,
-                            width: 120,
-                            height: 40,
-                            left: x,
-                            top: y,
-                            alignItems: 'center',
-                          }}>
-                          <Text
-                            style={{
-                              color: textColor,
-                              fontSize: tools.fontSize,
-                              fontWeight: '700',
-                              position: 'absolute',
-                            }}>
-                            {BusinessData?.mobileNumber ??
-                              businessDetails?.mobileNumber ??
-                              ToastAndroid.show(
-                                'Mobile Number is not available',
-                                ToastAndroid.LONG,
-                              )}
-                          </Text>
-                        </TouchableOpacity>
-                      ) : (
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            fontWeight: '700',
-                            position: 'absolute',
-                          }}>
-                          <CustomColorChange
-                            data={
-                              BusinessData?.mobileNumber ??
-                              businessDetails?.mobileNumber ??
-                              ToastAndroid.show(
-                                'Mobile Number is not available',
-                                ToastAndroid.LONG,
-                              )
-                            }
-                          />
-                        </Text>
-                      )}
+                    <DragDrop onDrag={drag} onDrop={drop}>
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: '700',
+                          position: 'absolute',
+                        }}>
+                        <CustomColorChange
+                          setShowBorderBox={setShowBorderBox}
+                          showBorderBox={showBorderBox}
+                          data={
+                            BusinessData?.mobileNumber ??
+                            businessDetails?.mobileNumber ??
+                            ToastAndroid.show(
+                              'Mobile Number is not available',
+                              ToastAndroid.LONG,
+                            )
+                          }
+                        />
+                      </Text>
                     </DragDrop>
                   ) : null}
                   {state?.whatsApp ? (
-                    <DragDrop
-                      onDrag={drag}
-                      onDrop={drop}
-                      // setShowModal={setShowModal}
-                    >
+                    <DragDrop onDrag={drag} onDrop={drop}>
                       <Text
                         style={{
                           // color: textColor,
@@ -843,6 +813,8 @@ const CustomSDK = ({route, navigation}) => {
                           position: 'absolute',
                         }}>
                         <CustomColorChange
+                          setShowBorderBox={setShowBorderBox}
+                          showBorderBox={showBorderBox}
                           data={
                             BusinessData?.whatsappNumber ??
                             businessDetails?.whatsappNumber ??
@@ -863,12 +835,13 @@ const CustomSDK = ({route, navigation}) => {
                     >
                       <Text
                         style={{
-                          // color: textColor,
                           fontSize: 18,
                           fontWeight: '700',
                           position: 'absolute',
                         }}>
                         <CustomColorChange
+                          setShowBorderBox={setShowBorderBox}
+                          showBorderBox={showBorderBox}
                           data={
                             BusinessData?.email ??
                             businessDetails?.email ??
@@ -882,11 +855,7 @@ const CustomSDK = ({route, navigation}) => {
                     </DragDrop>
                   ) : null}
                   {state?.location ? (
-                    <DragDrop
-                      onDrag={drag}
-                      onDrop={drop}
-                      // setShowModal={setShowModal}
-                    >
+                    <DragDrop onDrag={drag} onDrop={drop}>
                       <Text
                         style={{
                           // color: textColor,
@@ -896,6 +865,8 @@ const CustomSDK = ({route, navigation}) => {
                           textAlign: 'center',
                         }}>
                         <CustomColorChange
+                          setShowBorderBox={setShowBorderBox}
+                          showBorderBox={showBorderBox}
                           data={
                             BusinessData?.address
                               ? BusinessData?.address?.address +
@@ -1246,165 +1217,6 @@ const CustomSDK = ({route, navigation}) => {
             </>
           ) : null}
         </ScrollView>
-
-        {borderBox ? (
-          <>
-            <ScrollView
-              horizontal
-              contentContainerStyle={styles.frameContainer}
-              showsHorizontalScrollIndicator={false}>
-              <TouchableOpacity
-                style={{}}
-                onPress={() => {
-                  setControls(prev => ({
-                    ...prev,
-                    open: !prev.open,
-                  }));
-                }}>
-                <Text>Controls</Text>
-              </TouchableOpacity>
-            </ScrollView>
-
-            <View>
-              {controls.open ? (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}>
-                  {/* up and down */}
-                  <View>
-                    <TouchableOpacity
-                      onPress={() => setY(y - 10)}
-                      style={{
-                        backgroundColor: Colors.PRIMARY,
-                        padding: 10,
-                        borderRadius: 5,
-                        margin: 10,
-                        width: 50,
-                      }}>
-                      <AntDesign
-                        name="upcircleo"
-                        size={30}
-                        color={Colors.white}
-                      />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      onPress={() => setY(y + 10)}
-                      style={{
-                        backgroundColor: Colors.PRIMARY,
-                        padding: 10,
-                        borderRadius: 5,
-                        margin: 10,
-                        width: 50,
-                      }}>
-                      <AntDesign
-                        name="downcircleo"
-                        size={30}
-                        color={Colors.white}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                  {/* right and left */}
-                  <View>
-                    <TouchableOpacity
-                      onPress={() => setX(x + 10)}
-                      style={{
-                        backgroundColor: Colors.PRIMARY,
-                        padding: 10,
-                        borderRadius: 5,
-                        margin: 10,
-                        width: 50,
-                      }}>
-                      <AntDesign
-                        name="rightcircleo"
-                        size={30}
-                        color={Colors.white}
-                      />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => setX(x - 10)}
-                      style={{
-                        backgroundColor: Colors.PRIMARY,
-                        padding: 10,
-                        borderRadius: 5,
-                        margin: 10,
-                        width: 50,
-                      }}>
-                      <AntDesign
-                        name="leftcircleo"
-                        size={30}
-                        color={Colors.white}
-                      />
-                    </TouchableOpacity>
-                  </View>
-
-                  {/* font size up and down */}
-                  <View>
-                    <TouchableOpacity
-                      onPress={() =>
-                        setTools(prev => ({
-                          ...prev,
-                          fontSize: prev.fontSize + 2,
-                        }))
-                      }
-                      style={{
-                        backgroundColor: Colors.PRIMARY,
-                        padding: 10,
-                        borderRadius: 5,
-                        margin: 10,
-                        width: 50,
-                      }}>
-                      <MaterialCommunityIcons
-                        name="format-font-size-increase"
-                        size={30}
-                        color={Colors.white}
-                      />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() =>
-                        setTools(prev => ({
-                          ...prev,
-                          fontSize: prev.fontSize - 2,
-                        }))
-                      }
-                      style={{
-                        backgroundColor: Colors.PRIMARY,
-                        padding: 10,
-                        borderRadius: 5,
-                        margin: 10,
-                        width: 50,
-                      }}>
-                      <MaterialCommunityIcons
-                        name="format-font-size-decrease"
-                        size={30}
-                        color={Colors.white}
-                      />
-                    </TouchableOpacity>
-                  </View>
-
-                  {/* font color */}
-                  <TouchableOpacity
-                    onPress={() => setShowModal(true)}
-                    style={{
-                      backgroundColor: Colors.PRIMARY,
-                      padding: 10,
-                      borderRadius: 5,
-                      margin: 10,
-                      width: 50,
-                    }}>
-                    <MaterialCommunityIcons
-                      name="select-color"
-                      size={30}
-                      color={Colors.white}
-                    />
-                  </TouchableOpacity>
-                </View>
-              ) : null}
-            </View>
-          </>
-        ) : null}
 
         {/* effects on screen */}
         <ScrollView

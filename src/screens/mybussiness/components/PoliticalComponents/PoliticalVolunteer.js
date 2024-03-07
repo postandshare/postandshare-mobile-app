@@ -281,6 +281,8 @@ const PoliticalVolunteer = ({route, navigation}) => {
             formik={profileVolunteerFormik}
             name={'mobile'}
             label={'Your Mobile'}
+            keyboardType={'num-pad'}
+            maxLength={10}
           />
         </View>
         {/* whatsapp number */}
@@ -290,6 +292,8 @@ const PoliticalVolunteer = ({route, navigation}) => {
             formik={profileVolunteerFormik}
             name={'whatsappNumber'}
             label={'Whatsapp Number'}
+            keyboardType={'num-pad'}
+            maxLength={10}
           />
         </View>
         {/* about youself */}
