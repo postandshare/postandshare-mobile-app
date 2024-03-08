@@ -18,7 +18,6 @@ import moment from 'moment';
 import NavigationScreenName from '../../constants/NavigationScreenName';
 import CustomCarousel from '../../components/CustomCarousel';
 
-
 const Home = ({navigation}) => {
   const [value, setValue] = React.useState('photo');
   const [screenName, setScreenName] = useState('photo');
@@ -168,7 +167,7 @@ const Home = ({navigation}) => {
                   {/* <Text>carousel for the add offeres</Text> */}
 
                   {/* navigation card for birthday remainder */}
-                  <TouchableOpacity style={styles.navigation_box}>
+                  {/* <TouchableOpacity style={styles.navigation_box}>
                     <View style={{flexDirection: 'row'}}>
                       <View style={styles.navigation_box_content}>
                         <Image
@@ -188,7 +187,7 @@ const Home = ({navigation}) => {
                         />
                       </View>
                     </View>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
 
                   {/* container for showing the uploaded photo */}
                   <View style={styles.uploadpic_container}>
@@ -201,7 +200,8 @@ const Home = ({navigation}) => {
                       <Text style={styles.uploadpic_container_headerText}>
                         This Month
                       </Text>
-                      <TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate('MonthPhoto')}>
                         <Text style={styles.uploadpic_container_viewText}>
                           View All
                         </Text>
@@ -254,9 +254,13 @@ const Home = ({navigation}) => {
               )}
             </>
           ) : screenName === 'remainder' ? (
-            <Text  style={styles.box_tittle}>Remainder</Text>
+            <Text style={styles.box_tittle}>
+              This Feature is release in future release
+            </Text>
           ) : screenName === 'wallpaper' ? (
-            <Text  style={styles.box_tittle}>Wallpaper</Text>
+            <Text style={styles.box_tittle}>
+              This Feature is release in future release
+            </Text>
           ) : null}
         </View>
       </ScrollView>

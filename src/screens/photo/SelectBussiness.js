@@ -1,5 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {ScrollView, Text, ToastAndroid, View} from 'react-native';
+import {
+  RefreshControl,
+  ScrollView,
+  Text,
+  ToastAndroid,
+  View,
+} from 'react-native';
 import React, {useCallback} from 'react';
 import MyBussinessCard from '../../components/MyBussinessCard';
 import images from '../../constants/images';
@@ -49,7 +55,14 @@ const SelectBussiness = ({route, navigation}) => {
           })
         }
       />
-      <ScrollView contentContainerStyle={styles.root}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={getAllBusinessListFetching || getAllBusinessListLoading}
+            onRefresh={getAllBusinessListRefetch}
+          />
+        }
+        contentContainerStyle={styles.root}>
         {/* card for the bussiness name and update */}
 
         {getAllBusinessList_Data?.data?.list?.length === 0 && (

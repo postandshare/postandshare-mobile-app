@@ -13,11 +13,19 @@ import {
 } from 'react-native-gesture-handler';
 import Sizes from '../constants/Sizes';
 
-const DragDrop = ({children, onDrag, onDrop, setShowModal, setBorderBox}) => {
+const DragDrop = ({
+  children,
+  onDrag,
+  onDrop,
+  setShowModal,
+  setBorderBox,
+  intialX = 0,
+  intialY = 0,
+}) => {
   const panRef = React.createRef();
   const pinchRef = React.createRef();
-  const x = useSharedValue(0);
-  const y = useSharedValue(0);
+  const x = useSharedValue(intialX);
+  const y = useSharedValue(intialY);
   const scale = useSharedValue(1);
   const savedScale = useSharedValue(1);
 
@@ -91,12 +99,12 @@ const DragDrop = ({children, onDrag, onDrop, setShowModal, setBorderBox}) => {
             onGestureEvent={pinchGesture}>
             <Animated.View style={animatedStyleForPinch}>
               <Pressable
-                // onPress={() => console.log('pressed')}
-                // onLongPress={() => 
-                //   // setBorderBox(true)
-                //   setShowModal(true)
-                // }
-                >
+              // onPress={() => console.log('pressed')}
+              // onLongPress={() =>
+              //   // setBorderBox(true)
+              //   setShowModal(true)
+              // }
+              >
                 {children}
               </Pressable>
             </Animated.View>

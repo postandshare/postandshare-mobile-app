@@ -1,8 +1,7 @@
 import axios from 'axios';
-import { store } from './store';
-import { setLoginState, setLogout } from './reducer/AuthSlice';
+import {store} from './store';
+import {setLoginState, setLogout} from './reducer/AuthSlice';
 import Config from 'react-native-config';
-
 
 const baseURL = 'https://postandshare-content-service-zm5xloquaa-em.a.run.app';
 const authAxiosInstance = axios.create({
@@ -14,13 +13,13 @@ const authAxiosInstance = axios.create({
 });
 authAxiosInstance.interceptors.request.use(async req => {
   const {
-    auth: {login_Data}
+    auth: {login_Data},
   } = store.getState();
-
 
   console.log('in auth url', req?.url, req?.params, req?.data);
   try {
     const currentTime = new Date().getTime();
+
     if (currentTime > login_Data?.exp) {
       const body = {
         refreshToken: login_Data?.refreshToken,
@@ -32,7 +31,7 @@ authAxiosInstance.interceptors.request.use(async req => {
       };
       const {dispatch} = store;
       dispatch(setLoginState(newData));
-      req.headers['Authorization'] = `Bearer ${data?.accessToken?.token}`;
+      req.headers['Authorization'] = `Bearer ${data?.accessToken}`;
       return req;
     }
     // console.log("working");
@@ -42,8 +41,8 @@ authAxiosInstance.interceptors.request.use(async req => {
   }
 
   req.headers['Authorization'] = `Bearer ${login_Data?.token}`;
-
+  // console.log(login_Data?.accessToken, 'in auth')
   return req;
 });
 
-export {authAxiosInstance };
+export {authAxiosInstance};

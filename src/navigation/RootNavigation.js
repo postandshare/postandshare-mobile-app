@@ -25,6 +25,7 @@ import PhotoNavigator from '../screens/photo/PhotoNavigator';
 import CustomSDK from '../screens/customSDK';
 import ShareSave from '../screens/customSDK/ShareSave';
 import HelpSupport from '../screens/helpSupport';
+import MonthPhotos from '../screens/thismonth';
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -138,6 +139,7 @@ const Routes = () => {
                   name={NavigationScreenName.HELPSUPPORT}
                   component={HelpSupport}
                 />
+                <Stack.Screen name="MonthPhoto" component={MonthPhotos} />
               </>
             )
           ) : (

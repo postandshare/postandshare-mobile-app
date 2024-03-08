@@ -5,13 +5,14 @@ import {
   ImageBackground,
   Keyboard,
   PermissionsAndroid,
+  RefreshControl,
   ScrollView,
   Text,
   ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import styles from './style';
 import TopHeader from '../../components/TopHeader';
 import Colors from '../../constants/Colors';
@@ -24,7 +25,13 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import Images from '../../constants/images';
 import DragDrop from '../../components/DragDrop';
 import ViewShot from 'react-native-view-shot';
-import {Button, Dialog, Portal, TextInput} from 'react-native-paper';
+import {
+  ActivityIndicator,
+  Button,
+  Dialog,
+  Portal,
+  TextInput,
+} from 'react-native-paper';
 import FontFamily from '../../constants/FontFamily';
 import ColorPicker, {
   Panel1,
@@ -37,12 +44,13 @@ import {useQuery} from '@tanstack/react-query';
 import {getOrgFrame} from '../../services/userServices/frame.services';
 import {useFocusEffect} from '@react-navigation/native';
 import Loader from '../../components/Loader';
+import Sizes from '../../constants/Sizes';
 
 const CustomColorChange = ({data, setShowBorderBox, showBorderBox}) => {
   const [color, setColor] = useState(Colors.PRIMARY);
   const [showModal, setShowModal] = useState(false);
   const [fontWeight, setFontWeight] = useState('normal');
-  const [fontSize, setFontSize] = useState(10);
+  const [fontSize, setFontSize] = useState(14);
   const [fontStyle, setFontStyle] = useState('normal');
   const [textDecoration, setTextDecoration] = useState('none');
   const [textAlign, setTextAlign] = useState('left');
@@ -155,18 +163,24 @@ const CustomColorChange = ({data, setShowBorderBox, showBorderBox}) => {
 const FrameSelection = ({
   setFrameImg,
   setShowFrameImg,
-  setShowFrame2,
-  setShowFrame1,
-  setShowFrame3,
-  setFrame,
+  state,
+  setState,
   item,
   setSelectedIndex,
   selectedIndex,
   showFrameImg,
   index,
+  position,
+  setPosition,
+  logoPosition,
+  setLogoPosition,
+  setMobileNumPosition,
+  setEmailPosition,
+  setLocationPosition,
+  setWhatsAppPosition,
 }) => {
+  const [laoding, setLoading] = useState(false);
   const isSelected = selectedIndex === index;
-
   return (
     <TouchableOpacity
       style={[
@@ -175,22 +189,72 @@ const FrameSelection = ({
           : {backgroundColor: Colors.white},
         styles.frame,
       ]}
-      onPress={() => {
-        setShowFrame1(false);
-        setShowFrame2(false);
-        setShowFrame3(false);
-        setFrame(false);
+      onPress={async () => {
+        setLoading(true);
+        await setLogoPosition({
+          x: item?.contentLocation?.logo?.x_axis ?? 0,
+          y: item?.contentLocation?.logo?.y_axis ?? 0,
+        });
+        await setMobileNumPosition({
+          x: item?.contentLocation?.mobileNumber?.x_axis ?? 100,
+          y: item?.contentLocation?.mobileNumber?.y_axis ?? 200,
+        });
+        await setEmailPosition({
+          x: item?.contentLocation?.email?.x_axis ?? 50,
+          y: item?.contentLocation?.email?.y_axis ?? 100,
+        });
+        await setLocationPosition({
+          x: item?.contentLocation?.address?.x_axis ?? 80,
+          y: item?.contentLocation?.address?.y_axis ?? 100,
+        });
+        await setWhatsAppPosition({
+          x: item?.contentLocation?.whatsappNumber?.x_axis ?? 120,
+          y: item?.contentLocation?.whatsappNumber?.y_axis ?? 100,
+        });
+
+        setState(prev => ({
+          ...prev,
+          location: false,
+          mobile: false,
+          email: false,
+          whatsApp: false,
+          logo: false,
+        }));
         setShowFrameImg(true);
         setFrameImg(item?.framePic);
         setSelectedIndex(index);
+
+        setState(prev => ({
+          ...prev,
+          location: true,
+          mobile: true,
+          email: true,
+          whatsApp: true,
+          logo: true,
+        }));
+        setLoading(false);
       }}>
-      <Text style={styles.frameText}>{item?.frameCode}</Text>
+      <Image
+        source={{uri: item?.framePic}}
+        style={{
+          height: 50,
+          width: 50,
+          borderRadius: 5,
+        }}
+      />
+
+      {/* <Text style={styles.frameText}>{item?.frameCode}</Text> */}
     </TouchableOpacity>
   );
 };
 
 const CustomSDK = ({route, navigation}) => {
   const {picData, businessDetails} = route.params || {};
+  const [logoPosition, setLogoPosition] = useState({x: 0, y: 0});
+  const [mobileNumPosition, setMobileNumPosition] = useState({x: 0, y: 0});
+  const [emailPosition, setEmailPosition] = useState({x: 0, y: 0});
+  const [whatsAppPosition, setWhatsAppPosition] = useState({x: 0, y: 0});
+  const [locationPosition, setLocationPosition] = useState({x: 0, y: 0});
 
   const [showBorderBox, setShowBorderBox] = useState(false);
 
@@ -216,8 +280,7 @@ const CustomSDK = ({route, navigation}) => {
   const [fontFamily, setFontFamily] = useState('Arial');
   const [showFontFamily, setShowFontFamily] = useState(false);
   const [showCross, setShowCross] = useState(true);
-  const [x, setX] = useState(0);
-  const [y, setY] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [state, setState] = useState({
     location: false,
@@ -228,6 +291,7 @@ const CustomSDK = ({route, navigation}) => {
     text: '',
     showText: false,
   });
+
   const viewShotRef = useRef();
 
   const uploadePhoto = async (path, mime) => {
@@ -391,6 +455,8 @@ const CustomSDK = ({route, navigation}) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []),
   );
+
+  console.log(mobileNumPosition , whatsAppPosition  , "mobile and whats app position")
 
   return (
     <>
@@ -566,6 +632,12 @@ const CustomSDK = ({route, navigation}) => {
       </Portal>
 
       <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={getOrgFrameFetching || getOrgFrameLoading}
+            onRefresh={getOrgFrameRefetch}
+          />
+        }
         contentContainerStyle={styles.root}
         showsVerticalScrollIndicator={false}>
         {/* choose image area */}
@@ -751,7 +823,14 @@ const CustomSDK = ({route, navigation}) => {
                 {/* logo and other things that needs to be implemented */}
                 <View style={{zIndex: 3}}>
                   {state?.logo ? (
-                    <DragDrop onDrag={drag} onDrop={drop}>
+                    <DragDrop
+                      onDrag={drag}
+                      onDrop={drop}
+                      intialX={logoPosition?.x}
+                      intialY={logoPosition?.y}
+                      // intialX={position?.logo?.x}
+                      // intialY={position?.logo?.y}
+                    >
                       <Image
                         source={
                           BusinessData
@@ -781,11 +860,16 @@ const CustomSDK = ({route, navigation}) => {
                     </DragDrop>
                   ) : null}
                   {state?.mobile ? (
-                    <DragDrop onDrag={drag} onDrop={drop}>
-                      <Text
+                    <DragDrop
+                      onDrag={drag}
+                      onDrop={drop}
+                      intialX={mobileNumPosition?.x}
+                      intialY={mobileNumPosition?.y}
+                      // intialX={150}
+                      // intialY={300}
+                    >
+                      <View
                         style={{
-                          fontSize: 18,
-                          fontWeight: '700',
                           position: 'absolute',
                         }}>
                         <CustomColorChange
@@ -800,11 +884,15 @@ const CustomSDK = ({route, navigation}) => {
                             )
                           }
                         />
-                      </Text>
+                      </View>
                     </DragDrop>
                   ) : null}
                   {state?.whatsApp ? (
-                    <DragDrop onDrag={drag} onDrop={drop}>
+                    <DragDrop
+                      onDrag={drag}
+                      onDrop={drop}
+                      intialX={whatsAppPosition?.x}
+                      intialY={whatsAppPosition?.y}>
                       <Text
                         style={{
                           // color: textColor,
@@ -831,6 +919,8 @@ const CustomSDK = ({route, navigation}) => {
                     <DragDrop
                       onDrag={drag}
                       onDrop={drop}
+                      intialX={emailPosition?.x}
+                      intialY={emailPosition?.y}
                       // setShowModal={setShowModal}
                     >
                       <Text
@@ -855,7 +945,11 @@ const CustomSDK = ({route, navigation}) => {
                     </DragDrop>
                   ) : null}
                   {state?.location ? (
-                    <DragDrop onDrag={drag} onDrop={drop}>
+                    <DragDrop
+                      intialX={locationPosition?.x}
+                      intialY={locationPosition?.y}
+                      onDrag={drag}
+                      onDrop={drop}>
                       <Text
                         style={{
                           // color: textColor,
@@ -903,7 +997,8 @@ const CustomSDK = ({route, navigation}) => {
                     <DragDrop
                       onDrag={drag}
                       onDrop={drop}
-                      setShowModal={setShowModal}>
+                      setShowModal={setShowModal}
+                      >
                       <Text
                         style={{
                           color: textColor,
@@ -921,23 +1016,43 @@ const CustomSDK = ({route, navigation}) => {
                 {/* frames of the images */}
                 <View style={{zIndex: 2}}>
                   {showFrameImg ? (
-                    <Image
-                      source={
-                        framImg
-                          ? {uri: framImg}
-                          : ToastAndroid.show(
-                              'Frame is not available please provide better link',
-                              ToastAndroid.LONG,
-                            )
-                      }
-                      style={{
-                        height: '100%',
-                        alignSelf: 'center',
-                        width: '100%',
-                      }}
-                    />
+                    <>
+                      {isLoading && (
+                        <ActivityIndicator
+                          style={{
+                            position: 'absolute',
+                            alignSelf: 'center',
+                            top: '45%',
+                          }}
+                          size="large"
+                          color={Colors.PRIMARY}
+                        />
+                      )}
+                      <Image
+                        loadingIndicatorSource={
+                          <ActivityIndicator
+                            size="large"
+                            color={Colors.PRIMARY}
+                          />
+                        }
+                        onLoad={() => setIsLoading(false)}
+                        source={
+                          framImg
+                            ? {uri: framImg}
+                            : ToastAndroid.show(
+                                'Frame is not available please provide better link',
+                                ToastAndroid.LONG,
+                              )
+                        }
+                        style={{
+                          height: '100%',
+                          alignSelf: 'center',
+                          width: '100%',
+                        }}
+                      />
+                    </>
                   ) : null}
-                  {!getOrgFrame_Data?.data?.list?.length > 0 ? (
+                  {/* {!getOrgFrame_Data?.data?.list?.length > 0 ? (
                     <>
                       {showFrame ? (
                         <Image
@@ -977,7 +1092,7 @@ const CustomSDK = ({route, navigation}) => {
                         />
                       ) : null}
                     </>
-                  ) : null}
+                  ) : null} */}
                 </View>
                 {showCross ? (
                   <TouchableOpacity
@@ -1042,7 +1157,7 @@ const CustomSDK = ({route, navigation}) => {
               LOGO
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={[
               state?.image ? {backgroundColor: Colors.PRIMARY} : {},
               styles.additionalDetails,
@@ -1054,7 +1169,7 @@ const CustomSDK = ({route, navigation}) => {
                 state?.image ? {color: Colors.white} : {color: Colors.TEXT1}
               }
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             style={[
               state?.mobile ? {backgroundColor: Colors.PRIMARY} : {},
@@ -1095,7 +1210,7 @@ const CustomSDK = ({route, navigation}) => {
               color={state?.email ? Colors.white : Colors.TEXT1}
             />
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={[
               state?.facebook ? {backgroundColor: Colors.PRIMARY} : {},
               styles.additionalDetails,
@@ -1105,7 +1220,7 @@ const CustomSDK = ({route, navigation}) => {
               size={30}
               color={state?.facebook ? Colors.white : Colors.TEXT1}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </ScrollView>
 
         {/* for frame selection  */}
@@ -1127,10 +1242,17 @@ const CustomSDK = ({route, navigation}) => {
               setShowFrame3={setShowFrame3}
               setFrame={setFrame}
               key={index}
+              setLogoPosition={setLogoPosition}
+              state={state}
+              setState={setState}
+              setMobileNumPosition={setMobileNumPosition}
+              setEmailPosition={setEmailPosition}
+              setLocationPosition={setLocationPosition}
+              setWhatsAppPosition={setWhatsAppPosition}
             />
           ))}
 
-          {!getOrgFrame_Data?.data?.list?.length > 0 ? (
+          {/* {getOrgFrame_Data?.data?.list?.length > 0 ? (
             <>
               <TouchableOpacity
                 style={[
@@ -1196,26 +1318,8 @@ const CustomSDK = ({route, navigation}) => {
                 }}>
                 <Text style={styles.frameText}>Frame 4</Text>
               </TouchableOpacity>
-              <View style={styles.frame}>
-                <Text style={styles.frameText}>Frame 5</Text>
-              </View>
-              <View style={styles.frame}>
-                <Text style={styles.frameText}>Frame 6</Text>
-              </View>
-              <View style={styles.frame}>
-                <Text style={styles.frameText}>Frame 7</Text>
-              </View>
-              <View style={styles.frame}>
-                <Text style={styles.frameText}>Frame 8</Text>
-              </View>
-              <View style={styles.frame}>
-                <Text style={styles.frameText}>Frame 9</Text>
-              </View>
-              <View style={styles.frame}>
-                <Text style={styles.frameText}>Frame 10</Text>
-              </View>
             </>
-          ) : null}
+          ) : null} */}
         </ScrollView>
 
         {/* effects on screen */}
