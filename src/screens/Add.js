@@ -34,7 +34,21 @@ const Add = ({navigation}) => {
         onPresProfile={onPresProfile}
       />
       <SafeAreaView style={styles.screen}>
-        <DragDrop onDrag={drag} onDrop={drop}>
+        <View
+          style={{
+            flex: 1,
+            alignSelf: 'center',
+            justifyContent: 'center',
+          }}>
+          <Text
+            style={{
+              fontSize: 20,
+              color: 'black',
+            }}>
+            This Feature is released in the next version
+          </Text>
+        </View>
+        {/* <DragDrop onDrag={drag} onDrop={drop}>
           <View style={styles.balls} />
         </DragDrop>
         <DragDrop onDrag={drag} onDrop={drop}>
@@ -42,7 +56,7 @@ const Add = ({navigation}) => {
         </DragDrop>
         <View style={styles.pit}>
           <Text style={styles.text}>pit</Text>
-        </View>
+        </View> */}
       </SafeAreaView>
     </>
   );

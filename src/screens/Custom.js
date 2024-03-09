@@ -4,6 +4,7 @@ import {
   Image as RNImage,
   Text as RNText,
   PanResponder,
+  View,
   useWindowDimensions,
   ToastAndroid,
 } from 'react-native';
@@ -135,7 +136,23 @@ const Custom = ({navigation}) => {
         onPressNotification={onPressNotification}
         onPresProfile={onPresProfile}
       />
-      <GestureDetector gesture={gesture}>
+       <View
+          style={{
+            flex: 1,
+            alignSelf: 'center',
+            justifyContent: 'center',
+          }}>
+          <RNText
+            style={{
+              fontSize: 20,
+              color: 'black',
+            }}>
+            This Feature is released in the next version
+          </RNText>
+        </View>
+
+
+      {/* <GestureDetector gesture={gesture}>
         <Canvas ref={canvasRef} style={{flex: 1}}>
         <Fill color="white" />
           {image ? (
@@ -150,14 +167,14 @@ const Custom = ({navigation}) => {
               />
                {/* <Image image={image} fit="contain" x={0} y={0} width={256} height={256}/> */}
             </>
-          ) : null}
-          <Circle cx={translateX} cy={translateY} r={20} color="#3E3E" />
+      //     ) : null}
+      //     <Circle cx={translateX} cy={translateY} r={20} color="#3E3E" />
 
 
-          <Text x={0} y={0} text="Hello World"  />
-        </Canvas>
-      </GestureDetector>
-
+      //     <Text x={0} y={0} text="Hello World"  />
+      //   </Canvas>
+      // </GestureDetector> */}
+/* 
       <Button
         title="Capture"
         onPress={async () => {
@@ -182,9 +199,31 @@ const Custom = ({navigation}) => {
               });
           }
         }}
-      />
+        onPress={async () => {
+          const skImg = canvasRef.current?.makeImageSnapshot();
 
-      {capturedImage ? (
+          if (skImg) {
+            const base64 = skImg.encodeToBase64(ImageFormat.PNG, 100);
+            const uri = 'data:image/png;base64,' + base64;
+            setCapturedImage(uri);
+            const imageName = `myImage_${new Date().getTime()}.jpg`;
+
+            // Define the path to save the image
+            const path = `${RNFS.CachesDirectoryPath}/${imageName}`;
+            // Write the file
+            RNFS.writeFile(path, base64, 'base64')
+              .then(async () => {
+                console.log('Image saved to', path);
+                await savePicture(path);
+              })
+              .catch(error => {
+                console.error(error);
+              });
+          }
+        }}
+      /> *
+
+      {/* {capturedImage ? (
         <>
           <RNImage
             source={{uri: capturedImage}}
@@ -192,8 +231,12 @@ const Custom = ({navigation}) => {
           />
           <Button title="Remove" onPress={() => setCapturedImage('')} />
         </>
-      ) : null}
-    </>
+      ) : null} */
+
+
+
+    // Remove the problematic code block
+    // </>
   );
 };
 

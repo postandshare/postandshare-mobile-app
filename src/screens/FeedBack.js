@@ -19,12 +19,7 @@ const FeedBack = () => {
       return;
     }
 
-    console.log(
-        'rating',
-        onPressRating,
-        'feedback',
-        feedback,
-    )
+    console.log('rating', onPressRating, 'feedback', feedback);
     // rateComplaintSolutionMutate({
     //   complaintDocId: complainId,
     //   satisfactionRating: String(onPressRating),
@@ -39,11 +34,21 @@ const FeedBack = () => {
         <View style={styles.box_rate}>
           <View>
             <Text
-              style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>
+              style={{
+                fontSize: 20,
+                fontWeight: 'bold',
+                textAlign: 'center',
+                color: Colors.PRIMARY,
+              }}>
               Rate Your Experience
             </Text>
 
-            <Text style={{fontSize: 15, textAlign: 'center'}}>
+            <Text
+              style={{
+                fontSize: 15,
+                textAlign: 'center',
+                color: Colors.PRIMARY,
+              }}>
               How was your overall experience?
             </Text>
           </View>
@@ -62,8 +67,13 @@ const FeedBack = () => {
         </View>
         {/* container for typing */}
         <View style={styles.feedback_container}>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>Feedback</Text>
-          <Text style={{fontSize: 15}}>Please write your feedback</Text>
+          <Text
+            style={{fontSize: 20, fontWeight: 'bold', color: Colors.PRIMARY}}>
+            Feedback
+          </Text>
+          <Text style={{fontSize: 15, color: Colors.PRIMARY}}>
+            Please write your feedback
+          </Text>
           <TextInput
             style={{
               height: 100,

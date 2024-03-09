@@ -2,21 +2,30 @@
 import {
   FlatList,
   Image,
+  RefreshControl,
   ScrollView,
   Text,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import styles from './style';
 import DashboardTopHeader from '../../components/DashboardTopHeader';
-import Images, {uploadedImages} from '../../constants/images';
+import Images from '../../constants/images';
 import Sizes from '../../constants/Sizes';
 import Colors from '../../constants/Colors';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import moment from 'moment';
-import NavigationScreenName from '../../constants/NavigationScreenName';
 import CustomCarousel from '../../components/CustomCarousel';
+import FlatListComponent from './components/FlatListComponent';
+import {useQuery} from '@tanstack/react-query';
+import {
+  getTemplatesByBusiness,
+  getTemplatesByDate,
+  getTemplatesForQuotes,
+  getTemplatesOfGreatLeaders,
+  getTrendingTemlpates,
+} from '../../services/userServices/dashboard.services';
+import {useFocusEffect} from '@react-navigation/native';
 
 const Home = ({navigation}) => {
   const [value, setValue] = React.useState('photo');
@@ -30,6 +39,110 @@ const Home = ({navigation}) => {
     navigation.navigate('ProfileNavigator');
   };
 
+  const {
+    isLoading: getTemplatesForQuotesLoading,
+    isFetching: getTemplatesForQuotesFetching,
+    refetch: getTemplatesForQuotesRefetch,
+    data: getTemplatesForQuotes_Data,
+    isError: getTemplatesForQuotes_isError,
+  } = useQuery({
+    queryKey: ['getTemplatesForQuotes'],
+    queryFn: () => getTemplatesForQuotes(),
+    onSuccess: success => {
+      // console.log(success?.data , "success in my bussiness")
+    },
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
+  const {
+    isLoading: getTemplatesByDateLoading,
+    isFetching: getTemplatesByDateFetching,
+    refetch: getTemplatesByDateRefetch,
+    data: getTemplatesByDate_Data,
+    isError: getTemplatesByDate_isError,
+  } = useQuery({
+    queryKey: ['getTemplatesByDate'],
+    queryFn: () => getTemplatesByDate(),
+    onSuccess: success => {
+      // console.log(success?.data , "success in my bussiness")
+    },
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
+  const {
+    isLoading: getTemplatesOfGreatLeadersLoading,
+    isFetching: getTemplatesOfGreatLeadersFetching,
+    refetch: getTemplatesOfGreatLeadersRefetch,
+    data: getTemplatesOfGreatLeaders_Data,
+    isError: getTemplatesOfGreatLeaders_isError,
+  } = useQuery({
+    queryKey: ['getTemplatesOfGreatLeaders'],
+    queryFn: () => getTemplatesOfGreatLeaders(),
+    onSuccess: success => {
+      // console.log(success?.data , "success in my bussiness")
+    },
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
+  const {
+    isLoading: getTemplatesByBusinessLoading,
+    isFetching: getTemplatesByBusinessFetching,
+    refetch: getTemplatesByBusinessRefetch,
+    data: getTemplatesByBusiness_Data,
+    isError: getTemplatesByBusiness_isError,
+  } = useQuery({
+    queryKey: ['getTemplatesByBusiness'],
+    queryFn: () => getTemplatesByBusiness(),
+    onSuccess: success => {
+      // console.log(success?.data , "success in my bussiness")
+    },
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
+  const {
+    isLoading: getTrendingTemlpatesLoading,
+    isFetching: getTrendingTemlpatesFetching,
+    refetch: getTrendingTemlpatesRefetch,
+    data: getTrendingTemlpates_Data,
+    isError: getTrendingTemlpates_isError,
+  } = useQuery({
+    queryKey: ['getTrendingTemlpates'],
+    queryFn: () => getTrendingTemlpates(),
+    onSuccess: success => {
+      // console.log(success?.data , "success in my bussiness")
+    },
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
+
+  useFocusEffect(
+    useCallback(() => {
+      getTemplatesByDateRefetch();
+      getTemplatesForQuotesRefetch();
+      getTemplatesOfGreatLeadersRefetch();
+      getTemplatesByBusinessRefetch();
+      getTrendingTemlpatesRefetch();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+      getTemplatesForQuotesRefetch,
+      getTemplatesByDateRefetch,
+      navigation,
+      getTemplatesByBusinessRefetch,
+      getTemplatesOfGreatLeadersRefetch,
+      getTrendingTemlpatesRefetch,
+    ]),
+  );
+
   return (
     <>
       <DashboardTopHeader
@@ -37,7 +150,25 @@ const Home = ({navigation}) => {
         onPressNotification={onPressNotification}
         onPresProfile={onPresProfile}
       />
-      <ScrollView nestedScrollEnabled>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={
+              getTemplatesByDateLoading ||
+              getTemplatesForQuotesLoading ||
+              getTemplatesOfGreatLeadersLoading ||
+              getTemplatesByDateFetching ||
+              getTemplatesForQuotesFetching ||
+              getTemplatesOfGreatLeadersFetching
+            }
+            onRefresh={() => {
+              getTemplatesByDateRefetch();
+              getTemplatesForQuotesRefetch();
+              getTemplatesOfGreatLeadersRefetch();
+            }}
+          />
+        }
+        nestedScrollEnabled>
         <View style={styles.root}>
           {/* card for the  photo and evnet and wallpaper */}
           <View style={styles.box_card_wrapper}>
@@ -160,85 +291,53 @@ const Home = ({navigation}) => {
                     Trending
                   </Text>
                   <View style={{padding: 5}}>
-                    <CustomCarousel width={'98%'} />
-                  </View>
-
-                  {/* here carousel for the add offer details whenever there is add offer docid is setup*/}
-                  {/* <Text>carousel for the add offeres</Text> */}
-
-                  {/* navigation card for birthday remainder */}
-                  {/* <TouchableOpacity style={styles.navigation_box}>
-                    <View style={{flexDirection: 'row'}}>
-                      <View style={styles.navigation_box_content}>
-                        <Image
-                          source={Images.bell_icon}
-                          style={styles.birthday_icon}
-                        />
-                        <Text style={styles.navigation_box_text}>
-                          Birthday Remainder
-                        </Text>
-                      </View>
-                      <View style={{justifyContent: 'center'}}>
-                        <AntDesign
-                          name="right"
-                          size={20}
-                          color={Colors.TEXT1}
-                          style={{marginRight: 5}}
-                        />
-                      </View>
-                    </View>
-                  </TouchableOpacity> */}
-
-                  {/* container for showing the uploaded photo */}
-                  <View style={styles.uploadpic_container}>
-                    {/* text part of the container */}
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
-                      <Text style={styles.uploadpic_container_headerText}>
-                        This Month
-                      </Text>
-                      <TouchableOpacity
-                        onPress={() => navigation.navigate('MonthPhoto')}>
-                        <Text style={styles.uploadpic_container_viewText}>
-                          View All
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-
-                    {/* flatlist for rendering the photos */}
-                    <FlatList
-                      horizontal
-                      showsHorizontalScrollIndicator={false}
-                      data={uploadedImages}
-                      renderItem={({item}) => (
-                        <TouchableOpacity
-                          onPress={() =>
-                            navigation.navigate(
-                              NavigationScreenName.PHOTO_NAVIGATOR,
-                              {
-                                initialRouteName: item,
-                              },
-                            )
-                          }
-                          style={styles.uploadpic_container_image_view}>
-                          <View style={styles.uploadpic_container_dateview}>
-                            <Text style={styles.uploadpic_container_date}>
-                              {moment().format('MMM Do')}
-                            </Text>
-                          </View>
-                          <Image
-                            source={item?.pic}
-                            style={styles.uploadpic_container_image}
-                          />
-                        </TouchableOpacity>
-                      )}
-                      keyExtractor={index => index._id}
-                      extraData={uploadedImages}
+                    <CustomCarousel
+                      width={'98%'}
+                      navigation={navigation}
+                      data={getTrendingTemlpates_Data?.data?.list}
                     />
                   </View>
+                  {/* container for showing the templates by date */}
+                  {getTemplatesByDate_Data?.data?.list?.length > 0 ? (
+                    <FlatListComponent
+                      navigation={navigation}
+                      data={getTemplatesByDate_Data?.data?.list}
+                      byLabel={'By Date'}
+                    />
+                  ) : null}
+
+                  {/* container for showing the templates for quotes */}
+                  {getTemplatesForQuotes_Data?.data?.list?.length > 0 ? (
+                    <FlatListComponent
+                      navigation={navigation}
+                      data={getTemplatesForQuotes_Data?.data?.list}
+                      byLabel={'For Quotes'}
+                    />
+                  ) : null}
+                  {/* container for showing the templates for great leaders */}
+                  {getTemplatesOfGreatLeaders_Data?.data?.list?.length > 0 ? (
+                    <FlatListComponent
+                      navigation={navigation}
+                      data={getTemplatesForQuotes_Data?.data?.list}
+                      byLabel={'For Great Leaders'}
+                    />
+                  ) : null}
+
+                  {/* CONTAINER FOR ALL TYPES OF BUSSINESS THAT USER HAVE IN HIS PROFILE */}
+                  {getTemplatesByBusiness_Data?.data?.list?.length > 0
+                    ? getTemplatesByBusiness_Data?.data?.list?.map(
+                        (item, index) => {
+                          return (
+                            <FlatListComponent
+                              key={index}
+                              navigation={navigation}
+                              data={item?.photoList}
+                              byLabel={item?.businessName}
+                            />
+                          );
+                        },
+                      )
+                    : null}
                 </>
               ) : (
                 <Text

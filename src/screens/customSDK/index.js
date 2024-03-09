@@ -40,11 +40,13 @@ import ColorPicker, {
   OpacitySlider,
   HueSlider,
 } from 'reanimated-color-picker';
-import {useQuery} from '@tanstack/react-query';
+import {useMutation, useQuery} from '@tanstack/react-query';
 import {getOrgFrame} from '../../services/userServices/frame.services';
 import {useFocusEffect} from '@react-navigation/native';
 import Loader from '../../components/Loader';
 import Sizes from '../../constants/Sizes';
+import uploadFile from '../../utils/uploadFile';
+import {addUserPost} from '../../services/userServices/userpost.services';
 
 const CustomColorChange = ({data, setShowBorderBox, showBorderBox}) => {
   const [color, setColor] = useState(Colors.PRIMARY);
@@ -292,27 +294,34 @@ const CustomSDK = ({route, navigation}) => {
     showText: false,
   });
 
+
   const viewShotRef = useRef();
+
+  const {mutate: addUserPostMuatate, isLoading: addUserPostLoading} =
+    useMutation(addUserPost, {
+      onSuccess: success => {
+        ToastAndroid.show(success?.data?.message, ToastAndroid.SHORT);
+      },
+      onError: error => {
+        ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
+      },
+    });
 
   const uploadePhoto = async (path, mime) => {
     try {
       setImageUploading(true);
-      // const uplode = await uploadFile({
-      //   filePath: {path: path},
-      //   fileLocation: `public/${Date.now()}`,
-      //   contentType: mime,
-      // });
-      // setImageUploading(false);
-
-      // setPicUrl(uplode.fileURL);
-      // console.log(uplode.fileURL, 'in file url');
-
-      //await updateUserProfile({profilePic: uplode.fileURL});
-      // personalInfoFormik.setValues(prev => ({
-      //   ...prev,
-      //   imageUploading: false,
-      //   profilePic: uplode.fileURL,
-      // }));
+      const uplode = await uploadFile({
+        filePath: {path: path},
+        fileLocation: `public/${Date.now()}`,
+        contentType: mime,
+      });
+      addUserPostMuatate({
+        postLink: uplode.fileURL,
+        businessDocId: businessDetails?._id,
+        businessType: businessDetails?.businessType,
+      });
+      setImageUploading(false);
+      navigation.navigate('ShareSave', {picUrl: path});
     } catch (error) {
       setImageUploading(false);
     }
@@ -421,7 +430,7 @@ const CustomSDK = ({route, navigation}) => {
       logo: false,
     }));
     setShowFrame1(false);
-    navigation.navigate('ShareSave', {picUrl: uri});
+    uploadePhoto(uri, 'image/png');
   };
 
   const hideDialog = () => setVisible(false);
@@ -455,12 +464,10 @@ const CustomSDK = ({route, navigation}) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []),
   );
-
-  console.log(mobileNumPosition , whatsAppPosition  , "mobile and whats app position")
-
   return (
     <>
       <TopHeader titile={'Custom SDK'} next={'Next'} onPress={onCapture} />
+      <Loader open={imageUploading || addUserPostLoading} text="Loading..." />
       <Loader
         open={getOrgFrameLoading || getOrgFrameFetching}
         text="Loading..."
@@ -812,7 +819,7 @@ const CustomSDK = ({route, navigation}) => {
           <ViewShot ref={viewShotRef} options={{format: 'jpg', quality: 0.9}}>
             <View style={styles.chooseImageContainer}>
               <ImageBackground
-                source={imgData}
+                source={imgData ? {uri: imgData}: null}
                 resizeMode="cover"
                 style={{
                   zIndex: 1,
@@ -997,8 +1004,7 @@ const CustomSDK = ({route, navigation}) => {
                     <DragDrop
                       onDrag={drag}
                       onDrop={drop}
-                      setShowModal={setShowModal}
-                      >
+                      setShowModal={setShowModal}>
                       <Text
                         style={{
                           color: textColor,

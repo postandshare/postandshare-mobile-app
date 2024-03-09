@@ -4,13 +4,12 @@ import {
   ImageBackground,
   Pressable,
   RefreshControl,
-  ScrollView,
   Text,
   ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import Images from '../../constants/images';
 import authStyle from './authStyle';
 import Colors from '../../constants/Colors';
@@ -24,7 +23,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {getRegionalLanguages} from '../../services/userServices/monitoring.services';
 import NavigationScreenName from '../../constants/NavigationScreenName';
 import {useSelector} from 'react-redux';
-import {store} from '../../services/store';
+
 
 const LanguageSelection = ({navigation}) => {
   const {isProfileUpdated} = useSelector(store => store.commonStore);
@@ -139,7 +138,11 @@ const LanguageSelection = ({navigation}) => {
         keyExtractor={item => item?._id}
         ListHeaderComponent={
           <View style={authStyle.middleContainer}>
-            <Text style={[authStyle.input, {fontSize: 20, fontWeight: '500'}]}>
+            <Text
+              style={[
+                authStyle.input,
+                {fontSize: 20, fontWeight: '500', color: Colors.SECONDRY},
+              ]}>
               Regional Language:-
             </Text>
           </View>
@@ -159,7 +162,14 @@ const LanguageSelection = ({navigation}) => {
                 });
               }
             }}
-            style={{flex: 1}}>
+            style={[
+              authStyle.langaugeContainer,
+              selectReginalLan?.includes(item?._id)
+                ? {backgroundColor: Colors.PRIMARY}
+                : {
+                    backgroundColor: Colors.white,
+                  },
+            ]}>
             <Text
               style={
                 selectReginalLan.includes(item._id)
@@ -186,8 +196,10 @@ const LanguageSelection = ({navigation}) => {
                 setTimeout(() => {
                   setLoading(false);
                   isProfileUpdated == false
-                    ? navigation.navigate("ProfileNavigator")
-                    : navigation.navigate(NavigationScreenName.DRWAER_NAVIGATOR);
+                    ? navigation.navigate('ProfileNavigator')
+                    : navigation.navigate(
+                        NavigationScreenName.DRWAER_NAVIGATOR,
+                      );
                 }, 1000);
               }}>
               <Text style={authStyle.signin_text}>

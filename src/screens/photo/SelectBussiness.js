@@ -83,17 +83,10 @@ const SelectBussiness = ({route, navigation}) => {
               image={item?.logo ?? item?.partyLogo}
               userDocId={item?._id}
               lastUpdated={item?.lastUpdated ?? item?.createdOn}
-              // edit={true}
-              // onPressEdit={() =>
-              //   navigation.navigate('Edit Bussiness', {
-              //     businessId: item?._id,
-              //     businessType:item?.businessType,
-              //   })
-              // }
               onPress={() =>
                 picData
                   ? navigation.navigate('CustomSDK', {
-                      picData: picData?.pic,
+                      picData: picData?.photo,
                       businessDetails: item,
                     })
                   : navigation.navigate('View Bussiness', {

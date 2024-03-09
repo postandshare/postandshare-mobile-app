@@ -35,7 +35,11 @@ const BussinessType = ({bussinessDetails}) => {
     initialValues: {
       logo: bussinessDetails?.fetchBusiness?.logo ?? '',
       bussinessCategory: bussinessDetails?.fetchBusiness?.category ?? '',
+      bussinessCategoryDocId:
+        bussinessDetails?.fetchBusiness?.categoryDocId ?? '',
       bussinessSubCategory: bussinessDetails?.fetchBusiness?.subCategory ?? '',
+      bussinessSubCategoryDocId:
+        bussinessDetails?.fetchBusiness?.subCategoryDocId ?? '',
     },
     validationSchema: yup.object({
       logo: yup.string().required('logo is required'),
@@ -120,11 +124,6 @@ const BussinessType = ({bussinessDetails}) => {
     },
   });
 
-  console.log(
-    bussinessPartnerFormik?.values?.bussinessPartner,
-    'bussinessPartner IN BUSSINESS TYPE FORMIK IN THE LATEST FORMIKNSH IUODSFSF U SJDHASIDN JOSD AMDI',
-  );
-
   const {mutate: addBusinesslMutate, isLoading: addBusinesslLoading} =
     useMutation(addBusiness, {
       onSuccess: ({data}) => {
@@ -154,13 +153,25 @@ const BussinessType = ({bussinessDetails}) => {
       },
     });
 
+  console.log(
+    bussinessTypeFormik?.values?.bussinessSubCategory,
+    'bussinessTypeFormik?.values?.bussinessCategory',
+  );
+  console.log(
+    bussinessTypeFormik?.values?.bussinessSubCategoryDocId,
+    'bussinessTypeFormik?.values?.bussinessCategoryDocId',
+  );
+
   const handleSubmition = () => {
     if (bussinessDetails?.fetchBusiness?._id) {
       updateBusinessMutate({
         businessDocId: bussinessDetails?.fetchBusiness?._id,
         logo: bussinessTypeFormik?.values?.logo,
         category: bussinessTypeFormik?.values?.bussinessCategory,
+        categoryDocId: bussinessTypeFormik?.values?.bussinessCategoryDocId,
         subCategory: bussinessTypeFormik?.values?.bussinessSubCategory,
+        subCategoryDocId:
+          bussinessTypeFormik?.values?.bussinessSubCategoryDocId,
         businessName: bussinessProfileFormik?.values?.bussinessName,
         description: bussinessProfileFormik?.values?.bussinessDetail,
         email: bussinessProfileFormik?.values?.bussinessEmail,
@@ -183,7 +194,10 @@ const BussinessType = ({bussinessDetails}) => {
       addBusinesslMutate({
         logo: bussinessTypeFormik?.values?.logo,
         category: bussinessTypeFormik?.values?.bussinessCategory,
+        categoryDocId: bussinessTypeFormik?.values?.bussinessCategoryDocId,
         subCategory: bussinessTypeFormik?.values?.bussinessSubCategory,
+        subCategoryDocId:
+          bussinessTypeFormik?.values?.bussinessSubCategoryDocId,
         businessName: bussinessProfileFormik?.values?.bussinessName,
         description: bussinessProfileFormik?.values?.bussinessDetail,
         email: bussinessProfileFormik?.values?.bussinessEmail,

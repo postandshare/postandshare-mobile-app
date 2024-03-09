@@ -1,5 +1,6 @@
 import {
   PermissionsAndroid,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,27 +15,16 @@ import ImageCropPicker from 'react-native-image-crop-picker';
 import uploadFile from '../../../../utils/uploadFile';
 import globalStyles from '../../../../styles/globalStyles';
 import Colors from '../../../../constants/Colors';
-
-const bussinessCategory = [
-  {label: 'Doctor', value: 'Doctor'},
-  {label: 'Engineer', value: 'Engineer'},
-  {label: 'Teacher', value: 'Teacher'},
-  {label: 'Student', value: 'Student'},
-  {label: 'Contractor', value: 'Contractor'},
-  {label: 'Shopkeeper', value: 'Shopkeeper'},
-  {label: 'Businessman', value: 'Businessman'},
-  {label: 'Others', value: 'Others'},
-];
-
-const bussinessSubCategory = [
-  {label: 'School', value: 'School'},
-  {label: 'College', value: 'College'},
-  {label: 'University', value: 'University'},
-  {label: 'Others', value: 'Others'},
-];
+import {useQuery} from '@tanstack/react-query';
+import {
+  getBusinessCategory,
+  getBusinessSubCategory,
+} from '../../../../services/userServices/common.services';
 
 const BussinessTypeForm = ({bussinessTypeFormik}) => {
-  const [profilePic, setprofilePic] = useState(bussinessTypeFormik?.values?.logo);
+  const [profilePic, setprofilePic] = useState(
+    bussinessTypeFormik?.values?.logo,
+  );
   const [imageUploading, setImageUploading] = useState(false);
 
   const uploadePhoto = async (path, mime) => {
@@ -88,11 +78,67 @@ const BussinessTypeForm = ({bussinessTypeFormik}) => {
     }
   };
 
+  const {
+    isLoading: getBusinessCategoryLoading,
+    isFetching: getBusinessCategoryFetching,
+    refetch: getBusinessCategoryRefetch,
+    data: getBusinessCategory_Data,
+    isError: getBusinessCategory_isError,
+  } = useQuery({
+    queryKey: ['getBusinessCategory'],
+    queryFn: () => getBusinessCategory(),
+    onSuccess: async success => {
+      // console.log(success?.data, 'in success');
+    },
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
+
+  const {
+    isLoading: getBusinessSubCategoryLoading,
+    isFetching: getBusinessSubCategoryFetching,
+    refetch: getBusinessSubCategoryRefetch,
+    data: getBusinessSubCategory_Data,
+    isError: getBusinessSubCategory_isError,
+  } = useQuery({
+    queryKey: ['getBusinessSubCategory'],
+    queryFn: () =>
+      getBusinessSubCategory({
+        categoryDocId: bussinessTypeFormik.values?.bussinessCategoryDocId,
+      }),
+    onSuccess: async success => {
+      // console.log(success?.data, 'in success');
+    },
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
+
+
+
+
   return (
     <>
       <Loader open={imageUploading} text="Uploading Image" />
       <ScrollView
         keyboardDismissMode="on-drag"
+        refreshControl={
+          <RefreshControl
+            refreshing={
+              getBusinessCategoryFetching || getBusinessSubCategoryFetching
+            }
+            onRefresh={() => {
+              getBusinessCategoryRefetch();
+              {
+                bussinessTypeFormik.values?.bussinessCategory?._id &&
+                  getBusinessSubCategoryRefetch();
+              }
+            }}
+          />
+        }
         contentContainerStyle={styles.root}>
         {/* logo of the add bussiness */}
         <View style={styles.image_wrap}>
@@ -107,16 +153,20 @@ const BussinessTypeForm = ({bussinessTypeFormik}) => {
         <View style={{width: '95%', marginTop: 10, justifyContent: 'center'}}>
           <Text style={styles.subtitle}>Select Bussiness Category</Text>
           <Dropdown
-            data={bussinessCategory?.map(item => ({
-              label: item?.label,
-              value: item?.value,
+            refetch={getBusinessCategoryRefetch}
+            data={getBusinessCategory_Data?.data?.list?.map(item => ({
+              label: item?.categoryName,
+              value: item?.categoryName,
+              item: item,
             }))}
             value={bussinessTypeFormik.values['bussinessCategory']}
             label="Select Bussiness Category"
-            onChangeValue={value => {
+            onChangeValue={(value, item) => {
+              console.log(item, 'in category')
               bussinessTypeFormik.setValues(prev => ({
                 ...prev,
                 bussinessCategory: value,
+                bussinessCategoryDocId: item?.item?._id,
               }));
             }}
           />
@@ -128,23 +178,26 @@ const BussinessTypeForm = ({bussinessTypeFormik}) => {
             </Text>
           )}
 
-
         {/* bussiness subcategory dropdown */}
         <View style={{width: '95%', marginTop: 10, justifyContent: 'center'}}>
           <Text style={styles.subtitle}>Select Bussiness Sub-Category</Text>
           <Dropdown
-            data={bussinessSubCategory?.map(item => ({
-              label: item?.label,
-              value: item?.value,
+            refetch={getBusinessSubCategoryRefetch}
+            data={getBusinessSubCategory_Data?.data?.list?.map(item => ({
+              label: item?.subCategoryName,
+              value: item?.subCategoryName,
+              item: item,
             }))}
             value={bussinessTypeFormik.values['bussinessSubCategory']}
             label="Select Bussiness Sub-Category"
-            onChangeValue={value => {
-                bussinessTypeFormik.setValues(prev => ({
-                  ...prev,
-                  bussinessSubCategory: value,
-                }));
-              }}
+            onChangeValue={(value , item) => {
+              console.log(value, 'in sub category')
+              bussinessTypeFormik.setValues(prev => ({
+                ...prev,
+                bussinessSubCategory: value,
+                bussinessSubCategoryDocId: item?.item?._id,
+              }));
+            }}
           />
         </View>
         {bussinessTypeFormik.errors.bussinessSubCategory &&
@@ -153,7 +206,6 @@ const BussinessTypeForm = ({bussinessTypeFormik}) => {
               {bussinessTypeFormik.errors.bussinessSubCategory}
             </Text>
           )}
-
       </ScrollView>
     </>
   );
@@ -175,12 +227,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginTop: 10,
     fontWeight: '700',
-    color: Colors.TEXT1
+    color: Colors.TEXT1,
   },
   subtitle: {
     fontSize: 15,
     marginTop: 10,
     fontWeight: '500',
-    color: Colors.TEXT1
+    color: Colors.TEXT1,
   },
 });

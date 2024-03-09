@@ -4,6 +4,7 @@ import {
   Share,
   StyleSheet,
   Text,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -133,6 +134,7 @@ const CustomDrawerLeft = ({navigation, route}) => {
           icon={<Entypo name={'info'} style={styles.icon} />}
           text="Help & Support"
           onPress={async () => {
+            ToastAndroid.show('Coming Soon', ToastAndroid.SHORT);
             // await navigation.goBack(NavigationScreenName.HOME);
             // navigation.navigate(NavigationScreenName.HELPSUPPORT);
           }}

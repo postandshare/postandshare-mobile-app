@@ -1,11 +1,12 @@
-import {Dimensions, ImageBackground, StyleSheet, View} from 'react-native';
+import {Dimensions, ImageBackground, StyleSheet, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import Carousel from 'react-native-reanimated-carousel';
 import Sizes from '../constants/Sizes';
 import {uploadedImages} from '../constants/images';
+import NavigationScreenName from '../constants/NavigationScreenName';
 
 const width = Dimensions.get('window').width;
-const CustomCarousel = () => {
+const CustomCarousel = ({data , navigation}) => {
   return (
     <View style={styles.carousel_root}>
       <Carousel
@@ -14,21 +15,27 @@ const CustomCarousel = () => {
         width={Sizes.wp('98%')}
         height={width / 2}
         autoPlay={true}
-        data={uploadedImages}
+        data={data ?? uploadedImages}
         scrollAnimationDuration={1000}
         panGestureHandlerProps={{
           activeOffsetX: [-10, 10],
         }}
         onSnapToItem={index => {}}
         renderItem={({item, index}) => (
-          <View style={styles.carousel_Container}>
+          <TouchableOpacity 
+          onPress={() =>
+            navigation.navigate(NavigationScreenName.PHOTO_NAVIGATOR, {
+              initialRouteName: item,
+            })
+          }
+          style={styles.carousel_Container}>
             <ImageBackground
-              source={item?.pic}
+              source={item?.photo ? {uri: item?.photo} : item?.pic}
               resizeMode="cover"
-              style={styles.image}>
+              style={[styles.image, {overflow: 'hidden'}]}>
               {/* <Text style={styles.text}>Inside</Text> */}
             </ImageBackground>
-          </View>
+          </TouchableOpacity>
         )}
       />
     </View>
