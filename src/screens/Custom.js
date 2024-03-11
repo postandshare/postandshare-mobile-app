@@ -35,6 +35,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import DashboardTopHeader from '../components/DashboardTopHeader';
+import Sizes from '../constants/Sizes';
 
 const generateSkiaImage = async path => {
   return await Skia.Data.fromURI(path).then(data =>
@@ -136,7 +137,7 @@ const Custom = ({navigation}) => {
         onPressNotification={onPressNotification}
         onPresProfile={onPresProfile}
       />
-       <View
+      {/* <View
           style={{
             flex: 1,
             alignSelf: 'center',
@@ -149,32 +150,35 @@ const Custom = ({navigation}) => {
             }}>
             This Feature is released in the next version
           </RNText>
-        </View>
+        </View> */}
 
-
-      {/* <GestureDetector gesture={gesture}>
-        <Canvas ref={canvasRef} style={{flex: 1}}>
-        <Fill color="white" />
+      <GestureDetector 
+      
+      gesture={gesture}>
+        <Canvas
+          ref={canvasRef}
+          style={{
+            height: 500,
+            width: 500,
+          }}>
+          <Fill color="white" />
           {image ? (
             <>
               <Image
                 image={image}
-                fit="contain"
+                fit="cover"
                 x={0}
                 y={0}
                 width={500}
                 height={500}
               />
-               {/* <Image image={image} fit="contain" x={0} y={0} width={256} height={256}/> */}
             </>
-      //     ) : null}
-      //     <Circle cx={translateX} cy={translateY} r={20} color="#3E3E" />
+          ) : null}
+          <Text x={0} y={16} text="Hello World"  />
+          <Circle cx={translateX} cy={translateY} r={20} color="#3E3E" />
+        </Canvas>
+      </GestureDetector>
 
-
-      //     <Text x={0} y={0} text="Hello World"  />
-      //   </Canvas>
-      // </GestureDetector> */}
-/* 
       <Button
         title="Capture"
         onPress={async () => {
@@ -199,31 +203,9 @@ const Custom = ({navigation}) => {
               });
           }
         }}
-        onPress={async () => {
-          const skImg = canvasRef.current?.makeImageSnapshot();
+      />
 
-          if (skImg) {
-            const base64 = skImg.encodeToBase64(ImageFormat.PNG, 100);
-            const uri = 'data:image/png;base64,' + base64;
-            setCapturedImage(uri);
-            const imageName = `myImage_${new Date().getTime()}.jpg`;
-
-            // Define the path to save the image
-            const path = `${RNFS.CachesDirectoryPath}/${imageName}`;
-            // Write the file
-            RNFS.writeFile(path, base64, 'base64')
-              .then(async () => {
-                console.log('Image saved to', path);
-                await savePicture(path);
-              })
-              .catch(error => {
-                console.error(error);
-              });
-          }
-        }}
-      /> *
-
-      {/* {capturedImage ? (
+      {capturedImage ? (
         <>
           <RNImage
             source={{uri: capturedImage}}
@@ -231,12 +213,8 @@ const Custom = ({navigation}) => {
           />
           <Button title="Remove" onPress={() => setCapturedImage('')} />
         </>
-      ) : null} */
-
-
-
-    // Remove the problematic code block
-    // </>
+      ) : null}
+    </>
   );
 };
 

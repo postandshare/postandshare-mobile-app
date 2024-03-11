@@ -78,6 +78,7 @@ const ProfileView = ({}) => {
   useFocusEffect(
     useCallback(() => {
       getUserProfileRefetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [getUserProfileRefetch, navigation]),
   );
 

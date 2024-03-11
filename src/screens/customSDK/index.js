@@ -47,6 +47,7 @@ import Loader from '../../components/Loader';
 import Sizes from '../../constants/Sizes';
 import uploadFile from '../../utils/uploadFile';
 import {addUserPost} from '../../services/userServices/userpost.services';
+import images from '../../constants/images';
 
 const CustomColorChange = ({data, setShowBorderBox, showBorderBox}) => {
   const [color, setColor] = useState(Colors.PRIMARY);
@@ -257,9 +258,7 @@ const CustomSDK = ({route, navigation}) => {
   const [emailPosition, setEmailPosition] = useState({x: 0, y: 0});
   const [whatsAppPosition, setWhatsAppPosition] = useState({x: 0, y: 0});
   const [locationPosition, setLocationPosition] = useState({x: 0, y: 0});
-
   const [showBorderBox, setShowBorderBox] = useState(false);
-
   const imgData = picData;
   const BusinessData = businessDetails;
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -293,7 +292,6 @@ const CustomSDK = ({route, navigation}) => {
     text: '',
     showText: false,
   });
-
 
   const viewShotRef = useRef();
 
@@ -819,7 +817,7 @@ const CustomSDK = ({route, navigation}) => {
           <ViewShot ref={viewShotRef} options={{format: 'jpg', quality: 0.9}}>
             <View style={styles.chooseImageContainer}>
               <ImageBackground
-                source={imgData ? {uri: imgData}: null}
+                source={imgData ? {uri: imgData} : null}
                 resizeMode="cover"
                 style={{
                   zIndex: 1,
@@ -1057,48 +1055,20 @@ const CustomSDK = ({route, navigation}) => {
                         }}
                       />
                     </>
-                  ) : null}
-                  {/* {!getOrgFrame_Data?.data?.list?.length > 0 ? (
-                    <>
-                      {showFrame ? (
-                        <Image
-                          source={Images.frame_3}
-                          style={{
-                            height: 315,
-                            width: '100%',
-                            alignSelf: 'center',
-                          }}
-                        />
-                      ) : null}
-                      {showFrame1 ? (
-                        <Image
-                          source={Images.frame_1}
-                          style={{
-                            height: '100%',
-                            width: '100%',
-                          }}
-                        />
-                      ) : null}
-                      {showFrame2 ? (
-                        <ImageBackground
-                          source={Images.frame_2}
-                          style={{
-                            height: '100%',
-                            width: '100%',
-                          }}
-                        />
-                      ) : null}
-                      {showFrame3 ? (
-                        <ImageBackground
-                          source={Images.frame_4}
-                          style={{
-                            height: '100%',
-                            width: '100%',
-                          }}
-                        />
-                      ) : null}
-                    </>
-                  ) : null} */}
+                  ) 
+                  // : showFrame ? (
+                  //   <Image
+                  //     source={images.Insta_Freame}
+                  //     style={{
+                  //       height: 315,
+                  //       width: '100%',
+                  //       alignSelf: 'center',
+                  //       zIndex: -1
+                  //     }}
+                  //   />
+                  // ) 
+                  : 
+                  null}
                 </View>
                 {showCross ? (
                   <TouchableOpacity
@@ -1257,75 +1227,31 @@ const CustomSDK = ({route, navigation}) => {
               setWhatsAppPosition={setWhatsAppPosition}
             />
           ))}
-
-          {/* {getOrgFrame_Data?.data?.list?.length > 0 ? (
-            <>
-              <TouchableOpacity
-                style={[
-                  showFrame
-                    ? {backgroundColor: Colors.PRIMARY}
-                    : {backgroundColor: Colors.white},
-                  styles.frame,
-                ]}
-                onPress={() => {
-                  setFrame(!showFrame);
-                  setShowFrame1(false);
-                  setShowFrame2(false);
-                  setShowFrame3(false);
-                  setShowFrameImg(false);
-                }}>
-                <Text style={styles.frameText}>Frame 1</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  showFrame1
-                    ? {backgroundColor: Colors.PRIMARY}
-                    : {backgroundColor: Colors.white},
-                  styles.frame,
-                ]}
-                onPress={() => {
-                  setFrame(false);
-                  setShowFrame1(!showFrame1);
-                  setShowFrame2(false);
-                  setShowFrame3(false);
-                  setShowFrameImg(false);
-                }}>
-                <Text style={styles.frameText}>Frame 2</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  showFrame2
-                    ? {backgroundColor: Colors.PRIMARY}
-                    : {backgroundColor: Colors.white},
-                  styles.frame,
-                ]}
-                onPress={() => {
-                  setFrame(false);
-                  setShowFrame1(false);
-                  setShowFrame2(!showFrame2);
-                  setShowFrame3(false);
-                  setShowFrameImg(false);
-                }}>
-                <Text style={styles.frameText}>Frame 3</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  showFrame3
-                    ? {backgroundColor: Colors.PRIMARY}
-                    : {backgroundColor: Colors.white},
-                  styles.frame,
-                ]}
-                onPress={() => {
-                  setFrame(false);
-                  setShowFrame1(false);
-                  setShowFrame2(false);
-                  setShowFrame3(!showFrame3);
-                  setShowFrameImg(false);
-                }}>
-                <Text style={styles.frameText}>Frame 4</Text>
-              </TouchableOpacity>
-            </>
-          ) : null} */}
+          {/* {
+            <TouchableOpacity
+              style={[
+                showFrame
+                  ? {backgroundColor: Colors.PRIMARY}
+                  : {backgroundColor: Colors.white},
+                styles.frame,
+              ]}
+              onPress={() => {
+                setFrame(!showFrame);
+                setShowFrame1(false);
+                setShowFrame2(false);
+                setShowFrame3(false);
+                setShowFrameImg(false);
+              }}>
+              <Image
+                source={images.Insta_Freame}
+                style={{
+                  height: 50,
+                  width: 50,
+                  borderRadius: 5,
+                }}
+              />
+            </TouchableOpacity>
+          } */}
         </ScrollView>
 
         {/* effects on screen */}

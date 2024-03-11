@@ -55,6 +55,7 @@ export default {
     frame_2: require('../assets/frames/frame_2.png'),
     frame_3: require('../assets/frames/frame_1.png'),
     frame_4: require('../assets/frames/frame_4.png'),
+    Insta_Freame: require('../assets/frames/Insta_frame.jpg'),
   };
 
 const uploadedImages = [

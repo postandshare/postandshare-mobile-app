@@ -26,6 +26,8 @@ import {
   getTrendingTemlpates,
 } from '../../services/userServices/dashboard.services';
 import {useFocusEffect} from '@react-navigation/native';
+import {MotiText, MotiView} from 'moti';
+import {Skeleton} from 'moti/skeleton';
 
 const Home = ({navigation}) => {
   const [value, setValue] = React.useState('photo');
@@ -142,6 +144,48 @@ const Home = ({navigation}) => {
       getTrendingTemlpatesRefetch,
     ]),
   );
+
+  // const Spacer = ({width = 16}) => <View style={{width}} />;
+  // const skeletonText = ({label}) => (
+  //   <Text style={styles.skeletonText}>{label}</Text>
+  // );
+
+  // const skeletonLoading = (
+  //   <MotiView
+  //     transition={{
+  //       type: 'timing',
+  //     }}
+  //     style={[styles.container , {
+
+  //     }]}
+  //     animate={{backgroundColor: '#f5f5f5'}}>
+  //    <Spacer />
+  //     <Skeleton
+  //       height={Sizes.hp('10%')}
+  //       width={Sizes.wp('20%')}
+  //       colorMode="light"
+  //     />
+  //     <Spacer />
+  //     <Skeleton
+  //       height={Sizes.hp('10%')}
+  //       width={Sizes.wp('40%')}
+  //       colorMode="light"
+  //     />
+  //     <Spacer />
+  //     <Skeleton
+  //       height={Sizes.hp('10%')}
+  //       width={Sizes.wp('40%')}
+  //       colorMode="light"
+  //     />
+  //     <Spacer />
+  //     <Skeleton
+  //       height={Sizes.hp('10%')}
+  //       width={Sizes.wp('40%')}
+  //       colorMode="light"
+  //     />
+  //     <Spacer />
+  //   </MotiView>
+  // );
 
   return (
     <>
@@ -297,7 +341,9 @@ const Home = ({navigation}) => {
                       data={getTrendingTemlpates_Data?.data?.list}
                     />
                   </View>
+
                   {/* container for showing the templates by date */}
+
                   {getTemplatesByDate_Data?.data?.list?.length > 0 ? (
                     <FlatListComponent
                       navigation={navigation}
@@ -318,7 +364,7 @@ const Home = ({navigation}) => {
                   {getTemplatesOfGreatLeaders_Data?.data?.list?.length > 0 ? (
                     <FlatListComponent
                       navigation={navigation}
-                      data={getTemplatesForQuotes_Data?.data?.list}
+                      data={getTemplatesOfGreatLeaders_Data?.data?.list}
                       byLabel={'For Great Leaders'}
                     />
                   ) : null}

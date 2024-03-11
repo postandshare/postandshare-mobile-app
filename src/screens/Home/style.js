@@ -111,6 +111,21 @@ const styles = StyleSheet.create({
     color: Colors.white,
     textAlign: 'center',
   },
+
+    // moti container styles
+    container: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 10,
+      flexDirection: 'row',
+    },
+    skeletonText: {
+      marginTop: 10,
+      width: '90%',
+      height: 20,
+      backgroundColor: '#f5f5f5',
+      borderRadius: 10,
+    }
 });
 
 export default styles;
