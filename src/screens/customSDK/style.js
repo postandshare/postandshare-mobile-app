@@ -8,8 +8,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.Background,
   },
   chooseImageContainer: {
-    height: Sizes.height * 0.4,
-    width: Sizes.width * 0.9,
+    // height: Sizes.height * 0.4,
+    // width: Sizes.width * 0.9,
+    height: 375,
+    width: 375,
     backgroundColor: Colors.white,
     alignSelf: 'center',
     justifyContent: 'center',

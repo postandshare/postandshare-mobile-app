@@ -37,10 +37,10 @@ const DragDrop = ({
     onActive: (event, ctx) => {
       const newX = event.translationX + ctx.x;
       const newY = event.translationY + ctx.y;
-      if (newX >= 0 && newX <= Sizes.height * 0.4) {
+      if (newX >= 0 && newX <= 375) {
         x.value = newX;
       }
-      if (newY >= 0 && newY <= Sizes.width * 0.75) {
+      if (newY >= 0 && newY <= 375) {
         y.value = newY;
       }
       // x.value = event.translationX + ctx.x;

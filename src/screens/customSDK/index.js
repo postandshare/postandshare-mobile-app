@@ -49,13 +49,16 @@ import uploadFile from '../../utils/uploadFile';
 import {addUserPost} from '../../services/userServices/userpost.services';
 import images from '../../constants/images';
 
-const CustomColorChange = ({data, setShowBorderBox, showBorderBox}) => {
-  const [color, setColor] = useState(Colors.PRIMARY);
+const CustomColorChange = ({
+  data,
+  setShowBorderBox,
+  showBorderBox,
+  colorProps,
+}) => {
+  const [color, setColor] = useState(colorProps?.color ?? '#fff');
   const [showModal, setShowModal] = useState(false);
   const [fontWeight, setFontWeight] = useState('normal');
   const [fontSize, setFontSize] = useState(14);
-  const [fontStyle, setFontStyle] = useState('normal');
-  const [textDecoration, setTextDecoration] = useState('none');
   const [textAlign, setTextAlign] = useState('left');
   const [showTools, setShowTools] = useState(false);
 
@@ -184,6 +187,7 @@ const FrameSelection = ({
 }) => {
   const [laoding, setLoading] = useState(false);
   const isSelected = selectedIndex === index;
+  console.log(item?.contentLocation?.address, 'item');
   return (
     <TouchableOpacity
       style={[
@@ -197,22 +201,32 @@ const FrameSelection = ({
         await setLogoPosition({
           x: item?.contentLocation?.logo?.x_axis ?? 0,
           y: item?.contentLocation?.logo?.y_axis ?? 0,
+          color: item?.contentLocation?.logo?.fontColor ?? '#fff',
+          fontSize: item?.contentLocation?.logo?.fontSize ?? 18,
         });
         await setMobileNumPosition({
           x: item?.contentLocation?.mobileNumber?.x_axis ?? 100,
           y: item?.contentLocation?.mobileNumber?.y_axis ?? 200,
+          color: item?.contentLocation?.mobileNumber?.fontColor ?? '#fff',
+          fontSize: item?.contentLocation?.mobileNumber?.fontSize ?? 18,
         });
         await setEmailPosition({
           x: item?.contentLocation?.email?.x_axis ?? 50,
           y: item?.contentLocation?.email?.y_axis ?? 100,
+          color: item?.contentLocation?.email?.fontColor ?? '#7160c7',
+          fontSize: item?.contentLocation?.email?.fontSize ?? 18,
         });
         await setLocationPosition({
           x: item?.contentLocation?.address?.x_axis ?? 80,
           y: item?.contentLocation?.address?.y_axis ?? 100,
+          color: item?.contentLocation?.address?.fontColor ?? '#2d235f',
+          fontSize: item?.contentLocation?.address?.fontSize ?? 18,
         });
         await setWhatsAppPosition({
           x: item?.contentLocation?.whatsappNumber?.x_axis ?? 120,
           y: item?.contentLocation?.whatsappNumber?.y_axis ?? 100,
+          color: item?.contentLocation?.whatsappNumber?.fontColor ?? '#fff',
+          fontSize: item?.contentLocation?.whatsappNumber?.fontSize ?? 18,
         });
 
         setState(prev => ({
@@ -253,11 +267,41 @@ const FrameSelection = ({
 
 const CustomSDK = ({route, navigation}) => {
   const {picData, businessDetails} = route.params || {};
-  const [logoPosition, setLogoPosition] = useState({x: 0, y: 0});
-  const [mobileNumPosition, setMobileNumPosition] = useState({x: 0, y: 0});
-  const [emailPosition, setEmailPosition] = useState({x: 0, y: 0});
-  const [whatsAppPosition, setWhatsAppPosition] = useState({x: 0, y: 0});
-  const [locationPosition, setLocationPosition] = useState({x: 0, y: 0});
+  const [logoPosition, setLogoPosition] = useState({
+    x: 0,
+    y: 0,
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '500',
+  });
+  const [mobileNumPosition, setMobileNumPosition] = useState({
+    x: 0,
+    y: 0,
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '500',
+  });
+  const [emailPosition, setEmailPosition] = useState({
+    x: 0,
+    y: 0,
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '500',
+  });
+  const [whatsAppPosition, setWhatsAppPosition] = useState({
+    x: 0,
+    y: 0,
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '500',
+  });
+  const [locationPosition, setLocationPosition] = useState({
+    x: 0,
+    y: 0,
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '500',
+  });
   const [showBorderBox, setShowBorderBox] = useState(false);
   const imgData = picData;
   const BusinessData = businessDetails;
@@ -462,6 +506,7 @@ const CustomSDK = ({route, navigation}) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []),
   );
+
   return (
     <>
       <TopHeader titile={'Custom SDK'} next={'Next'} onPress={onCapture} />
@@ -818,11 +863,11 @@ const CustomSDK = ({route, navigation}) => {
             <View style={styles.chooseImageContainer}>
               <ImageBackground
                 source={imgData ? {uri: imgData} : null}
-                resizeMode="cover"
+                resizeMode="contain"
                 style={{
                   zIndex: 1,
-                  height: '100%',
-                  width: '100%',
+                  height: 375,
+                  width: 375,
                   justifyContent: 'center',
                 }}>
                 {/* logo and other things that needs to be implemented */}
@@ -878,6 +923,7 @@ const CustomSDK = ({route, navigation}) => {
                           position: 'absolute',
                         }}>
                         <CustomColorChange
+                          colorProps={mobileNumPosition}
                           setShowBorderBox={setShowBorderBox}
                           showBorderBox={showBorderBox}
                           data={
@@ -908,6 +954,7 @@ const CustomSDK = ({route, navigation}) => {
                         <CustomColorChange
                           setShowBorderBox={setShowBorderBox}
                           showBorderBox={showBorderBox}
+                          colorProps={whatsAppPosition}
                           data={
                             BusinessData?.whatsappNumber ??
                             businessDetails?.whatsappNumber ??
@@ -926,6 +973,7 @@ const CustomSDK = ({route, navigation}) => {
                       onDrop={drop}
                       intialX={emailPosition?.x}
                       intialY={emailPosition?.y}
+
                       // setShowModal={setShowModal}
                     >
                       <Text
@@ -937,6 +985,7 @@ const CustomSDK = ({route, navigation}) => {
                         <CustomColorChange
                           setShowBorderBox={setShowBorderBox}
                           showBorderBox={showBorderBox}
+                          colorProps={whatsAppPosition}
                           data={
                             BusinessData?.email ??
                             businessDetails?.email ??
@@ -966,6 +1015,7 @@ const CustomSDK = ({route, navigation}) => {
                         <CustomColorChange
                           setShowBorderBox={setShowBorderBox}
                           showBorderBox={showBorderBox}
+                          colorProps={locationPosition}
                           data={
                             BusinessData?.address
                               ? BusinessData?.address?.address +
@@ -1048,15 +1098,16 @@ const CustomSDK = ({route, navigation}) => {
                                 ToastAndroid.LONG,
                               )
                         }
+                        resizeMode="contain"
                         style={{
-                          height: '100%',
                           alignSelf: 'center',
-                          width: '100%',
+                          height: 375,
+                          width: 375,
                         }}
+                        res
                       />
                     </>
-                  ) 
-                  // : showFrame ? (
+                  ) : // : showFrame ? (
                   //   <Image
                   //     source={images.Insta_Freame}
                   //     style={{
@@ -1066,8 +1117,7 @@ const CustomSDK = ({route, navigation}) => {
                   //       zIndex: -1
                   //     }}
                   //   />
-                  // ) 
-                  : 
+                  // )
                   null}
                 </View>
                 {showCross ? (
@@ -1227,31 +1277,6 @@ const CustomSDK = ({route, navigation}) => {
               setWhatsAppPosition={setWhatsAppPosition}
             />
           ))}
-          {/* {
-            <TouchableOpacity
-              style={[
-                showFrame
-                  ? {backgroundColor: Colors.PRIMARY}
-                  : {backgroundColor: Colors.white},
-                styles.frame,
-              ]}
-              onPress={() => {
-                setFrame(!showFrame);
-                setShowFrame1(false);
-                setShowFrame2(false);
-                setShowFrame3(false);
-                setShowFrameImg(false);
-              }}>
-              <Image
-                source={images.Insta_Freame}
-                style={{
-                  height: 50,
-                  width: 50,
-                  borderRadius: 5,
-                }}
-              />
-            </TouchableOpacity>
-          } */}
         </ScrollView>
 
         {/* effects on screen */}
