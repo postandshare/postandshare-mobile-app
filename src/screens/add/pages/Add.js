@@ -12,7 +12,7 @@ import {
   ImageBackground,
   Image,
 } from 'react-native';
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import DashboardTopHeader from '../../../components/DashboardTopHeader';
 import {addUserPost} from '../../../services/userServices/userpost.services';
 import {useMutation, useQuery} from '@tanstack/react-query';
@@ -121,7 +121,7 @@ const Add = ({navigation, route}) => {
   const [fontFamily, setFontFamily] = useState('Arial');
   const [showFontFamily, setShowFontFamily] = useState(false);
   const [showCross, setShowCross] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [state, setState] = useState({
     location: false,
@@ -159,7 +159,7 @@ const Add = ({navigation, route}) => {
         businessType: businessDetails?.businessType,
       });
       setImageUploading(false);
-        navigation.navigate('ShareSave', {picUrl: path});
+      navigation.navigate('ShareSave', {picUrl: path});
     } catch (error) {
       setImageUploading(false);
     }
@@ -322,8 +322,9 @@ const Add = ({navigation, route}) => {
   useFocusEffect(
     React.useCallback(() => {
       getOrgFrameRefetch();
+      setPicUrl('');
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []),
+    }, [navigation]),
   );
 
   return (
@@ -337,10 +338,6 @@ const Add = ({navigation, route}) => {
         onPress={onCapture}
       />
       <Loader open={imageUploading || addUserPostLoading} text="Loading..." />
-      <Loader
-        open={getOrgFrameLoading || getOrgFrameFetching}
-        text="Loading..."
-      />
 
       {/* dialogue for adding the text on the image */}
       <Portal>
@@ -512,7 +509,7 @@ const Add = ({navigation, route}) => {
         refreshControl={
           <RefreshControl
             refreshing={getOrgFrameFetching || getOrgFrameLoading}
-            onRefresh={getOrgFrameRefetch}
+            onRefresh={() => getOrgFrameRefetch()}
           />
         }
         contentContainerStyle={styles.root}
@@ -754,7 +751,18 @@ const Add = ({navigation, route}) => {
                 </View>
                 {showCross ? (
                   <TouchableOpacity
-                    onPress={() => navigation.goBack()}
+                    onPress={() => {
+                      setPicUrl('');
+                      setState(prev => ({
+                        ...prev,
+                        location: false,
+                        mobile: false,
+                        email: false,
+                        whatsApp: false,
+                        logo: false,
+                      }));
+                      setShowFrame1(false);
+                    }}
                     style={{
                       zIndex: 4,
                       top: -10,

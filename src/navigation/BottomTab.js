@@ -38,7 +38,7 @@ const BottomTab = () => {
           tabBarIcon: ({focused}) => (
             <AntDesign
               name="home"
-              size={focused ? 26 : 24}
+              size={focused ? 24 : 24}
               color={focused ? '#0A85FE' : '#0B1F32'}
             />
           ),
@@ -52,7 +52,7 @@ const BottomTab = () => {
           tabBarIcon: ({focused}) => (
             <AntDesign
               name="pluscircleo"
-              size={focused ? 26 : 24}
+              size={focused ? 24 : 24}
               color={focused ? '#0A85FE' : '#0B1F32'}
             />
           ),
@@ -66,7 +66,7 @@ const BottomTab = () => {
           tabBarIcon: ({focused}) => (
             <AntDesign
               name="appstore-o"
-              size={focused ? 26 : 24}
+              size={focused ? 24   : 24}
               color={focused ? '#0A85FE' : '#0B1F32'}
             />
           ),
