@@ -460,7 +460,9 @@ const Add = ({navigation, route}) => {
                     ]}>
                     <Text
                       style={[
-                        fontFamily === item ? {color: Colors.PRIMARY} : null,
+                        fontFamily === item
+                          ? {color: Colors.PRIMARY}
+                          : {color: Colors.TEXT1},
                         {fontFamily: item},
                         styles.item_content,
                       ]}>
@@ -780,7 +782,7 @@ const Add = ({navigation, route}) => {
             style={styles.chooseImageContainer}
             onPress={TakePhotofromGallery}>
             <AntDesign name="upload" size={30} color={Colors.PRIMARY} />
-            <Text>Choose Image</Text>
+            <Text style={{color: Colors.TEXT1}}>Choose Image</Text>
           </TouchableOpacity>
         )}
 
@@ -910,7 +912,7 @@ const Add = ({navigation, route}) => {
             />
             <Text style={styles.frameText}>Add Text</Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => {
               if (stickers) {
                 setShowSticker(!showSticker);
@@ -925,7 +927,7 @@ const Add = ({navigation, route}) => {
               color={Colors.SECONDRY}
             />
             <Text style={styles.frameText}>Sticker</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             onPress={() => setShowFontFamily(true)}
             style={styles.frame}>

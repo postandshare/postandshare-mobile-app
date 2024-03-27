@@ -404,7 +404,14 @@ const ViewBussiness = ({route, navigation}) => {
                   }}>
                   {item?.name ?? '--'}
                 </Text>
-                <Text>{item?.designation}</Text>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    fontWeight: '400',
+                    color: Colors.TEXT1,
+                  }}>
+                  {item?.designation}
+                </Text>
               </View>
               <View style={{flex: 0.2, justifyContent: 'space-between'}}>
                 <TouchableOpacity
@@ -468,7 +475,7 @@ const ViewBussiness = ({route, navigation}) => {
               marginHorizontal: 10,
               textDecorationLine: 'underline',
             }}>
-            Add more bussiness
+            Add more bussiness partner
           </Text>
         </TouchableOpacity>
 

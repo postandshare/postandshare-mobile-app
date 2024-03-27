@@ -29,7 +29,6 @@ const BottomTab = () => {
           display: 'flex',
           backgroundColor: '#fff',
           borderTopColor: '#fff',
-          height: Sizes.hp('8%'),
         },
       }}>
       <Tab.Screen
