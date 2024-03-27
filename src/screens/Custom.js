@@ -137,7 +137,7 @@ const Custom = ({navigation}) => {
         onPressNotification={onPressNotification}
         onPresProfile={onPresProfile}
       />
-      {/* <View
+      <View
           style={{
             flex: 1,
             alignSelf: 'center',
@@ -150,9 +150,9 @@ const Custom = ({navigation}) => {
             }}>
             This Feature is released in the next version
           </RNText>
-        </View> */}
+        </View>
 
-      <GestureDetector 
+      {/* <GestureDetector 
       
       gesture={gesture}>
         <Canvas
@@ -177,9 +177,9 @@ const Custom = ({navigation}) => {
           <Text x={0} y={16} text="Hello World"  />
           <Circle cx={translateX} cy={translateY} r={20} color="#3E3E" />
         </Canvas>
-      </GestureDetector>
+      </GestureDetector> */}
 
-      <Button
+      {/* <Button
         title="Capture"
         onPress={async () => {
           const skImg = canvasRef.current?.makeImageSnapshot();
@@ -203,7 +203,7 @@ const Custom = ({navigation}) => {
               });
           }
         }}
-      />
+      /> */}
 
       {capturedImage ? (
         <>

@@ -24,10 +24,12 @@ const BottomTab = () => {
         tabBarActiveTintColor: '#0A85FE',
         tabBarInactiveTintColor: '#0B1F32',
         swipeEnabled: true,
+        animationEnabled: true,
         tabBarStyle: {
           display: 'flex',
           backgroundColor: '#fff',
           borderTopColor: '#fff',
+          height: Sizes.hp('8%'),
         },
       }}>
       <Tab.Screen
