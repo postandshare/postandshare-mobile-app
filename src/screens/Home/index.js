@@ -36,7 +36,9 @@ const Home = ({navigation}) => {
     navigation.openDrawer();
     navigation.getParent('leftDrawer').openDrawer();
   };
-  const onPressNotification = () => {};
+  const onPressNotification = () => {
+    ToastAndroid.show('Notification is release soon', ToastAndroid.SHORT);
+  };
   const onPresProfile = () => {
     navigation.navigate('ProfileNavigator');
   };
@@ -252,7 +254,7 @@ const Home = ({navigation}) => {
                 />
               </TouchableOpacity>
               <View style={{height: Sizes.hp('4%')}}>
-                <Text style={styles.box_tittle}>Events Reminder</Text>
+                <Text style={styles.box_tittle}>Events Remainder</Text>
               </View>
             </View>
 

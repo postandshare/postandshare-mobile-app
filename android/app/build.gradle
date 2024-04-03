@@ -2,7 +2,8 @@ apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
 apply plugin: 'ly.img.android.sdk'
 apply plugin: 'kotlin-android'
-
+// Apply the Google services plugin at the bottom
+apply plugin: 'com.google.gms.google-services'
 
 // Comment out the modules you don't need, to save size.
 imglyConfig {
@@ -189,6 +190,8 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
 
+    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
+    implementation("com.google.firebase:firebase-analytics")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")

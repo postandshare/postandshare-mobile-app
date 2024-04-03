@@ -5,6 +5,7 @@ export default {
     loginTop: require('../assets/images/login.png'),
     splashTop: require('../assets/images/splash-top.png'),
     splashBottom: require('../assets/images/splash-bottom.png'),
+    error: require('../assets/images/error.png'), 
 
     //bottom tab icons
     bottomHomeActive: require('../assets/icons/Home_active.png'),

@@ -38,36 +38,49 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
           showsHorizontalScrollIndicator={false}
           data={data}
           renderItem={({item}) => (
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate(NavigationScreenName.PHOTO_NAVIGATOR, {
-                  initialRouteName: item,
-                })
-              }
-              style={styles.uploadpic_container_image_view}>
-              <View style={styles.uploadpic_container_dateview}>
-                <Text style={styles.uploadpic_container_date}>
-                  {moment(item?.date).format('MMM Do')}
-                </Text>
-              </View>
-              {loading && (
-                <ActivityIndicator
-                  style={{
-                    position: 'absolute',
-                    zIndex: 1,
-                    alignSelf: 'center',
-                    top: '40%',
-                  }}
-                  size="small"
-                  color={Colors.PRIMARY}
+            <>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate(NavigationScreenName.PHOTO_NAVIGATOR, {
+                    initialRouteName: item,
+                  })
+                }
+                style={styles.uploadpic_container_image_view}>
+                <View style={styles.uploadpic_container_dateview}>
+                  <Text style={styles.uploadpic_container_date}>
+                    {moment(item?.date).format('MMM Do')}
+                  </Text>
+                </View>
+                {loading && (
+                  <ActivityIndicator
+                    style={{
+                      position: 'absolute',
+                      zIndex: 1,
+                      alignSelf: 'center',
+                      top: '40%',
+                    }}
+                    size="small"
+                    color={Colors.PRIMARY}
+                  />
+                )}
+                <Image
+                  onLoadEnd={() => setIsLoading(false)}
+                  source={item?.photo ? {uri: item?.photo} : item?.pic}
+                  style={styles.uploadpic_container_image}
                 />
-              )}
-              <Image
-                onLoadEnd={() => setIsLoading(false)}
-                source={item?.photo ? {uri: item?.photo} : item?.pic}
-                style={styles.uploadpic_container_image}
-              />
-            </TouchableOpacity>
+              </TouchableOpacity>
+              {/* <View>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: Colors.TEXT1,
+                    textAlign: 'center',
+                    marginTop: 5,
+                  }}>
+                  {item?.name}
+                </Text>
+              </View> */}
+            </>
           )}
           keyExtractor={index => index._id}
           extraData={uploadedImages}

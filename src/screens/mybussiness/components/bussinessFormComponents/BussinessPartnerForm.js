@@ -284,8 +284,8 @@ const BussinessPartnerForm = ({bussinessTypeFormik , bussinessDetails}) => {
               onPress={() => {
                 actionSheetRef?.current?.show();
               }}>
-              <Text style={{color: 'blue', fontStyle: 'italic' ,marginBottom: 5}}>
-                Add More Business Partner
+              <Text style={{color: 'blue', fontStyle: 'italic' ,marginBottom: 10}}>
+                Add More Bussiness Partner
               </Text>
             </TouchableOpacity>
           </View>

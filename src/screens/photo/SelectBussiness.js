@@ -68,8 +68,8 @@ const SelectBussiness = ({route, navigation}) => {
         {getAllBusinessList_Data?.data?.list?.length === 0 && (
           <View style={styles.noData}>
             <Text style={styles.noDataText}>
-              You have not added any business yet {'\n'}
-              Please add a business to continue
+              You have not added any bussiness yet {'\n'}
+              Please add a bussiness to continue
             </Text>
           </View>
         )}

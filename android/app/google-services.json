@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "318984367049",
+    "project_id": "postandshareapp",
+    "storage_bucket": "postandshareapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:318984367049:android:243ac50da208895d951618",
+        "android_client_info": {
+          "package_name": "com.postandshare_mobile_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA120UjAeWxArBH_rw7mFyaphixPASNPHA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Provider} from 'react-redux';
 import {Provider as PaperProvider, DefaultTheme} from 'react-native-paper';
@@ -8,9 +8,11 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {persistor, store} from './src/services/store';
 import Routes from './src/navigation/RootNavigation';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import { Amplify } from 'aws-amplify';
+import {Amplify} from 'aws-amplify';
 import aws_exports from './src/aws-exports';
-
+import NetInfo from '@react-native-community/netinfo';
+import NoInternet from './src/components/NoInternet';
+import OneSignal from 'react-native-onesignal';
 
 Amplify.configure(aws_exports);
 
@@ -23,6 +25,26 @@ export const queryClient = new QueryClient({
   },
 });
 const App = () => {
+  const [isConnected, setIsConnected] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      setIsConnected(state.isConnected);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    OneSignal.setAppId('81677935-54bb-44f5-ade2-2b4ea34c4eba');
+    console.log('OneSignal');
+  }, []);
+
+  if (!isConnected) {
+    return <NoInternet setIsConnected={setIsConnected} />;
+  }
+  
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <QueryClientProvider client={queryClient}>

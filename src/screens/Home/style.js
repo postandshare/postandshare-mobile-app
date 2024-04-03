@@ -96,10 +96,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   uploadpic_container_dateview: {
-    height: Sizes.hp('3%'),
+    height: Sizes.hp('2%'),
     width: Sizes.wp('15%'),
     backgroundColor: Colors.PRIMARY,
-     zIndex: 1,
+    zIndex: 1,
     position: 'absolute',
     top: 12,
     borderTopRightRadius: 10,
@@ -112,20 +112,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-    // moti container styles
-    container: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 10,
-      flexDirection: 'row',
-    },
-    skeletonText: {
-      marginTop: 10,
-      width: '90%',
-      height: 20,
-      backgroundColor: '#f5f5f5',
-      borderRadius: 10,
-    }
+  // moti container styles
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+    flexDirection: 'row',
+  },
+  skeletonText: {
+    marginTop: 10,
+    width: '90%',
+    height: 20,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 10,
+  },
 });
 
 export default styles;

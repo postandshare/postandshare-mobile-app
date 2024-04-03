@@ -84,16 +84,16 @@ const Login = ({navigation}) => {
           maxLength={10}
           onChange={onChangePhone}
         />
-        <TouchableOpacity onPress={onPressTrouble}>
+        {/* <TouchableOpacity onPress={onPressTrouble}>
           <Text style={authStyle.touble_text}>Trouble to Sign in ?</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <CustomButton title={'Send Code'} onPress={handleVerification} />
-        <View style={authStyle.signup_textWrapper}>
+        {/* <View style={authStyle.signup_textWrapper}>
           <Text style={authStyle.singup_text}>Dont't Have an Account Yet? </Text>
           <TouchableOpacity onPress={handleOnPressSignup}>
             <Text style={authStyle.singup_link}>Signup</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
     </>
   );

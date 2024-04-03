@@ -26,6 +26,8 @@ import CustomSDK from '../screens/customSDK';
 import ShareSave from '../screens/customSDK/ShareSave';
 import HelpSupport from '../screens/helpSupport';
 import MonthPhotos from '../screens/thismonth';
+import OneSignal from 'react-native-onesignal';
+import Deeplinking from '../utils/linking';
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -48,8 +50,15 @@ const Routes = () => {
   };
 
   useEffect(() => {
+    OneSignal.promptForPushNotificationsWithUserResponse();
+  }, []);
+
+  useEffect(() => {
     setTimeout(() => {
       setState(false);
+
+      OneSignal.setAppId('81677935-54bb-44f5-ade2-2b4ea34c4eba');
+      console.log('OneSignal');
     }, 3000);
     getOnboarding();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -63,7 +72,8 @@ const Routes = () => {
           colors: {
             background: '#fff',
           },
-        }}>
+        }}
+        linking={Deeplinking}>
         <Stack.Navigator screenOptions={{headerShown: false}}>
           {state ? (
             <Stack.Screen

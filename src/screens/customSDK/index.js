@@ -187,7 +187,7 @@ const FrameSelection = ({
 }) => {
   const [laoding, setLoading] = useState(false);
   const isSelected = selectedIndex === index;
-  console.log(item?.contentLocation?.address, 'item');
+
   return (
     <TouchableOpacity
       style={[
@@ -1091,12 +1091,11 @@ const CustomSDK = ({route, navigation}) => {
                         }
                         onLoad={() => setIsLoading(false)}
                         source={
-                          framImg
-                            ? {uri: framImg}
-                            : ToastAndroid.show(
-                                'Frame is not available please provide better link',
-                                ToastAndroid.LONG,
-                              )
+                          framImg ? {uri: framImg} : null
+                          // : ToastAndroid.show(
+                          //     'Frame is not available please provide better link',
+                          //     ToastAndroid.LONG,
+                          //   )
                         }
                         resizeMode="contain"
                         style={{
@@ -1294,7 +1293,8 @@ const CustomSDK = ({route, navigation}) => {
             />
             <Text style={styles.frameText}>Add Text</Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* sticker */}
+          {/* <TouchableOpacity
             onPress={() => {
               if (stickers) {
                 setShowSticker(!showSticker);
@@ -1309,7 +1309,7 @@ const CustomSDK = ({route, navigation}) => {
               color={Colors.SECONDRY}
             />
             <Text style={styles.frameText}>Sticker</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             onPress={() => setShowFontFamily(true)}
             style={styles.frame}>

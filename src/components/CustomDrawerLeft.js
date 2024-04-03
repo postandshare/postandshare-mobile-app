@@ -97,7 +97,7 @@ const CustomDrawerLeft = ({navigation, route}) => {
         />
         <Item
           icon={<AntDesign name={'filetext1'} style={styles.icon} />}
-          text="Term & Condition"
+          text="Terms & Conditions"
           path={NavigationScreenName.TERM_AND_CONDITION}
           onPress={() =>
             navigation.navigate(NavigationScreenName.TERM_AND_CONDITION)
