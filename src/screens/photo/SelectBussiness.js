@@ -15,6 +15,7 @@ import {useQuery} from '@tanstack/react-query';
 import {getAllBusinessList} from '../../services/userServices/bussiness.servies';
 import {useFocusEffect} from '@react-navigation/native';
 import NavigationScreenName from '../../constants/NavigationScreenName';
+import {getUserProfile} from '../../services/userServices/profile.services';
 
 const SelectBussiness = ({route, navigation}) => {
   const {picData} = route?.params;
@@ -38,11 +39,36 @@ const SelectBussiness = ({route, navigation}) => {
     enabled: false,
   });
 
+  const {
+    isLoading: getUserProfileLoading,
+    isFetching: getUserProfileFetching,
+    refetch: getUserProfileRefetch,
+    data: getUserProfile_Data,
+    isError: getUserProfile_isError,
+  } = useQuery({
+    queryKey: ['getUserProfile'],
+    queryFn: () => getUserProfile(),
+    onSuccess: success => {},
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getUserProfileRefetch();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [getUserProfileRefetch, navigation]),
+  );
+
   useFocusEffect(
     useCallback(() => {
       getAllBusinessListRefetch();
     }, [getAllBusinessListRefetch, navigation]),
   );
+
+  console.log(getUserProfile_Data?.data?.obj?.profilePic, 'user profile');
 
   return (
     <>
@@ -96,6 +122,37 @@ const SelectBussiness = ({route, navigation}) => {
               }
             />
           ))}
+
+          <Text style={styles.text}>Your Profile</Text>
+          {/* <MyBussinessCard */}
+          <MyBussinessCard
+            name={
+              getUserProfile_Data?.data?.obj?.firstName
+                ? getUserProfile_Data?.data?.obj?.firstName
+                : '-' + getAllBusinessList_Data?.data?.obj?.middleName
+                ? getUserProfile_Data?.data?.obj?.middleName
+                : '-' + getUserProfile_Data?.data?.obj?.lastName
+                ? getUserProfile_Data?.data?.obj?.lastName
+                : '-'
+            }
+            EstblishmentDate={getUserProfile_Data?.data?.obj?.DOB}
+            image={getUserProfile_Data?.data?.obj?.profilePic}
+            userDocId={getUserProfile_Data?.data?.obj?._id}
+            // lastUpdated={item?.lastUpdated ?? item?.createdOn}
+            onPress={
+              () =>
+                picData
+                  ? navigation.navigate('CustomSDK', {
+                      picData: picData?.photo,
+                      businessDetails: getUserProfile_Data?.data?.obj,
+                    })
+                  : null
+              // : navigation.navigate('View Bussiness', {
+              //     businessId: item?._id,
+              //     businessType: item?.businessType,
+              //   })
+            }
+          />
         </View>
       </ScrollView>
     </>

@@ -887,7 +887,8 @@ const CustomSDK = ({route, navigation}) => {
                             ? {
                                 uri:
                                   BusinessData?.logo ??
-                                  businessDetails?.partyLogo,
+                                  businessDetails?.partyLogo ??
+                                  BusinessData?.profilePic,
                               }
                             : Images.akSchoolIcon
                         }
@@ -1039,6 +1040,17 @@ const CustomSDK = ({route, navigation}) => {
                                 ' ' +
                                 '\n' +
                                 BusinessData?.legislativeAssembly
+                              : BusinessData?.currentAddress
+                              ? BusinessData?.currentAddress?.address +
+                                ' ' +
+                                '||' +
+                                BusinessData?.currentAddress?.dist +
+                                ' ' +
+                                '\n' +
+                                BusinessData?.currentAddress?.state +
+                                ' ' +
+                                '\n' +
+                                BusinessData?.currentAddress?.pinCode
                               : ToastAndroid.show(
                                   'Address is not available',
                                   ToastAndroid.LONG,

@@ -1,9 +1,6 @@
-
-import { utils } from '@react-native-firebase/app';
-import { Linking } from 'react-native';
+import {utils} from '@react-native-firebase/app';
+import {Linking} from 'react-native';
 import OneSignal from 'react-native-onesignal';
-import { store } from '../services/store';
-
 
 export const deepLinkConfig = {
   // Deep link configuration
@@ -13,31 +10,6 @@ export const deepLinkConfig = {
     Add: 'add',
     MyPost: 'mypost',
     HelpSupport: 'helpSupport',
-//     NoticeBoard: 'notice',
-//     Transportation: 'transport',
-//     StaffAndTeacher: 'staff',
-//     TimeTable: 'timeTable',
-//     ResultNavigator: 'result',
-//     ChildProfileNavigator: 'childId',
-//     ChildSubjectNavigator: {
-//       screens: {
-//         Subjects: 'sub',
-//         SubjectDetails: 'subDetails',
-//         SubjectTopic: 'subTopic',
-//       },
-//     },
-//     AboutSchool: 'about',
-//     ComplainNavigator: 'complain',
-//     GalleryNavigator: 'gallery',
-//     AcademicCalendar: 'academicCalendar',
-
-//     BottomTab: {
-//       screens: {
-//         HomeWork: 'homework',
-//         Attendance: 'attendance',
-//         Thought: 'thought',
-//       },
-//     },
   },
 };
 
@@ -54,7 +26,7 @@ const Deeplinking = {
     // The exact usage depend on the third-party SDK you use
     // For example, to get to get the initial URL for Firebase Dynamic Links:
 
-    // const {isAvailable} = utils().playServicesAvailability;
+    const {isAvailable} = utils().playServicesAvailability;
 
     // if (isAvailable) {
     //   const initialLink = await dynamicLinks().getInitialLink();
@@ -88,7 +60,7 @@ const Deeplinking = {
         const data = notification.notification.additionalData;
         const userDocId = data?.userDocId;
         const url = data?.url;
-        console.log("data in notification" , data);
+        console.log('data in notification', data);
         // const {
         //   commonStore: {selectedChild},
         // } = store.getState();
@@ -116,9 +88,9 @@ const Deeplinking = {
 
     return () => {
       // Clean up the event listeners
-    //   unsubscribeFirebase();
+      // unsubscribeFirebase();
       linkingSubscription?.remove();
-      //unsubscribeNotification();
+      // unsubscribeNotification();
     };
   },
 

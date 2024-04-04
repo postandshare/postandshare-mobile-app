@@ -1,4 +1,4 @@
-import {Image, Text, ToastAndroid, TouchableOpacity, View} from 'react-native';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import styles from '../style';
 import {FlatList} from 'react-native-actions-sheet';
@@ -51,6 +51,11 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
                     {moment(item?.date).format('MMM Do')}
                   </Text>
                 </View>
+                <View style={styles.uploadpic_container_eventview}>
+                  <Text style={styles.uploadpic_container_eventname}>
+                    {item?.name ?? null}
+                  </Text>
+                </View>
                 {loading && (
                   <ActivityIndicator
                     style={{
@@ -69,17 +74,6 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
                   style={styles.uploadpic_container_image}
                 />
               </TouchableOpacity>
-              {/* <View>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: Colors.TEXT1,
-                    textAlign: 'center',
-                    marginTop: 5,
-                  }}>
-                  {item?.name}
-                </Text>
-              </View> */}
             </>
           )}
           keyExtractor={index => index._id}

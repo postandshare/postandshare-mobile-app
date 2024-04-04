@@ -44,7 +44,7 @@ const App = () => {
   if (!isConnected) {
     return <NoInternet setIsConnected={setIsConnected} />;
   }
-  
+
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <QueryClientProvider client={queryClient}>

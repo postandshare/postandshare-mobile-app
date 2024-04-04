@@ -17,10 +17,11 @@ const MyBussinessCard = ({
   onPressEdit,
   onPressForPhotoEdit,
 }) => {
+
   return (
-    <TouchableOpacity style={styles.root_container} onPress={
-      onPressForPhotoEdit ?? onPress
-    }>
+    <TouchableOpacity
+      style={styles.root_container}
+      onPress={onPressForPhotoEdit ?? onPress}>
       {/* profile image */}
       <View style={styles.profile_container}>
         {image ? (
@@ -44,7 +45,9 @@ const MyBussinessCard = ({
       {/* bussiness name and est date */}
       <View style={styles.name_container}>
         <Text style={styles.bussinessName}>{name}</Text>
-        <Text style={styles.est_date}>{moment(EstblishmentDate).format('LL')}</Text>
+        <Text style={styles.est_date}>
+          {moment(EstblishmentDate).format('LL')}
+        </Text>
       </View>
 
       {/* edit button */}

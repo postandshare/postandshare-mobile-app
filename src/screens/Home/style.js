@@ -105,11 +105,24 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     borderBottomRightRadius: 10,
   },
+  uploadpic_container_eventview: {
+    zIndex: 1,
+    position: 'absolute',
+    bottom: 8,
+    alignSelf: 'center',
+  },
   uploadpic_container_date: {
     fontSize: 12,
     fontWeight: '400',
     color: Colors.white,
     textAlign: 'center',
+  },
+  uploadpic_container_eventname: {
+    fontSize: 12,
+    fontWeight: '400',
+    color: Colors.PRIMARY,
+    textAlign: 'center',
+    alignSelf: 'center',
   },
 
   // moti container styles
