@@ -7,10 +7,33 @@ export const deepLinkConfig = {
   // Deep link configuration
   // props name are written in comment
   screens: {
-    initialRouteName: 'Home',
     Add: 'add',
     MyPost: 'mypost',
     HelpSupport: 'helpSupport',
+    ProfileNavigator: {
+      screens: {
+        ProfileView: 'profileView',
+        EditProfile: 'editProfile',
+        ViewDetailedProfile: 'viewDetailedProfile',
+      },
+    },
+    MyBussinessNavigator: {
+      screens: {
+        MyBussiness: 'myBussiness',
+        AddBussiness: 'addBussiness',
+        EditBussiness: 'editBussiness',
+      },
+    },
+    PhotoNavigator: {
+      screens: {
+        Photo: 'photo',
+        PhotoDetail: 'photoDetail',
+        PhotoEdit: 'photoEdit',
+      },
+    },
+    CustomSDK: 'customSDK',
+    ShareSave: 'shareSave',
+    FeedBack: 'feedBack',
   },
 };
 
@@ -29,12 +52,12 @@ const Deeplinking = {
 
     const {isAvailable} = utils().playServicesAvailability;
 
-    // if (isAvailable) {
-    //   const initialLink = await dynamicLinks().getInitialLink();
-    //   if (initialLink) {
-    //     return initialLink.url;
-    //   }
-    // }
+    if (isAvailable) {
+      const initialLink = await dynamicLinks().getInitialLink();
+      if (initialLink) {
+        return initialLink.url;
+      }
+    }
 
     // As a fallback, you may want to do the default deep link handling
     const url = await Linking.getInitialURL();
@@ -62,22 +85,6 @@ const Deeplinking = {
         const userDocId = data?.userDocId;
         const url = data?.url;
         console.log('data in notification', data);
-        // const {
-        //   commonStore: {selectedChild},
-        // } = store.getState();
-        // if (selectedChild?._id !== userDocId) {
-        //   const {
-        //     commonStore: {childList},
-        //   } = store.getState();
-
-        //   const sChild = childList.find(child => child._id === userDocId);
-        //   const {data} = await schoolAccessTokenByStudent({
-        //     studentDocId: sChild?._id,
-        //     schoolDocId: sChild?.schoolDocId ? sChild?.schoolDocId : null,
-        //   });
-        //   store.dispatch(setStudentLoginState(data));
-        //   store.dispatch(setSelectedChild(sChild));
-        // }
         if (url) {
           // redirect after 2 sec
           setTimeout(() => {
@@ -90,7 +97,7 @@ const Deeplinking = {
     return () => {
       // Clean up the event listeners
       unsubscribeFirebase();
-      Linking.removeAllListeners('url', linkingSubscription);
+      linkingSubscription?.remove();
       // unsubscribeNotification();
     };
   },

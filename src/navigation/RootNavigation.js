@@ -27,7 +27,7 @@ import ShareSave from '../screens/customSDK/ShareSave';
 import HelpSupport from '../screens/helpSupport';
 import MonthPhotos from '../screens/thismonth';
 import OneSignal from 'react-native-onesignal';
-
+import Deeplinking from '../utils/linking';
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -49,17 +49,14 @@ const Routes = () => {
     }
   };
 
-  // useEffect(() => {
-  //   OneSignal.promptForPushNotificationsWithUserResponse();
-  // }, []);
-
-
+  useEffect(() => {
+    OneSignal.promptForPushNotificationsWithUserResponse();
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {
       setState(false);
-
-      // OneSignal.setAppId('81677935-54bb-44f5-ade2-2b4ea34c4eba');
+      OneSignal.setAppId('81677935-54bb-44f5-ade2-2b4ea34c4eba');
       console.log('OneSignal');
     }, 3000);
     getOnboarding();
@@ -75,8 +72,7 @@ const Routes = () => {
             background: '#fff',
           },
         }}
-        // linking={Deeplinking}
-      >
+        linking={Deeplinking}>
         <Stack.Navigator screenOptions={{headerShown: false}}>
           {state ? (
             <Stack.Screen
