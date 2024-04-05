@@ -84,7 +84,7 @@ const Deeplinking = {
         const data = notification.notification.additionalData;
         const userDocId = data?.userDocId;
         const url = data?.url;
-        console.log('data in notification', data);
+        console.log('data in notification', url);
         if (url) {
           // redirect after 2 sec
           setTimeout(() => {
