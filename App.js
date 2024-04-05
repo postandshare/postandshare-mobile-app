@@ -26,6 +26,7 @@ export const queryClient = new QueryClient({
 });
 
 const App = () => {
+  
   const [isConnected, setIsConnected] = useState(true);
 
   useEffect(() => {

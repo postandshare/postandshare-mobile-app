@@ -49,23 +49,17 @@ const Routes = () => {
     }
   };
 
-  useEffect(() => {
-    OneSignal.promptForPushNotificationsWithUserResponse();
-  }, []);
+  // useEffect(() => {
+  //   OneSignal.promptForPushNotificationsWithUserResponse();
+  // }, []);
 
-  OneSignal.setNotificationOpenedHandler(openResult => {
-    try {
-      console.log('Message: ', openResult);
-    } catch (error) {
-      console.error('Error in setNotificationOpenedHandler: ', error);
-    }
-  });
+
 
   useEffect(() => {
     setTimeout(() => {
       setState(false);
 
-      OneSignal.setAppId('81677935-54bb-44f5-ade2-2b4ea34c4eba');
+      // OneSignal.setAppId('81677935-54bb-44f5-ade2-2b4ea34c4eba');
       console.log('OneSignal');
     }, 3000);
     getOnboarding();
