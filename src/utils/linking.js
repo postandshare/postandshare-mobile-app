@@ -1,6 +1,7 @@
 import {utils} from '@react-native-firebase/app';
 import {Linking} from 'react-native';
 import OneSignal from 'react-native-onesignal';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 export const deepLinkConfig = {
   // Deep link configuration
@@ -46,9 +47,9 @@ const Deeplinking = {
   // Custom function to subscribe to incoming links
   subscribe(listener) {
     // Listen to incoming links from Firebase Dynamic Links
-    // const unsubscribeFirebase = dynamicLinks().onLink(({url}) => {
-    //   listener(url);
-    // });
+    const unsubscribeFirebase = dynamicLinks().onLink(({url}) => {
+      listener(url);
+    });
 
     // // Listen to incoming links from deep linking
     const linkingSubscription = Linking.addEventListener('url', ({url}) => {
@@ -88,8 +89,8 @@ const Deeplinking = {
 
     return () => {
       // Clean up the event listeners
-      // unsubscribeFirebase();
-      linkingSubscription?.remove();
+      unsubscribeFirebase();
+      Linking.removeAllListeners('url', linkingSubscription);
       // unsubscribeNotification();
     };
   },

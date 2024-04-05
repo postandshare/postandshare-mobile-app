@@ -1,4 +1,4 @@
-import {StatusBar, StyleSheet, Text, View} from 'react-native';
+import {Alert, StatusBar, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
@@ -27,7 +27,7 @@ import ShareSave from '../screens/customSDK/ShareSave';
 import HelpSupport from '../screens/helpSupport';
 import MonthPhotos from '../screens/thismonth';
 import OneSignal from 'react-native-onesignal';
-import Deeplinking from '../utils/linking';
+
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -53,6 +53,14 @@ const Routes = () => {
     OneSignal.promptForPushNotificationsWithUserResponse();
   }, []);
 
+  OneSignal.setNotificationOpenedHandler(openResult => {
+    try {
+      console.log('Message: ', openResult);
+    } catch (error) {
+      console.error('Error in setNotificationOpenedHandler: ', error);
+    }
+  });
+
   useEffect(() => {
     setTimeout(() => {
       setState(false);
@@ -73,7 +81,8 @@ const Routes = () => {
             background: '#fff',
           },
         }}
-        linking={Deeplinking}>
+        // linking={Deeplinking}
+      >
         <Stack.Navigator screenOptions={{headerShown: false}}>
           {state ? (
             <Stack.Screen

@@ -12,7 +12,7 @@ import {Amplify} from 'aws-amplify';
 import aws_exports from './src/aws-exports';
 import NetInfo from '@react-native-community/netinfo';
 import NoInternet from './src/components/NoInternet';
-import OneSignal from 'react-native-onesignal';
+
 
 Amplify.configure(aws_exports);
 
@@ -24,6 +24,7 @@ export const queryClient = new QueryClient({
     },
   },
 });
+
 const App = () => {
   const [isConnected, setIsConnected] = useState(true);
 
@@ -34,11 +35,6 @@ const App = () => {
     return () => {
       unsubscribe();
     };
-  }, []);
-
-  useEffect(() => {
-    OneSignal.setAppId('81677935-54bb-44f5-ade2-2b4ea34c4eba');
-    console.log('OneSignal');
   }, []);
 
   if (!isConnected) {

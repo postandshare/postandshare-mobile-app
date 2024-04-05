@@ -4070,23 +4070,23 @@
   resolved "https://registry.npmjs.org/@react-native-community/netinfo/-/netinfo-11.2.1.tgz"
   integrity sha512-n9kgmH7vLaU7Cdo8vGfJGGwhrlgppaOSq5zKj9I7H4k5iRM3aNtwURw83mgrc22Ip7nSye2afZV2xDiIyvHttQ==
 
-"@react-native-firebase/analytics@^18.6.1":
-  version "18.6.1"
-  resolved "https://registry.npmjs.org/@react-native-firebase/analytics/-/analytics-18.6.1.tgz"
-  integrity sha512-ae43ud4N4m6jLfuR4b7XVFwARVW2WIa+rrZt5FrbnRYvh3Fje21fttK3UsMB40KgRaz0S1orV3gGLuSxqr8RRQ==
+"@react-native-firebase/analytics@^18.7.3":
+  version "18.7.3"
+  resolved "https://registry.npmjs.org/@react-native-firebase/analytics/-/analytics-18.7.3.tgz"
+  integrity sha512-bUofJYQvU93QSQAo2wob15vZ2ywWoqlHkOzVlU4F0ussgbwWzuJYBc0rLKbTg4+Q+nIhxKxyX5M68R3nxK8VjQ==
 
-"@react-native-firebase/app@^18.6.1", "@react-native-firebase/app@18.6.1":
-  version "18.6.1"
-  resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-18.6.1.tgz"
-  integrity sha512-lqINQLLTCmBSeln/cSPfvuJNQuwsPY9n6QyxSRRCTjyZdEPI3EY2df7isOCp8BwuxqYmkR9YhTNw2yFI72th+w==
+"@react-native-firebase/app@^18.7.3", "@react-native-firebase/app@18.7.3":
+  version "18.7.3"
+  resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-18.7.3.tgz"
+  integrity sha512-KlUuLSCYrBMHXE2Evye1fzrqunUjFEPihxcpzuUyJ5yQyAuCNws7VGdEPIaXoKz1esof0uv8wMSxD+G6W+Vi8Q==
   dependencies:
     opencollective-postinstall "^2.0.3"
     superstruct "^0.6.2"
 
-"@react-native-firebase/dynamic-links@^18.6.1":
-  version "18.6.1"
-  resolved "https://registry.npmjs.org/@react-native-firebase/dynamic-links/-/dynamic-links-18.6.1.tgz"
-  integrity sha512-IRNyozt8yQZvsQ8H5NFC2ujlvtbWLacfFQswe3oql4tKT7RdovyV2HStmavnu1Vywl9MayNiBbqQVfo4I2FRpg==
+"@react-native-firebase/dynamic-links@^18.7.3":
+  version "18.7.3"
+  resolved "https://registry.npmjs.org/@react-native-firebase/dynamic-links/-/dynamic-links-18.7.3.tgz"
+  integrity sha512-Q22+3ZXsUfSdYGmhQHE1BiJJFx53SK/OpsrxytyV6PJz4acA8bN/ADh84mCbYTr0Mz6JiwSGrjBkDVkOS9Co7w==
 
 "@react-native-masked-view/masked-view@^0.2.9":
   version "0.2.9"
