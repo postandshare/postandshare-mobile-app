@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import styles from './style';
 import DashboardTopHeader from '../../components/DashboardTopHeader';
 import Images from '../../constants/images';
@@ -28,6 +28,7 @@ import {
 import {useFocusEffect} from '@react-navigation/native';
 import {MotiText, MotiView} from 'moti';
 import {Skeleton} from 'moti/skeleton';
+import OneSignal from 'react-native-onesignal';
 
 const Home = ({navigation}) => {
   const [value, setValue] = React.useState('photo');
@@ -136,6 +137,7 @@ const Home = ({navigation}) => {
       getTemplatesOfGreatLeadersRefetch();
       getTemplatesByBusinessRefetch();
       getTrendingTemlpatesRefetch();
+      getOnesignalData();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
       getTemplatesForQuotesRefetch,
@@ -146,6 +148,21 @@ const Home = ({navigation}) => {
       getTrendingTemlpatesRefetch,
     ]),
   );
+
+  const getOnesignalData = useCallback(async () => {
+    const data = await OneSignal.getDeviceState();
+    const playerId = data?.userId;
+    console.log(playerId, 'playerId');
+    // saveStaffNotificationToken({
+    //   appNotificationToken: playerId,
+    // });
+
+    //checking the user is already subscribe to onesignal or not
+    const isSubscribed = data?.isSubscribed;
+    if (!isSubscribed) {
+      OneSignal.promptForPushNotificationsWithUserResponse();
+    }
+  }, []);
 
   // const Spacer = ({width = 16}) => <View style={{width}} />;
   // const skeletonText = ({label}) => (
