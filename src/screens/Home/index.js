@@ -29,6 +29,10 @@ import {useFocusEffect} from '@react-navigation/native';
 import {MotiText, MotiView} from 'moti';
 import {Skeleton} from 'moti/skeleton';
 import OneSignal from 'react-native-onesignal';
+import {
+  getUserProfile,
+  saveAppNotificationToken,
+} from '../../services/userServices/profile.services';
 
 const Home = ({navigation}) => {
   const [value, setValue] = React.useState('photo');
@@ -43,6 +47,22 @@ const Home = ({navigation}) => {
   const onPresProfile = () => {
     navigation.navigate('ProfileNavigator');
   };
+
+  const {
+    isLoading: getUserProfileLoading,
+    isFetching: getUserProfileFetching,
+    refetch: getUserProfileRefetch,
+    data: getUserProfile_Data,
+    isError: getUserProfile_isError,
+  } = useQuery({
+    queryKey: ['getUserProfile'],
+    queryFn: () => getUserProfile(),
+    onSuccess: success => {},
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
 
   const {
     isLoading: getTemplatesForQuotesLoading,
@@ -131,12 +151,13 @@ const Home = ({navigation}) => {
   });
 
   useFocusEffect(
-    useCallback(() => {
+    useCallback(async () => {
       getTemplatesByDateRefetch();
       getTemplatesForQuotesRefetch();
       getTemplatesOfGreatLeadersRefetch();
       getTemplatesByBusinessRefetch();
       getTrendingTemlpatesRefetch();
+      await getUserProfileRefetch();
       getOnesignalData();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
@@ -149,13 +170,16 @@ const Home = ({navigation}) => {
     ]),
   );
 
+  console.log(getUserProfile_Data?.data?.obj?._id, 'user id');
+
   const getOnesignalData = useCallback(async () => {
     const data = await OneSignal.getDeviceState();
     const playerId = data?.userId;
     console.log(playerId, 'playerId');
-    // saveStaffNotificationToken({
-    //   appNotificationToken: playerId,
-    // });
+    saveAppNotificationToken({
+      userDocId: getUserProfile_Data?.data?.obj?._id,
+      appNotificationToken: playerId,
+    });
 
     //checking the user is already subscribe to onesignal or not
     const isSubscribed = data?.isSubscribed;

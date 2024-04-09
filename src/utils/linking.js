@@ -34,6 +34,9 @@ export const deepLinkConfig = {
     CustomSDK: 'customSDK',
     ShareSave: 'shareSave',
     FeedBack: 'feedBack',
+    Notification: 'notification',
+    Search: 'search',
+    Home: 'home',
   },
 };
 
