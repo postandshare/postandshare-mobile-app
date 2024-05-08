@@ -3,8 +3,6 @@ import {scale} from 'react-native-size-matters';
 import Sizes from '../../constants/Sizes';
 import Colors from '../../constants/Colors';
 
-
-
 const styles = StyleSheet.create({
   // splash style
   root: {
@@ -31,7 +29,7 @@ const styles = StyleSheet.create({
   },
   //   onboarding style
   onboarding_root: {
-    backgroundColor: Colors.PRIMARY,
+    backgroundColor: '#fff',
     flex: 1,
     position: 'relative',
     width: Sizes.width,
@@ -51,7 +49,7 @@ const styles = StyleSheet.create({
     marginTop: Sizes.hp('4%'),
   },
   skip_button: {
-   // color: Colors.TEXT1,
+    // color: Colors.TEXT1,
     fontSize: scale(15),
     fontWeight: '400',
     letterSpacing: 0.7,
@@ -111,7 +109,7 @@ const styles = StyleSheet.create({
     marginTop: Sizes.hp('3%'),
     marginHorizontal: Sizes.wp('10%'),
   },
- 
+
   top_image_wrapper: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -157,7 +155,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     paddingHorizontal: 40,
     paddingVertical: 60,
-    width: Sizes.wp('100%')
+    width: Sizes.wp('100%'),
   },
   startButton_cont: {
     backgroundColor: Colors.white,
@@ -184,5 +182,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: -5,
   },
+
+  // new onboarding style
 });
 export default styles;

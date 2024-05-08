@@ -151,14 +151,18 @@ const Home = ({navigation}) => {
   });
 
   useFocusEffect(
-    useCallback(async () => {
-      getTemplatesByDateRefetch();
-      getTemplatesForQuotesRefetch();
-      getTemplatesOfGreatLeadersRefetch();
-      getTemplatesByBusinessRefetch();
-      getTrendingTemlpatesRefetch();
-      await getUserProfileRefetch();
-      getOnesignalData();
+    useCallback(() => {
+      const fetchData = async () => {
+        await getTemplatesByDateRefetch();
+        await getTemplatesForQuotesRefetch();
+        await getTemplatesOfGreatLeadersRefetch();
+        await getTemplatesByBusinessRefetch();
+        await getTrendingTemlpatesRefetch();
+        await getUserProfileRefetch();
+        getOnesignalData();
+      };
+
+      fetchData();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
       getTemplatesForQuotesRefetch,
@@ -169,8 +173,6 @@ const Home = ({navigation}) => {
       getTrendingTemlpatesRefetch,
     ]),
   );
-
-  console.log(getUserProfile_Data?.data?.obj?._id, 'user id');
 
   const getOnesignalData = useCallback(async () => {
     const data = await OneSignal.getDeviceState();
@@ -186,6 +188,7 @@ const Home = ({navigation}) => {
     if (!isSubscribed) {
       OneSignal.promptForPushNotificationsWithUserResponse();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // const Spacer = ({width = 16}) => <View style={{width}} />;

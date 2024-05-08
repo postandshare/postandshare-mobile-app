@@ -2,66 +2,127 @@ import {
   Text,
   View,
   Image,
-  ImageBackground,
   TouchableOpacity,
+  FlatList,
+  Animated,
 } from 'react-native';
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import styles from './style';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
 import Images from '../../constants/images';
-import NavigationScreenName from '../../constants/NavigationScreenName';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LocalStorageKey from '../../constants/LocalStorageKey';
-import { useDispatch } from 'react-redux';
-import { setOnBoarding } from '../../services/reducer/AuthSlice';
+import {useDispatch} from 'react-redux';
+import {setOnBoarding} from '../../services/reducer/AuthSlice';
+import OnboardingNextButton from '../../components/OnboardingNextButton';
+import Paginator from '../../components/Paginator';
+
+const onBoardingContent = [
+  {
+    img: Images.onboarding1,
+    title: 'Create Post',
+    text: 'Begin crafting stunning social media content with just a few taps',
+  },
+  {
+    img: Images.onboarding2,
+    title: 'Share the Love',
+    text: 'Start spreading love with personalised posts for your special ones',
+  },
+  {
+    img: Images.onboarding3,
+    title: 'Video Templates',
+    text: 'Lights, Camera, Template! Explore Our Exciting Video Templates Now!',
+  },
+];
+
 const OnBoarding = ({navigation}) => {
+  const scrollX = useRef(new Animated.Value(0)).current;
+  const [currentIndex, setCurrentIndex] = useState(0);
   const dispatch = useDispatch();
-  const handleOnPresStart = async() => {
+  const viewableItemChanged = useRef(({viewableItems}) => {
+    setCurrentIndex(viewableItems[0].index);
+  }).current;
+
+  const viewConfig = useRef({viewAreaCoveragePercentThreshold: 50}).current;
+  const slidesRef = useRef(null);
+  const scrollTo = async () => {
+    try {
+      if (currentIndex < onBoardingContent.length - 1) {
+        slidesRef?.current?.scrollToIndex({index: currentIndex + 1});
+      } else {
+        await AsyncStorage.setItem(LocalStorageKey.ONBOARDING, 'true');
+        dispatch(setOnBoarding(true));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleOnPressSkip = async () => {
+    try {
+      await AsyncStorage.setItem(LocalStorageKey.ONBOARDING, 'true');
+      dispatch(setOnBoarding(true));
+    } catch (error) {}
+  };
+
+  const handleOnPresStart = async () => {
     try {
       await AsyncStorage.setItem(LocalStorageKey.ONBOARDING, 'true');
       dispatch(setOnBoarding(true));
     } catch (error) {}
   };
   return (
-    <>
-      <View style={styles.rootOboarding}>
-        <View>
-          <View style={styles.top_image_wrapper}>
-            <Image source={Images.splashTop} />
-          </View>
-          <View style={styles.text_wrapper}>
-            <Text style={[styles.easyText, styles.common]}>
-              Easy <Text style={[styles.wayText, styles.common]}>Way</Text> to
-            </Text>
-            <Text style={[styles.createText, styles.common]}>
-              Create <Text style={[styles.yourText, styles.common]}>Your</Text>{' '}
-              <Text style={[styles.postText, styles.common]}>Post</Text>
-            </Text>
-            <Text style={styles.subtitle_text}>
-              Lorem Ipsum is simply dummy text printing and typesetting
-              industry. Lorem Ipsum been the industry's Ipsum has standard.
-            </Text>
-          </View>
-        </View>
-        <ImageBackground
-          source={Images.splashBottom}
-          style={styles.bottomImage_root}>
-          <TouchableOpacity
-            style={styles.startButton_cont}
-            activeOpacity={0.5}
-            onPress={handleOnPresStart}>
-            <View style={styles.startButton_text_wrapper}>
-              <Text style={styles.startButton_text}>Start</Text>
-              <FontAwesome5
-                name="long-arrow-alt-right"
-                style={styles.startButton_icon}
+    <View style={[styles.onboarding_root]}>
+      <View style={styles.onboarding_relative_upper} />
+      <View style={styles.onboarding_relative_bottom} />
+      <FlatList
+        style={styles.onboarding_flatlist_root}
+        data={onBoardingContent}
+        renderItem={({item}) => (
+          <View style={styles.onboarding_flatlist_wrap}>
+            <View style={styles.onboarding_flatlist_upper_card}>
+              <Image
+                source={item.img}
+                style={styles.onboarding_flatlist_upper_card_img}
               />
             </View>
-          </TouchableOpacity>
-        </ImageBackground>
+            <View style={styles.onboarding_flatlist_lower_card}>
+              <View style={styles.onboarding_flatlist_lower_card_wrap}>
+                <Text style={styles.onboarding_flatlist_lower_card_title}>
+                  {item.title}
+                </Text>
+                <Text style={styles.onboarding_flatlist_lower_card_text}>
+                  {item.text}
+                </Text>
+              </View>
+            </View>
+          </View>
+        )}
+        keyExtractor={(item, index) => index}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        bounces={false}
+        pagingEnabled={true}
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {x: scrollX}}}],
+          {
+            useNativeDriver: false,
+          },
+        )}
+        onViewableItemsChanged={viewableItemChanged}
+        viewabilityConfig={viewConfig}
+        scrollEventThrottle={32}
+        ref={slidesRef}
+      />
+      <View style={[styles.paginatorContainer]}>
+        <TouchableOpacity onPress={handleOnPressSkip}>
+          <Text style={styles.skip_button}>Skip</Text>
+        </TouchableOpacity>
+        <Paginator data={onBoardingContent} scrollX={scrollX} />
+        <OnboardingNextButton
+          percentage={(currentIndex + 1) * (100 / onBoardingContent.length)}
+          scrollTo={scrollTo}
+        />
       </View>
-    </>
+    </View>
   );
 };
 

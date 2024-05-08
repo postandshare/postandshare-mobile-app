@@ -7,7 +7,7 @@ import {
   ToastAndroid,
   View,
 } from 'react-native';
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import TopHeader from '../../components/TopHeader';
 import styles from './style';
 import images from '../../constants/images';
@@ -75,12 +75,9 @@ const ProfileView = ({}) => {
     enabled: false,
   });
 
-  useFocusEffect(
-    useCallback(() => {
-      getUserProfileRefetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [getUserProfileRefetch, navigation]),
-  );
+  useEffect(() => {
+    getUserProfileRefetch();
+  }, [navigation]);
 
   const Spacer = ({height = 16}) => <View style={{height}} />;
 

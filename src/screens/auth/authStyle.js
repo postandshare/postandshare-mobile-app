@@ -6,10 +6,11 @@ import Colors from '../../constants/Colors';
 
 const authStyle = StyleSheet.create({
   upperImage: {
-    height: Sizes.hp('35%'),
+    height: Sizes.hp('65%'),
     justifyContent: 'flex-end',
     paddingHorizontal: Sizes.wp('5%'),
     paddingVertical: Sizes.hp('3%'),
+    top: -Sizes.hp('8%'),
   },
   topImgSec: {
     height: Sizes.hp('8%'),
@@ -19,7 +20,7 @@ const authStyle = StyleSheet.create({
     border: 0.8,
     borderStyle: 'solid',
     borderColor: ' rgba(11, 73, 119, 0.17)',
-    marginBottom: 10,
+    bottom: 210,
     justifyContent: 'center',
   },
   otp_icon_img: {
@@ -28,29 +29,32 @@ const authStyle = StyleSheet.create({
     alignSelf: 'center',
   },
   welcomeText: {
-    color: Colors.white,
+    color: Colors.TEXT1,
     letterSpacing: 2,
     fontSize: 30,
     fontWeight: '700',
     marginVertical: 5,
+    bottom: 200,
   },
   signin_text: {
-    color: Colors.white,
+    color: Colors.TEXT1,
     letterSpacing: 3,
     fontSize: 18,
     fontWeight: '600',
+    bottom: 190,
   },
   otp_send_text: {
-    color: Colors.white,
+    color: Colors.TEXT1,
     letterSpacing: 1,
     fontSize: 16,
     fontWeight: '600',
+    bottom: 195,
   },
   bottom_content_root: {
     paddingHorizontal: Sizes.wp('5%'),
-    paddingVertical: Sizes.hp('3%'),
+    // paddingVertical: Sizes.hp('3%'),
     backgroundColor: Colors.white,
-    flex: 1,
+    bottom: Sizes.hp('10%'),
   },
   singup_link: {
     color: 'blue',
@@ -82,12 +86,12 @@ const authStyle = StyleSheet.create({
     fontSize: scale(13),
     fontWeight: '600',
   },
-  middleContainer: {marginVertical: 10},
+  middleContainer: {marginVertical: 1},
   input: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 16,
+    bottom: 50,
     // alignContent: 'center',
   },
   otpBoxTxt: {
@@ -188,7 +192,7 @@ const authStyle = StyleSheet.create({
     backgroundColor: Colors.SECONDRY,
     width: '100%',
     alignItems: 'center',
-    padding: 20,
+    padding: 15,
     borderRadius: 15,
   },
   submitBtnContainer: {
@@ -224,6 +228,23 @@ const authStyle = StyleSheet.create({
     margin: 5,
     fontSize: 15,
     fontWeight: '300',
+  },
+  termsandcondition: {
+    flexDirection: 'row',
+    // justifyContent: 'center',
+    alignItems: 'center',
+  },
+  termsandcondition_link: {
+    color: 'blue',
+    fontSize: 12,
+    fontWeight: '700',
+    textDecorationColor: 'blue',
+    textDecorationLine: 'underline',
+  },
+  termsandcondition_text: {
+    color: Colors.text1,
+    fontSize: 12,
+    fontWeight: '400',
   },
 });
 

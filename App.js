@@ -13,7 +13,6 @@ import aws_exports from './src/aws-exports';
 import NetInfo from '@react-native-community/netinfo';
 import NoInternet from './src/components/NoInternet';
 
-
 Amplify.configure(aws_exports);
 
 export const queryClient = new QueryClient({
@@ -51,13 +50,21 @@ const App = () => {
                 theme={{
                   colors: {
                     ...DefaultTheme.colors,
-                    primary: '#00CC8C',
-                    secondary: '#184D41',
+                    primary: '#F95F32',
+                    secondary: '#404040',
                     placeholder: '#fff',
-                    outline: 'rgba(24,77,65,0.5)',
-                    surface: 'rgba(24,77,65,0.5)',
-                    surfaceVariant: 'rgba(24,77,65,0.5)',
+                    label: ' #6A6A6A',
+                    outline: '#F95F3240',
+                    surface: ' #F95F3250',
+                    surfaceVariant: '#F95F32',
+                    desturctive: ' #FF0A00',
                     background: '#fff',
+                  },
+                  fonts: {
+                    regular: {
+                      fontFamily: 'Playfair Display',
+                      fontStyle: 'Source Sans 3',
+                    },
                   },
                 }}>
                 <Routes />

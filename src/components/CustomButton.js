@@ -8,7 +8,7 @@ import Sizes from '../constants/Sizes';
 import Colors from '../constants/Colors';
 
 const CustomButton = ({
-  secondary = true,
+  secondary = false,
   width = '90%',
   title,
   onPress = () => {},

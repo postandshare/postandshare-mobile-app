@@ -12,27 +12,28 @@ import CustomInputField from '../../../components/CustomInputField';
 import CustomButton from '../../../components/CustomButton';
 import NavigationScreenName from '../../../constants/NavigationScreenName';
 import authStyle from '../authStyle';
-import { SendOTPonMobile } from '../../../services/authServices/auth.services';
-import { useMutation } from '@tanstack/react-query';
+import {SendOTPonMobile} from '../../../services/authServices/auth.services';
+import {useMutation} from '@tanstack/react-query';
 import Loader from '../../../components/Loader';
+import {Checkbox, TextInput} from 'react-native-paper';
 
 const Login = ({navigation}) => {
   const [state, setState] = useState({
     name: '',
     phone: '',
     err: {},
+    check: false,
   });
   const onChangePhone = text => {
     setState({...state, phone: text, err: {...state.err, phone: ''}});
   };
 
-  const {mutate: SendOTPonMobileMuatate, isLoading: SendOTPonMobileLoading} = useMutation(
-    SendOTPonMobile,
-    {
+  const {mutate: SendOTPonMobileMuatate, isLoading: SendOTPonMobileLoading} =
+    useMutation(SendOTPonMobile, {
       onSuccess: success => {
         ToastAndroid.show(success?.data?.message, ToastAndroid.SHORT);
 
-        console.log(success?.data , "in success");
+        console.log(success?.data, 'in success');
         navigation.navigate(NavigationScreenName.VERIFY_OTP, {
           mobileNumber: state?.phone,
           requesId: success?.data?.request_id,
@@ -41,11 +42,7 @@ const Login = ({navigation}) => {
       onError: error => {
         ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
       },
-    },
-  );
-
-
-
+    });
 
   const handleVerification = () => {
     let err = {};
@@ -68,11 +65,13 @@ const Login = ({navigation}) => {
   };
   return (
     <>
-    <Loader open={SendOTPonMobileLoading } text='Sending OTP...'/>
+      <Loader open={SendOTPonMobileLoading} text="Sending OTP..." />
       <ImageBackground source={Images.loginTop} style={authStyle.upperImage}>
-        <View style={authStyle.topImgSec} />
-        <Text style={authStyle.welcomeText}>Welcome !</Text>
-        <Text style={authStyle.signin_text}>Sign in to Continue</Text>
+        {/* <View style={authStyle.topImgSec} /> */}
+        <Text style={authStyle.welcomeText}>Enter your phone number</Text>
+        <Text style={authStyle.signin_text}>
+          Input your mobile number for account verification
+        </Text>
       </ImageBackground>
       <View style={authStyle.bottom_content_root}>
         <CustomInputField
@@ -84,6 +83,24 @@ const Login = ({navigation}) => {
           maxLength={10}
           onChange={onChangePhone}
         />
+
+        <View style={authStyle.termsandcondition}>
+          <Checkbox
+            status={state?.check ? 'checked' : 'unchecked'}
+            onPress={() => {
+              setState({...state, check: !state.check});
+            }}
+          />
+          <Text style={authStyle.termsandcondition_text}>
+            By continuing, you agree to our{' '}
+          </Text>
+          <TouchableOpacity>
+            <Text style={authStyle.termsandcondition_link}>
+              Terms & Conditions
+            </Text>
+          </TouchableOpacity>
+        </View>
+
         {/* <TouchableOpacity onPress={onPressTrouble}>
           <Text style={authStyle.touble_text}>Trouble to Sign in ?</Text>
         </TouchableOpacity> */}

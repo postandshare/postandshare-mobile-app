@@ -4,6 +4,7 @@ import {
   Pressable,
   ScrollView,
   Text,
+  TextInput,
   ToastAndroid,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -12,15 +13,20 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import Images from '../../../constants/images';
 import authStyle from '../authStyle';
-import {TextInput} from 'react-native-paper';
+// import {TextInput} from 'react-native-paper';
 import NavigationScreenName from '../../../constants/NavigationScreenName';
-import {SignInWithOTP} from '../../../services/authServices/auth.services';
+import {
+  SendOTPonMobile,
+  SignInWithOTP,
+} from '../../../services/authServices/auth.services';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {useDispatch, useSelector} from 'react-redux';
 import {setLoginState} from '../../../services/reducer/AuthSlice';
 import Loader from '../../../components/Loader';
 import {getUserProfile} from '../../../services/userServices/profile.services';
-import { setProfileUpdated } from '../../../services/reducer/CommonReducer';
+import {setProfileUpdated} from '../../../services/reducer/CommonReducer';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Colors from '../../../constants/Colors';
 
 export let newOtp = 0;
 
@@ -34,6 +40,16 @@ const VerifyOTP = ({navigation, route}) => {
   const [isOtpSend, setIsOtpSend] = useState(true);
   const [isOtpVerify, setIsOtpVerfiy] = useState(false);
   const [loginStateData, setLoginStateData] = useState();
+
+  const {mutate: SendOTPonMobileMuatate, isLoading: SendOTPonMobileLoading} =
+    useMutation(SendOTPonMobile, {
+      onSuccess: success => {
+        ToastAndroid.show(success?.data?.message, ToastAndroid.SHORT);
+      },
+      onError: error => {
+        ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
+      },
+    });
 
   const {mutate: SignInWithOTPMuatate, isLoading: SignInWithOTPLoading} =
     useMutation(SignInWithOTP, {
@@ -68,11 +84,11 @@ const VerifyOTP = ({navigation, route}) => {
         navigation.navigate(NavigationScreenName.LANGUAGE_SELECTION, {
           loginStateData: loginStateData,
         });
-        console.log("success?.data?.isProfileUpdated == false");
+        console.log('success?.data?.isProfileUpdated == false');
       } else {
         dispatch(setProfileUpdated(true));
         await navigation.navigate(NavigationScreenName.DRWAER_NAVIGATOR);
-        console.log("else part of success?.data?.isProfileUpdated == false");
+        console.log('else part of success?.data?.isProfileUpdated == false');
       }
     },
     onError: err => {
@@ -106,6 +122,9 @@ const VerifyOTP = ({navigation, route}) => {
     focusOtp();
     setOtp('');
     setResendTime(40);
+    SendOTPonMobileMuatate({
+      mobileNumber: mobileNumber,
+    });
   };
   function getTime(sec) {
     if (sec === 40 || sec === 0) return '';
@@ -131,19 +150,24 @@ const VerifyOTP = ({navigation, route}) => {
     <>
       <Loader text="Loading..." open={SignInWithOTPLoading} />
 
-      {/* upper card */}
-      <ImageBackground source={Images.loginTop} style={authStyle.upperImage}>
-        <View style={authStyle.topImgSec}>
-          <Image source={Images.otp_icon} style={authStyle.otp_icon_img} />
-        </View>
-        <Text style={authStyle.welcomeText}>Enter OTP</Text>
-        <Text style={authStyle.otp_send_text}>
-          We have sent OTP to your registered mobile number
-        </Text>
-      </ImageBackground>
-
-      <ScrollView contentContainerStyle={{flexGrow: 1}}>
-        <Pressable style={{flex: 1}}>
+      <ScrollView contentContainerStyle={{}}>
+        {/* upper card */}
+        <ImageBackground source={Images.loginTop} style={authStyle.upperImage}>
+          <View style={authStyle.topImgSec}>
+            <MaterialCommunityIcons
+              name="cellphone-message"
+              size={35}
+              style={{alignSelf: 'center'}}
+              color="#0C2F49"
+            />
+            {/* <Image source={Images.otp_icon} style={authStyle.otp_icon_img} /> */}
+          </View>
+          <Text style={authStyle.welcomeText}>Enter OTP</Text>
+          <Text style={authStyle.otp_send_text}>
+            Secure your account, one code at a time
+          </Text>
+        </ImageBackground>
+        <Pressable style={{}}>
           <View style={authStyle.middleContainer}>
             <View style={authStyle.input}>
               <TextInput
