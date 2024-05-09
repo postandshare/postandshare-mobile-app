@@ -27,8 +27,8 @@ const Dropdown = ({
   return (
     <View
       style={{
-        borderColor: 'rgba(22, 75, 146, 0.15)',
-        borderWidth: 2,
+        borderColor: Colors.PRIMARY,
+        borderWidth: 0.52,
         borderStyle: 'solid',
         backgroundColor: '#fff',
         borderRadius: 10,

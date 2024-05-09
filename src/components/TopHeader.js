@@ -46,7 +46,7 @@ const TopHeader = ({
   };
 
   return (
-    <ImageBackground source={Images?.topHeader} style={styles.root}>
+    <View style={styles.root}>
       <View style={styles.left_wrap}>
         {/* Back button */}
         {showBackIcon && (
@@ -87,7 +87,7 @@ const TopHeader = ({
       ) : (
         <View />
       )}
-    </ImageBackground>
+    </View>
   );
 };
 
@@ -101,7 +101,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: Sizes.wp('5%'),
-
+    backgroundColor: 'rgba(64, 64, 64, 0.46)',
+    opacity: 1,
     paddingTop: Sizes.hp('5%'),
   },
   left_wrap: {
@@ -117,14 +118,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.1)',
     marginRight: 13,
     borderWidth: 1,
-    borderColor: '#fff',
+    borderColor: 'rgba(64, 64, 64, 1)',
   },
   left_icon: {
-    color: '#fff',
+    color: 'rgba(64, 64, 64, 1)',
     fontSize: scale(20),
   },
   title: {
-    color: '#fff',
+    color: 'rgba(64, 64, 64, 1)',
     fontSize: scale(19),
     letterSpacing: 1.2,
   },

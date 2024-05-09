@@ -60,12 +60,6 @@ const App = () => {
                     desturctive: ' #FF0A00',
                     background: '#fff',
                   },
-                  fonts: {
-                    regular: {
-                      fontFamily: 'Playfair Display',
-                      fontStyle: 'Source Sans 3',
-                    },
-                  },
                 }}>
                 <Routes />
               </PaperProvider>

@@ -1,16 +1,13 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   FlatList,
-  Image,
-  ImageBackground,
   Pressable,
   RefreshControl,
   Text,
   ToastAndroid,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useCallback, useState} from 'react';
-import Images from '../../constants/images';
 import authStyle from './authStyle';
 import Colors from '../../constants/Colors';
 import {useMutation, useQuery} from '@tanstack/react-query';
@@ -23,7 +20,9 @@ import {useFocusEffect} from '@react-navigation/native';
 import {getRegionalLanguages} from '../../services/userServices/monitoring.services';
 import NavigationScreenName from '../../constants/NavigationScreenName';
 import {useSelector} from 'react-redux';
-
+import TopHeader from '../../components/TopHeader';
+import {Checkbox} from 'react-native-paper';
+import Sizes from '../../constants/Sizes';
 
 const LanguageSelection = ({navigation}) => {
   const {isProfileUpdated} = useSelector(store => store.commonStore);
@@ -101,7 +100,7 @@ const LanguageSelection = ({navigation}) => {
   return (
     <>
       {/* upper card */}
-      <ImageBackground source={Images.loginTop} style={authStyle.upperImage}>
+      {/* <ImageBackground source={Images.loginTop} style={authStyle.upperImage}>
         <View style={authStyle.topImgSec}>
           <Image source={Images.otp_icon} style={authStyle.otp_icon_img} />
         </View>
@@ -109,106 +108,135 @@ const LanguageSelection = ({navigation}) => {
         <Text style={authStyle.otp_send_text}>
           Select your preferred language
         </Text>
-      </ImageBackground>
+      </ImageBackground> */}
+      <TopHeader titile={'Select Language'} />
 
-      {/* flatlist for rendering the regional language */}
-      <FlatList
-        numColumns={2}
-        contentContainerStyle={{
+      <View
+        style={{
+          flexDirection: 'row',
           justifyContent: 'space-between',
           marginHorizontal: 10,
-        }}
-        refreshControl={
-          <RefreshControl
-            refreshing={
-              getRegionalLanguagesFetching ||
-              getSelectedRegionalLanguagesFetching ||
-              upsertRegionalLanguageLoading ||
-              deleteRegionalLanguageLoading ||
-              getSelectedRegionalLanguagesLoading ||
-              getRegionalLanguagesLoading ||
-              loading
-            }
-            onRefresh={
-              getSelectedRegionalLanguagesRefetch && getRegionalLanguagesRefetch
-            }
-          />
-        }
-        data={getRegionalLanguages_Data?.data?.list}
-        keyExtractor={item => item?._id}
-        ListHeaderComponent={
-          <View style={authStyle.middleContainer}>
-            <Text
-              style={[
-                authStyle.input,
-                {fontSize: 20, fontWeight: '500', color: Colors.SECONDRY},
-              ]}>
-              Regional Language:-
-            </Text>
-          </View>
-        }
-        renderItem={({item}) => (
-          <TouchableOpacity
-            onPress={async () => {
-              if (selectReginalLan.includes(item?._id)) {
-                setRiginalLan(selectReginalLan.filter(id => id !== item?._id));
-                deleteRegionalLanguageMuatate({
-                  languageDocId: item?._id,
-                });
-              } else {
-                setRiginalLan([...selectReginalLan, item?._id]);
-                upsertRegionalLanguageMuatate({
-                  languageDocId: item?._id,
-                });
+          top: Sizes.hp('8%'),
+        }}>
+        <Text
+          style={[
+            authStyle.input,
+            {fontSize: 15, fontWeight: '500', color: Colors.TEXT1},
+          ]}>
+          Post Languages:-
+        </Text>
+        {/* <Text
+          style={[
+            authStyle.input,
+            {
+              fontSize: 10,
+              fontWeight: '300',
+              color: Colors.TEXT1,
+              alignSelf: 'center',
+            },
+          ]}>
+          select atleast three
+        </Text> */}
+      </View>
+
+      <View
+        style={{
+          borderWidth: 1,
+          borderRadius: 6,
+          backgroundColor: Colors.white,
+          borderColor: '#4141412F',
+          width: '90%',
+          alignSelf: 'center',
+          top: Sizes.hp('2%'),
+        }}>
+        {/* flatlist for rendering the regional language */}
+        <FlatList
+          contentContainerStyle={{
+            justifyContent: 'space-between',
+            padding: 10,
+          }}
+          refreshControl={
+            <RefreshControl
+              refreshing={
+                getRegionalLanguagesFetching ||
+                getSelectedRegionalLanguagesFetching ||
+                upsertRegionalLanguageLoading ||
+                deleteRegionalLanguageLoading ||
+                getSelectedRegionalLanguagesLoading ||
+                getRegionalLanguagesLoading ||
+                loading
               }
-            }}
-            style={[
-              authStyle.langaugeContainer,
-              selectReginalLan?.includes(item?._id)
-                ? {backgroundColor: Colors.PRIMARY}
-                : {
-                    backgroundColor: Colors.white,
-                  },
-            ]}>
-            <Text
-              style={
-                selectReginalLan.includes(item._id)
-                  ? authStyle.selectedLanguage
-                  : authStyle.unSelectedLanguage
-              }>
-              {item?.languageName}
-            </Text>
-          </TouchableOpacity>
-        )}
-        ListFooterComponent={
-          <View style={authStyle.bottom_content_root}>
-            <Pressable
-              style={({pressed}) => [
-                {
-                  backgroundColor: pressed ? Colors.PRIMARY : Colors.SECONDRY,
-                  padding: 10,
-                  borderRadius: 5,
-                  alignItems: 'center',
-                },
-              ]}
-              onPress={() => {
-                setLoading(true);
-                setTimeout(() => {
-                  setLoading(false);
-                  isProfileUpdated == false
-                    ? navigation.navigate('ProfileNavigator')
-                    : navigation.navigate(
-                        NavigationScreenName.DRWAER_NAVIGATOR,
-                      );
-                }, 1000);
+              onRefresh={
+                getSelectedRegionalLanguagesRefetch &&
+                getRegionalLanguagesRefetch
+              }
+            />
+          }
+          data={getRegionalLanguages_Data?.data?.list}
+          keyExtractor={item => item?._id}
+          renderItem={({item}) => (
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginVertical: 1,
               }}>
-              <Text style={authStyle.signin_text}>
-                {loading ? 'Please wait...' : 'Continue'}
+              <Checkbox
+                status={
+                  selectReginalLan.includes(item?._id) ? 'checked' : 'unchecked'
+                }
+                onPress={async () => {
+                  if (selectReginalLan.includes(item?._id)) {
+                    setRiginalLan(
+                      selectReginalLan.filter(id => id !== item?._id),
+                    );
+                    deleteRegionalLanguageMuatate({
+                      languageDocId: item?._id,
+                    });
+                  } else {
+                    setRiginalLan([...selectReginalLan, item?._id]);
+                    upsertRegionalLanguageMuatate({
+                      languageDocId: item?._id,
+                    });
+                  }
+                }}
+              />
+              <Text
+                style={
+                  selectReginalLan.includes(item._id)
+                    ? authStyle.selectedLanguage
+                    : authStyle.unSelectedLanguage
+                }>
+                {item?.languageName}
               </Text>
-            </Pressable>
-          </View>
-        }
-      />
+            </View>
+          )}
+        />
+      </View>
+      <View style={authStyle.bottom_content_root_Language}>
+        <Pressable
+          style={({pressed}) => [
+            {
+              backgroundColor: Colors.PRIMARY,
+              padding: 10,
+              borderRadius: 5,
+              alignItems: 'center',
+            },
+          ]}
+          onPress={() => {
+            setLoading(true);
+            setTimeout(() => {
+              setLoading(false);
+              isProfileUpdated === false
+                ? navigation.navigate('ProfileNavigator')
+                : navigation.navigate(NavigationScreenName.DRWAER_NAVIGATOR);
+            }, 1000);
+          }}>
+          <Text style={authStyle.signin_text_Language}>
+            {loading ? 'Please wait...' : 'Save'}
+          </Text>
+        </Pressable>
+      </View>
     </>
   );
 };

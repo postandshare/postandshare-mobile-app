@@ -33,10 +33,13 @@ import {
   getUserProfile,
   saveAppNotificationToken,
 } from '../../services/userServices/profile.services';
+import {useDispatch} from 'react-redux';
+import {setUserDetails} from '../../services/reducer/CommonReducer';
 
 const Home = ({navigation}) => {
   const [value, setValue] = React.useState('photo');
   const [screenName, setScreenName] = useState('photo');
+  const dispatch = useDispatch();
   const onPressMenu = () => {
     navigation.openDrawer();
     navigation.getParent('leftDrawer').openDrawer();
@@ -57,7 +60,9 @@ const Home = ({navigation}) => {
   } = useQuery({
     queryKey: ['getUserProfile'],
     queryFn: () => getUserProfile(),
-    onSuccess: success => {},
+    onSuccess: success => {
+      dispatch(setUserDetails(success?.data?.obj));
+    },
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },

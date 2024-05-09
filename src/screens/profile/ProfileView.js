@@ -1,6 +1,5 @@
 import {
   Alert,
-  Image,
   RefreshControl,
   ScrollView,
   Text,
@@ -10,7 +9,6 @@ import {
 import React, {useCallback, useEffect} from 'react';
 import TopHeader from '../../components/TopHeader';
 import styles from './style';
-import images from '../../constants/images';
 import {getUserProfile} from '../../services/userServices/profile.services';
 import {useQuery} from '@tanstack/react-query';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -22,6 +20,9 @@ import {MotiView} from 'moti';
 import Sizes from '../../constants/Sizes';
 import {useDispatch} from 'react-redux';
 import {setProfileUpdated} from '../../services/reducer/CommonReducer';
+import ProfileDetails from './components/ProfileDetails';
+import SocialMediaDetails from './components/SocialMediaDetails';
+import AddressDetails from './components/AddressDetails';
 
 const ViewBox = ({title, value}) => {
   return (
@@ -75,9 +76,11 @@ const ProfileView = ({}) => {
     enabled: false,
   });
 
-  useEffect(() => {
-    getUserProfileRefetch();
-  }, [navigation]);
+  useFocusEffect(
+    useCallback(() => {
+      getUserProfileRefetch();
+    }, [navigation]),
+  );
 
   const Spacer = ({height = 16}) => <View style={{height}} />;
 
@@ -127,9 +130,7 @@ const ProfileView = ({}) => {
     <>
       <TopHeader
         titile={'Profile'}
-        IconProp={
-          <FontAwesome name={'edit'} size={25} color={Colors.SECONDRY} />
-        }
+        IconProp={<FontAwesome name={'edit'} size={25} color={Colors.TEXT1} />}
         onPress={() =>
           navigation.navigate('EditProfile', {
             data: getUserProfile_Data?.data?.obj,
@@ -148,63 +149,15 @@ const ProfileView = ({}) => {
           skeletonLoading
         ) : (
           <>
-            {/* image of the profile */}
-            <View style={styles.image_wrap}>
-              <Image
-                source={
-                  getUserProfile_Data?.data?.obj?.profilePic
-                    ? {uri: getUserProfile_Data?.data?.obj?.profilePic}
-                    : images.akSchoolIcon
-                }
-                style={styles.profile_pic}
-              />
-            </View>
+            {/* profile details component */}
+            <ProfileDetails data={getUserProfile_Data?.data?.obj} />
 
-            {/* name of the profile */}
-            <Text style={styles.name_text}>
-              {getUserProfile_Data?.data?.obj?.firstName}{' '}
-              {getUserProfile_Data?.data?.obj?.middle}{' '}
-              {getUserProfile_Data?.data?.obj?.lastName}
-            </Text>
+            <Text style={styles.title}>Social Media</Text>
+            {/* social media details */}
+            <SocialMediaDetails data={getUserProfile_Data?.data?.obj} />
 
-            {/* other details of the profile */}
-            <View style={styles.other_details}>
-              <ViewBox
-                title={'Email'}
-                value={getUserProfile_Data?.data?.obj?.email}
-              />
-              <ViewBox
-                title={'Phone'}
-                value={getUserProfile_Data?.data?.obj?.mobileNumber}
-              />
-              <ViewBox
-                title={'Address'}
-                value={
-                  getUserProfile_Data?.data?.obj?.currentAddress?.address +
-                  ' ' +
-                  getUserProfile_Data?.data?.obj?.currentAddress?.dist +
-                  ' ' +
-                  getUserProfile_Data?.data?.obj?.currentAddress?.state +
-                  ' ' +
-                  getUserProfile_Data?.data?.obj?.currentAddress?.pinCode
-                }
-              />
-
-              <ViewBox
-                title={'Date of Birth'}
-                value={moment(getUserProfile_Data?.data?.obj?.DOB).format('LL')}
-              />
-
-              <ViewBox
-                title={'Gender'}
-                value={getUserProfile_Data?.data?.obj?.gender}
-              />
-
-              <ViewBox
-                title={'WhatsApp Number'}
-                value={getUserProfile_Data?.data?.obj?.whatsappNumber}
-              />
-            </View>
+            <Text style={styles.title}>Address</Text>
+            <AddressDetails data={getUserProfile_Data?.data?.obj} />
           </>
         )}
       </ScrollView>

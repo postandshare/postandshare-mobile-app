@@ -41,7 +41,13 @@ const authStyle = StyleSheet.create({
     letterSpacing: 3,
     fontSize: 18,
     fontWeight: '600',
-    bottom: 190,
+    bottom: 200,
+  },
+  signin_text_Language: {
+    color: Colors.white,
+    letterSpacing: 3,
+    fontSize: 18,
+    fontWeight: '600',
   },
   otp_send_text: {
     color: Colors.TEXT1,
@@ -55,6 +61,11 @@ const authStyle = StyleSheet.create({
     // paddingVertical: Sizes.hp('3%'),
     backgroundColor: Colors.white,
     bottom: Sizes.hp('10%'),
+  },
+  bottom_content_root_Language: {
+    paddingHorizontal: Sizes.wp('5%'),
+    marginVertical: Sizes.hp('3%'),
+    backgroundColor: Colors.white,
   },
   singup_link: {
     color: 'blue',
@@ -215,7 +226,7 @@ const authStyle = StyleSheet.create({
     margin: 5,
   },
   selectedLanguage: {
-    color: Colors.white,
+    color: Colors.TEXT1,
     flex: 1,
     fontSize: 18,
     fontWeight: '500',

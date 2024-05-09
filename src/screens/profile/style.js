@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
   root: {
     flexGrow: 1,
     backgroundColor: '#f5f5f5',
+    paddingBottom: 100,
   },
   image_wrap: {
     alignItems: 'center',
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: 10,
     borderWidth: 0.5,
-    borderColor: Colors.SECONDRY
+    borderColor: Colors.SECONDRY,
   },
   view_box_title: {
     color: Colors.PRIMARY,
@@ -64,16 +65,16 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: 'space-between',
     alignItems: 'center',
-
   },
   button: {
-    width: '100%',
+    width: '90%',
     borderRadius: 15,
     paddingVertical: 15,
     justifyContent: 'center',
     backgroundColor: Colors.PRIMARY,
     alignItems: 'center',
     marginTop: 20,
+    alignSelf: 'center',
   },
   errorText: {
     fontSize: 12,
@@ -82,9 +83,12 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   title: {
-    color: Colors.PRIMARY,
+    color: Colors.TEXT1,
     fontSize: 16,
+    marginTop: 10,
+    paddingHorizontal: 10,
   },
+
   margin: {
     width: '100%',
     backgroundColor: '#fff',
@@ -92,7 +96,6 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     elevation: 5,
   },
-
 
   // moti container styles
   container: {

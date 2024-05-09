@@ -20,9 +20,10 @@ import Colors from '../constants/Colors';
 import Images from '../constants/images';
 import NavigationScreenName from '../constants/NavigationScreenName';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {setLoginState} from '../services/reducer/AuthSlice';
 import {setProfileUpdated} from '../services/reducer/CommonReducer';
+import images from '../constants/images';
 
 const Item = ({icon, text, path, onPress = () => {}, isActive}) => (
   <TouchableOpacity
@@ -35,8 +36,41 @@ const Item = ({icon, text, path, onPress = () => {}, isActive}) => (
     <Feather name="chevron-right" style={styles.icon} />
   </TouchableOpacity>
 );
+
+const UserProfileCard = ({profileData}) => {
+  return (
+    <>
+      <View style={styles.userProfileCard}>
+        <View style={styles.image_wrap}>
+          <Image
+            source={
+              profileData?.profilePic
+                ? {uri: profileData?.profilePic}
+                : images.akSchoolIcon
+            }
+            style={styles.profile_pic}
+            resizeMode="cover"
+          />
+        </View>
+        <View>
+          <Text style={styles.name_text}>
+            {profileData?.firstName ?? '-'}
+            {profileData?.middleName ?? '-'}
+            {profileData?.lastName ?? '-'}
+          </Text>
+          <Text style={styles.schoole_name}>
+            {profileData?.mobileNumber ?? '-'}
+          </Text>
+          <Text style={styles.schoole_name}>{profileData?.email ?? '-'}</Text>
+        </View>
+      </View>
+    </>
+  );
+};
+
 const CustomDrawerLeft = ({navigation, route}) => {
   const dispatch = useDispatch();
+  const {userDetails} = useSelector(store => store.commonStore);
 
   const handlePressLogout = () => {
     Alert.alert('Post and Share App', 'Are you sure want to Logout ?', [
@@ -66,29 +100,7 @@ const CustomDrawerLeft = ({navigation, route}) => {
   return (
     <DrawerContentScrollView>
       <View style={styles.root}>
-        <TouchableOpacity
-        // onPress={() =>
-        //   navigation.navigate(NavigationScreenName.USER_PROFILE)
-        // }
-        >
-          <View style={styles.image_wrap}>
-            <Image
-              source={
-                // loggedInUserProfile?.obj?.profilePic
-                //   ? {uri: loggedInUserProfile?.obj?.profilePic}
-                //   :
-                Images.akSchoolIcon
-              }
-              style={styles.profile_pic}
-            />
-          </View>
-          <Text style={styles.name_text}>
-            {/* {loggedInUserProfile?.obj?.firstName}{' '}
-            {loggedInUserProfile?.obj?.middle}{' '}
-            {loggedInUserProfile?.obj?.lastName} */}
-            Dr. A.K.Public Inter College
-          </Text>
-        </TouchableOpacity>
+        <UserProfileCard profileData={userDetails} />
         <Item
           icon={<AntDesign name={'home'} style={styles.icon} />}
           text={'My Bussiness'}
@@ -178,8 +190,8 @@ const styles = StyleSheet.create({
     paddingVertical: Sizes.wp('5%'),
   },
   image_wrap: {
-    height: 80,
-    width: 80,
+    height: 60,
+    width: 60,
     borderRadius: 40,
     elevation: 3,
     alignSelf: 'center',
@@ -187,26 +199,26 @@ const styles = StyleSheet.create({
     // borderWidth: 1.5,
   },
   name_text: {
-    color: Colors.TEXT1,
+    color: Colors.PRIMARY,
     fontWeight: '700',
     fontSize: 16,
     textAlign: 'center',
     marginTop: 10,
+    flex: 1,
   },
   profile_pic: {
     resizeMode: 'cover',
-    height: 80,
-    width: 80,
+    height: 60,
+    width: 60,
     borderRadius: 40,
   },
   schoole_name: {
-    fontSize: scale(15),
+    flex: 1,
+    fontSize: scale(12),
     lineHeight: scale(20),
-    paddingTop: 10,
     textAlign: 'center',
     color: Colors.TEXT1,
-    fontWeight: '600',
-    textTransform: 'capitalize',
+    fontWeight: '300',
   },
   selector_root: {
     flexDirection: 'row',
@@ -265,5 +277,16 @@ const styles = StyleSheet.create({
   },
   active_text: {
     color: Colors.white,
+  },
+  userProfileCard: {
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderWidth: 0.5,
+    borderColor: Colors.borderColor,
+    borderRadius: 5,
+    marginVertical: 5,
+    backgroundColor: Colors.white,
   },
 });
