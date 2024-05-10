@@ -117,9 +117,6 @@ const BussinessTypeForm = ({bussinessTypeFormik}) => {
     enabled: false,
   });
 
-
-
-
   return (
     <>
       <Loader open={imageUploading} text="Uploading Image" />
@@ -162,7 +159,7 @@ const BussinessTypeForm = ({bussinessTypeFormik}) => {
             value={bussinessTypeFormik.values['bussinessCategory']}
             label="Select Bussiness Category"
             onChangeValue={(value, item) => {
-              console.log(item, 'in category')
+              console.log(item, 'in category');
               bussinessTypeFormik.setValues(prev => ({
                 ...prev,
                 bussinessCategory: value,
@@ -190,8 +187,8 @@ const BussinessTypeForm = ({bussinessTypeFormik}) => {
             }))}
             value={bussinessTypeFormik.values['bussinessSubCategory']}
             label="Select Bussiness Sub-Category"
-            onChangeValue={(value , item) => {
-              console.log(value, 'in sub category')
+            onChangeValue={(value, item) => {
+              console.log(value, 'in sub category');
               bussinessTypeFormik.setValues(prev => ({
                 ...prev,
                 bussinessSubCategory: value,
@@ -216,7 +213,7 @@ export default BussinessTypeForm;
 const styles = StyleSheet.create({
   root: {
     flexGrow: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: Colors.transparent,
     alignItems: 'center',
   },
   image_wrap: {

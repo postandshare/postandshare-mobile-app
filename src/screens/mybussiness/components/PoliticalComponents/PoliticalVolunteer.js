@@ -1,4 +1,5 @@
 import {
+  ImageBackground,
   PermissionsAndroid,
   RefreshControl,
   ScrollView,
@@ -26,6 +27,8 @@ import {
 } from '../../../../services/userServices/political.services';
 import NavigationScreenName from '../../../../constants/NavigationScreenName';
 import {useFocusEffect} from '@react-navigation/native';
+import images from '../../../../constants/images';
+import globalStyles from '../../../../styles/globalStyles';
 
 const PoliticalVolunteer = ({route, navigation}) => {
   const {
@@ -234,87 +237,91 @@ const PoliticalVolunteer = ({route, navigation}) => {
         open={updatePoliticalBusinessLoading}
         text="Updating Political Bussiness"
       />
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={getPoliticalPartyDetailsFetching}
-            onRefresh={getPoliticalPartyDetailsRefetch}
-          />
-        }
-        contentContainerStyle={styles.root}>
-        {/* profile pic container */}
-        <View style={styles.image_wrap}>
-          <ProfilePic
-            imageUrl={profilePic}
-            TakePhotofromGallery={TakePhotofromGallery}
-          />
-          {profileVolunteerFormik?.errors?.profilePic &&
-            profileVolunteerFormik?.touched?.profilePic && (
-              <Text style={{color: 'red'}}>
-                {profileVolunteerFormik?.errors?.profilePic}
-              </Text>
-            )}
-          <Text style={styles.tittle}>Upload Your ProfilePic</Text>
-        </View>
-        {/* your name */}
-        <View style={styles.textInputField}>
-          <Text style={{color: Colors.TEXT1}}>Your Name</Text>
-          <CustomTextInputFormik
-            formik={profileVolunteerFormik}
-            name={'name'}
-            label={'Your Name'}
-          />
-        </View>
-        {/* designation */}
-        <View style={styles.textInputField}>
-          <Text style={{color: Colors.TEXT1}}>Designation</Text>
-          <CustomTextInputFormik
-            formik={profileVolunteerFormik}
-            name={'desingation'}
-            label={'Your Designation'}
-          />
-        </View>
-        {/* mobile */}
-        <View style={styles.textInputField}>
-          <Text style={{color: Colors.TEXT1}}>Mobile</Text>
-          <CustomTextInputFormik
-            formik={profileVolunteerFormik}
-            name={'mobile'}
-            label={'Your Mobile'}
-            keyboardType='number-pad'
-            maxLength={10}
-          />
-        </View>
-        {/* whatsapp number */}
-        <View style={styles.textInputField}>
-          <Text style={{color: Colors.TEXT1}}>Whatsapp Number</Text>
-          <CustomTextInputFormik
-            formik={profileVolunteerFormik}
-            name={'whatsappNumber'}
-            label={'Whatsapp Number'}
-            keyboardType={'number-pad'}
-            maxLength={10}
-          />
-        </View>
-        {/* about youself */}
-        <View style={styles.textInputField}>
-          <Text style={{color: Colors.TEXT1}}>About Yourself</Text>
-          <CustomTextInputFormik
-            formik={profileVolunteerFormik}
-            name={'aboutYourself'}
-            label={'About Yourself'}
-            numberOfLines={4}
-            maxLength={1000}
-          />
-        </View>
+      <ImageBackground
+        source={images.background}
+        style={globalStyles.backgroundImage}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={getPoliticalPartyDetailsFetching}
+              onRefresh={getPoliticalPartyDetailsRefetch}
+            />
+          }
+          contentContainerStyle={styles.root}>
+          {/* profile pic container */}
+          <View style={styles.image_wrap}>
+            <ProfilePic
+              imageUrl={profilePic}
+              TakePhotofromGallery={TakePhotofromGallery}
+            />
+            {profileVolunteerFormik?.errors?.profilePic &&
+              profileVolunteerFormik?.touched?.profilePic && (
+                <Text style={{color: 'red'}}>
+                  {profileVolunteerFormik?.errors?.profilePic}
+                </Text>
+              )}
+            <Text style={styles.tittle}>Upload Your ProfilePic</Text>
+          </View>
+          {/* your name */}
+          <View style={styles.textInputField}>
+            <Text style={{color: Colors.TEXT1}}>Your Name</Text>
+            <CustomTextInputFormik
+              formik={profileVolunteerFormik}
+              name={'name'}
+              label={'Your Name'}
+            />
+          </View>
+          {/* designation */}
+          <View style={styles.textInputField}>
+            <Text style={{color: Colors.TEXT1}}>Designation</Text>
+            <CustomTextInputFormik
+              formik={profileVolunteerFormik}
+              name={'desingation'}
+              label={'Your Designation'}
+            />
+          </View>
+          {/* mobile */}
+          <View style={styles.textInputField}>
+            <Text style={{color: Colors.TEXT1}}>Mobile</Text>
+            <CustomTextInputFormik
+              formik={profileVolunteerFormik}
+              name={'mobile'}
+              label={'Your Mobile'}
+              keyboardType="number-pad"
+              maxLength={10}
+            />
+          </View>
+          {/* whatsapp number */}
+          <View style={styles.textInputField}>
+            <Text style={{color: Colors.TEXT1}}>Whatsapp Number</Text>
+            <CustomTextInputFormik
+              formik={profileVolunteerFormik}
+              name={'whatsappNumber'}
+              label={'Whatsapp Number'}
+              keyboardType={'number-pad'}
+              maxLength={10}
+            />
+          </View>
+          {/* about youself */}
+          <View style={styles.textInputField}>
+            <Text style={{color: Colors.TEXT1}}>About Yourself</Text>
+            <CustomTextInputFormik
+              formik={profileVolunteerFormik}
+              name={'aboutYourself'}
+              label={'About Yourself'}
+              numberOfLines={4}
+              maxLength={1000}
+            />
+          </View>
 
-        <CustomButton
-          title={'Submit'}
-          onPress={() => {
-            profileVolunteerFormik?.handleSubmit();
-          }}
-        />
-      </ScrollView>
+          <CustomButton
+            title={'Submit'}
+            onPress={() => {
+              profileVolunteerFormik?.handleSubmit();
+            }}
+          />
+        </ScrollView>
+      </ImageBackground>
     </>
   );
 };
@@ -324,7 +331,7 @@ export default PoliticalVolunteer;
 const styles = StyleSheet.create({
   root: {
     flexGrow: 1,
-    backgroundColor: Colors.Background,
+    backgroundColor: Colors.transparent,
     bottom: 10,
   },
   image_wrap: {

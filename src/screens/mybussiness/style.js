@@ -4,7 +4,7 @@ import Colors from '../../constants/Colors';
 const styles = StyleSheet.create({
   root: {
     flexGrow: 1,
-    backgroundColor: Colors.Background,
+    backgroundColor: 'transparent',
   },
   container: {
     // flex: 1,
@@ -16,7 +16,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.yellow,
     marginBottom: 10,
   },
-
 
   // moti container styles
   shape: {

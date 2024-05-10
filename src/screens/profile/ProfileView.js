@@ -1,5 +1,6 @@
 import {
   Alert,
+  ImageBackground,
   RefreshControl,
   ScrollView,
   Text,
@@ -23,15 +24,9 @@ import {setProfileUpdated} from '../../services/reducer/CommonReducer';
 import ProfileDetails from './components/ProfileDetails';
 import SocialMediaDetails from './components/SocialMediaDetails';
 import AddressDetails from './components/AddressDetails';
+import images from '../../constants/images';
+import globalStyles from '../../styles/globalStyles';
 
-const ViewBox = ({title, value}) => {
-  return (
-    <View style={styles.view_box}>
-      <Text style={styles.view_box_title}>{title}</Text>
-      <Text style={styles.view_box_value}>{value}</Text>
-    </View>
-  );
-};
 const ProfileView = ({}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -137,30 +132,34 @@ const ProfileView = ({}) => {
           })
         }
       />
-      <ScrollView
-        contentContainerStyle={styles.root}
-        refreshControl={
-          <RefreshControl
-            refreshing={getUserProfileFetching || getUserProfileLoading}
-            onRefresh={() => getUserProfileRefetch()}
-          />
-        }>
-        {getUserProfileLoading || getUserProfileFetching ? (
-          skeletonLoading
-        ) : (
-          <>
-            {/* profile details component */}
-            <ProfileDetails data={getUserProfile_Data?.data?.obj} />
+      <ImageBackground
+        source={images.background}
+        style={globalStyles.backgroundImage}>
+        <ScrollView
+          contentContainerStyle={styles.root}
+          refreshControl={
+            <RefreshControl
+              refreshing={getUserProfileFetching || getUserProfileLoading}
+              onRefresh={() => getUserProfileRefetch()}
+            />
+          }>
+          {getUserProfileLoading || getUserProfileFetching ? (
+            skeletonLoading
+          ) : (
+            <>
+              {/* profile details component */}
+              <ProfileDetails data={getUserProfile_Data?.data?.obj} />
 
-            <Text style={styles.title}>Social Media</Text>
-            {/* social media details */}
-            <SocialMediaDetails data={getUserProfile_Data?.data?.obj} />
+              <Text style={styles.title}>Social Media</Text>
+              {/* social media details */}
+              <SocialMediaDetails data={getUserProfile_Data?.data?.obj} />
 
-            <Text style={styles.title}>Address</Text>
-            <AddressDetails data={getUserProfile_Data?.data?.obj} />
-          </>
-        )}
-      </ScrollView>
+              <Text style={styles.title}>Address</Text>
+              <AddressDetails data={getUserProfile_Data?.data?.obj} />
+            </>
+          )}
+        </ScrollView>
+      </ImageBackground>
     </>
   );
 };

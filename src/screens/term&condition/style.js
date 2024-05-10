@@ -5,11 +5,11 @@ import Sizes from '../../constants/Sizes';
 const styles = StyleSheet.create({
   root: {
     flexGrow: 1,
-    backgroundColor: Colors.Background,
+    backgroundColor: Colors.transparent,
   },
   container: {
     flex: 1,
-    backgroundColor: Colors.Background,
+    backgroundColor: Colors.transparent,
     justifyContent: 'center',
     margin: 10,
   },

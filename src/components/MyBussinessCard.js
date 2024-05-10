@@ -16,8 +16,8 @@ const MyBussinessCard = ({
   edit,
   onPressEdit,
   onPressForPhotoEdit,
+  data = {},
 }) => {
-
   return (
     <TouchableOpacity
       style={styles.root_container}
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#3D398945',
-    backgroundColor: '#9CDEFB60',
+    backgroundColor: Colors.white,
     marginVertical: 5,
     padding: 10,
     alignSelf: 'center',
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   bussinessName: {
     fontSize: 16,
     fontWeight: '600',
-    color: Colors.TEXT1,
+    color: Colors.PRIMARY,
     textAlign: 'justify',
     marginVertical: 5,
   },

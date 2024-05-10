@@ -1,5 +1,6 @@
 import {
   Image,
+  ImageBackground,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -23,6 +24,8 @@ import {
 } from '../../../../services/userServices/political.services';
 import {useFocusEffect} from '@react-navigation/native';
 import Loader from '../../../../components/Loader';
+import images from '../../../../constants/images';
+import globalStyles from '../../../../styles/globalStyles';
 
 const ChangeLeader = ({route, navigation}) => {
   const {
@@ -127,37 +130,76 @@ const ChangeLeader = ({route, navigation}) => {
       <TopHeader titile={'Change Leader'} />
       <Loader open={updatePoliticalBusinessLeaderLoading} text="Updating..." />
       <Loader open={addPoliticalLeaderLoading} text="Adding..." />
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={getLeaderDetailFetching}
-            onRefresh={getLeaderDetailRefetch}
-          />
-        }
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.root}
-        nestedScrollEnabled={true}>
-        <Text style={styles.label}>Please Select 8 Photos only from below</Text>
 
-        {/* Great Person */}
-        <Text style={styles.label}>Great Person</Text>
-        <ScrollView style={styles.imgScrollContainer} nestedScrollEnabled>
-          <View style={styles.imageWrap}>
-            {getLeaderDetail_Data?.data?.list?.greatLeader?.length > 0 &&
-              getLeaderDetail_Data?.data?.list?.greatLeader?.map(
+      <ImageBackground
+        source={images.background}
+        style={globalStyles.backgroundImage}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={getLeaderDetailFetching}
+              onRefresh={getLeaderDetailRefetch}
+            />
+          }
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.root}
+          nestedScrollEnabled={true}>
+          <Text style={styles.label}>
+            Please Select 8 Photos only from below
+          </Text>
+
+          {/* Great Person */}
+          <Text style={styles.label}>Great Person</Text>
+          <ScrollView style={styles.imgScrollContainer} nestedScrollEnabled>
+            <View style={styles.imageWrap}>
+              {getLeaderDetail_Data?.data?.list?.greatLeader?.length > 0 &&
+                getLeaderDetail_Data?.data?.list?.greatLeader?.map(
+                  (item, index) => {
+                    return (
+                      <TouchableOpacity
+                        onPress={() => handleImagePress(item)}
+                        key={index}
+                        style={styles.imageContainer}>
+                        <View
+                          style={[
+                            styles.image,
+                            choosenLeader.includes(item?._id)
+                              ? {borderColor: 'green'}
+                              : {},
+                          ]}>
+                          <Image
+                            source={{uri: item?.leaderPhoto}}
+                            style={styles.imageStyle}
+                          />
+                        </View>
+                        <Text
+                          style={[
+                            styles.name,
+                            choosenLeader.includes(item?._id)
+                              ? {color: 'green'}
+                              : {color: Colors.TEXT1},
+                          ]}>
+                          {item?.leaderName}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  },
+                )}
+            </View>
+          </ScrollView>
+
+          {/* Senior Leader in country */}
+          <Text style={styles.label}>Senior Leader in Country</Text>
+          <ScrollView style={styles.imgScrollContainer} nestedScrollEnabled>
+            <View style={styles.imageWrap}>
+              {getLeaderDetail_Data?.data?.list?.seniorLeaderInCountry?.map(
                 (item, index) => {
                   return (
                     <TouchableOpacity
                       onPress={() => handleImagePress(item)}
                       key={index}
                       style={styles.imageContainer}>
-                      <View
-                        style={[
-                          styles.image,
-                          choosenLeader.includes(item?._id)
-                            ? {borderColor: 'green'}
-                            : {},
-                        ]}>
+                      <View style={styles.image}>
                         <Image
                           source={{uri: item?.leaderPhoto}}
                           style={styles.imageStyle}
@@ -168,7 +210,7 @@ const ChangeLeader = ({route, navigation}) => {
                           styles.name,
                           choosenLeader.includes(item?._id)
                             ? {color: 'green'}
-                            : {color: Colors.TEXT1},
+                            : {},
                         ]}>
                         {item?.leaderName}
                       </Text>
@@ -176,128 +218,96 @@ const ChangeLeader = ({route, navigation}) => {
                   );
                 },
               )}
-          </View>
-        </ScrollView>
-
-        {/* Senior Leader in country */}
-        <Text style={styles.label}>Senior Leader in Country</Text>
-        <ScrollView style={styles.imgScrollContainer} nestedScrollEnabled>
-          <View style={styles.imageWrap}>
-            {getLeaderDetail_Data?.data?.list?.seniorLeaderInCountry?.map(
-              (item, index) => {
-                return (
-                  <TouchableOpacity
-                    onPress={() => handleImagePress(item)}
-                    key={index}
-                    style={styles.imageContainer}>
-                    <View style={styles.image}>
-                      <Image
-                        source={{uri: item?.leaderPhoto}}
-                        style={styles.imageStyle}
-                      />
-                    </View>
-                    <Text
-                      style={[
-                        styles.name,
-                        choosenLeader.includes(item?._id)
-                          ? {color: 'green'}
-                          : {},
-                      ]}>
-                      {item?.leaderName}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              },
-            )}
-          </View>
-        </ScrollView>
-
-        {/* Senior Leader in State */}
-        <Text style={styles.label}>Senior Leader in State</Text>
-        <ScrollView style={styles.imgScrollContainer} nestedScrollEnabled>
-          <View style={styles.imageWrap}>
-            {getLeaderDetail_Data?.data?.list?.seniorLeaderInState?.map(
-              (item, index) => {
-                return (
-                  <TouchableOpacity
-                    onPress={() => handleImagePress(item)}
-                    key={index}
-                    style={styles.imageContainer}>
-                    <View style={styles.image}>
-                      <Image
-                        source={{uri: item?.leaderPhoto}}
-                        style={styles.imageStyle}
-                      />
-                    </View>
-                    <Text
-                      style={[
-                        styles.name,
-                        choosenLeader.includes(item?._id)
-                          ? {color: 'green'}
-                          : {},
-                      ]}>
-                      {item?.leaderName}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              },
-            )}
-          </View>
-        </ScrollView>
-
-        {/* Leader's in your area */}
-        <Text style={styles.label}>Leader's in your area</Text>
-        <ScrollView style={styles.imgScrollContainer} nestedScrollEnabled>
-          <View style={styles.imageWrap}>
-            {getLeaderDetail_Data?.data?.list?.localLeader?.map(
-              (item, index) => {
-                return (
-                  <TouchableOpacity
-                    onPress={() => handleImagePress(item)}
-                    key={index}
-                    style={styles.imageContainer}>
-                    <View style={styles.image}>
-                      <Image
-                        source={{uri: item?.leaderPhoto}}
-                        style={styles.imageStyle}
-                      />
-                    </View>
-                    <Text
-                      style={[
-                        styles.name,
-                        choosenLeader.includes(item?._id)
-                          ? {color: 'green'}
-                          : {},
-                      ]}>
-                      {item?.leaderName}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              },
-            )}
-            <View style={styles.uploadView}>
-              <TouchableOpacity
-                style={styles.uploadContainer}
-                onPress={() => {
-                  actionSheetRef?.current?.show();
-                }}>
-                <AntDesign name="upload" size={30} color={Colors.TEXT1} />
-              </TouchableOpacity>
-              <Text style={styles.label}>Upload Here</Text>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
 
-        <CustomButton
-          title={'Confirm'}
-          onPress={() => {
-            updatePoliticalBusinessLeaderMutate({
-              politicalBusinessDocId: bussinessDocId,
-              politicalLeaderDetail: choosenLeaderDocId,
-            });
-          }}
-        />
-      </ScrollView>
+          {/* Senior Leader in State */}
+          <Text style={styles.label}>Senior Leader in State</Text>
+          <ScrollView style={styles.imgScrollContainer} nestedScrollEnabled>
+            <View style={styles.imageWrap}>
+              {getLeaderDetail_Data?.data?.list?.seniorLeaderInState?.map(
+                (item, index) => {
+                  return (
+                    <TouchableOpacity
+                      onPress={() => handleImagePress(item)}
+                      key={index}
+                      style={styles.imageContainer}>
+                      <View style={styles.image}>
+                        <Image
+                          source={{uri: item?.leaderPhoto}}
+                          style={styles.imageStyle}
+                        />
+                      </View>
+                      <Text
+                        style={[
+                          styles.name,
+                          choosenLeader.includes(item?._id)
+                            ? {color: 'green'}
+                            : {},
+                        ]}>
+                        {item?.leaderName}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                },
+              )}
+            </View>
+          </ScrollView>
+
+          {/* Leader's in your area */}
+          <Text style={styles.label}>Leader's in your area</Text>
+          <ScrollView style={styles.imgScrollContainer} nestedScrollEnabled>
+            <View style={styles.imageWrap}>
+              {getLeaderDetail_Data?.data?.list?.localLeader?.map(
+                (item, index) => {
+                  return (
+                    <TouchableOpacity
+                      onPress={() => handleImagePress(item)}
+                      key={index}
+                      style={styles.imageContainer}>
+                      <View style={styles.image}>
+                        <Image
+                          source={{uri: item?.leaderPhoto}}
+                          style={styles.imageStyle}
+                        />
+                      </View>
+                      <Text
+                        style={[
+                          styles.name,
+                          choosenLeader.includes(item?._id)
+                            ? {color: 'green'}
+                            : {},
+                        ]}>
+                        {item?.leaderName}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                },
+              )}
+              <View style={styles.uploadView}>
+                <TouchableOpacity
+                  style={styles.uploadContainer}
+                  onPress={() => {
+                    actionSheetRef?.current?.show();
+                  }}>
+                  <AntDesign name="upload" size={30} color={Colors.TEXT1} />
+                </TouchableOpacity>
+                <Text style={styles.label}>Upload Here</Text>
+              </View>
+            </View>
+          </ScrollView>
+
+          <CustomButton
+            title={'Confirm'}
+            onPress={() => {
+              updatePoliticalBusinessLeaderMutate({
+                politicalBusinessDocId: bussinessDocId,
+                politicalLeaderDetail: choosenLeaderDocId,
+              });
+            }}
+          />
+        </ScrollView>
+      </ImageBackground>
     </>
   );
 };
@@ -307,7 +317,7 @@ export default ChangeLeader;
 const styles = StyleSheet.create({
   root: {
     flexGrow: 1,
-    backgroundColor: Colors.Background,
+    backgroundColor: Colors.transparent,
     bottom: 10,
   },
   label: {

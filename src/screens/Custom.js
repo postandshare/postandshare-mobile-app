@@ -7,6 +7,7 @@ import {
   View,
   useWindowDimensions,
   ToastAndroid,
+  ImageBackground,
 } from 'react-native';
 import React, {useEffect, useMemo, useState} from 'react';
 import TopHeader from '../components/TopHeader';
@@ -36,6 +37,8 @@ import Animated, {
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import DashboardTopHeader from '../components/DashboardTopHeader';
 import Sizes from '../constants/Sizes';
+import images from '../constants/images';
+import globalStyles from '../styles/globalStyles';
 
 const generateSkiaImage = async path => {
   return await Skia.Data.fromURI(path).then(data =>
@@ -137,7 +140,10 @@ const Custom = ({navigation}) => {
         onPressNotification={onPressNotification}
         onPresProfile={onPresProfile}
       />
-      <View
+      <ImageBackground
+        source={images.background}
+        style={globalStyles.backgroundImage}>
+        <View
           style={{
             flex: 1,
             alignSelf: 'center',
@@ -151,6 +157,7 @@ const Custom = ({navigation}) => {
             This Feature is released in the next version
           </RNText>
         </View>
+      </ImageBackground>
 
       {/* <GestureDetector 
       

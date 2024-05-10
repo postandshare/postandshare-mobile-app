@@ -3,6 +3,7 @@
 import {
   Alert,
   Image,
+  ImageBackground,
   PermissionsAndroid,
   RefreshControl,
   ScrollView,
@@ -41,6 +42,7 @@ import AddBussinessPartnerSheet from './components/actionsheets/AddBussinessPart
 import Loader from '../../components/Loader';
 import CustomButton from '../../components/CustomButton';
 import {getPoliticalPartyDetails} from '../../services/userServices/political.services';
+import globalStyles from '../../styles/globalStyles';
 
 const ViewBussiness = ({route, navigation}) => {
   const {businessId, businessType} = route?.params;
@@ -284,240 +286,246 @@ const ViewBussiness = ({route, navigation}) => {
         titile={BussinessData?.fetchBusiness?.businessName ?? 'My Bussiness'}
       />
 
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={getAllBusinessListFetching || getAllBusinessListLoading}
-            onRefresh={() => getAllBusinessListRefetch()}
-          />
-        }
-        style={{
-          flex: 1,
-        }}>
-        {/* logo view */}
-        <View style={styles.logo_view}>
-          <View style={styles.logo_container}>
-            <Image
-              // source={images.profilePlaceholder}
-              source={{uri: BussinessData?.fetchBusiness?.logo ?? ''}}
-              style={styles.logo}
+      <ImageBackground
+        source={images.background}
+        style={globalStyles.backgroundImage}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={
+                getAllBusinessListFetching || getAllBusinessListLoading
+              }
+              onRefresh={() => getAllBusinessListRefetch()}
+            />
+          }
+          style={{
+            flex: 1,
+          }}>
+          {/* logo view */}
+          <View style={styles.logo_view}>
+            <View style={styles.logo_container}>
+              <Image
+                // source={images.profilePlaceholder}
+                source={{uri: BussinessData?.fetchBusiness?.logo ?? ''}}
+                style={styles.logo}
+              />
+            </View>
+            <View style={{flex: 0.6}}>
+              <Text style={styles.logo_text}>
+                {BussinessData?.fetchBusiness?.businessName ?? '--'}
+              </Text>
+              <Text style={styles.logo_text_subtitle}>
+                {BussinessData?.fetchBusiness?.category ?? '--'} ||{' '}
+                {BussinessData?.fetchBusiness?.subCategory ?? '--'} ||{' '}
+                <Text style={{color: 'green', fontStyle: 'italic'}}>
+                  {BussinessData?.fetchBusiness?.businessStatus ?? '--'}
+                </Text>
+              </Text>
+            </View>
+            <TouchableOpacity
+              onPress={() => TakePhotofromGallery()}
+              style={{flex: 0.1, justifyContent: 'center', left: 30}}>
+              <FontAwesome style={{color: '#26A9E1'}} name={'edit'} size={25} />
+            </TouchableOpacity>
+          </View>
+
+          {/* card for the ownner name */}
+          <View style={styles.card_container}>
+            <AntDesign name={'user'} size={25} color={Colors.PRIMARY} />
+            <Text style={styles.card_text}>
+              {BussinessData?.fetchBusiness?.ownerName ?? '--'} (
+              {BussinessData?.fetchBusiness?.designation ?? '--'})
+            </Text>
+          </View>
+          {/* mobile number */}
+          <View style={styles.card_container}>
+            <AntDesign name={'mobile1'} size={25} color={Colors.PRIMARY} />
+            <Text style={styles.card_text}>
+              {BussinessData?.fetchBusiness?.mobileNumber ?? '--'}
+            </Text>
+          </View>
+          {/* whatsapp number */}
+          <View style={styles.card_container}>
+            <FontAwesome name={'whatsapp'} size={25} color={Colors.PRIMARY} />
+            <Text style={styles.card_text}>
+              {BussinessData?.fetchBusiness?.whatsappNumber ?? '--'}
+            </Text>
+          </View>
+          {/* mail */}
+          <View style={styles.card_container}>
+            <AntDesign name={'mail'} size={25} color={Colors.PRIMARY} />
+            <Text style={styles.card_text}>
+              {BussinessData?.fetchBusiness?.email ?? '--'}
+            </Text>
+          </View>
+          {/* address */}
+          <View style={styles.card_container}>
+            <Entypo name={'location'} size={25} color={Colors.PRIMARY} />
+            <Text style={styles.card_text}>
+              {BussinessData?.fetchBusiness?.address?.address ?? '--'}
+              {'\n'}
+              {BussinessData?.fetchBusiness?.address?.dist ?? '--'}
+              {'\n'}
+              {BussinessData?.fetchBusiness?.address?.state ?? '--'}
+              {'\n'}
+              {BussinessData?.fetchBusiness?.address?.pinCode ?? '--'}
+            </Text>
+          </View>
+          {/* website */}
+          <View style={styles.card_container}>
+            <MaterialCommunityIcons
+              name={'web'}
+              size={25}
+              color={Colors.PRIMARY}
+            />
+            <Text style={styles.card_text}>
+              {BussinessData?.fetchBusiness?.website ?? '--'}
+            </Text>
+          </View>
+          {/* description */}
+          <View style={styles.card_container}>
+            <MaterialIcons
+              name={'description'}
+              size={25}
+              color={Colors.PRIMARY}
+            />
+            <Text style={styles.card_text}>
+              {BussinessData?.fetchBusiness?.description ?? '--'}
+            </Text>
+          </View>
+
+          <Text style={styles.bussinessPartnerText}>Bussiness Partner</Text>
+          {getAllBusinessList_Data?.data?.obj?.businessPartnerList?.map(
+            (item, index) => (
+              <View style={styles.bussinessPartnerView}>
+                <Image
+                  source={{uri: item?.photo ?? ''}}
+                  style={{height: 60, width: 60, borderRadius: 50}}
+                />
+                <View style={{flex: 0.8}}>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontWeight: '700',
+                      color: Colors.TEXT1,
+                    }}>
+                    {item?.name ?? '--'}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontWeight: '400',
+                      color: Colors.TEXT1,
+                    }}>
+                    {item?.designation}
+                  </Text>
+                </View>
+                <View style={{flex: 0.2, justifyContent: 'space-between'}}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      actionSheetRef?.current?.show();
+                      setBussinessPartnerDetails(item);
+                      bussinessPartnerDetailsFormik.setValues(prev => ({
+                        ...prev,
+                        bussinessPartnerName: item?.name,
+                        bussinessPartnerDessignation: item?.designation,
+                        bussinessPartnerPhoto: item?.photo,
+                      }));
+                    }}>
+                    <FontAwesome name={'edit'} size={25} color={'#26A9E1'} />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      Alert.alert(
+                        'Delete Bussiness Partner',
+                        'Are you sure you want to delete this bussiness partner?',
+                        [
+                          {
+                            text: 'Cancel',
+                            onPress: () => console.log('Cancel Pressed'),
+                            style: 'cancel',
+                          },
+                          {
+                            text: 'OK',
+                            onPress: () => {
+                              deleteBusinessPartnerMutate({
+                                businessPartnerDocId: item?._id,
+                                businessDocId: businessId,
+                              });
+                            },
+                          },
+                        ],
+                        {cancelable: false},
+                      );
+                    }}>
+                    <AntDesign name={'delete'} size={25} color={'#EA1C1C'} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ),
+          )}
+
+          {/* add bussiness partner more */}
+          <TouchableOpacity
+            style={{
+              marginBottom: 10,
+            }}
+            onPress={() => {
+              setBussinessPartnerDetails({});
+              bussinessPartnerDetailsFormik?.resetForm();
+              actionSheetRef?.current?.show();
+            }}>
+            <Text
+              style={{
+                color: 'blue',
+                fontStyle: 'italic',
+                marginHorizontal: 10,
+                textDecorationLine: 'underline',
+              }}>
+              Add more bussiness partner
+            </Text>
+          </TouchableOpacity>
+
+          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+            <CustomButton
+              title={'Delete'}
+              onPress={() => {
+                Alert.alert(
+                  'Delete Bussiness',
+                  'Are you sure you want to delete this bussiness?',
+                  [
+                    {
+                      text: 'Cancel',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'OK',
+                      onPress: () => {
+                        deleteBusinessMutate({bussinessDocId: businessId});
+                      },
+                    },
+                  ],
+                  {cancelable: false},
+                );
+              }}
+              width="40%"
+              customStyle={{backgroundColor: '#EA1C1C'}}
+            />
+            <CustomButton
+              title={'Edit'}
+              onPress={() => {
+                navigation.navigate('Add Bussiness', {
+                  businessId: businessId,
+                  bussinessDetails: getAllBusinessList_Data?.data?.obj,
+                });
+              }}
+              width="40%"
+              customStyle={{marginBottom: 30}}
             />
           </View>
-          <View style={{flex: 0.6}}>
-            <Text style={styles.logo_text}>
-              {BussinessData?.fetchBusiness?.businessName ?? '--'}
-            </Text>
-            <Text style={styles.logo_text_subtitle}>
-              {BussinessData?.fetchBusiness?.category ?? '--'} ||{' '}
-              {BussinessData?.fetchBusiness?.subCategory ?? '--'} ||{' '}
-              <Text style={{color: 'green', fontStyle: 'italic'}}>
-                {BussinessData?.fetchBusiness?.businessStatus ?? '--'}
-              </Text>
-            </Text>
-          </View>
-          <TouchableOpacity
-            onPress={() => TakePhotofromGallery()}
-            style={{flex: 0.1, justifyContent: 'center', left: 30}}>
-            <FontAwesome style={{color: '#26A9E1'}} name={'edit'} size={25} />
-          </TouchableOpacity>
-        </View>
-
-        {/* card for the ownner name */}
-        <View style={styles.card_container}>
-          <AntDesign name={'user'} size={25} color={Colors.PRIMARY} />
-          <Text style={styles.card_text}>
-            {BussinessData?.fetchBusiness?.ownerName ?? '--'} (
-            {BussinessData?.fetchBusiness?.designation ?? '--'})
-          </Text>
-        </View>
-        {/* mobile number */}
-        <View style={styles.card_container}>
-          <AntDesign name={'mobile1'} size={25} color={Colors.PRIMARY} />
-          <Text style={styles.card_text}>
-            {BussinessData?.fetchBusiness?.mobileNumber ?? '--'}
-          </Text>
-        </View>
-        {/* whatsapp number */}
-        <View style={styles.card_container}>
-          <FontAwesome name={'whatsapp'} size={25} color={Colors.PRIMARY} />
-          <Text style={styles.card_text}>
-            {BussinessData?.fetchBusiness?.whatsappNumber ?? '--'}
-          </Text>
-        </View>
-        {/* mail */}
-        <View style={styles.card_container}>
-          <AntDesign name={'mail'} size={25} color={Colors.PRIMARY} />
-          <Text style={styles.card_text}>
-            {BussinessData?.fetchBusiness?.email ?? '--'}
-          </Text>
-        </View>
-        {/* address */}
-        <View style={styles.card_container}>
-          <Entypo name={'location'} size={25} color={Colors.PRIMARY} />
-          <Text style={styles.card_text}>
-            {BussinessData?.fetchBusiness?.address?.address ?? '--'}
-            {'\n'}
-            {BussinessData?.fetchBusiness?.address?.dist ?? '--'}
-            {'\n'}
-            {BussinessData?.fetchBusiness?.address?.state ?? '--'}
-            {'\n'}
-            {BussinessData?.fetchBusiness?.address?.pinCode ?? '--'}
-          </Text>
-        </View>
-        {/* website */}
-        <View style={styles.card_container}>
-          <MaterialCommunityIcons
-            name={'web'}
-            size={25}
-            color={Colors.PRIMARY}
-          />
-          <Text style={styles.card_text}>
-            {BussinessData?.fetchBusiness?.website ?? '--'}
-          </Text>
-        </View>
-        {/* description */}
-        <View style={styles.card_container}>
-          <MaterialIcons
-            name={'description'}
-            size={25}
-            color={Colors.PRIMARY}
-          />
-          <Text style={styles.card_text}>
-            {BussinessData?.fetchBusiness?.description ?? '--'}
-          </Text>
-        </View>
-
-        <Text style={styles.bussinessPartnerText}>Bussiness Partner</Text>
-        {getAllBusinessList_Data?.data?.obj?.businessPartnerList?.map(
-          (item, index) => (
-            <View style={styles.bussinessPartnerView}>
-              <Image
-                source={{uri: item?.photo ?? ''}}
-                style={{height: 60, width: 60, borderRadius: 50}}
-              />
-              <View style={{flex: 0.8}}>
-                <Text
-                  style={{
-                    fontSize: 15,
-                    fontWeight: '700',
-                    color: Colors.TEXT1,
-                  }}>
-                  {item?.name ?? '--'}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 15,
-                    fontWeight: '400',
-                    color: Colors.TEXT1,
-                  }}>
-                  {item?.designation}
-                </Text>
-              </View>
-              <View style={{flex: 0.2, justifyContent: 'space-between'}}>
-                <TouchableOpacity
-                  onPress={() => {
-                    actionSheetRef?.current?.show();
-                    setBussinessPartnerDetails(item);
-                    bussinessPartnerDetailsFormik.setValues(prev => ({
-                      ...prev,
-                      bussinessPartnerName: item?.name,
-                      bussinessPartnerDessignation: item?.designation,
-                      bussinessPartnerPhoto: item?.photo,
-                    }));
-                  }}>
-                  <FontAwesome name={'edit'} size={25} color={'#26A9E1'} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    Alert.alert(
-                      'Delete Bussiness Partner',
-                      'Are you sure you want to delete this bussiness partner?',
-                      [
-                        {
-                          text: 'Cancel',
-                          onPress: () => console.log('Cancel Pressed'),
-                          style: 'cancel',
-                        },
-                        {
-                          text: 'OK',
-                          onPress: () => {
-                            deleteBusinessPartnerMutate({
-                              businessPartnerDocId: item?._id,
-                              businessDocId: businessId,
-                            });
-                          },
-                        },
-                      ],
-                      {cancelable: false},
-                    );
-                  }}>
-                  <AntDesign name={'delete'} size={25} color={'#EA1C1C'} />
-                </TouchableOpacity>
-              </View>
-            </View>
-          ),
-        )}
-
-        {/* add bussiness partner more */}
-        <TouchableOpacity
-          style={{
-            marginBottom: 10,
-          }}
-          onPress={() => {
-            setBussinessPartnerDetails({});
-            bussinessPartnerDetailsFormik?.resetForm();
-            actionSheetRef?.current?.show();
-          }}>
-          <Text
-            style={{
-              color: 'blue',
-              fontStyle: 'italic',
-              marginHorizontal: 10,
-              textDecorationLine: 'underline',
-            }}>
-            Add more bussiness partner
-          </Text>
-        </TouchableOpacity>
-
-        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-          <CustomButton
-            title={'Delete'}
-            onPress={() => {
-              Alert.alert(
-                'Delete Bussiness',
-                'Are you sure you want to delete this bussiness?',
-                [
-                  {
-                    text: 'Cancel',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
-                  },
-                  {
-                    text: 'OK',
-                    onPress: () => {
-                      deleteBusinessMutate({bussinessDocId: businessId});
-                    },
-                  },
-                ],
-                {cancelable: false},
-              );
-            }}
-            width="40%"
-            customStyle={{backgroundColor: '#EA1C1C'}}
-          />
-          <CustomButton
-            title={'Edit'}
-            onPress={() => {
-              navigation.navigate('Add Bussiness', {
-                businessId: businessId,
-                bussinessDetails: getAllBusinessList_Data?.data?.obj,
-              });
-            }}
-            width="40%"
-            customStyle={{marginBottom: 30}}
-          />
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </ImageBackground>
     </>
   );
 };

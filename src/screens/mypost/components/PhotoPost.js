@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   Alert,
   ImageBackground,
@@ -22,6 +23,8 @@ import ImageView from 'react-native-image-zoom-viewer';
 import Loader from '../../../components/Loader';
 import moment from 'moment';
 import Sizes from '../../../constants/Sizes';
+import globalStyles from '../../../styles/globalStyles';
+import Images from '../../../constants/images';
 
 const PhotoPost = ({navigation}) => {
   const [modalVisible, setModalVisible] = React.useState(false);
@@ -60,7 +63,7 @@ const PhotoPost = ({navigation}) => {
   useFocusEffect(
     useCallback(() => {
       getUserPostRefetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [getUserPostRefetch, navigation]),
   );
 
@@ -86,109 +89,113 @@ const PhotoPost = ({navigation}) => {
         </Modal>
       </Portal>
 
-      <ScrollView
-        style={{
-          flexGrow: 1,
-          backgroundColor: '#f5f5f5f5',
-        }}
-        contentContainerStyle={{
-          alignSelf: 'center',
-        }}
-        refreshControl={
-          <RefreshControl
-            refreshing={getUserPostFetching || getUserPostLoading}
-            onRefresh={() => {
-              getUserPostRefetch();
-            }}
-          />
-        }>
-        <View
+      <ImageBackground
+        source={Images?.background}
+        style={globalStyles.backgroundImage}>
+        <ScrollView
           style={{
-            flexWrap: 'wrap',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            flex: 1,
-            padding: 10,
-          }}>
-          {getUserPost_Data?.data?.list?.map((item, index) => {
-            return (
-              <>
-                <TouchableOpacity
-                  key={index}
-                  onLongPress={() => {
-                    Alert.alert(
-                      'Post and Share App',
-                      'Are you sure you want to delete this post?',
-                      [
-                        {
-                          text: 'Cancel',
-                          onPress: () => console.log('Cancel Pressed'),
-                          style: 'cancel',
-                        },
-                        {
-                          text: 'OK',
-                          onPress: () => {
-                            deleteUserPostMuatate({postDocId: item?._id});
+            flexGrow: 1,
+            backgroundColor: Colors.transparent,
+          }}
+          contentContainerStyle={{
+            alignSelf: 'center',
+          }}
+          refreshControl={
+            <RefreshControl
+              refreshing={getUserPostFetching || getUserPostLoading}
+              onRefresh={() => {
+                getUserPostRefetch();
+              }}
+            />
+          }>
+          <View
+            style={{
+              flexWrap: 'wrap',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              flex: 1,
+              padding: 10,
+            }}>
+            {getUserPost_Data?.data?.list?.map((item, index) => {
+              return (
+                <>
+                  <TouchableOpacity
+                    key={index}
+                    onLongPress={() => {
+                      Alert.alert(
+                        'Post and Share App',
+                        'Are you sure you want to delete this post?',
+                        [
+                          {
+                            text: 'Cancel',
+                            onPress: () => console.log('Cancel Pressed'),
+                            style: 'cancel',
                           },
-                        },
-                      ],
-                      {cancelable: false},
-                    );
-                  }}
-                  onPress={() => {
-                    setImages([item?.postLink]);
-                    setModalVisible(true);
-                  }}
-                  style={{
-                    width: Sizes.wp('45%'),
-                    height: 180,
-                    borderWidth: 1,
-                    borderColor: Colors.PRIMARY,
-                    marginVertical: 10,
-                    borderRadius: 10,
-                    overflow: 'hidden',
-                  }}>
-                  {isLoading && (
-                    <ActivityIndicator
-                      style={{
-                        position: 'absolute',
-                        zIndex: 1,
-                        alignSelf: 'center',
-                        top: '40%',
-                      }}
-                      size="small"
-                      color={Colors.PRIMARY}
-                    />
-                  )}
-                  <ImageBackground
-                    onLoadEnd={() => setIsLoading(false)}
-                    source={{uri: item?.postLink}}
-                    style={{
-                      width: '100%',
-                      zIndex: 1,
-                      height: '100%',
+                          {
+                            text: 'OK',
+                            onPress: () => {
+                              deleteUserPostMuatate({postDocId: item?._id});
+                            },
+                          },
+                        ],
+                        {cancelable: false},
+                      );
                     }}
-                    borderRadius={10}
-                    resizeMode="contain">
-                    <Text
+                    onPress={() => {
+                      setImages([item?.postLink]);
+                      setModalVisible(true);
+                    }}
+                    style={{
+                      width: Sizes.wp('45%'),
+                      height: 180,
+                      borderWidth: 1,
+                      borderColor: Colors.PRIMARY,
+                      marginVertical: 10,
+                      borderRadius: 10,
+                      overflow: 'hidden',
+                    }}>
+                    {isLoading && (
+                      <ActivityIndicator
+                        style={{
+                          position: 'absolute',
+                          zIndex: 1,
+                          alignSelf: 'center',
+                          top: '40%',
+                        }}
+                        size="small"
+                        color={Colors.PRIMARY}
+                      />
+                    )}
+                    <ImageBackground
+                      onLoadEnd={() => setIsLoading(false)}
+                      source={{uri: item?.postLink}}
                       style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                        color: 'white',
                         width: '100%',
-                        padding: 5,
-                        textAlign: 'center',
-                      }}>
-                      {moment(item?.createdAt).format('DD-MM-YYYY')}
-                    </Text>
-                  </ImageBackground>
-                </TouchableOpacity>
-              </>
-            );
-          })}
-        </View>
-      </ScrollView>
+                        zIndex: 1,
+                        height: '100%',
+                      }}
+                      borderRadius={10}
+                      resizeMode="contain">
+                      <Text
+                        style={{
+                          position: 'absolute',
+                          bottom: 0,
+                          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                          color: 'white',
+                          width: '100%',
+                          padding: 5,
+                          textAlign: 'center',
+                        }}>
+                        {moment(item?.createdAt).format('DD-MM-YYYY')}
+                      </Text>
+                    </ImageBackground>
+                  </TouchableOpacity>
+                </>
+              );
+            })}
+          </View>
+        </ScrollView>
+      </ImageBackground>
     </>
   );
 };

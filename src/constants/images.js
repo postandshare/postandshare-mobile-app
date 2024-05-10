@@ -6,6 +6,7 @@ export default {
   splashTop: require('../assets/images/splash-top.png'),
   splashBottom: require('../assets/images/splash-bottom.png'),
   error: require('../assets/images/error.png'),
+  background: require('../assets/images/background.png'),
 
   // onBoarding Images
   onboarding1: require('../assets/images/onboarding1.png'),

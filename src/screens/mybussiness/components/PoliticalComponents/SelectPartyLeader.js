@@ -1,5 +1,6 @@
 import {
   Image,
+  ImageBackground,
   PermissionsAndroid,
   RefreshControl,
   ScrollView,
@@ -24,6 +25,8 @@ import {
   updatePoliticalBusinessLogo,
 } from '../../../../services/userServices/political.services';
 import {useFocusEffect} from '@react-navigation/native';
+import globalStyles from '../../../../styles/globalStyles';
+import images from '../../../../constants/images';
 
 const SelectPartyLeader = ({route, navigation}) => {
   const {partyDocId, PoliticalBussinessDocId, politicalData, businessId} =
@@ -185,80 +188,113 @@ const SelectPartyLeader = ({route, navigation}) => {
         open={imageUploading || updatePoliticalBusinessLogoLoading}
         text="Uploading Image"
       />
-      <ScrollView
-        nestedScrollEnabled={true}
-        refreshControl={
-          <RefreshControl
-            refreshing={getAllPartyDetailsFetching}
-            onRefresh={getAllPartyDetailsRefetch}
-          />
-        }
-        contentContainerStyle={styles.root}>
-        {/* party selection name */}
-        <View style={styles.partyLogoContainer}>
-          <ProfilePic
-            imageUrl={
-              businessId
-                ? getPoliticalPartyDetails_Data?.data?.obj
-                    ?.fetchExistingPoliticalBusiness?.partyLogo
-                : profilePic
-            }
-            TakePhotofromGallery={
-              businessId
-                ? TakePhotofromGallery
-                : () =>
-                    ToastAndroid.show(
-                      'You can not change the logo' +
-                        '\n' +
-                        'until the bussiness is registered.',
-                      ToastAndroid.LONG,
-                    )
-            }
-          />
-          <View style={styles.partyNameCotainer}>
-            <Text style={styles.label}>Party Name</Text>
-            <Text style={styles.title}>
-              {businessId
-                ? getPoliticalPartyDetails_Data?.data?.obj
-                    ?.fetchExistingPoliticalBusiness?.partyName ?? 'Party Name'
-                : getAllPartyDetails_Data?.data?.obj?.fetchParty?.partyName}
-            </Text>
-            {/* from the prev screen */}
+      <ImageBackground
+        source={images.background}
+        style={globalStyles.backgroundImage}>
+        <ScrollView
+          nestedScrollEnabled={true}
+          refreshControl={
+            <RefreshControl
+              refreshing={getAllPartyDetailsFetching}
+              onRefresh={getAllPartyDetailsRefetch}
+            />
+          }
+          contentContainerStyle={styles.root}>
+          {/* party selection name */}
+          <View style={styles.partyLogoContainer}>
+            <ProfilePic
+              imageUrl={
+                businessId
+                  ? getPoliticalPartyDetails_Data?.data?.obj
+                      ?.fetchExistingPoliticalBusiness?.partyLogo
+                  : profilePic
+              }
+              TakePhotofromGallery={
+                businessId
+                  ? TakePhotofromGallery
+                  : () =>
+                      ToastAndroid.show(
+                        'You can not change the logo' +
+                          '\n' +
+                          'until the bussiness is registered.',
+                        ToastAndroid.LONG,
+                      )
+              }
+            />
+            <View style={styles.partyNameCotainer}>
+              <Text style={styles.label}>Party Name</Text>
+              <Text style={styles.title}>
+                {businessId
+                  ? getPoliticalPartyDetails_Data?.data?.obj
+                      ?.fetchExistingPoliticalBusiness?.partyName ??
+                    'Party Name'
+                  : getAllPartyDetails_Data?.data?.obj?.fetchParty?.partyName}
+              </Text>
+              {/* from the prev screen */}
+            </View>
           </View>
-        </View>
 
-        {/* selected leader details which are upto max 8 */}
-        <View style={styles.partyLeaderContainer}>
-          <View style={styles.row_text_container}>
-            <Text style={styles.title}>Selected Leader</Text>
-            {businessId && (
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('Change Leader', {
-                    partyDocId: partyDocId,
-                    bussinessDocId: businessId,
-                    buinessDtata: politicalData,
-                  });
-                }}>
-                <Text style={styles.changeLeader_text}>Change</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-          <View style={styles.imageWrap}>
-            {businessId
-              ? getPoliticalPartyDetails_Data?.data?.obj?.fetchPoliticalLeaders?.map(
-                  (item, index) => {
+          {/* selected leader details which are upto max 8 */}
+          <View style={styles.partyLeaderContainer}>
+            <View style={styles.row_text_container}>
+              <Text style={styles.title}>Selected Leader</Text>
+              {businessId && (
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('Change Leader', {
+                      partyDocId: partyDocId,
+                      bussinessDocId: businessId,
+                      buinessDtata: politicalData,
+                    });
+                  }}>
+                  <Text style={styles.changeLeader_text}>Change</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+            <View style={styles.imageWrap}>
+              {businessId
+                ? getPoliticalPartyDetails_Data?.data?.obj?.fetchPoliticalLeaders?.map(
+                    (item, index) => {
+                      return (
+                        <View
+                          key={index}
+                          style={{
+                            margin: 5,
+                            color: Colors.TEXT1,
+                            width: 100,
+                            textAlign: 'center',
+                          }}>
+                          <Image
+                            source={{uri: item?.leaderDocId?.leaderPhoto}}
+                            style={{
+                              height: 100,
+                              width: 100,
+                              //backgroundColor: 'red'
+                            }}
+                          />
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              fontWeight: '500',
+                              color: Colors.TEXT1,
+                              width: 100,
+                            }}>
+                            {item?.leaderDocId?.leaderName}
+                          </Text>
+                        </View>
+                      );
+                    },
+                  )
+                : selectedLeader?.map((item, index) => {
                     return (
                       <View
                         key={index}
                         style={{
                           margin: 5,
-                          color: Colors.TEXT1,
-                          width: 100,
-                          textAlign: 'center',
+                          alignItems: 'center',
                         }}>
                         <Image
-                          source={{uri: item?.leaderDocId?.leaderPhoto}}
+                          source={{uri: item?.leaderPhoto}}
                           style={{
                             height: 100,
                             width: 100,
@@ -271,59 +307,31 @@ const SelectPartyLeader = ({route, navigation}) => {
                             fontWeight: '500',
                             color: Colors.TEXT1,
                             width: 100,
+                            textAlign: 'center',
                           }}>
-                          {item?.leaderDocId?.leaderName}
+                          {item?.leaderName}
+                          {item?.leaderName}
                         </Text>
                       </View>
                     );
-                  },
-                )
-              : selectedLeader?.map((item, index) => {
-                  return (
-                    <View
-                      key={index}
-                      style={{
-                        margin: 5,
-                        alignItems: 'center',
-                      }}>
-                      <Image
-                        source={{uri: item?.leaderPhoto}}
-                        style={{
-                          height: 100,
-                          width: 100,
-                          //backgroundColor: 'red'
-                        }}
-                      />
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          fontWeight: '500',
-                          color: Colors.TEXT1,
-                          width: 100,
-                          textAlign: 'center',
-                        }}>
-                        {item?.leaderName}
-                        {item?.leaderName}
-                      </Text>
-                    </View>
-                  );
-                })}
+                  })}
+            </View>
           </View>
-        </View>
 
-        <CustomButton
-          title={'Next'}
-          onPress={() => {
-            navigation.navigate('PoliticalVolunteer', {
-              partyDocId: partyDocId,
-              selectedLeaderDocId: selectedLeaderDocId,
-              politicalData: politicalData,
-              partyLogo: profilePic,
-              businessId: businessId,
-            });
-          }}
-        />
-      </ScrollView>
+          <CustomButton
+            title={'Next'}
+            onPress={() => {
+              navigation.navigate('PoliticalVolunteer', {
+                partyDocId: partyDocId,
+                selectedLeaderDocId: selectedLeaderDocId,
+                politicalData: politicalData,
+                partyLogo: profilePic,
+                businessId: businessId,
+              });
+            }}
+          />
+        </ScrollView>
+      </ImageBackground>
     </>
   );
 };
@@ -333,7 +341,7 @@ export default SelectPartyLeader;
 const styles = StyleSheet.create({
   root: {
     flexGrow: 1,
-    backgroundColor: Colors.Background,
+    backgroundColor: Colors.transparent,
   },
   partyLogoContainer: {
     margin: 10,

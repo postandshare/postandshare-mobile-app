@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import {
   FlatList,
+  ImageBackground,
   Pressable,
   RefreshControl,
   Text,
@@ -23,6 +24,8 @@ import {useSelector} from 'react-redux';
 import TopHeader from '../../components/TopHeader';
 import {Checkbox} from 'react-native-paper';
 import Sizes from '../../constants/Sizes';
+import globalStyles from '../../styles/globalStyles';
+import images from '../../constants/images';
 
 const LanguageSelection = ({navigation}) => {
   const {isProfileUpdated} = useSelector(store => store.commonStore);
@@ -99,144 +102,123 @@ const LanguageSelection = ({navigation}) => {
 
   return (
     <>
-      {/* upper card */}
-      {/* <ImageBackground source={Images.loginTop} style={authStyle.upperImage}>
-        <View style={authStyle.topImgSec}>
-          <Image source={Images.otp_icon} style={authStyle.otp_icon_img} />
-        </View>
-        <Text style={authStyle.welcomeText}>Select Language</Text>
-        <Text style={authStyle.otp_send_text}>
-          Select your preferred language
-        </Text>
-      </ImageBackground> */}
       <TopHeader titile={'Select Language'} />
 
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginHorizontal: 10,
-          top: Sizes.hp('8%'),
-        }}>
-        <Text
-          style={[
-            authStyle.input,
-            {fontSize: 15, fontWeight: '500', color: Colors.TEXT1},
-          ]}>
-          Post Languages:-
-        </Text>
-        {/* <Text
-          style={[
-            authStyle.input,
-            {
-              fontSize: 10,
-              fontWeight: '300',
-              color: Colors.TEXT1,
-              alignSelf: 'center',
-            },
-          ]}>
-          select atleast three
-        </Text> */}
-      </View>
-
-      <View
-        style={{
-          borderWidth: 1,
-          borderRadius: 6,
-          backgroundColor: Colors.white,
-          borderColor: '#4141412F',
-          width: '90%',
-          alignSelf: 'center',
-          top: Sizes.hp('2%'),
-        }}>
-        {/* flatlist for rendering the regional language */}
-        <FlatList
-          contentContainerStyle={{
-            justifyContent: 'space-between',
-            padding: 10,
-          }}
-          refreshControl={
-            <RefreshControl
-              refreshing={
-                getRegionalLanguagesFetching ||
-                getSelectedRegionalLanguagesFetching ||
-                upsertRegionalLanguageLoading ||
-                deleteRegionalLanguageLoading ||
-                getSelectedRegionalLanguagesLoading ||
-                getRegionalLanguagesLoading ||
-                loading
-              }
-              onRefresh={
-                getSelectedRegionalLanguagesRefetch &&
-                getRegionalLanguagesRefetch
-              }
-            />
-          }
-          data={getRegionalLanguages_Data?.data?.list}
-          keyExtractor={item => item?._id}
-          renderItem={({item}) => (
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginVertical: 1,
-              }}>
-              <Checkbox
-                status={
-                  selectReginalLan.includes(item?._id) ? 'checked' : 'unchecked'
-                }
-                onPress={async () => {
-                  if (selectReginalLan.includes(item?._id)) {
-                    setRiginalLan(
-                      selectReginalLan.filter(id => id !== item?._id),
-                    );
-                    deleteRegionalLanguageMuatate({
-                      languageDocId: item?._id,
-                    });
-                  } else {
-                    setRiginalLan([...selectReginalLan, item?._id]);
-                    upsertRegionalLanguageMuatate({
-                      languageDocId: item?._id,
-                    });
-                  }
-                }}
-              />
-              <Text
-                style={
-                  selectReginalLan.includes(item._id)
-                    ? authStyle.selectedLanguage
-                    : authStyle.unSelectedLanguage
-                }>
-                {item?.languageName}
-              </Text>
-            </View>
-          )}
-        />
-      </View>
-      <View style={authStyle.bottom_content_root_Language}>
-        <Pressable
-          style={({pressed}) => [
-            {
-              backgroundColor: Colors.PRIMARY,
-              padding: 10,
-              borderRadius: 5,
-              alignItems: 'center',
-            },
-          ]}
-          onPress={() => {
-            setLoading(true);
-            setTimeout(() => {
-              setLoading(false);
-              isProfileUpdated === false
-                ? navigation.navigate('ProfileNavigator')
-                : navigation.navigate(NavigationScreenName.DRWAER_NAVIGATOR);
-            }, 1000);
+      {/* imagebackground */}
+      <ImageBackground
+        source={images.background}
+        style={globalStyles.backgroundImage}>
+        <View
+          style={{
+            marginHorizontal: 10,
           }}>
-          <Text style={authStyle.signin_text_Language}>
-            {loading ? 'Please wait...' : 'Save'}
+          <Text
+            style={[{fontSize: 15, fontWeight: '500', color: Colors.TEXT1}]}>
+            Post Languages:-
           </Text>
-        </Pressable>
-      </View>
+        </View>
+
+        <View
+          style={{
+            flexGrow: 1,
+            alignSelf: 'center',
+            borderWidth: 1,
+            borderRadius: 6,
+            backgroundColor: Colors.white,
+            borderColor: '#4141412F',
+            width: '90%',
+          }}>
+          {/* flatlist for rendering the regional language */}
+          <FlatList
+            contentContainerStyle={{
+              justifyContent: 'space-between',
+              padding: 10,
+            }}
+            refreshControl={
+              <RefreshControl
+                refreshing={
+                  getRegionalLanguagesFetching ||
+                  getSelectedRegionalLanguagesFetching ||
+                  upsertRegionalLanguageLoading ||
+                  deleteRegionalLanguageLoading ||
+                  getSelectedRegionalLanguagesLoading ||
+                  getRegionalLanguagesLoading ||
+                  loading
+                }
+                onRefresh={
+                  getSelectedRegionalLanguagesRefetch &&
+                  getRegionalLanguagesRefetch
+                }
+              />
+            }
+            data={getRegionalLanguages_Data?.data?.list}
+            keyExtractor={item => item?._id}
+            renderItem={({item}) => (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginVertical: 1,
+                }}>
+                <Checkbox
+                  status={
+                    selectReginalLan.includes(item?._id)
+                      ? 'checked'
+                      : 'unchecked'
+                  }
+                  onPress={async () => {
+                    if (selectReginalLan.includes(item?._id)) {
+                      setRiginalLan(
+                        selectReginalLan.filter(id => id !== item?._id),
+                      );
+                      deleteRegionalLanguageMuatate({
+                        languageDocId: item?._id,
+                      });
+                    } else {
+                      setRiginalLan([...selectReginalLan, item?._id]);
+                      upsertRegionalLanguageMuatate({
+                        languageDocId: item?._id,
+                      });
+                    }
+                  }}
+                />
+                <Text
+                  style={
+                    selectReginalLan.includes(item._id)
+                      ? authStyle.selectedLanguage
+                      : authStyle.unSelectedLanguage
+                  }>
+                  {item?.languageName}
+                </Text>
+              </View>
+            )}
+          />
+        </View>
+        <View style={authStyle.bottom_content_root_Language}>
+          <Pressable
+            style={({pressed}) => [
+              {
+                backgroundColor: Colors.PRIMARY,
+                padding: 10,
+                borderRadius: 5,
+                alignItems: 'center',
+              },
+            ]}
+            onPress={() => {
+              setLoading(true);
+              setTimeout(() => {
+                setLoading(false);
+                isProfileUpdated === false
+                  ? navigation.navigate('ProfileNavigator')
+                  : navigation.navigate(NavigationScreenName.DRWAER_NAVIGATOR);
+              }, 1000);
+            }}>
+            <Text style={authStyle.signin_text_Language}>
+              {loading ? 'Please wait...' : 'Save'}
+            </Text>
+          </Pressable>
+        </View>
+      </ImageBackground>
     </>
   );
 };

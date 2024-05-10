@@ -1,4 +1,5 @@
 import {
+  ImageBackground,
   PermissionsAndroid,
   ScrollView,
   Text,
@@ -37,6 +38,8 @@ import CustomTextInputFormik from '../../components/CustomTextInputFormik';
 import BasicEdit from './components/EditProfile/BasicEdit';
 import SocialMediaEdit from './components/EditProfile/SocialMediaEdit';
 import AddressEdit from './components/EditProfile/AddressEdit';
+import images from '../../constants/images';
+import globalStyles from '../../styles/globalStyles';
 
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -217,27 +220,31 @@ const EditProfile = ({route, navigation}) => {
       <Loader open={imageUploading} text="Uploading Image" />
       <Loader open={updateUserProfileLoading} text="Updating Deatils..." />
       <TopHeader titile={'Edit Profile'} />
-      <ScrollView
-        keyboardDismissMode="on-drag"
-        contentContainerStyle={styles.root}>
-        <Text style={styles.title}>Basic Edit</Text>
-        <BasicEdit
-          profilePic={profilePic}
-          TakePhotofromGallery={TakePhotofromGallery}
-          personalProfileFormik={personalProfileFormik}
-        />
-        <Text style={styles.title}>Social Media</Text>
-        <SocialMediaEdit personalProfileFormik={personalProfileFormik} />
-        <Text style={styles.title}>Address</Text>
-        <AddressEdit personalProfileFormik={personalProfileFormik} />
-        <TouchableOpacity
-          onPress={personalProfileFormik?.handleSubmit}
-          style={styles.button}>
-          <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>
-            Update
-          </Text>
-        </TouchableOpacity>
-      </ScrollView>
+      <ImageBackground
+        source={images.background}
+        style={globalStyles.backgroundImage}>
+        <ScrollView
+          keyboardDismissMode="on-drag"
+          contentContainerStyle={styles.root}>
+          <Text style={styles.title}>Basic Edit</Text>
+          <BasicEdit
+            profilePic={profilePic}
+            TakePhotofromGallery={TakePhotofromGallery}
+            personalProfileFormik={personalProfileFormik}
+          />
+          <Text style={styles.title}>Social Media</Text>
+          <SocialMediaEdit personalProfileFormik={personalProfileFormik} />
+          <Text style={styles.title}>Address</Text>
+          <AddressEdit personalProfileFormik={personalProfileFormik} />
+          <TouchableOpacity
+            onPress={personalProfileFormik?.handleSubmit}
+            style={styles.button}>
+            <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>
+              Update
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </ImageBackground>
     </>
   );
 };

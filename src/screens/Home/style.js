@@ -4,7 +4,7 @@ import Sizes from '../../constants/Sizes';
 
 const styles = StyleSheet.create({
   root: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: 'transparent',
     minHeight: Sizes.hp('86%'),
   },
   box_card_wrapper: {

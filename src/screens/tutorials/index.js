@@ -1,10 +1,12 @@
-import {View} from 'react-native';
+import {ImageBackground, View} from 'react-native';
 import React from 'react';
 import TopHeader from '../../components/TopHeader';
 import {ScrollView} from 'react-native-gesture-handler';
 import styles from './style';
 import NavigationScreenName from '../../constants/NavigationScreenName';
 import TutorailNavCard from '../../components/TutorailNavCard';
+import images from '../../constants/images';
+import globalStyles from '../../styles/globalStyles';
 
 const TutorialCardNavData = [
   {
@@ -58,13 +60,17 @@ const Tutorial = () => {
   return (
     <>
       <TopHeader titile="Tutorials" />
-      <ScrollView style={styles.root}>
-        <View style={styles.container}>
-          {TutorialCardNavData?.map((item, idx) => (
-            <TutorailNavCard key={idx} item={item} />
-          ))}
-        </View>
-      </ScrollView>
+      <ImageBackground
+        source={images.background}
+        style={globalStyles.backgroundImage}>
+        <ScrollView style={styles.root}>
+          <View style={styles.container}>
+            {TutorialCardNavData?.map((item, idx) => (
+              <TutorailNavCard key={idx} item={item} />
+            ))}
+          </View>
+        </ScrollView>
+      </ImageBackground>
     </>
   );
 };

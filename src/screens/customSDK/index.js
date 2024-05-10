@@ -48,6 +48,7 @@ import Sizes from '../../constants/Sizes';
 import uploadFile from '../../utils/uploadFile';
 import {addUserPost} from '../../services/userServices/userpost.services';
 import images from '../../constants/images';
+import globalStyles from '../../styles/globalStyles';
 
 const CustomColorChange = ({
   data,
@@ -681,456 +682,172 @@ const CustomSDK = ({route, navigation}) => {
         </Dialog>
       </Portal>
 
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={getOrgFrameFetching || getOrgFrameLoading}
-            onRefresh={getOrgFrameRefetch}
-          />
-        }
-        contentContainerStyle={styles.root}
-        showsVerticalScrollIndicator={false}>
-        {/* choose image area */}
-        {picUrl ? (
-          <ViewShot
-            ref={viewShotRef}
-            options={{format: 'png', quality: 1.0, result: 'base64'}}>
-            <View style={styles.chooseImageContainer}>
-              <ImageBackground
-                source={{uri: picUrl}}
-                resizeMode="center"
-                style={{
-                  zIndex: 1,
-                  height: '100%',
-                  width: '100%',
-                  justifyContent: 'center',
-                }}>
-                <View style={{zIndex: 3}}>
-                  {state?.logo ? (
-                    <DragDrop onDrag={drag} onDrop={drop}>
-                      <Image
-                        source={Images.akSchoolIcon}
-                        style={{
-                          height: 50,
-                          width: 50,
-                          // left: 50,
-                        }}
-                      />
-                    </DragDrop>
-                  ) : null}
-                  {showSticker ? (
-                    <DragDrop onDrag={drag} onDrop={drop}>
-                      <Image
-                        source={{uri: stickers}}
-                        style={{
-                          height: 50,
-                          width: 50,
-                          // left: 50,
-                        }}
-                      />
-                    </DragDrop>
-                  ) : null}
-                  {state?.mobile ? (
-                    <DragDrop
-                      onDrag={drag}
-                      onDrop={drop}
-                      setShowModal={setShowModal}>
-                      <Text
-                        style={{
-                          color: textColor,
-                          fontSize: 18,
-                          fontWeight: '700',
-                          position: 'absolute',
-                        }}>
-                        9876543210
-                      </Text>
-                    </DragDrop>
-                  ) : null}
-                  {state?.whatsApp ? (
-                    <DragDrop
-                      onDrag={drag}
-                      onDrop={drop}
-                      setShowModal={setShowModal}>
-                      <Text
-                        style={{
-                          color: textColor,
-                          fontSize: 18,
-                          fontWeight: '700',
-                          position: 'absolute',
-                        }}>
-                        8957339512
-                      </Text>
-                    </DragDrop>
-                  ) : null}
-                  {state?.email ? (
-                    <DragDrop
-                      onDrag={drag}
-                      onDrop={drop}
-                      setShowModal={setShowModal}>
-                      <Text
-                        style={{
-                          color: textColor,
-                          fontSize: 18,
-                          fontWeight: '700',
-                          position: 'absolute',
-                        }}>
-                        postandshare@gamilc.com
-                      </Text>
-                    </DragDrop>
-                  ) : null}
-                  {state?.location ? (
-                    <DragDrop
-                      onDrag={drag}
-                      onDrop={drop}
-                      setShowModal={setShowModal}>
-                      <Text
-                        style={{
-                          color: textColor,
-                          fontSize: 18,
-                          fontWeight: '700',
-                          position: 'absolute',
-                        }}>
-                        123, xyz street, abc city
-                      </Text>
-                    </DragDrop>
-                  ) : null}
-                  {state?.text && state?.showText ? (
-                    <DragDrop
-                      onDrag={drag}
-                      onDrop={drop}
-                      setShowModal={setShowModal}>
-                      <Text
-                        style={{
-                          color: textColor,
-                          fontSize: 18,
-                          fontWeight: '700',
-                          position: 'absolute',
-                          textAlign: textAlignment,
-                          fontFamily: fontFamily,
-                        }}>
-                        {state?.text}
-                      </Text>
-                    </DragDrop>
-                  ) : null}
-                </View>
-
-                <View style={{zIndex: 2}}>
-                  {showFrame ? (
-                    <Image
-                      source={Images.frame_1}
-                      style={{
-                        transform: [{rotate: '90deg'}],
-                      }}
-                    />
-                  ) : null}
-                  {showFrame1 ? (
-                    <Image
-                      source={Images.frame_1}
-                      style={{
-                        height: '100%',
-                        width: '100%',
-                      }}
-                    />
-                  ) : null}
-                  {showFrame2 ? (
-                    <ImageBackground
-                      source={Images.frame_2}
-                      style={{
-                        height: '100%',
-                        width: '100%',
-                        top: -20,
-                      }}
-                    />
-                  ) : null}
-                </View>
-              </ImageBackground>
-              {showCross ? (
-                <TouchableOpacity
-                  onPress={() => navigation.goBack()}
+      <ImageBackground
+        source={images.background}
+        style={globalStyles.backgroundImage}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={getOrgFrameFetching || getOrgFrameLoading}
+              onRefresh={getOrgFrameRefetch}
+            />
+          }
+          contentContainerStyle={styles.root}
+          showsVerticalScrollIndicator={false}>
+          {/* choose image area */}
+          {picUrl ? (
+            <ViewShot
+              ref={viewShotRef}
+              options={{format: 'png', quality: 1.0, result: 'base64'}}>
+              <View style={styles.chooseImageContainer}>
+                <ImageBackground
+                  source={{uri: picUrl}}
+                  resizeMode="center"
                   style={{
-                    zIndex: 4,
-                    top: -10,
-                    right: -15,
-                    position: 'absolute',
+                    zIndex: 1,
+                    height: '100%',
+                    width: '100%',
+                    justifyContent: 'center',
                   }}>
-                  <AntDesign name="closecircleo" size={30} color={'red'} />
-                </TouchableOpacity>
-              ) : null}
-            </View>
-          </ViewShot>
-        ) : imgData ? (
-          <ViewShot ref={viewShotRef} options={{format: 'jpg', quality: 0.9}}>
-            <View style={styles.chooseImageContainer}>
-              <ImageBackground
-                source={imgData ? {uri: imgData} : null}
-                resizeMode="contain"
-                style={{
-                  zIndex: 1,
-                  height: 375,
-                  width: 375,
-                  justifyContent: 'center',
-                }}>
-                {/* logo and other things that needs to be implemented */}
-                <View style={{zIndex: 3}}>
-                  {state?.logo ? (
-                    <DragDrop
-                      onDrag={drag}
-                      onDrop={drop}
-                      intialX={logoPosition?.x}
-                      intialY={logoPosition?.y}
-                      // intialX={position?.logo?.x}
-                      // intialY={position?.logo?.y}
-                    >
-                      <Image
-                        source={
-                          BusinessData
-                            ? {
-                                uri:
-                                  BusinessData?.logo ??
-                                  businessDetails?.partyLogo ??
-                                  BusinessData?.profilePic,
-                              }
-                            : Images.akSchoolIcon
-                        }
-                        style={{
-                          height: 50,
-                          width: 50,
-                        }}
-                      />
-                    </DragDrop>
-                  ) : null}
-                  {showSticker ? (
-                    <DragDrop onDrag={drag} onDrop={drop}>
-                      <Image
-                        source={{uri: stickers}}
-                        style={{
-                          height: 50,
-                          width: 50,
-                        }}
-                      />
-                    </DragDrop>
-                  ) : null}
-                  {state?.mobile ? (
-                    <DragDrop
-                      onDrag={drag}
-                      onDrop={drop}
-                      intialX={mobileNumPosition?.x}
-                      intialY={mobileNumPosition?.y}
-                      // intialX={150}
-                      // intialY={300}
-                    >
-                      <View
-                        style={{
-                          position: 'absolute',
-                        }}>
-                        <CustomColorChange
-                          colorProps={mobileNumPosition}
-                          setShowBorderBox={setShowBorderBox}
-                          showBorderBox={showBorderBox}
-                          data={
-                            BusinessData?.mobileNumber ??
-                            businessDetails?.mobileNumber ??
-                            ToastAndroid.show(
-                              'Mobile Number is not available',
-                              ToastAndroid.LONG,
-                            )
-                          }
-                        />
-                      </View>
-                    </DragDrop>
-                  ) : null}
-                  {state?.whatsApp ? (
-                    <DragDrop
-                      onDrag={drag}
-                      onDrop={drop}
-                      intialX={whatsAppPosition?.x}
-                      intialY={whatsAppPosition?.y}>
-                      <Text
-                        style={{
-                          // color: textColor,
-                          fontSize: 18,
-                          fontWeight: '700',
-                          position: 'absolute',
-                        }}>
-                        <CustomColorChange
-                          setShowBorderBox={setShowBorderBox}
-                          showBorderBox={showBorderBox}
-                          colorProps={whatsAppPosition}
-                          data={
-                            BusinessData?.whatsappNumber ??
-                            businessDetails?.whatsappNumber ??
-                            ToastAndroid.show(
-                              'Whatsapp Number is not available',
-                              ToastAndroid.LONG,
-                            )
-                          }
-                        />
-                      </Text>
-                    </DragDrop>
-                  ) : null}
-                  {state?.email ? (
-                    <DragDrop
-                      onDrag={drag}
-                      onDrop={drop}
-                      intialX={emailPosition?.x}
-                      intialY={emailPosition?.y}
-
-                      // setShowModal={setShowModal}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          fontWeight: '700',
-                          position: 'absolute',
-                        }}>
-                        <CustomColorChange
-                          setShowBorderBox={setShowBorderBox}
-                          showBorderBox={showBorderBox}
-                          colorProps={whatsAppPosition}
-                          data={
-                            BusinessData?.email ??
-                            businessDetails?.email ??
-                            ToastAndroid.show(
-                              'Email is not available',
-                              ToastAndroid.LONG,
-                            )
-                          }
-                        />
-                      </Text>
-                    </DragDrop>
-                  ) : null}
-                  {state?.location ? (
-                    <DragDrop
-                      intialX={locationPosition?.x}
-                      intialY={locationPosition?.y}
-                      onDrag={drag}
-                      onDrop={drop}>
-                      <Text
-                        style={{
-                          // color: textColor,
-                          fontSize: 18,
-                          fontWeight: '700',
-                          position: 'absolute',
-                          textAlign: 'center',
-                        }}>
-                        <CustomColorChange
-                          setShowBorderBox={setShowBorderBox}
-                          showBorderBox={showBorderBox}
-                          colorProps={locationPosition}
-                          data={
-                            BusinessData?.address
-                              ? BusinessData?.address?.address +
-                                ' ' +
-                                '||' +
-                                BusinessData?.address?.dist +
-                                ' ' +
-                                '\n' +
-                                BusinessData?.address?.state +
-                                ' ' +
-                                '\n' +
-                                BusinessData?.address?.pinCode +
-                                ' ' +
-                                '||' +
-                                BusinessData?.address?.tehsil
-                              : BusinessData?.state
-                              ? BusinessData?.state +
-                                ' ' +
-                                '||' +
-                                BusinessData?.district +
-                                ' ' +
-                                '\n' +
-                                BusinessData?.legislativeAssembly
-                              : BusinessData?.currentAddress
-                              ? BusinessData?.currentAddress?.address +
-                                ' ' +
-                                '||' +
-                                BusinessData?.currentAddress?.dist +
-                                ' ' +
-                                '\n' +
-                                BusinessData?.currentAddress?.state +
-                                ' ' +
-                                '\n' +
-                                BusinessData?.currentAddress?.pinCode
-                              : ToastAndroid.show(
-                                  'Address is not available',
-                                  ToastAndroid.LONG,
-                                )
-                          }
-                        />
-                      </Text>
-                    </DragDrop>
-                  ) : null}
-                  {state?.text && state?.showText ? (
-                    <DragDrop
-                      onDrag={drag}
-                      onDrop={drop}
-                      setShowModal={setShowModal}>
-                      <Text
-                        style={{
-                          color: textColor,
-                          fontSize: 18,
-                          fontWeight: '700',
-                          position: 'absolute',
-                          textAlign: textAlignment,
-                          fontFamily: fontFamily,
-                        }}>
-                        {state?.text}
-                      </Text>
-                    </DragDrop>
-                  ) : null}
-                </View>
-                {/* frames of the images */}
-                <View style={{zIndex: 2}}>
-                  {showFrameImg ? (
-                    <>
-                      {isLoading && (
-                        <ActivityIndicator
+                  <View style={{zIndex: 3}}>
+                    {state?.logo ? (
+                      <DragDrop onDrag={drag} onDrop={drop}>
+                        <Image
+                          source={Images.akSchoolIcon}
                           style={{
-                            position: 'absolute',
-                            alignSelf: 'center',
-                            top: '45%',
+                            height: 50,
+                            width: 50,
+                            // left: 50,
                           }}
-                          size="large"
-                          color={Colors.PRIMARY}
                         />
-                      )}
+                      </DragDrop>
+                    ) : null}
+                    {showSticker ? (
+                      <DragDrop onDrag={drag} onDrop={drop}>
+                        <Image
+                          source={{uri: stickers}}
+                          style={{
+                            height: 50,
+                            width: 50,
+                            // left: 50,
+                          }}
+                        />
+                      </DragDrop>
+                    ) : null}
+                    {state?.mobile ? (
+                      <DragDrop
+                        onDrag={drag}
+                        onDrop={drop}
+                        setShowModal={setShowModal}>
+                        <Text
+                          style={{
+                            color: textColor,
+                            fontSize: 18,
+                            fontWeight: '700',
+                            position: 'absolute',
+                          }}>
+                          9876543210
+                        </Text>
+                      </DragDrop>
+                    ) : null}
+                    {state?.whatsApp ? (
+                      <DragDrop
+                        onDrag={drag}
+                        onDrop={drop}
+                        setShowModal={setShowModal}>
+                        <Text
+                          style={{
+                            color: textColor,
+                            fontSize: 18,
+                            fontWeight: '700',
+                            position: 'absolute',
+                          }}>
+                          8957339512
+                        </Text>
+                      </DragDrop>
+                    ) : null}
+                    {state?.email ? (
+                      <DragDrop
+                        onDrag={drag}
+                        onDrop={drop}
+                        setShowModal={setShowModal}>
+                        <Text
+                          style={{
+                            color: textColor,
+                            fontSize: 18,
+                            fontWeight: '700',
+                            position: 'absolute',
+                          }}>
+                          postandshare@gamilc.com
+                        </Text>
+                      </DragDrop>
+                    ) : null}
+                    {state?.location ? (
+                      <DragDrop
+                        onDrag={drag}
+                        onDrop={drop}
+                        setShowModal={setShowModal}>
+                        <Text
+                          style={{
+                            color: textColor,
+                            fontSize: 18,
+                            fontWeight: '700',
+                            position: 'absolute',
+                          }}>
+                          123, xyz street, abc city
+                        </Text>
+                      </DragDrop>
+                    ) : null}
+                    {state?.text && state?.showText ? (
+                      <DragDrop
+                        onDrag={drag}
+                        onDrop={drop}
+                        setShowModal={setShowModal}>
+                        <Text
+                          style={{
+                            color: textColor,
+                            fontSize: 18,
+                            fontWeight: '700',
+                            position: 'absolute',
+                            textAlign: textAlignment,
+                            fontFamily: fontFamily,
+                          }}>
+                          {state?.text}
+                        </Text>
+                      </DragDrop>
+                    ) : null}
+                  </View>
+
+                  <View style={{zIndex: 2}}>
+                    {showFrame ? (
                       <Image
-                        loadingIndicatorSource={
-                          <ActivityIndicator
-                            size="large"
-                            color={Colors.PRIMARY}
-                          />
-                        }
-                        onLoad={() => setIsLoading(false)}
-                        source={
-                          framImg ? {uri: framImg} : null
-                          // : ToastAndroid.show(
-                          //     'Frame is not available please provide better link',
-                          //     ToastAndroid.LONG,
-                          //   )
-                        }
-                        resizeMode="contain"
+                        source={Images.frame_1}
                         style={{
-                          alignSelf: 'center',
-                          height: 375,
-                          width: 375,
+                          transform: [{rotate: '90deg'}],
                         }}
-                        res
                       />
-                    </>
-                  ) : // : showFrame ? (
-                  //   <Image
-                  //     source={images.Insta_Freame}
-                  //     style={{
-                  //       height: 315,
-                  //       width: '100%',
-                  //       alignSelf: 'center',
-                  //       zIndex: -1
-                  //     }}
-                  //   />
-                  // )
-                  null}
-                </View>
+                    ) : null}
+                    {showFrame1 ? (
+                      <Image
+                        source={Images.frame_1}
+                        style={{
+                          height: '100%',
+                          width: '100%',
+                        }}
+                      />
+                    ) : null}
+                    {showFrame2 ? (
+                      <ImageBackground
+                        source={Images.frame_2}
+                        style={{
+                          height: '100%',
+                          width: '100%',
+                          top: -20,
+                        }}
+                      />
+                    ) : null}
+                  </View>
+                </ImageBackground>
                 {showCross ? (
                   <TouchableOpacity
                     onPress={() => navigation.goBack()}
@@ -1143,58 +860,347 @@ const CustomSDK = ({route, navigation}) => {
                     <AntDesign name="closecircleo" size={30} color={'red'} />
                   </TouchableOpacity>
                 ) : null}
-              </ImageBackground>
-            </View>
-          </ViewShot>
-        ) : (
-          <TouchableOpacity
-            style={styles.chooseImageContainer}
-            onPress={TakePhotofromGallery}>
-            <AntDesign name="upload" size={30} color={Colors.PRIMARY} />
-            <Text>Choose Image</Text>
-          </TouchableOpacity>
-        )}
+              </View>
+            </ViewShot>
+          ) : imgData ? (
+            <ViewShot ref={viewShotRef} options={{format: 'jpg', quality: 0.9}}>
+              <View style={styles.chooseImageContainer}>
+                <ImageBackground
+                  source={imgData ? {uri: imgData} : null}
+                  resizeMode="contain"
+                  style={{
+                    zIndex: 1,
+                    height: 375,
+                    width: 375,
+                    justifyContent: 'center',
+                    borderWidth: 1,
+                    borderColor: Colors.PRIMARY,
+                  }}>
+                  {/* logo and other things that needs to be implemented */}
+                  <View style={{zIndex: 3}}>
+                    {state?.logo ? (
+                      <DragDrop
+                        onDrag={drag}
+                        onDrop={drop}
+                        intialX={logoPosition?.x}
+                        intialY={logoPosition?.y}
+                        // intialX={position?.logo?.x}
+                        // intialY={position?.logo?.y}
+                      >
+                        <Image
+                          source={
+                            BusinessData
+                              ? {
+                                  uri:
+                                    BusinessData?.logo ??
+                                    businessDetails?.partyLogo ??
+                                    BusinessData?.profilePic,
+                                }
+                              : Images.akSchoolIcon
+                          }
+                          style={{
+                            height: 50,
+                            width: 50,
+                          }}
+                        />
+                      </DragDrop>
+                    ) : null}
+                    {showSticker ? (
+                      <DragDrop onDrag={drag} onDrop={drop}>
+                        <Image
+                          source={{uri: stickers}}
+                          style={{
+                            height: 50,
+                            width: 50,
+                          }}
+                        />
+                      </DragDrop>
+                    ) : null}
+                    {state?.mobile ? (
+                      <DragDrop
+                        onDrag={drag}
+                        onDrop={drop}
+                        intialX={mobileNumPosition?.x}
+                        intialY={mobileNumPosition?.y}
+                        // intialX={150}
+                        // intialY={300}
+                      >
+                        <View
+                          style={{
+                            position: 'absolute',
+                          }}>
+                          <CustomColorChange
+                            colorProps={mobileNumPosition}
+                            setShowBorderBox={setShowBorderBox}
+                            showBorderBox={showBorderBox}
+                            data={
+                              BusinessData?.mobileNumber ??
+                              businessDetails?.mobileNumber ??
+                              ToastAndroid.show(
+                                'Mobile Number is not available',
+                                ToastAndroid.LONG,
+                              )
+                            }
+                          />
+                        </View>
+                      </DragDrop>
+                    ) : null}
+                    {state?.whatsApp ? (
+                      <DragDrop
+                        onDrag={drag}
+                        onDrop={drop}
+                        intialX={whatsAppPosition?.x}
+                        intialY={whatsAppPosition?.y}>
+                        <Text
+                          style={{
+                            // color: textColor,
+                            fontSize: 18,
+                            fontWeight: '700',
+                            position: 'absolute',
+                          }}>
+                          <CustomColorChange
+                            setShowBorderBox={setShowBorderBox}
+                            showBorderBox={showBorderBox}
+                            colorProps={whatsAppPosition}
+                            data={
+                              BusinessData?.whatsappNumber ??
+                              businessDetails?.whatsappNumber ??
+                              ToastAndroid.show(
+                                'Whatsapp Number is not available',
+                                ToastAndroid.LONG,
+                              )
+                            }
+                          />
+                        </Text>
+                      </DragDrop>
+                    ) : null}
+                    {state?.email ? (
+                      <DragDrop
+                        onDrag={drag}
+                        onDrop={drop}
+                        intialX={emailPosition?.x}
+                        intialY={emailPosition?.y}
 
-        {/* aditional details like logo, location etc */}
-        <ScrollView
-          horizontal
-          contentContainerStyle={styles.additionalDetailsContainer}
-          showsHorizontalScrollIndicator={false}>
-          <TouchableOpacity
-            style={[
-              state?.location ? {backgroundColor: Colors.PRIMARY} : {},
-              styles.additionalDetails,
-            ]}
-            onPress={() =>
-              setState(prev => ({...prev, location: !state?.location}))
-            }>
-            <Entypo
-              name="location-pin"
-              size={30}
-              color={state?.location ? Colors.white : Colors.TEXT1}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() =>
-              setState(prev => ({
-                ...prev,
-                logo: !state?.logo,
-              }))
-            }
-            style={[
-              state?.logo ? {backgroundColor: Colors.PRIMARY} : {},
-              styles.additionalDetails,
-            ]}>
-            <Text
+                        // setShowModal={setShowModal}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 18,
+                            fontWeight: '700',
+                            position: 'absolute',
+                          }}>
+                          <CustomColorChange
+                            setShowBorderBox={setShowBorderBox}
+                            showBorderBox={showBorderBox}
+                            colorProps={whatsAppPosition}
+                            data={
+                              BusinessData?.email ??
+                              businessDetails?.email ??
+                              ToastAndroid.show(
+                                'Email is not available',
+                                ToastAndroid.LONG,
+                              )
+                            }
+                          />
+                        </Text>
+                      </DragDrop>
+                    ) : null}
+                    {state?.location ? (
+                      <DragDrop
+                        intialX={locationPosition?.x}
+                        intialY={locationPosition?.y}
+                        onDrag={drag}
+                        onDrop={drop}>
+                        <Text
+                          style={{
+                            // color: textColor,
+                            fontSize: 18,
+                            fontWeight: '700',
+                            position: 'absolute',
+                            textAlign: 'center',
+                          }}>
+                          <CustomColorChange
+                            setShowBorderBox={setShowBorderBox}
+                            showBorderBox={showBorderBox}
+                            colorProps={locationPosition}
+                            data={
+                              BusinessData?.address
+                                ? BusinessData?.address?.address +
+                                  ' ' +
+                                  '||' +
+                                  BusinessData?.address?.dist +
+                                  ' ' +
+                                  '\n' +
+                                  BusinessData?.address?.state +
+                                  ' ' +
+                                  '\n' +
+                                  BusinessData?.address?.pinCode +
+                                  ' ' +
+                                  '||' +
+                                  BusinessData?.address?.tehsil
+                                : BusinessData?.state
+                                ? BusinessData?.state +
+                                  ' ' +
+                                  '||' +
+                                  BusinessData?.district +
+                                  ' ' +
+                                  '\n' +
+                                  BusinessData?.legislativeAssembly
+                                : BusinessData?.currentAddress
+                                ? BusinessData?.currentAddress?.address +
+                                  ' ' +
+                                  '||' +
+                                  BusinessData?.currentAddress?.dist +
+                                  ' ' +
+                                  '\n' +
+                                  BusinessData?.currentAddress?.state +
+                                  ' ' +
+                                  '\n' +
+                                  BusinessData?.currentAddress?.pinCode
+                                : ToastAndroid.show(
+                                    'Address is not available',
+                                    ToastAndroid.LONG,
+                                  )
+                            }
+                          />
+                        </Text>
+                      </DragDrop>
+                    ) : null}
+                    {state?.text && state?.showText ? (
+                      <DragDrop
+                        onDrag={drag}
+                        onDrop={drop}
+                        setShowModal={setShowModal}>
+                        <Text
+                          style={{
+                            color: textColor,
+                            fontSize: 18,
+                            fontWeight: '700',
+                            position: 'absolute',
+                            textAlign: textAlignment,
+                            fontFamily: fontFamily,
+                          }}>
+                          {state?.text}
+                        </Text>
+                      </DragDrop>
+                    ) : null}
+                  </View>
+                  {/* frames of the images */}
+                  <View style={{zIndex: 2}}>
+                    {showFrameImg ? (
+                      <>
+                        {isLoading && (
+                          <ActivityIndicator
+                            style={{
+                              position: 'absolute',
+                              alignSelf: 'center',
+                              top: '45%',
+                            }}
+                            size="large"
+                            color={Colors.PRIMARY}
+                          />
+                        )}
+                        <Image
+                          loadingIndicatorSource={
+                            <ActivityIndicator
+                              size="large"
+                              color={Colors.PRIMARY}
+                            />
+                          }
+                          onLoad={() => setIsLoading(false)}
+                          source={
+                            framImg ? {uri: framImg} : null
+                            // : ToastAndroid.show(
+                            //     'Frame is not available please provide better link',
+                            //     ToastAndroid.LONG,
+                            //   )
+                          }
+                          resizeMode="contain"
+                          style={{
+                            alignSelf: 'center',
+                            height: 375,
+                            width: 375,
+                          }}
+                          res
+                        />
+                      </>
+                    ) : // : showFrame ? (
+                    //   <Image
+                    //     source={images.Insta_Freame}
+                    //     style={{
+                    //       height: 315,
+                    //       width: '100%',
+                    //       alignSelf: 'center',
+                    //       zIndex: -1
+                    //     }}
+                    //   />
+                    // )
+                    null}
+                  </View>
+                  {showCross ? (
+                    <TouchableOpacity
+                      onPress={() => navigation.goBack()}
+                      style={{
+                        zIndex: 4,
+                        top: -10,
+                        right: -15,
+                        position: 'absolute',
+                      }}>
+                      <AntDesign name="closecircleo" size={30} color={'red'} />
+                    </TouchableOpacity>
+                  ) : null}
+                </ImageBackground>
+              </View>
+            </ViewShot>
+          ) : (
+            <TouchableOpacity
+              style={styles.chooseImageContainer}
+              onPress={TakePhotofromGallery}>
+              <AntDesign name="upload" size={30} color={Colors.PRIMARY} />
+              <Text>Choose Image</Text>
+            </TouchableOpacity>
+          )}
+
+          {/* aditional details like logo, location etc */}
+          <ScrollView
+            horizontal
+            contentContainerStyle={styles.additionalDetailsContainer}
+            showsHorizontalScrollIndicator={false}>
+            <TouchableOpacity
               style={[
-                state?.logo ? {color: Colors.white} : {color: Colors.TEXT1},
-                styles.additionalDetailsText,
-                {fontStyle: 'italic'},
+                state?.location ? {backgroundColor: Colors.PRIMARY} : {},
+                styles.additionalDetails,
+              ]}
+              onPress={() =>
+                setState(prev => ({...prev, location: !state?.location}))
+              }>
+              <Entypo
+                name="location-pin"
+                size={30}
+                color={state?.location ? Colors.white : Colors.TEXT1}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                setState(prev => ({
+                  ...prev,
+                  logo: !state?.logo,
+                }))
+              }
+              style={[
+                state?.logo ? {backgroundColor: Colors.PRIMARY} : {},
+                styles.additionalDetails,
               ]}>
-              LOGO
-            </Text>
-          </TouchableOpacity>
-          {/* <TouchableOpacity
+              <Text
+                style={[
+                  state?.logo ? {color: Colors.white} : {color: Colors.TEXT1},
+                  styles.additionalDetailsText,
+                  {fontStyle: 'italic'},
+                ]}>
+                LOGO
+              </Text>
+            </TouchableOpacity>
+            {/* <TouchableOpacity
             style={[
               state?.image ? {backgroundColor: Colors.PRIMARY} : {},
               styles.additionalDetails,
@@ -1207,47 +1213,49 @@ const CustomSDK = ({route, navigation}) => {
               }
             />
           </TouchableOpacity> */}
-          <TouchableOpacity
-            style={[
-              state?.mobile ? {backgroundColor: Colors.PRIMARY} : {},
-              styles.additionalDetails,
-            ]}
-            onPress={() =>
-              setState(prev => ({...prev, mobile: !state?.mobile}))
-            }>
-            <AntDesign
-              name="mobile1"
-              size={30}
-              color={state?.mobile ? Colors.white : Colors.TEXT1}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              state?.whatsApp ? {backgroundColor: Colors.PRIMARY} : {},
-              styles.additionalDetails,
-            ]}
-            onPress={() =>
-              setState(prev => ({...prev, whatsApp: !state?.whatsApp}))
-            }>
-            <FontAwesome
-              name="whatsapp"
-              size={30}
-              color={state?.whatsApp ? Colors.white : Colors.TEXT1}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              state?.email ? {backgroundColor: Colors.PRIMARY} : {},
-              styles.additionalDetails,
-            ]}
-            onPress={() => setState(prev => ({...prev, email: !state?.email}))}>
-            <AntDesign
-              name="mail"
-              size={30}
-              color={state?.email ? Colors.white : Colors.TEXT1}
-            />
-          </TouchableOpacity>
-          {/* <TouchableOpacity
+            <TouchableOpacity
+              style={[
+                state?.mobile ? {backgroundColor: Colors.PRIMARY} : {},
+                styles.additionalDetails,
+              ]}
+              onPress={() =>
+                setState(prev => ({...prev, mobile: !state?.mobile}))
+              }>
+              <AntDesign
+                name="mobile1"
+                size={30}
+                color={state?.mobile ? Colors.white : Colors.TEXT1}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                state?.whatsApp ? {backgroundColor: Colors.PRIMARY} : {},
+                styles.additionalDetails,
+              ]}
+              onPress={() =>
+                setState(prev => ({...prev, whatsApp: !state?.whatsApp}))
+              }>
+              <FontAwesome
+                name="whatsapp"
+                size={30}
+                color={state?.whatsApp ? Colors.white : Colors.TEXT1}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                state?.email ? {backgroundColor: Colors.PRIMARY} : {},
+                styles.additionalDetails,
+              ]}
+              onPress={() =>
+                setState(prev => ({...prev, email: !state?.email}))
+              }>
+              <AntDesign
+                name="mail"
+                size={30}
+                color={state?.email ? Colors.white : Colors.TEXT1}
+              />
+            </TouchableOpacity>
+            {/* <TouchableOpacity
             style={[
               state?.facebook ? {backgroundColor: Colors.PRIMARY} : {},
               styles.additionalDetails,
@@ -1258,55 +1266,55 @@ const CustomSDK = ({route, navigation}) => {
               color={state?.facebook ? Colors.white : Colors.TEXT1}
             />
           </TouchableOpacity> */}
-        </ScrollView>
+          </ScrollView>
 
-        {/* for frame selection  */}
-        <ScrollView
-          horizontal
-          contentContainerStyle={styles.frameContainer}
-          showsHorizontalScrollIndicator={false}>
-          {getOrgFrame_Data?.data?.list?.map((item, index) => (
-            <FrameSelection
-              setFrameImg={setFrameImg}
-              setShowFrameImg={setShowFrameImg}
-              showFrameImg={showFrameImg}
-              item={item}
-              setSelectedIndex={setSelectedIndex}
-              selectedIndex={selectedIndex}
-              index={index}
-              setShowFrame1={setShowFrame1}
-              setShowFrame2={setShowFrame2}
-              setShowFrame3={setShowFrame3}
-              setFrame={setFrame}
-              key={index}
-              setLogoPosition={setLogoPosition}
-              state={state}
-              setState={setState}
-              setMobileNumPosition={setMobileNumPosition}
-              setEmailPosition={setEmailPosition}
-              setLocationPosition={setLocationPosition}
-              setWhatsAppPosition={setWhatsAppPosition}
-            />
-          ))}
-        </ScrollView>
+          {/* for frame selection  */}
+          <ScrollView
+            horizontal
+            contentContainerStyle={styles.frameContainer}
+            showsHorizontalScrollIndicator={false}>
+            {getOrgFrame_Data?.data?.list?.map((item, index) => (
+              <FrameSelection
+                setFrameImg={setFrameImg}
+                setShowFrameImg={setShowFrameImg}
+                showFrameImg={showFrameImg}
+                item={item}
+                setSelectedIndex={setSelectedIndex}
+                selectedIndex={selectedIndex}
+                index={index}
+                setShowFrame1={setShowFrame1}
+                setShowFrame2={setShowFrame2}
+                setShowFrame3={setShowFrame3}
+                setFrame={setFrame}
+                key={index}
+                setLogoPosition={setLogoPosition}
+                state={state}
+                setState={setState}
+                setMobileNumPosition={setMobileNumPosition}
+                setEmailPosition={setEmailPosition}
+                setLocationPosition={setLocationPosition}
+                setWhatsAppPosition={setWhatsAppPosition}
+              />
+            ))}
+          </ScrollView>
 
-        {/* effects on screen */}
-        <ScrollView
-          horizontal
-          contentContainerStyle={styles.frameContainer}
-          showsHorizontalScrollIndicator={false}>
-          <TouchableOpacity
-            style={styles.frame}
-            onPress={() => setVisible(true)}>
-            <MaterialCommunityIcons
-              name="text-recognition"
-              size={20}
-              color={Colors.SECONDRY}
-            />
-            <Text style={styles.frameText}>Add Text</Text>
-          </TouchableOpacity>
-          {/* sticker */}
-          {/* <TouchableOpacity
+          {/* effects on screen */}
+          <ScrollView
+            horizontal
+            contentContainerStyle={styles.frameContainer}
+            showsHorizontalScrollIndicator={false}>
+            <TouchableOpacity
+              style={styles.frame}
+              onPress={() => setVisible(true)}>
+              <MaterialCommunityIcons
+                name="text-recognition"
+                size={20}
+                color={Colors.SECONDRY}
+              />
+              <Text style={styles.frameText}>Add Text</Text>
+            </TouchableOpacity>
+            {/* sticker */}
+            {/* <TouchableOpacity
             onPress={() => {
               if (stickers) {
                 setShowSticker(!showSticker);
@@ -1322,46 +1330,47 @@ const CustomSDK = ({route, navigation}) => {
             />
             <Text style={styles.frameText}>Sticker</Text>
           </TouchableOpacity> */}
-          <TouchableOpacity
-            onPress={() => setShowFontFamily(true)}
-            style={styles.frame}>
-            <MaterialCommunityIcons
-              name="draw"
-              size={30}
-              color={Colors.SECONDRY}
-            />
-            <Text style={styles.frameText}>Font Style</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setShowModal(true)}
-            style={styles.frame}>
-            <MaterialCommunityIcons
-              name="star-four-points-outline"
-              size={20}
-              color={Colors.SECONDRY}
-            />
-            <Text style={styles.frameText}>Glow</Text>
-          </TouchableOpacity>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>Effect 5</Text>
-          </View>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>Effect 6</Text>
-          </View>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>Effect 7</Text>
-          </View>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>Effect 8</Text>
-          </View>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>Effect 9</Text>
-          </View>
-          <View style={styles.frame}>
-            <Text style={styles.frameText}>Effect 10</Text>
-          </View>
+            <TouchableOpacity
+              onPress={() => setShowFontFamily(true)}
+              style={styles.frame}>
+              <MaterialCommunityIcons
+                name="draw"
+                size={30}
+                color={Colors.SECONDRY}
+              />
+              <Text style={styles.frameText}>Font Style</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setShowModal(true)}
+              style={styles.frame}>
+              <MaterialCommunityIcons
+                name="star-four-points-outline"
+                size={20}
+                color={Colors.SECONDRY}
+              />
+              <Text style={styles.frameText}>Glow</Text>
+            </TouchableOpacity>
+            <View style={styles.frame}>
+              <Text style={styles.frameText}>Effect 5</Text>
+            </View>
+            <View style={styles.frame}>
+              <Text style={styles.frameText}>Effect 6</Text>
+            </View>
+            <View style={styles.frame}>
+              <Text style={styles.frameText}>Effect 7</Text>
+            </View>
+            <View style={styles.frame}>
+              <Text style={styles.frameText}>Effect 8</Text>
+            </View>
+            <View style={styles.frame}>
+              <Text style={styles.frameText}>Effect 9</Text>
+            </View>
+            <View style={styles.frame}>
+              <Text style={styles.frameText}>Effect 10</Text>
+            </View>
+          </ScrollView>
         </ScrollView>
-      </ScrollView>
+      </ImageBackground>
     </>
   );
 };

@@ -95,7 +95,7 @@ const PartySelect = ({route, businessId, bussinessDetails}) => {
         }
         contentContainerStyle={{
           flexGrow: 1,
-          backgroundColor: Colors.Background,
+          backgroundColor: Colors.transparent,
           bottom: 10,
         }}
         style={{

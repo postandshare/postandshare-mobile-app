@@ -5,7 +5,7 @@ import Sizes from '../../constants/Sizes';
 const styles = StyleSheet.create({
   root: {
     flexGrow: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: Colors.transparent,
     paddingBottom: 100,
   },
   image_wrap: {

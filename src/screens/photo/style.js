@@ -5,11 +5,11 @@ import Sizes from '../../constants/Sizes';
 const styles = StyleSheet.create({
   root: {
     flexGrow: 1,
-    backgroundColor: Colors.Background,
+    backgroundColor: Colors.transparent,
   },
   container: {
     // flex: 1,
-    backgroundColor: Colors.Background,
+    backgroundColor: Colors.transparent,
     justifyContent: 'center',
     margin: 10,
   },
@@ -25,11 +25,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   uploadpic_container: {
-        flexWrap: 'wrap',
-        flexDirection: 'row',
-        marginVertical: 5,
-        marginHorizontal: 5,
-        padding: 5,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    marginVertical: 5,
+    marginHorizontal: 5,
+    padding: 5,
   },
   imageGrid: {
     flexDirection: 'row',
@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
     borderColor: '#3D398930',
     justifyContent: 'center',
     margin: 15,
-
   },
   uploadpic_container_image: {
     height: '100%',

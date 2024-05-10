@@ -5,7 +5,7 @@ import Sizes from '../../constants/Sizes';
 const styles = StyleSheet.create({
   root: {
     flexGrow: 1,
-    backgroundColor: Colors.Background,
+    backgroundColor: Colors.transparent,
   },
   chooseImageContainer: {
     // height: Sizes.height * 0.4,
@@ -34,57 +34,56 @@ const styles = StyleSheet.create({
     borderColor: Colors.PRIMARY,
     margin: 10,
   },
-    additionalDetailsText: {
-        fontWeight: 'bold',
-    },
-    frameContainer: {
-        marginVertical: 10,
-        alignItems: 'center',
-    },
-    frame: {
-        height: 60,
-        width: 70,
-        padding: 10,
-        borderRadius: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: Colors.PRIMARY,
-        margin: 10,
-    },
-    frameText: {
-        fontSize: 10,
-        color: Colors.SECONDRY,
-        fontWeight: 'bold',
-    },
-     button: {
-        height: 50,
-        width: 150,
-        backgroundColor: Colors.white,
-        borderRadius: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: Colors.SECONDRY,
-        margin: 10,
-    },
-    buttonText: {
-        color: Colors.white,
-        fontWeight: 'bold',
-    },
-    buttonContainer: {
-        marginVertical: 10,
-        alignItems: 'center',
-        flexDirection: 'row',
-        alignSelf: 'center',
-    },
-    scroller: {
-    },
-    item_content: {
-        marginVertical: 10,
-        alignItems: 'center',
-        fontSize: 18
-    }
+  additionalDetailsText: {
+    fontWeight: 'bold',
+  },
+  frameContainer: {
+    marginVertical: 10,
+    alignItems: 'center',
+  },
+  frame: {
+    height: 60,
+    width: 70,
+    padding: 10,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: Colors.PRIMARY,
+    margin: 10,
+  },
+  frameText: {
+    fontSize: 10,
+    color: Colors.SECONDRY,
+    fontWeight: 'bold',
+  },
+  button: {
+    height: 50,
+    width: 150,
+    backgroundColor: Colors.white,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: Colors.SECONDRY,
+    margin: 10,
+  },
+  buttonText: {
+    color: Colors.white,
+    fontWeight: 'bold',
+  },
+  buttonContainer: {
+    marginVertical: 10,
+    alignItems: 'center',
+    flexDirection: 'row',
+    alignSelf: 'center',
+  },
+  scroller: {},
+  item_content: {
+    marginVertical: 10,
+    alignItems: 'center',
+    fontSize: 18,
+  },
 });
 
 export default styles;

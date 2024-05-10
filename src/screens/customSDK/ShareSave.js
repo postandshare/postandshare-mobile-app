@@ -16,6 +16,8 @@ import TopHeader from '../../components/TopHeader';
 import NavigationScreenName from '../../constants/NavigationScreenName';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import Loader from '../../components/Loader';
+import images from '../../constants/images';
+import globalStyles from '../../styles/globalStyles';
 
 const ShareSave = ({route, navigation}) => {
   const {picUrl} = route.params;
@@ -156,35 +158,39 @@ const ShareSave = ({route, navigation}) => {
   };
 
   return (
-    <View>
+    <>
       <TopHeader titile={'Share & Save'} />
       <Loader open={loading} text="Saving Image..." />
-      <View style={styles.chooseImageContainer}>
-        <ImageBackground
-          source={{uri: picUrl}}
-          resizeMode="cover"
-          style={{
-            zIndex: 1,
-            height: '100%',
-            width: '100%',
-            justifyContent: 'center',
-          }}></ImageBackground>
-      </View>
+      <ImageBackground
+        source={images.background}
+        style={globalStyles.backgroundImage}>
+        <View style={styles.chooseImageContainer}>
+          <ImageBackground
+            source={{uri: picUrl}}
+            resizeMode="cover"
+            style={{
+              zIndex: 1,
+              height: '100%',
+              width: '100%',
+              justifyContent: 'center',
+            }}></ImageBackground>
+        </View>
 
-      {/* buttons for sae and share */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={onCapture}>
-          <Text style={[styles.buttonText, {color: Colors.SECONDRY}]}>
-            Save
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={shareImage}
-          style={[styles.button, {backgroundColor: Colors.SECONDRY}]}>
-          <Text style={styles.buttonText}>Share</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+        {/* buttons for sae and share */}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={onCapture}>
+            <Text style={[styles.buttonText, {color: Colors.SECONDRY}]}>
+              Save
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={shareImage}
+            style={[styles.button, {backgroundColor: Colors.SECONDRY}]}>
+            <Text style={styles.buttonText}>Share</Text>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
+    </>
   );
 };
 

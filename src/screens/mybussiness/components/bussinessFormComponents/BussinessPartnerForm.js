@@ -22,7 +22,7 @@ import images from '../../../../constants/images';
 import {useMutation} from '@tanstack/react-query';
 import {addBusinessPartner} from '../../../../services/userServices/bussiness.servies';
 
-const BussinessPartnerForm = ({bussinessTypeFormik , bussinessDetails}) => {
+const BussinessPartnerForm = ({bussinessTypeFormik, bussinessDetails}) => {
   const [profilePic, setprofilePic] = useState(
     bussinessTypeFormik?.values?.bussinessOwnerPhoto,
   );
@@ -31,7 +31,6 @@ const BussinessPartnerForm = ({bussinessTypeFormik , bussinessDetails}) => {
   const [bussinessPartner, setBussinessPartner] = useState(
     bussinessTypeFormik?.values?.bussinessPartner ?? [],
   );
-
 
   const bussinessPartnerDetailsFormik = useFormik({
     initialValues: {
@@ -220,7 +219,13 @@ const BussinessPartnerForm = ({bussinessTypeFormik , bussinessDetails}) => {
         {/* BUSSINESS PARTNER   */}
         {bussinessDetails ? null : (
           <View style={{flex: 1, marginHorizontal: 10}}>
-            <Text style={{fontSize: 20, fontWeight: 'bold', marginTop: 20, color: Colors.TEXT1}}>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: 'bold',
+                marginTop: 20,
+                color: Colors.TEXT1,
+              }}>
               Bussiness Partner
             </Text>
             {bussinessPartner?.map((item, index) => (
@@ -239,12 +244,12 @@ const BussinessPartnerForm = ({bussinessTypeFormik , bussinessDetails}) => {
                 </View>
                 <View style={{flex: 0.6}}>
                   <Text style={{fontSize: 16, color: Colors.TEXT1}}>
-                    { bussinessDetails?.businessPartnerList
+                    {bussinessDetails?.businessPartnerList
                       ? item?.name
                       : item?.bussinessPartnerName}
                   </Text>
                   <Text style={{fontSize: 14, color: Colors.TEXT1}}>
-                    { bussinessDetails?.businessPartnerList
+                    {bussinessDetails?.businessPartnerList
                       ? item?.designation
                       : item?.bussinessPartnerDessignation}
                   </Text>
@@ -284,7 +289,8 @@ const BussinessPartnerForm = ({bussinessTypeFormik , bussinessDetails}) => {
               onPress={() => {
                 actionSheetRef?.current?.show();
               }}>
-              <Text style={{color: 'blue', fontStyle: 'italic' ,marginBottom: 10}}>
+              <Text
+                style={{color: 'blue', fontStyle: 'italic', marginBottom: 10}}>
                 Add More Bussiness Partner
               </Text>
             </TouchableOpacity>
@@ -300,6 +306,7 @@ export default BussinessPartnerForm;
 const styles = StyleSheet.create({
   root: {
     justifyContent: 'center',
+    backgroundColor: Colors.transparent,
   },
   image_wrap: {
     marginVertical: 20,

@@ -67,7 +67,7 @@ const BottomTab = () => {
           tabBarIcon: ({focused}) => (
             <AntDesign
               name="appstore-o"
-              size={focused ? 24   : 24}
+              size={focused ? 24 : 24}
               color={focused ? '#0A85FE' : '#0B1F32'}
             />
           ),

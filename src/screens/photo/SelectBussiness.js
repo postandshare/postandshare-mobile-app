@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
+  ImageBackground,
   RefreshControl,
   ScrollView,
   Text,
@@ -16,6 +17,7 @@ import {getAllBusinessList} from '../../services/userServices/bussiness.servies'
 import {useFocusEffect} from '@react-navigation/native';
 import NavigationScreenName from '../../constants/NavigationScreenName';
 import {getUserProfile} from '../../services/userServices/profile.services';
+import globalStyles from '../../styles/globalStyles';
 
 const SelectBussiness = ({route, navigation}) => {
   const {picData} = route?.params;
@@ -68,8 +70,6 @@ const SelectBussiness = ({route, navigation}) => {
     }, [getAllBusinessListRefetch, navigation]),
   );
 
-  console.log(getUserProfile_Data?.data?.obj?.profilePic, 'user profile');
-
   return (
     <>
       <TopHeader
@@ -81,80 +81,87 @@ const SelectBussiness = ({route, navigation}) => {
           })
         }
       />
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={getAllBusinessListFetching || getAllBusinessListLoading}
-            onRefresh={getAllBusinessListRefetch}
-          />
-        }
-        contentContainerStyle={styles.root}>
-        {/* card for the bussiness name and update */}
+      <ImageBackground
+        source={images.background}
+        style={globalStyles.backgroundImage}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={
+                getAllBusinessListFetching || getAllBusinessListLoading
+              }
+              onRefresh={getAllBusinessListRefetch}
+            />
+          }
+          contentContainerStyle={styles.root}>
+          {/* card for the bussiness name and update */}
 
-        {getAllBusinessList_Data?.data?.list?.length === 0 && (
-          <View style={styles.noData}>
-            <Text style={styles.noDataText}>
-              You have not added any bussiness yet {'\n'}
-              Please add a bussiness to continue
-            </Text>
-          </View>
-        )}
+          {getAllBusinessList_Data?.data?.list?.length === 0 && (
+            <View style={styles.noData}>
+              <Text style={styles.noDataText}>
+                You have not added any bussiness yet {'\n'}
+                Please add a bussiness to continue
+              </Text>
+            </View>
+          )}
 
-        <View style={styles.container}>
-          {getAllBusinessList_Data?.data?.list?.map((item, index) => (
+          <View style={styles.container}>
+            {getAllBusinessList_Data?.data?.list?.map((item, index) => (
+              <MyBussinessCard
+                key={index}
+                name={item?.businessName ?? item?.volunteerName}
+                EstblishmentDate={item?.createdOn}
+                image={item?.logo ?? item?.partyLogo}
+                userDocId={item?._id}
+                lastUpdated={item?.lastUpdated ?? item?.createdOn}
+                data={item}
+                onPress={() =>
+                  picData
+                    ? navigation.navigate('CustomSDK', {
+                        picData: picData?.photo,
+                        businessDetails: item,
+                      })
+                    : navigation.navigate('View Bussiness', {
+                        businessId: item?._id,
+                        businessType: item?.businessType,
+                      })
+                }
+              />
+            ))}
+
+            <Text style={styles.text}>Your Profile</Text>
+            {/* <MyBussinessCard */}
             <MyBussinessCard
-              key={index}
-              name={item?.businessName ?? item?.volunteerName}
-              EstblishmentDate={item?.createdOn}
-              image={item?.logo ?? item?.partyLogo}
-              userDocId={item?._id}
-              lastUpdated={item?.lastUpdated ?? item?.createdOn}
-              onPress={() =>
-                picData
-                  ? navigation.navigate('CustomSDK', {
-                      picData: picData?.photo,
-                      businessDetails: item,
-                    })
-                  : navigation.navigate('View Bussiness', {
-                      businessId: item?._id,
-                      businessType: item?.businessType,
-                    })
+              name={
+                getUserProfile_Data?.data?.obj?.firstName
+                  ? getUserProfile_Data?.data?.obj?.firstName
+                  : '-' + getAllBusinessList_Data?.data?.obj?.middleName
+                  ? getUserProfile_Data?.data?.obj?.middleName
+                  : '-' + getUserProfile_Data?.data?.obj?.lastName
+                  ? getUserProfile_Data?.data?.obj?.lastName
+                  : '-'
+              }
+              EstblishmentDate={getUserProfile_Data?.data?.obj?.DOB}
+              image={getUserProfile_Data?.data?.obj?.profilePic}
+              userDocId={getUserProfile_Data?.data?.obj?._id}
+              // lastUpdated={item?.lastUpdated ?? item?.createdOn}
+              onPress={
+                () =>
+                  picData
+                    ? navigation.navigate('CustomSDK', {
+                        picData: picData?.photo,
+                        businessDetails: getUserProfile_Data?.data?.obj,
+                      })
+                    : null
+                // : navigation.navigate('View Bussiness', {
+                //     businessId: item?._id,
+                //     businessType: item?.businessType,
+                //   })
               }
             />
-          ))}
-
-          <Text style={styles.text}>Your Profile</Text>
-          {/* <MyBussinessCard */}
-          <MyBussinessCard
-            name={
-              getUserProfile_Data?.data?.obj?.firstName
-                ? getUserProfile_Data?.data?.obj?.firstName
-                : '-' + getAllBusinessList_Data?.data?.obj?.middleName
-                ? getUserProfile_Data?.data?.obj?.middleName
-                : '-' + getUserProfile_Data?.data?.obj?.lastName
-                ? getUserProfile_Data?.data?.obj?.lastName
-                : '-'
-            }
-            EstblishmentDate={getUserProfile_Data?.data?.obj?.DOB}
-            image={getUserProfile_Data?.data?.obj?.profilePic}
-            userDocId={getUserProfile_Data?.data?.obj?._id}
-            // lastUpdated={item?.lastUpdated ?? item?.createdOn}
-            onPress={
-              () =>
-                picData
-                  ? navigation.navigate('CustomSDK', {
-                      picData: picData?.photo,
-                      businessDetails: getUserProfile_Data?.data?.obj,
-                    })
-                  : null
-              // : navigation.navigate('View Bussiness', {
-              //     businessId: item?._id,
-              //     businessType: item?.businessType,
-              //   })
-            }
-          />
-        </View>
-      </ScrollView>
+          </View>
+        </ScrollView>
+      </ImageBackground>
     </>
   );
 };

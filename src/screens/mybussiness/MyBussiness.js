@@ -1,5 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {RefreshControl, ScrollView, ToastAndroid, View} from 'react-native';
+import {
+  ImageBackground,
+  RefreshControl,
+  ScrollView,
+  ToastAndroid,
+  View,
+} from 'react-native';
 import React, {useCallback} from 'react';
 import TopHeader from '../../components/TopHeader';
 import styles from './style';
@@ -8,6 +14,8 @@ import CustomButton from '../../components/CustomButton';
 import {useQuery} from '@tanstack/react-query';
 import {getAllBusinessList} from '../../services/userServices/bussiness.servies';
 import {useFocusEffect} from '@react-navigation/native';
+import images from '../../constants/images';
+import globalStyles from '../../styles/globalStyles';
 
 const MyBussiness = ({navigation, route}) => {
   const {picData} = route.params || {};
@@ -44,56 +52,62 @@ const MyBussiness = ({navigation, route}) => {
         add
         onPress={() => navigation.navigate('Add Bussiness')}
       />
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={getAllBusinessListFetching || getAllBusinessListLoading}
-            onRefresh={() => getAllBusinessListRefetch()}
-          />
-        }
-        contentContainerStyle={styles.root}>
-        {/* card for the bussiness name and update */}
-        <View style={styles.container}>
-          {getAllBusinessList_Data?.data?.list?.map((item, index) => (
-            <MyBussinessCard
-              key={index}
-              name={item?.businessName ?? item?.volunteerName}
-              EstblishmentDate={item?.createdOn}
-              image={item?.logo ?? item?.partyLogo}
-              userDocId={item?._id}
-              lastUpdated={item?.lastUpdated ?? item?.createdOn}
-              // edit={true}
-              // onPressEdit={() =>
-              //   navigation.navigate('Edit Bussiness', {
-              //     businessId: item?._id,
-              //     businessType:item?.businessType,
-              //   })
-              // }
-              onPress={() =>
-                picData
-                  ? navigation.navigate('CustomSDK', {
-                      picData: PhotoData,
-                    })
-                  : item?.businessType === 'political'
-                  ? navigation.navigate('View Political', {
-                      businessId: item?._id,
-                      businessType: item?.businessType,
-                    })
-                  : navigation.navigate('View Bussiness', {
-                      businessId: item?._id,
-                      businessType: item?.businessType,
-                    })
+      <ImageBackground
+        source={images.background}
+        style={globalStyles.backgroundImage}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={
+                getAllBusinessListFetching || getAllBusinessListLoading
               }
+              onRefresh={() => getAllBusinessListRefetch()}
             />
-          ))}
-        </View>
+          }
+          contentContainerStyle={styles.root}>
+          {/* card for the bussiness name and update */}
+          <View style={styles.container}>
+            {getAllBusinessList_Data?.data?.list?.map((item, index) => (
+              <MyBussinessCard
+                key={index}
+                name={item?.businessName ?? item?.volunteerName}
+                EstblishmentDate={item?.createdOn}
+                image={item?.logo ?? item?.partyLogo}
+                userDocId={item?._id}
+                lastUpdated={item?.lastUpdated ?? item?.createdOn}
+                // edit={true}
+                // onPressEdit={() =>
+                //   navigation.navigate('Edit Bussiness', {
+                //     businessId: item?._id,
+                //     businessType:item?.businessType,
+                //   })
+                // }
+                onPress={() =>
+                  picData
+                    ? navigation.navigate('CustomSDK', {
+                        picData: PhotoData,
+                      })
+                    : item?.businessType === 'political'
+                    ? navigation.navigate('View Political', {
+                        businessId: item?._id,
+                        businessType: item?.businessType,
+                      })
+                    : navigation.navigate('View Bussiness', {
+                        businessId: item?._id,
+                        businessType: item?.businessType,
+                      })
+                }
+              />
+            ))}
+          </View>
 
-        <CustomButton
-          title={'Premium'}
-          secondary={false}
-          customStyle={styles.premium_Buttton}
-        />
-      </ScrollView>
+          <CustomButton
+            title={'Premium'}
+            secondary={false}
+            customStyle={styles.premium_Buttton}
+          />
+        </ScrollView>
+      </ImageBackground>
     </>
   );
 };

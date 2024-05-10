@@ -12,6 +12,7 @@ import {scale} from 'react-native-size-matters';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Colors from '../constants/Colors';
 
 const DashboardTopHeader = ({
   onPressMenu = () => {},
@@ -22,7 +23,7 @@ const DashboardTopHeader = ({
   onPress,
 }) => {
   return (
-    <ImageBackground source={Images.topHeader} style={styles.root}>
+    <View source={Images.topHeader} style={styles.root}>
       <View style={[styles.left_wrap, next ? {flex: 1} : null]}>
         {/* Menu button */}
         {/* {schoolDocId && ( */}
@@ -77,7 +78,7 @@ const DashboardTopHeader = ({
           ) : null}
         </View>
       </View>
-    </ImageBackground>
+    </View>
   );
 };
 
@@ -92,6 +93,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: Sizes.wp('3%'),
     paddingTop: Sizes.hp('5%'),
+    backgroundColor: 'rgba(64, 64, 64, 0.46)',
   },
   left_wrap: {
     flexDirection: 'row',
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
     marginRight: 13,
   },
   left_icon: {
-    color: '#fff',
+    color: Colors.TEXT1,
     fontSize: scale(27),
   },
   right_container: {
@@ -111,18 +113,18 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   right_icon: {
-    color: '#fff',
+    color: Colors.TEXT1,
     fontSize: scale(25),
     marginTop: Sizes.hp('1%'),
   },
   right_icon_next: {
-    color: '#fff',
+    color: Colors.TEXT1,
     fontSize: scale(30),
     marginTop: Sizes.hp('1%'),
     left: 10,
   },
   title: {
-    color: '#fff',
+    color: Colors.TEXT1,
     fontWeight: '700',
     fontSize: scale(16),
     letterSpacing: 1.2,
@@ -131,7 +133,7 @@ const styles = StyleSheet.create({
   },
   userIcon: {
     marginLeft: 15,
-    color: '#fff',
+    color: Colors.TEXT1,
     fontSize: scale(23),
     marginTop: Sizes.hp('1%'),
   },

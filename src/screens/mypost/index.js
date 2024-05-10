@@ -5,7 +5,7 @@ import Colors from '../../constants/Colors';
 import {scale} from 'react-native-size-matters';
 import PhotoPost from './components/PhotoPost';
 import VideoPost from './components/VideoPost';
-import { Dimensions } from 'react-native';
+import {Dimensions} from 'react-native';
 
 const Tab = createMaterialTopTabNavigator();
 const MyPost = () => {
@@ -19,7 +19,7 @@ const MyPost = () => {
           },
           tabBarScrollEnabled: true,
           tabBarItemStyle: {
-            width: Dimensions.get('window').width/2
+            width: Dimensions.get('window').width / 2,
           },
 
           tabBarLabelStyle: {

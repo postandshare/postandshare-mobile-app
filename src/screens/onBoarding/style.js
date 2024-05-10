@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     width: Sizes.width,
     height: '100%',
     resizeMode: 'stretch',
-    backgroundColor: Colors.PRIMARY,
+    backgroundColor: Colors.white,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

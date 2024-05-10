@@ -24,6 +24,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setLoginState} from '../services/reducer/AuthSlice';
 import {setProfileUpdated} from '../services/reducer/CommonReducer';
 import images from '../constants/images';
+import {useNavigation} from '@react-navigation/native';
 
 const Item = ({icon, text, path, onPress = () => {}, isActive}) => (
   <TouchableOpacity
@@ -33,14 +34,19 @@ const Item = ({icon, text, path, onPress = () => {}, isActive}) => (
       {icon}
       <Text style={styles.text}>{text}</Text>
     </View>
-    <Feather name="chevron-right" style={styles.icon} />
+    <Feather name="chevron-right" style={styles.iconArrow} />
   </TouchableOpacity>
 );
 
 const UserProfileCard = ({profileData}) => {
+  const navigation = useNavigation();
   return (
     <>
-      <View style={styles.userProfileCard}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('ProfileNavigator');
+        }}
+        style={styles.userProfileCard}>
         <View style={styles.image_wrap}>
           <Image
             source={
@@ -54,8 +60,7 @@ const UserProfileCard = ({profileData}) => {
         </View>
         <View>
           <Text style={styles.name_text}>
-            {profileData?.firstName ?? '-'}
-            {profileData?.middleName ?? '-'}
+            {profileData?.firstName ?? '-'} {profileData?.middleName ?? '-'}{' '}
             {profileData?.lastName ?? '-'}
           </Text>
           <Text style={styles.schoole_name}>
@@ -63,7 +68,7 @@ const UserProfileCard = ({profileData}) => {
           </Text>
           <Text style={styles.schoole_name}>{profileData?.email ?? '-'}</Text>
         </View>
-      </View>
+      </TouchableOpacity>
     </>
   );
 };
@@ -205,6 +210,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 10,
     flex: 1,
+    width: '98%',
   },
   profile_pic: {
     resizeMode: 'cover',
@@ -264,6 +270,11 @@ const styles = StyleSheet.create({
   },
   icon: {
     color: Colors.PRIMARY,
+    fontSize: 25,
+    marginRight: Sizes.wp('3%'),
+  },
+  iconArrow: {
+    color: Colors.TEXT1,
     fontSize: 25,
     marginRight: Sizes.wp('3%'),
   },

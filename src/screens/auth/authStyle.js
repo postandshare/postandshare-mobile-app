@@ -65,7 +65,6 @@ const authStyle = StyleSheet.create({
   bottom_content_root_Language: {
     paddingHorizontal: Sizes.wp('5%'),
     marginVertical: Sizes.hp('3%'),
-    backgroundColor: Colors.white,
   },
   singup_link: {
     color: 'blue',

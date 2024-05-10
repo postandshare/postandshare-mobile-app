@@ -8,6 +8,13 @@ const globalStyles = StyleSheet.create({
     marginHorizontal: 15,
     borderRadius: 10,
   },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+  },
   input_label: {
     color: '#0C2F49',
     opacity: 0.75,
@@ -123,7 +130,6 @@ const globalStyles = StyleSheet.create({
   error_text: {
     color: 'red',
   },
-
 
   //action sheet styles
   actionSheet_header: {

@@ -1,4 +1,11 @@
-import {Alert, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  ImageBackground,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
@@ -28,6 +35,9 @@ import HelpSupport from '../screens/helpSupport';
 import MonthPhotos from '../screens/thismonth';
 import OneSignal from 'react-native-onesignal';
 import Deeplinking from '../utils/linking';
+import images from '../constants/images';
+import Sizes from '../constants/Sizes';
+import Colors from '../constants/Colors';
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -167,4 +177,14 @@ const Routes = () => {
 
 export default Routes;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  root: {
+    width: Sizes.width,
+    height: '100%',
+    resizeMode: 'stretch',
+    backgroundColor: Colors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+});

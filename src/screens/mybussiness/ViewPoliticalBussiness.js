@@ -1,6 +1,7 @@
 import {
   Alert,
   Image,
+  ImageBackground,
   PermissionsAndroid,
   RefreshControl,
   ScrollView,
@@ -31,6 +32,8 @@ import uploadFile from '../../utils/uploadFile';
 import {useFocusEffect} from '@react-navigation/native';
 
 import Loader from '../../components/Loader';
+import images from '../../constants/images';
+import globalStyles from '../../styles/globalStyles';
 
 const ViewPoliticalBussiness = ({route, navigation}) => {
   const {businessId, businessType} = route?.params;
@@ -172,104 +175,107 @@ const ViewPoliticalBussiness = ({route, navigation}) => {
         text="Uploading Image..."
       />
 
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={
-              getPoliticalPartyDetailsFetching ||
-              getPoliticalPartyDetailsLoading
-            }
-            onRefresh={() => getPoliticalPartyDetailsRefetch()}
-          />
-        }
-        style={{
-          flex: 1,
-        }}>
-        {/* logo view */}
-        <View style={styles.logo_view}>
-          <View style={styles.logo_container}>
-            <Image
-              // source={images.profilePlaceholder}
-              source={{
-                uri:
-                  getPoliticalPartyDetails_Data?.data?.obj
-                    ?.fetchExistingPoliticalBusiness?.volunteerPhoto ?? '',
-              }}
-              style={styles.logo}
+      <ImageBackground
+        source={images.background}
+        style={globalStyles.backgroundImage}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={
+                getPoliticalPartyDetailsFetching ||
+                getPoliticalPartyDetailsLoading
+              }
+              onRefresh={() => getPoliticalPartyDetailsRefetch()}
             />
-          </View>
-          <View style={{flex: 0.6}}>
-            <Text style={styles.logo_text}>
-              {getPoliticalPartyDetails_Data?.data?.obj
-                ?.fetchExistingPoliticalBusiness?.volunteerName ?? '--'}
-            </Text>
-            {/* <Text style={styles.logo_text_subtitle}>
+          }
+          style={{
+            flex: 1,
+          }}>
+          {/* logo view */}
+          <View style={styles.logo_view}>
+            <View style={styles.logo_container}>
+              <Image
+                // source={images.profilePlaceholder}
+                source={{
+                  uri:
+                    getPoliticalPartyDetails_Data?.data?.obj
+                      ?.fetchExistingPoliticalBusiness?.volunteerPhoto ?? '',
+                }}
+                style={styles.logo}
+              />
+            </View>
+            <View style={{flex: 0.6}}>
+              <Text style={styles.logo_text}>
+                {getPoliticalPartyDetails_Data?.data?.obj
+                  ?.fetchExistingPoliticalBusiness?.volunteerName ?? '--'}
+              </Text>
+              {/* <Text style={styles.logo_text_subtitle}>
               {getPoliticalPartyDetails_Data?.data?.obj?.category ?? '--'} ||{' '}
               {getPoliticalPartyDetails_Data?.data?.obj?.subCategory ?? '--'} ||{' '}
               <Text style={{color: 'green', fontStyle: 'italic'}}>
                 {getPoliticalPartyDetails_Data?.data?.obj?.businessStatus ??
                   '--'}
               </Text> */}
-            {/* </Text> */}
+              {/* </Text> */}
+            </View>
+            <TouchableOpacity
+              onPress={() => TakePhotofromGallery()}
+              style={{flex: 0.1, justifyContent: 'center', left: 30}}>
+              <FontAwesome style={{color: '#26A9E1'}} name={'edit'} size={25} />
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            onPress={() => TakePhotofromGallery()}
-            style={{flex: 0.1, justifyContent: 'center', left: 30}}>
-            <FontAwesome style={{color: '#26A9E1'}} name={'edit'} size={25} />
-          </TouchableOpacity>
-        </View>
 
-        {/* card for the ownner name */}
-        <View style={styles.card_container}>
-          <AntDesign name={'user'} size={25} color={Colors.PRIMARY} />
-          <Text style={styles.card_text}>
-            {getPoliticalPartyDetails_Data?.data?.obj
-              ?.fetchExistingPoliticalBusiness?.volunteerName ?? '--'}{' '}
-            (
-            {getPoliticalPartyDetails_Data?.data?.obj
-              ?.fetchExistingPoliticalBusiness?.designation ?? '--'}
-            )
-          </Text>
-        </View>
-        {/* mobile number */}
-        <View style={styles.card_container}>
-          <AntDesign name={'mobile1'} size={25} color={Colors.PRIMARY} />
-          <Text style={styles.card_text}>
-            {getPoliticalPartyDetails_Data?.data?.obj
-              ?.fetchExistingPoliticalBusiness?.mobileNumber ?? '--'}
-          </Text>
-        </View>
-        {/* whatsapp number */}
-        <View style={styles.card_container}>
-          <FontAwesome name={'whatsapp'} size={25} color={Colors.PRIMARY} />
-          <Text style={styles.card_text}>
-            {getPoliticalPartyDetails_Data?.data?.obj
-              ?.fetchExistingPoliticalBusiness?.whatsappNumber ?? '--'}
-          </Text>
-        </View>
-        {/* mail */}
-        {/* <View style={styles.card_container}>
+          {/* card for the ownner name */}
+          <View style={styles.card_container}>
+            <AntDesign name={'user'} size={25} color={Colors.PRIMARY} />
+            <Text style={styles.card_text}>
+              {getPoliticalPartyDetails_Data?.data?.obj
+                ?.fetchExistingPoliticalBusiness?.volunteerName ?? '--'}{' '}
+              (
+              {getPoliticalPartyDetails_Data?.data?.obj
+                ?.fetchExistingPoliticalBusiness?.designation ?? '--'}
+              )
+            </Text>
+          </View>
+          {/* mobile number */}
+          <View style={styles.card_container}>
+            <AntDesign name={'mobile1'} size={25} color={Colors.PRIMARY} />
+            <Text style={styles.card_text}>
+              {getPoliticalPartyDetails_Data?.data?.obj
+                ?.fetchExistingPoliticalBusiness?.mobileNumber ?? '--'}
+            </Text>
+          </View>
+          {/* whatsapp number */}
+          <View style={styles.card_container}>
+            <FontAwesome name={'whatsapp'} size={25} color={Colors.PRIMARY} />
+            <Text style={styles.card_text}>
+              {getPoliticalPartyDetails_Data?.data?.obj
+                ?.fetchExistingPoliticalBusiness?.whatsappNumber ?? '--'}
+            </Text>
+          </View>
+          {/* mail */}
+          {/* <View style={styles.card_container}>
           <AntDesign name={'mail'} size={25} color={Colors.PRIMARY} />
           <Text style={styles.card_text}>
             {getPoliticalPartyDetails_Data?.data?.obj?.email ?? '--'}
           </Text>
         </View> */}
-        {/* address */}
-        <View style={styles.card_container}>
-          <Entypo name={'location'} size={25} color={Colors.PRIMARY} />
-          <Text style={styles.card_text}>
-            {getPoliticalPartyDetails_Data?.data?.obj
-              ?.fetchExistingPoliticalBusiness?.legislativeAssembly ?? '--'}
-            {'\n'}
-            {getPoliticalPartyDetails_Data?.data?.obj
-              ?.fetchExistingPoliticalBusiness?.dist ?? '--'}
-            {'\n'}
-            {getPoliticalPartyDetails_Data?.data?.obj
-              ?.fetchExistingPoliticalBusiness?.state ?? '--'}
-          </Text>
-        </View>
-        {/* website */}
-        {/* <View style={styles.card_container}>
+          {/* address */}
+          <View style={styles.card_container}>
+            <Entypo name={'location'} size={25} color={Colors.PRIMARY} />
+            <Text style={styles.card_text}>
+              {getPoliticalPartyDetails_Data?.data?.obj
+                ?.fetchExistingPoliticalBusiness?.legislativeAssembly ?? '--'}
+              {'\n'}
+              {getPoliticalPartyDetails_Data?.data?.obj
+                ?.fetchExistingPoliticalBusiness?.dist ?? '--'}
+              {'\n'}
+              {getPoliticalPartyDetails_Data?.data?.obj
+                ?.fetchExistingPoliticalBusiness?.state ?? '--'}
+            </Text>
+          </View>
+          {/* website */}
+          {/* <View style={styles.card_container}>
           <MaterialCommunityIcons
             name={'web'}
             size={25}
@@ -279,81 +285,81 @@ const ViewPoliticalBussiness = ({route, navigation}) => {
             {getPoliticalPartyDetails_Data?.data?.obj?.website ?? '--'}
           </Text>
         </View> */}
-        {/* description */}
-        <View style={styles.card_container}>
-          <MaterialIcons
-            name={'description'}
-            size={25}
-            color={Colors.PRIMARY}
-          />
-          <Text style={styles.card_text}>
-            {getPoliticalPartyDetails_Data?.data?.obj
-              ?.fetchExistingPoliticalBusiness?.volunteerDetail ?? '--'}
-          </Text>
-        </View>
-
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <Text style={styles.bussinessPartnerText}>Selected Leader</Text>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('Change Leader', {
-                bussinessDocId: businessId,
-                state:
-                  getPoliticalPartyDetails_Data?.data?.obj
-                    ?.fetchExistingPoliticalBusiness?.state,
-                district:
-                  getPoliticalPartyDetails_Data?.data?.obj
-                    ?.fetchExistingPoliticalBusiness?.district,
-                legislativeAssembly:
-                  getPoliticalPartyDetails_Data?.data?.obj
-                    ?.fetchExistingPoliticalBusiness?.legislativeAssembly,
-                partyDocId:
-                  getPoliticalPartyDetails_Data?.data?.obj
-                    ?.fetchExistingPoliticalBusiness?.partyDocId,
-              });
-            }}>
-            <Text
-              style={{
-                color: 'blue',
-                fontStyle: 'italic',
-                marginHorizontal: 10,
-              }}>
-              Change Leader
+          {/* description */}
+          <View style={styles.card_container}>
+            <MaterialIcons
+              name={'description'}
+              size={25}
+              color={Colors.PRIMARY}
+            />
+            <Text style={styles.card_text}>
+              {getPoliticalPartyDetails_Data?.data?.obj
+                ?.fetchExistingPoliticalBusiness?.volunteerDetail ?? '--'}
             </Text>
-          </TouchableOpacity>
-        </View>
-        {getPoliticalPartyDetails_Data?.data?.obj?.fetchPoliticalLeaders?.map(
-          (item, index) => (
-            <View style={styles.bussinessPartnerView}>
-              <Image
-                source={{uri: item?.leaderDocId?.leaderPhoto ?? ''}}
-                style={{height: 60, width: 60, borderRadius: 50}}
-              />
-              <View style={{flex: 0.8}}>
-                <Text
-                  style={{
-                    fontSize: 15,
-                    fontWeight: '700',
-                    color: Colors.TEXT1,
-                  }}>
-                  {item?.leaderDocId?.leaderName ?? '--'}
-                </Text>
-                <Text
-                  style={{
-                    color: Colors.TEXT1,
-                  }}>
-                  {item?.leaderDocId?.designation}
-                </Text>
-              </View>
-            </View>
-          ),
-        )}
+          </View>
 
-        {/* add bussiness partner more
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <Text style={styles.bussinessPartnerText}>Selected Leader</Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Change Leader', {
+                  bussinessDocId: businessId,
+                  state:
+                    getPoliticalPartyDetails_Data?.data?.obj
+                      ?.fetchExistingPoliticalBusiness?.state,
+                  district:
+                    getPoliticalPartyDetails_Data?.data?.obj
+                      ?.fetchExistingPoliticalBusiness?.district,
+                  legislativeAssembly:
+                    getPoliticalPartyDetails_Data?.data?.obj
+                      ?.fetchExistingPoliticalBusiness?.legislativeAssembly,
+                  partyDocId:
+                    getPoliticalPartyDetails_Data?.data?.obj
+                      ?.fetchExistingPoliticalBusiness?.partyDocId,
+                });
+              }}>
+              <Text
+                style={{
+                  color: 'blue',
+                  fontStyle: 'italic',
+                  marginHorizontal: 10,
+                }}>
+                Change Leader
+              </Text>
+            </TouchableOpacity>
+          </View>
+          {getPoliticalPartyDetails_Data?.data?.obj?.fetchPoliticalLeaders?.map(
+            (item, index) => (
+              <View style={styles.bussinessPartnerView}>
+                <Image
+                  source={{uri: item?.leaderDocId?.leaderPhoto ?? ''}}
+                  style={{height: 60, width: 60, borderRadius: 50}}
+                />
+                <View style={{flex: 0.8}}>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontWeight: '700',
+                      color: Colors.TEXT1,
+                    }}>
+                    {item?.leaderDocId?.leaderName ?? '--'}
+                  </Text>
+                  <Text
+                    style={{
+                      color: Colors.TEXT1,
+                    }}>
+                    {item?.leaderDocId?.designation}
+                  </Text>
+                </View>
+              </View>
+            ),
+          )}
+
+          {/* add bussiness partner more
         <TouchableOpacity
           style={{
             marginBottom: 10,
@@ -372,47 +378,48 @@ const ViewPoliticalBussiness = ({route, navigation}) => {
           </Text>
         </TouchableOpacity> */}
 
-        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-          <CustomButton
-            title={'Delete'}
-            onPress={() => {
-              Alert.alert(
-                'Delete Bussiness',
-                'Are you sure you want to delete this bussiness?',
-                [
-                  {
-                    text: 'Cancel',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
-                  },
-                  {
-                    text: 'OK',
-                    onPress: () => {
-                      deletePoliticalBusinessMutate({
-                        businessDocId: businessId,
-                      });
+          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+            <CustomButton
+              title={'Delete'}
+              onPress={() => {
+                Alert.alert(
+                  'Delete Bussiness',
+                  'Are you sure you want to delete this bussiness?',
+                  [
+                    {
+                      text: 'Cancel',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
                     },
-                  },
-                ],
-                {cancelable: false},
-              );
-            }}
-            width="40%"
-            customStyle={{backgroundColor: '#EA1C1C'}}
-          />
-          <CustomButton
-            title={'Edit'}
-            onPress={() => {
-              navigation.navigate('Add Bussiness', {
-                businessId: businessId,
-                bussinessDetails: getPoliticalPartyDetails_Data?.data?.obj,
-              });
-            }}
-            width="40%"
-            customStyle={{marginBottom: 30}}
-          />
-        </View>
-      </ScrollView>
+                    {
+                      text: 'OK',
+                      onPress: () => {
+                        deletePoliticalBusinessMutate({
+                          businessDocId: businessId,
+                        });
+                      },
+                    },
+                  ],
+                  {cancelable: false},
+                );
+              }}
+              width="40%"
+              customStyle={{backgroundColor: '#EA1C1C'}}
+            />
+            <CustomButton
+              title={'Edit'}
+              onPress={() => {
+                navigation.navigate('Add Bussiness', {
+                  businessId: businessId,
+                  bussinessDetails: getPoliticalPartyDetails_Data?.data?.obj,
+                });
+              }}
+              width="40%"
+              customStyle={{marginBottom: 30}}
+            />
+          </View>
+        </ScrollView>
+      </ImageBackground>
     </>
   );
 };

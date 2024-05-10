@@ -4,7 +4,7 @@ import Colors from '../../constants/Colors';
 const styles = StyleSheet.create({
   root: {
     flexGrow: 1,
-    backgroundColor: Colors.Background,
+    backgroundColor: 'transparent',
   },
   chooseImageContainer: {
     // height: Sizes.height * 0.4,
