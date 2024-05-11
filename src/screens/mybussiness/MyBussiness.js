@@ -3,10 +3,11 @@ import {
   ImageBackground,
   RefreshControl,
   ScrollView,
+  Text,
   ToastAndroid,
   View,
 } from 'react-native';
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import TopHeader from '../../components/TopHeader';
 import styles from './style';
 import MyBussinessCard from '../../components/MyBussinessCard';
@@ -16,11 +17,25 @@ import {getAllBusinessList} from '../../services/userServices/bussiness.servies'
 import {useFocusEffect} from '@react-navigation/native';
 import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
+import {Button, Menu, Portal, TextInput} from 'react-native-paper';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import Colors from '../../constants/Colors';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import ViewBussinessModal from './components/modal/ViewBussinessModal';
 
 const MyBussiness = ({navigation, route}) => {
   const {picData} = route.params || {};
+  const [searchQuery, setSearchQuery] = useState('');
   const PhotoData = picData;
-
+  const [visible, setVisible] = useState(false);
+  const [sortOption, setSortOption] = useState('Newest');
+  const [showBussiness, setShowBussiness] = useState({
+    show: false,
+    businessId: '',
+    businessType: '',
+  });
+  const [bussinessList, setBussinessList] = useState([]);
+  const [detailedBussiness, setDetailedBussiness] = useState();
   const {
     isLoading: getAllBusinessListLoading,
     isFetching: getAllBusinessListFetching,
@@ -29,9 +44,23 @@ const MyBussiness = ({navigation, route}) => {
     isError: getAllBusinessList_isError,
   } = useQuery({
     queryKey: ['getAllBusinessList'],
-    queryFn: () => getAllBusinessList(),
+    queryFn: () => {
+      if (showBussiness?.show) {
+        return getAllBusinessList({
+          businessDocId: showBussiness?.businessId,
+          businessType: showBussiness?.businessType,
+        });
+      } else {
+        return getAllBusinessList();
+      }
+    },
     onSuccess: success => {
-      // console.log(success?.data , "success in my bussiness")
+      if (showBussiness?.show) {
+        console.log(success?.data, 'success');
+        setDetailedBussiness(success?.data?.obj);
+      } else {
+        setBussinessList(success?.data?.list);
+      }
     },
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
@@ -45,6 +74,43 @@ const MyBussiness = ({navigation, route}) => {
     }, [getAllBusinessListRefetch, navigation]),
   );
 
+  useFocusEffect(
+    useCallback(() => {
+      if (showBussiness?.show) {
+        getAllBusinessListRefetch();
+      }
+    }, [showBussiness, getAllBusinessListRefetch]),
+  );
+
+  const filteredBusinesses = bussinessList?.filter(
+    business =>
+      business?.businessName
+        ?.toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      business?.volunteerName
+        ?.toLowerCase()
+        .includes(searchQuery.toLowerCase()),
+  );
+
+  const sortedBusinesses = [...(filteredBusinesses || [])].sort((a, b) => {
+    switch (sortOption) {
+      case 'AtoZ':
+        return (a?.businessName ?? a?.volunteerName)?.localeCompare(
+          b?.businessName ?? b?.volunteerName,
+        );
+      case 'ZtoA':
+        return (b?.businessName ?? b?.volunteerName)?.localeCompare(
+          a?.businessName ?? a?.volunteerName,
+        );
+      case 'Newest':
+        return new Date(b?.createdOn) - new Date(a?.createdOn);
+      case 'Oldest':
+        return new Date(a?.createdOn) - new Date(b?.createdOn);
+      default:
+        return 0;
+    }
+  });
+
   return (
     <>
       <TopHeader
@@ -52,6 +118,14 @@ const MyBussiness = ({navigation, route}) => {
         add
         onPress={() => navigation.navigate('Add Bussiness')}
       />
+      <Portal>
+        <ViewBussinessModal
+          detailedBussiness={detailedBussiness}
+          showBussiness={showBussiness?.show}
+          setShowBussiness={setShowBussiness}
+          navigation={navigation}
+        />
+      </Portal>
       <ImageBackground
         source={images.background}
         style={globalStyles.backgroundImage}>
@@ -65,9 +139,78 @@ const MyBussiness = ({navigation, route}) => {
             />
           }
           contentContainerStyle={styles.root}>
-          {/* card for the bussiness name and update */}
           <View style={styles.container}>
-            {getAllBusinessList_Data?.data?.list?.map((item, index) => (
+            {/* search option for bussineess */}
+            <View style={styles.row_container}>
+              <TextInput
+                mode="outlined"
+                label={'Search'}
+                style={styles.searchInput}
+                placeholder="Search"
+                onChangeText={text => setSearchQuery(text)}
+                value={searchQuery}
+              />
+              <Menu
+                visible={visible}
+                contentStyle={{
+                  backgroundColor: Colors.Background,
+                }}
+                onDismiss={() => setVisible(false)}
+                anchor={
+                  <TouchableOpacity
+                    style={styles.sortButtonContainer}
+                    onPress={() => setVisible(true)}>
+                    <FontAwesome name="sort" size={15} color={Colors.white} />
+                    <Text style={styles.sortText}>
+                      {sortOption === 'Newest' ? 'Newest' : sortOption}
+                    </Text>
+                  </TouchableOpacity>
+                }>
+                <Menu.Item
+                  title="A to Z"
+                  onPress={() => {
+                    setSortOption('AtoZ');
+                    setVisible(false);
+                  }}
+                  icon={sortOption === 'AtoZ' ? 'check' : 'none'}
+                />
+                <Menu.Item
+                  title="Z to A"
+                  onPress={() => {
+                    setSortOption('ZtoA');
+                    setVisible(false);
+                  }}
+                  icon={sortOption === 'ZtoA' ? 'check' : 'none'}
+                />
+                <Menu.Item
+                  title="Newest"
+                  onPress={() => {
+                    setSortOption('Newest');
+                    setVisible(false);
+                  }}
+                  icon={sortOption === 'Newest' ? 'check' : 'none'}
+                />
+                <Menu.Item
+                  title="Oldest"
+                  onPress={() => {
+                    setSortOption('Oldest');
+                    setVisible(false);
+                  }}
+                  icon={sortOption === 'Oldest' ? 'check' : 'none'}
+                />
+              </Menu>
+            </View>
+            {searchQuery.length > 0 && sortedBusinesses.length === 0 && (
+              <View style={styles.padded}>
+                <CustomButton
+                  title={'No Business Found'}
+                  secondary={false}
+                  customStyle={styles.premium_Buttton}
+                />
+              </View>
+            )}
+
+            {sortedBusinesses?.map((item, index) => (
               <MyBussinessCard
                 key={index}
                 name={item?.businessName ?? item?.volunteerName}
@@ -92,20 +235,52 @@ const MyBussiness = ({navigation, route}) => {
                         businessId: item?._id,
                         businessType: item?.businessType,
                       })
-                    : navigation.navigate('View Bussiness', {
+                    : setShowBussiness({
+                        show: true,
                         businessId: item?._id,
                         businessType: item?.businessType,
                       })
                 }
               />
             ))}
-          </View>
 
-          <CustomButton
-            title={'Premium'}
-            secondary={false}
-            customStyle={styles.premium_Buttton}
-          />
+            {/* card for the bussiness name and update */}
+            {!searchQuery &&
+              !sortedBusinesses?.length &&
+              bussinessList.map((item, index) => (
+                <MyBussinessCard
+                  key={index}
+                  name={item?.businessName ?? item?.volunteerName}
+                  EstblishmentDate={item?.createdOn}
+                  image={item?.logo ?? item?.partyLogo}
+                  userDocId={item?._id}
+                  lastUpdated={item?.lastUpdated ?? item?.createdOn}
+                  // edit={true}
+                  // onPressEdit={() =>
+                  //   navigation.navigate('Edit Bussiness', {
+                  //     businessId: item?._id,
+                  //     businessType:item?.businessType,
+                  //   })
+                  // }
+                  onPress={() =>
+                    picData
+                      ? navigation.navigate('CustomSDK', {
+                          picData: PhotoData,
+                        })
+                      : item?.businessType === 'political'
+                      ? navigation.navigate('View Political', {
+                          businessId: item?._id,
+                          businessType: item?.businessType,
+                        })
+                      : setShowBussiness({
+                          show: true,
+                          businessId: item?._id,
+                          businessType: item?.businessType,
+                        })
+                  }
+                />
+              ))}
+          </View>
         </ScrollView>
       </ImageBackground>
     </>

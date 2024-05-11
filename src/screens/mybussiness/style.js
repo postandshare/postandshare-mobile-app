@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import Colors from '../../constants/Colors';
+import Sizes from '../../constants/Sizes';
 
 const styles = StyleSheet.create({
   root: {
@@ -7,8 +8,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   container: {
-    // flex: 1,
-    backgroundColor: Colors.Background,
+    backgroundColor: Colors.transparent,
     justifyContent: 'center',
     margin: 10,
   },
@@ -26,12 +26,38 @@ const styles = StyleSheet.create({
     marginRight: 10,
     backgroundColor: 'white',
   },
-  // container: {
-  //   flex: 1,
-  //   justifyContent: 'center',
-  // },
   padded: {
     padding: 16,
+  },
+  searchInput: {
+    width: '80%',
+    borderRadius: 10,
+    height: 40,
+    alignSelf: 'center',
+    margin: 5,
+  },
+  row_container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  sortButtonContainer: {
+    backgroundColor: Colors.PRIMARY,
+    padding: 7,
+    height: Sizes.height * 0.04,
+    width: Sizes.width * 0.15,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 5,
+  },
+  sortText: {
+    color: Colors.white,
+    fontWeight: '400',
+    fontSize: 14,
+    textAlign: 'center',
+    alignSelf: 'center',
   },
 });
 
