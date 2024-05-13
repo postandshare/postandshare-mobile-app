@@ -8,6 +8,23 @@ import Sizes from '../../../../constants/Sizes';
 import moment from 'moment';
 import Entypo from 'react-native-vector-icons/Entypo';
 import DatePicker from 'react-native-date-picker';
+import Dropdown from '../../../../components/Dropdown';
+import globalStyles from '../../../../styles/globalStyles';
+
+const genderList = [
+  {
+    label: 'Male',
+    value: 'Male',
+  },
+  {
+    label: 'Female',
+    value: 'Female',
+  },
+  {
+    label: 'Other',
+    value: 'Other',
+  },
+];
 
 const BasicEdit = ({
   profilePic,
@@ -44,10 +61,37 @@ const BasicEdit = ({
           label={'Last Name'}
           width="95%"
         />
+        {/* gender dropdown */}
+        <View
+          style={{
+            width: '95%',
+            marginTop: 10,
+            justifyContent: 'center',
+            alignSelf: 'center',
+          }}>
+          <Text style={styles.title}>Select Gender</Text>
+          <Dropdown
+            data={genderList?.map(item => ({
+              label: item?.label,
+              value: item?.value,
+            }))}
+            value={personalProfileFormik?.values['gender']}
+            label="Select Gender"
+            onChangeValue={value => {
+              personalProfileFormik?.setFieldValue('gender', value);
+            }}
+          />
+        </View>
+        {personalProfileFormik?.errors.gender ? (
+          <Text style={globalStyles?.error_text}>
+            {personalProfileFormik?.errors.gender}
+          </Text>
+        ) : null}
         {/* Date of birth picker */}
         <View
           style={{
-            width: '100%',
+            width: '99%',
+            alignSelf: 'center',
             justifyContent: 'center',
             marginVertical: 10,
           }}>
@@ -83,7 +127,7 @@ const BasicEdit = ({
         />
 
         {personalProfileFormik?.errors?.DOB ? (
-          <Text style={styles.errorText}>
+          <Text style={globalStyles?.error_text}>
             {personalProfileFormik?.errors?.DOB}
           </Text>
         ) : null}

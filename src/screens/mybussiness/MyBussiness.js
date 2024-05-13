@@ -123,7 +123,24 @@ const MyBussiness = ({navigation, route}) => {
           detailedBussiness={detailedBussiness}
           showBussiness={showBussiness?.show}
           setShowBussiness={setShowBussiness}
-          navigation={navigation}
+          handleEdit={() => {
+            navigation.navigate('Add Bussiness', {
+              businessId: showBussiness?.businessId,
+              bussinessDetails: getAllBusinessList_Data?.data?.obj,
+            });
+          }}
+          handleDelailedView={() => {
+            navigation.navigate('View Bussiness', {
+              businessId: showBussiness?.businessId,
+              businessType: showBussiness?.businessType,
+            });
+          }}
+          handlePoliticalView={() => {
+            navigation.navigate('View Political', {
+              businessId: showBussiness?.businessId,
+              businessType: showBussiness?.businessType,
+            });
+          }}
         />
       </Portal>
       <ImageBackground
@@ -218,20 +235,14 @@ const MyBussiness = ({navigation, route}) => {
                 image={item?.logo ?? item?.partyLogo}
                 userDocId={item?._id}
                 lastUpdated={item?.lastUpdated ?? item?.createdOn}
-                // edit={true}
-                // onPressEdit={() =>
-                //   navigation.navigate('Edit Bussiness', {
-                //     businessId: item?._id,
-                //     businessType:item?.businessType,
-                //   })
-                // }
                 onPress={() =>
                   picData
                     ? navigation.navigate('CustomSDK', {
                         picData: PhotoData,
                       })
                     : item?.businessType === 'political'
-                    ? navigation.navigate('View Political', {
+                    ? setShowBussiness({
+                        show: true,
                         businessId: item?._id,
                         businessType: item?.businessType,
                       })
@@ -247,7 +258,7 @@ const MyBussiness = ({navigation, route}) => {
             {/* card for the bussiness name and update */}
             {!searchQuery &&
               !sortedBusinesses?.length &&
-              bussinessList.map((item, index) => (
+              bussinessList?.map((item, index) => (
                 <MyBussinessCard
                   key={index}
                   name={item?.businessName ?? item?.volunteerName}

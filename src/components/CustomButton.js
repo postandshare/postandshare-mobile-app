@@ -16,6 +16,7 @@ const CustomButton = ({
   marginTop = Sizes.hp('2%'),
   customStyle,
   disabled = false,
+  titleColor = '#fff',
 }) => {
   return (
     <TouchableOpacity
@@ -39,7 +40,12 @@ const CustomButton = ({
 
         ...customStyle,
       }}>
-      <Text style={{color: '#fff', fontSize: scale(19), letterSpacing: 1}}>
+      <Text
+        style={{
+          color: titleColor ?? '#fff',
+          fontSize: scale(19),
+          letterSpacing: 1,
+        }}>
         {title}
       </Text>
     </TouchableOpacity>

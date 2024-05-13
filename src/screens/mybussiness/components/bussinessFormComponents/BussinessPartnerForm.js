@@ -131,8 +131,6 @@ const BussinessPartnerForm = ({bussinessTypeFormik, bussinessDetails}) => {
     }
   };
 
-  // console.log(bussinessPartner, 'bussiness partner in the state');
-
   const actionSheetRef = useRef(null);
   const onPressCross = () => {
     actionSheetRef?.current?.hide();
@@ -167,67 +165,104 @@ const BussinessPartnerForm = ({bussinessTypeFormik, bussinessDetails}) => {
       <ScrollView
         keyboardDismissMode="on-drag"
         contentContainerStyle={styles.root}>
-        <View style={styles.image_wrap}>
-          <ProfilePic
-            imageUrl={profilePic}
-            TakePhotofromGallery={TakePhotofromGallery}
-          />
-          <Text style={styles.tittle}>Upload Your Bussiness Pic</Text>
-        </View>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: 'bold',
+            marginTop: 2,
+            paddingHorizontal: 10,
+            color: Colors.TEXT1,
+          }}>
+          Your Detail
+        </Text>
+        <View
+          style={{
+            backgroundColor: Colors.white,
+            borderWidth: 1,
+            borderRadius: 10,
+            width: '90%',
+            alignSelf: 'center',
+            padding: 10,
+            borderColor: Colors.borderColor,
+          }}>
+          <View style={styles.image_wrap}>
+            <ProfilePic
+              imageUrl={profilePic}
+              TakePhotofromGallery={TakePhotofromGallery}
+            />
+            <Text style={styles.tittle}>Upload Your Bussiness Pic</Text>
+          </View>
 
-        {/* your name */}
-        <View style={styles.textInputField}>
-          <Text color={Colors.TEXT1}>Your Name</Text>
-          <CustomTextInputFormik
-            formik={bussinessTypeFormik}
-            name={'bussinessOwnerName'}
-            label={'Your Name'}
-          />
-        </View>
-        {/* desingnation */}
-        <View style={styles.textInputField}>
-          <Text style={{color: Colors.TEXT1}}>Desingnation</Text>
-          <CustomTextInputFormik
-            formik={bussinessTypeFormik}
-            name={'bussinessOwnerDessignation'}
-            label={'Desingnation'}
-          />
-        </View>
-        {/* mobile */}
-        <View style={styles.textInputField}>
-          <Text style={{color: Colors.TEXT1}}>Mobile</Text>
-          <CustomTextInputFormik
-            formik={bussinessTypeFormik}
-            name={'bussinessOwnerPhone'}
-            label={'Mobile'}
-            keyboardType={'number-pad'}
-            maxLength={10}
-          />
-        </View>
-        {/* whatsapp */}
-        <View style={styles.textInputField}>
-          <Text style={{color: Colors.TEXT1}}>Whatsapp</Text>
-          <CustomTextInputFormik
-            formik={bussinessTypeFormik}
-            name={'bussinessOwnerWhatsapp'}
-            label={'Whatsapp'}
-            keyboardType={'number-pad'}
-            maxLength={10}
-          />
+          {/* your name */}
+          <View style={styles.textInputField}>
+            {/* <Text color={Colors.TEXT1}>Your Name</Text> */}
+            <CustomTextInputFormik
+              formik={bussinessTypeFormik}
+              name={'bussinessOwnerName'}
+              label={'Your Name'}
+            />
+          </View>
+          {/* desingnation */}
+          <View style={styles.textInputField}>
+            {/* <Text style={{color: Colors.TEXT1}}>Desingnation</Text> */}
+            <CustomTextInputFormik
+              formik={bussinessTypeFormik}
+              name={'bussinessOwnerDessignation'}
+              label={'Desingnation'}
+            />
+          </View>
+          {/* mobile */}
+          <View style={styles.textInputField}>
+            {/* <Text style={{color: Colors.TEXT1}}>Mobile</Text> */}
+            <CustomTextInputFormik
+              formik={bussinessTypeFormik}
+              name={'bussinessOwnerPhone'}
+              label={'Mobile'}
+              keyboardType={'number-pad'}
+              maxLength={10}
+            />
+          </View>
+          {/* whatsapp */}
+          <View style={styles.textInputField}>
+            {/* <Text style={{color: Colors.TEXT1}}>Whatsapp</Text> */}
+            <CustomTextInputFormik
+              formik={bussinessTypeFormik}
+              name={'bussinessOwnerWhatsapp'}
+              label={'Whatsapp'}
+              keyboardType={'number-pad'}
+              maxLength={10}
+            />
+          </View>
         </View>
 
         {/* BUSSINESS PARTNER   */}
         {bussinessDetails ? null : (
           <View style={{flex: 1, marginHorizontal: 10}}>
-            <Text
+            <View
               style={{
-                fontSize: 20,
-                fontWeight: 'bold',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
                 marginTop: 20,
-                color: Colors.TEXT1,
               }}>
-              Bussiness Partner
-            </Text>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  color: Colors.TEXT1,
+                }}>
+                Bussiness Partner
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  actionSheetRef?.current?.show();
+                }}>
+                <Text style={{color: Colors.PRIMARY, fontStyle: 'italic'}}>
+                  Add Bussiness Partner
+                </Text>
+              </TouchableOpacity>
+            </View>
+
             {bussinessPartner?.map((item, index) => (
               <View key={index} style={styles.partnerCard}>
                 <View style={{flex: 0.2}}>
@@ -243,7 +278,7 @@ const BussinessPartnerForm = ({bussinessTypeFormik, bussinessDetails}) => {
                   />
                 </View>
                 <View style={{flex: 0.6}}>
-                  <Text style={{fontSize: 16, color: Colors.TEXT1}}>
+                  <Text style={{fontSize: 16, color: Colors.PRIMARY}}>
                     {bussinessDetails?.businessPartnerList
                       ? item?.name
                       : item?.bussinessPartnerName}
@@ -285,15 +320,18 @@ const BussinessPartnerForm = ({bussinessTypeFormik, bussinessDetails}) => {
                 </View>
               </View>
             ))}
-            <TouchableOpacity
-              onPress={() => {
-                actionSheetRef?.current?.show();
-              }}>
+
+            {bussinessPartner?.length > 0 ? null : (
               <Text
-                style={{color: 'blue', fontStyle: 'italic', marginBottom: 10}}>
-                Add More Bussiness Partner
+                style={{
+                  color: 'red',
+                  height: 100,
+                  alignSelf: 'center',
+                  fontSize: 16,
+                }}>
+                No Bussiness Partner Added
               </Text>
-            </TouchableOpacity>
+            )}
           </View>
         )}
       </ScrollView>
@@ -309,7 +347,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.transparent,
   },
   image_wrap: {
-    marginVertical: 20,
+    marginVertical: 10,
     alignItems: 'center',
   },
   tittle: {
@@ -319,18 +357,18 @@ const styles = StyleSheet.create({
   },
   textInputField: {
     width: '95%',
-    marginTop: 10,
+    marginTop: 1,
     alignSelf: 'center',
   },
   partnerCard: {
     flexDirection: 'row',
     flex: 1,
-    backgroundColor: '#F0FBFF',
+    backgroundColor: Colors.white,
     elevation: 5,
     marginVertical: 10,
     borderWidth: 0.5,
     padding: 10,
     borderRadius: 10,
-    borderColor: '#3D3989',
+    borderColor: Colors.borderColor,
   },
 });

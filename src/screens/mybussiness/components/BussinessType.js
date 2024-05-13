@@ -237,65 +237,55 @@ const BussinessType = ({bussinessDetails}) => {
   return (
     <>
       <Loader open={addBusinesslLoading} text="Adding Bussiness" />
-      {/* top navigator */}
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          marginTop: 10,
-        }}>
-        {/* bussiness type */}
-        <View style={{alignItems: 'center'}}>
-          <View
-            style={[
-              formStep === 1 ? {backgroundColor: Colors.PRIMARY} : null,
-              styles.container,
-            ]}>
-            <Entypo
-              name="user"
-              size={20}
-              color={formStep === 1 ? 'white' : Colors.TEXT1}
-            />
-          </View>
-          <Text style={{color: Colors.TEXT1}}>BussinessType</Text>
-        </View>
-        {/* bussiness profile */}
-        <View style={{alignItems: 'center'}}>
-          <View
-            style={[
-              formStep === 2 ? {backgroundColor: Colors.PRIMARY} : null,
-              styles.container,
-            ]}>
-            <FontAwesome5
-              name="hand-holding-usd"
-              size={20}
-              color={formStep === 2 ? 'white' : Colors.TEXT1}
-            />
-          </View>
-          <Text style={{color: Colors.TEXT1}}>Bussiness Profile</Text>
-        </View>
-
-        {/* patner */}
-        <View style={{alignItems: 'center'}}>
-          <View
-            style={[
-              formStep === 3 ? {backgroundColor: Colors.PRIMARY} : null,
-              styles.container,
-            ]}>
-            <Ionicons
-              name="people"
-              size={20}
-              color={formStep === 3 ? 'white' : Colors.TEXT1}
-            />
-          </View>
-          <Text style={{color: Colors.TEXT1}}>Bussiness Partner</Text>
-        </View>
-      </View>
-
-      {/* bussiness type form */}
       {formStep == 1 && (
-        <View>
-          <BussinessTypeForm bussinessTypeFormik={bussinessTypeFormik} />
+        <ScrollView>
+          <View>
+            <Text
+              style={{
+                fontSize: 16,
+                margin: 5,
+                fontWeight: 'bold',
+                color: Colors.TEXT1,
+              }}>
+              Bussiness Type
+            </Text>
+            <View
+              style={{
+                backgroundColor: Colors.white,
+                borderWidth: 1,
+                borderRadius: 10,
+                width: '90%',
+                alignSelf: 'center',
+                padding: 10,
+                borderColor: Colors.borderColor,
+              }}>
+              <BussinessTypeForm bussinessTypeFormik={bussinessTypeFormik} />
+            </View>
+          </View>
+
+          <Text
+            style={{
+              fontSize: 16,
+              margin: 5,
+              fontWeight: 'bold',
+              color: Colors.TEXT1,
+            }}>
+            Bussiness Profile
+          </Text>
+          <View
+            style={{
+              backgroundColor: Colors.white,
+              borderWidth: 1,
+              borderRadius: 10,
+              width: '90%',
+              alignSelf: 'center',
+              padding: 10,
+              borderColor: Colors.borderColor,
+            }}>
+            <BussinessProfileForm
+              bussinessTypeFormik={bussinessProfileFormik}
+            />
+          </View>
           <CustomButton
             title={'Next'}
             onPress={async () => {
@@ -304,75 +294,42 @@ const BussinessType = ({bussinessDetails}) => {
                 bussinessSubCategory: true,
                 logo: true,
               });
-              const errors = await bussinessTypeFormik?.validateForm();
-              if (Object.keys(errors).length > 0) {
-                //addressInfoFormik.handleSubmit();
+              bussinessProfileFormik?.setTouched({
+                bussinessName: true,
+                bussinessDetail: true,
+                bussinessEmail: true,
+                businessWebsite: true,
+                bussinessAddress: true,
+                bussinessPinCode: true,
+                bussinessTehsil: true,
+                bussinessDistrict: true,
+                bussinessState: true,
+              });
+
+              const errorsProfile =
+                await bussinessProfileFormik?.validateForm();
+              const errorsType = await bussinessTypeFormik?.validateForm();
+
+              if (
+                Object.keys(errorsProfile).length > 0 ||
+                Object.keys(errorsType).length > 0
+              ) {
                 ToastAndroid.show(
-                  `Please correct ${Object.keys(
-                    errors,
-                  )} errors before proceeding.`,
+                  `Please correct errors before proceeding.`,
                   ToastAndroid.LONG,
                 );
                 return;
               } else {
                 bussinessTypeFormik.handleSubmit();
+                bussinessProfileFormik.handleSubmit();
                 setFormStep(2);
               }
             }}
           />
-        </View>
-      )}
-      {/* bussiness profile form */}
-      {formStep == 2 && (
-        <ScrollView>
-          <BussinessProfileForm bussinessTypeFormik={bussinessProfileFormik} />
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              bottom: 10,
-            }}>
-            <CustomButton
-              title={'Back'}
-              onPress={() => setFormStep(1)}
-              width="40%"
-            />
-            <CustomButton
-              title={'Next'}
-              onPress={async () => {
-                bussinessProfileFormik?.setTouched({
-                  bussinessName: true,
-                  bussinessDetail: true,
-                  bussinessEmail: true,
-                  businessWebsite: true,
-                  bussinessAddress: true,
-                  bussinessPinCode: true,
-                  bussinessTehsil: true,
-                  bussinessDistrict: true,
-                  bussinessState: true,
-                });
-                const errors = await bussinessProfileFormik?.validateForm();
-                if (Object.keys(errors).length > 0) {
-                  //addressInfoFormik.handleSubmit();
-                  ToastAndroid.show(
-                    `Please correct ${Object.keys(
-                      errors,
-                    )} errors before proceeding.`,
-                    ToastAndroid.LONG,
-                  );
-                  return;
-                } else {
-                  bussinessProfileFormik.handleSubmit();
-                  setFormStep(3);
-                }
-              }}
-              width="40%"
-            />
-          </View>
         </ScrollView>
       )}
       {/* bussiness partner form */}
-      {formStep == 3 && (
+      {formStep == 2 && (
         <ScrollView>
           <BussinessPartnerForm
             bussinessTypeFormik={bussinessPartnerFormik}
@@ -386,7 +343,7 @@ const BussinessType = ({bussinessDetails}) => {
             }}>
             <CustomButton
               title={'Back'}
-              onPress={() => setFormStep(2)}
+              onPress={() => setFormStep(1)}
               width="40%"
             />
             <CustomButton
