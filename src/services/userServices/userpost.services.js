@@ -1,6 +1,8 @@
 import {authAxiosInstance} from '../AxiosInstance';
 
-const baseURL = 'https://postandshare-content-service-zm5xloquaa-em.a.run.app';
+import Config from 'react-native-config';
+
+const baseURL = Config.AUTH_URL;
 const userPost_route = `${baseURL}/userPost`;
 
 export const addUserPost = body => {

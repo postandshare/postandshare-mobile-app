@@ -1,6 +1,8 @@
 import {authAxiosInstance} from '../AxiosInstance';
 
-const baseURL = 'https://postandshare-content-service-zm5xloquaa-em.a.run.app';
+import Config from 'react-native-config';
+
+const baseURL = Config.AUTH_URL;
 const bussiness_route = `${baseURL}/business`;
 
 export const getAllBusinessList = params => {
@@ -45,5 +47,3 @@ export const addBusinessPartner = body => {
 export const updateBusiness = body => {
   return authAxiosInstance.put(`${bussiness_route}/updateBusiness`, body);
 };
-
-

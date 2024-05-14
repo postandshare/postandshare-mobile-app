@@ -1,7 +1,7 @@
 import Config from 'react-native-config';
 import {authAxiosInstance} from '../AxiosInstance';
 
-const baseURL = 'https://postandshare-content-service-zm5xloquaa-em.a.run.app';
+const baseURL = Config.AUTH_URL;
 const user_route = `${baseURL}/userSelf`;
 
 export const getUserProfile = params => {

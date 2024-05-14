@@ -33,13 +33,22 @@ const styles = StyleSheet.create({
   specail_subcontainer: {
     flex: 1,
     alignSelf: 'center',
-
     width: Sizes.wp('96%'),
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#BBE3F1',
     backgroundColor: '#F0FBFF',
     padding: 6,
+    marginVertical: 5,
+  },
+  boxContainer: {
+    backgroundColor: Colors.white,
+    borderWidth: 1,
+    borderRadius: 10,
+    width: '100%',
+    alignSelf: 'center',
+    padding: 10,
+    borderColor: Colors.borderColor,
   },
 });
 

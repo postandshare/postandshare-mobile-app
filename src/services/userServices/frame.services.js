@@ -1,15 +1,12 @@
-import { authAxiosInstance } from '../AxiosInstance';
+import {authAxiosInstance} from '../AxiosInstance';
 
-const baseURL = 'https://postandshare-content-service-zm5xloquaa-em.a.run.app';
+import Config from 'react-native-config';
+
+const baseURL = Config.AUTH_URL;
 const user_route = `${baseURL}/frame`;
 
-
 export const getOrgFrame = params => {
-    return authAxiosInstance.get(
-      `${user_route}/getOrgFrame`,
-      {
-        params,
-      },
-    );
-  };
-
+  return authAxiosInstance.get(`${user_route}/getOrgFrame`, {
+    params,
+  });
+};

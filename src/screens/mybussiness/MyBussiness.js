@@ -22,6 +22,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import Colors from '../../constants/Colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import ViewBussinessModal from './components/modal/ViewBussinessModal';
+import {getPoliticalPartyDetails} from '../../services/userServices/political.services';
 
 const MyBussiness = ({navigation, route}) => {
   const {picData} = route.params || {};
@@ -68,6 +69,28 @@ const MyBussiness = ({navigation, route}) => {
     enabled: false,
   });
 
+  const {
+    isLoading: getPoliticalPartyDetailsLoading,
+    isFetching: getPoliticalPartyDetailsFetching,
+    refetch: getPoliticalPartyDetailsRefetch,
+    data: getPoliticalPartyDetails_Data,
+    isError: getPoliticalPartyDetails_isError,
+  } = useQuery({
+    queryKey: ['getPoliticalPartyDetails'],
+    queryFn: () =>
+      getPoliticalPartyDetails({
+        politicalBusinessDocId: showBussiness?.businessId,
+      }),
+    onSuccess: success => {
+      console.log(success?.data, 'success');
+      setDetailedBussiness(success?.data?.obj);
+    },
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
+
   useFocusEffect(
     useCallback(() => {
       getAllBusinessListRefetch();
@@ -77,7 +100,9 @@ const MyBussiness = ({navigation, route}) => {
   useFocusEffect(
     useCallback(() => {
       if (showBussiness?.show) {
-        getAllBusinessListRefetch();
+        if (showBussiness?.businessType === 'political') {
+          getPoliticalPartyDetailsRefetch();
+        } else getAllBusinessListRefetch();
       }
     }, [showBussiness, getAllBusinessListRefetch]),
   );
@@ -124,22 +149,30 @@ const MyBussiness = ({navigation, route}) => {
           showBussiness={showBussiness?.show}
           setShowBussiness={setShowBussiness}
           handleEdit={() => {
-            navigation.navigate('Add Bussiness', {
-              businessId: showBussiness?.businessId,
-              bussinessDetails: getAllBusinessList_Data?.data?.obj,
-            });
+            if (showBussiness?.businessType === 'political') {
+              navigation.navigate('Add Bussiness', {
+                businessId: showBussiness?.businessId,
+                bussinessDetails: getPoliticalPartyDetails_Data?.data?.obj,
+              });
+            } else {
+              navigation.navigate('Add Bussiness', {
+                businessId: showBussiness?.businessId,
+                bussinessDetails: getAllBusinessList_Data?.data?.obj,
+              });
+            }
           }}
           handleDelailedView={() => {
-            navigation.navigate('View Bussiness', {
-              businessId: showBussiness?.businessId,
-              businessType: showBussiness?.businessType,
-            });
-          }}
-          handlePoliticalView={() => {
-            navigation.navigate('View Political', {
-              businessId: showBussiness?.businessId,
-              businessType: showBussiness?.businessType,
-            });
+            if (showBussiness?.businessType === 'political') {
+              navigation.navigate('View Political', {
+                businessId: showBussiness?.businessId,
+                businessType: showBussiness?.businessType,
+              });
+            } else {
+              navigation.navigate('View Bussiness', {
+                businessId: showBussiness?.businessId,
+                businessType: showBussiness?.businessType,
+              });
+            }
           }}
         />
       </Portal>

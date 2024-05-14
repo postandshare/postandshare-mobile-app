@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   RefreshControl,
   ScrollView,
@@ -102,16 +103,13 @@ const PartySelect = ({route, businessId, bussinessDetails}) => {
           alignSelf: 'center',
         }}>
         {/* party selection */}
-        <Text
-          style={{fontSize: 20, marginTop: 20, margin: 5, color: Colors.TEXT1}}>
-          Select Party
-        </Text>
+        <Text style={styles.label}>Select Party</Text>
         <View style={styles.partySelection_container}>
           {getAllPartyDetails_Data?.data?.list?.map((item, index) => {
             return (
               <View
                 key={index}
-                style={{flexDirection: 'row', margin: 5, alignItems: 'center'}}>
+                style={{flexDirection: 'row', margin: 2, alignItems: 'center'}}>
                 <RadioButton
                   value={item}
                   status={checked === item ? 'checked' : 'unchecked'}
@@ -134,66 +132,72 @@ const PartySelect = ({route, businessId, bussinessDetails}) => {
           })}
         </View>
 
-        {/* for selecting the state for current address */}
-        <View
-          style={{
-            marginVertical: 5,
-            width: Sizes.wp('91%'),
-            marginHorizontal: 8,
-          }}>
-          <Text style={{color: Colors.TEXT1}}>Select State</Text>
-          <Dropdown
-            value={politicalFormik.values.state}
-            label="Select State*"
-            data={STATES?.map(item => ({label: item, value: item}))}
-            onChangeValue={res => {
-              console.log(res);
-              politicalFormik.setValues(prev => ({
-                ...prev,
-                state: res,
-              }));
-            }}
-          />
-        </View>
+        <Text style={styles.label}>Address</Text>
+        <View style={styles.boxContainer}>
+          {/* for selecting the state for current address */}
+          <View
+            style={{
+              marginVertical: 5,
+              width: Sizes.wp('82%'),
+              marginHorizontal: 8,
+            }}>
+            <Text style={{color: Colors.TEXT1, marginVertical: 1}}>
+              Select State
+            </Text>
+            <Dropdown
+              value={politicalFormik.values.state}
+              label="Select State*"
+              data={STATES?.map(item => ({label: item, value: item}))}
+              onChangeValue={res => {
+                console.log(res);
+                politicalFormik.setValues(prev => ({
+                  ...prev,
+                  state: res,
+                }));
+              }}
+            />
+          </View>
 
-        {politicalFormik.errors.state && politicalFormik.touched.state && (
-          <Text style={globalStyles.error_text}>
-            {politicalFormik.errors.state}
-          </Text>
-        )}
-
-        {/* for district */}
-        <View
-          style={{
-            marginVertical: 5,
-            width: Sizes.wp('91%'),
-            marginHorizontal: 8,
-          }}>
-          <Text style={{color: Colors.TEXT1}}>Select District</Text>
-          <Dropdown
-            value={politicalFormik.values.district}
-            label="Select District*"
-            data={DISTRICTS[
-              STATES.indexOf(politicalFormik.values.state) + 1
-            ]?.map(item => ({label: item, value: item}))}
-            onChangeValue={res => {
-              politicalFormik.setValues(prev => ({
-                ...prev,
-                district: res,
-              }));
-            }}
-          />
-        </View>
-        {politicalFormik.errors.district &&
-          politicalFormik.touched.district && (
+          {politicalFormik.errors.state && politicalFormik.touched.state && (
             <Text style={globalStyles.error_text}>
-              {politicalFormik.errors.district}
+              {politicalFormik.errors.state}
             </Text>
           )}
 
-        <Text style={styles.label}>Constituency</Text>
-        <View style={{marginHorizontal: 10}}>
+          {/* for district */}
+          <View
+            style={{
+              marginVertical: 5,
+              width: Sizes.wp('91%'),
+              marginHorizontal: 8,
+            }}>
+            <Text style={{color: Colors.TEXT1, marginVertical: 1}}>
+              Select District
+            </Text>
+            <Dropdown
+              value={politicalFormik.values.district}
+              label="Select District*"
+              width="90%"
+              data={DISTRICTS[
+                STATES.indexOf(politicalFormik.values.state) + 1
+              ]?.map(item => ({label: item, value: item}))}
+              onChangeValue={res => {
+                politicalFormik.setValues(prev => ({
+                  ...prev,
+                  district: res,
+                }));
+              }}
+            />
+          </View>
+          {politicalFormik.errors.district &&
+            politicalFormik.touched.district && (
+              <Text style={globalStyles.error_text}>
+                {politicalFormik.errors.district}
+              </Text>
+            )}
+
           <CustomTextInputFormik
+            width="96%"
             formik={politicalFormik}
             name={'constituency'}
             label={'Constituency'}
@@ -218,9 +222,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: 'grey',
+    borderColor: Colors.borderColor,
     padding: 10,
-    marginTop: 10,
+    marginTop: 5,
     width: '90%',
     alignSelf: 'center',
   },
@@ -230,5 +234,14 @@ const styles = StyleSheet.create({
     color: Colors.TEXT1,
     marginTop: 10,
     paddingHorizontal: 10,
+  },
+  boxContainer: {
+    backgroundColor: Colors.white,
+    borderWidth: 1,
+    borderRadius: 10,
+    width: '90%',
+    alignSelf: 'center',
+    padding: 10,
+    borderColor: Colors.borderColor,
   },
 });

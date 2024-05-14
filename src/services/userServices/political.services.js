@@ -1,6 +1,7 @@
 import {authAxiosInstance} from '../AxiosInstance';
+import Config from 'react-native-config';
 
-const baseURL = 'https://postandshare-content-service-zm5xloquaa-em.a.run.app';
+const baseURL = Config.AUTH_URL;
 const political_route = `${baseURL}/political`;
 
 export const getAllPartyDetails = params => {
@@ -28,10 +29,7 @@ export const addPoliticalBusiness = body => {
   );
 };
 export const addPoliticalLeader = body => {
-  return authAxiosInstance.post(
-    `${political_route}/addPoliticalLeader`,
-    body,
-  );
+  return authAxiosInstance.post(`${political_route}/addPoliticalLeader`, body);
 };
 
 export const updatePoliticalParty = body => {
@@ -92,4 +90,3 @@ export const DeletePoliticalLeader = body => {
     `${political_route}/DeletePoliticalLeader/${body?.languageDocId}`,
   );
 };
-

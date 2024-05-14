@@ -21,29 +21,33 @@ const Privacy = () => {
             <View style={styles.sub_container}>
               <Text style={styles.textTitle}>Lorem Ipsum</Text>
               {/* subtitle */}
-              <Text style={styles.text}>
-                There are many variations of passages of Lorem Ipsum available,
-                but the majority have suffered alteration in some form, by
-                injected humour, or randomised words which don't look even
-                slightly believable. If you are going to use a passage of Lorem
-                Ipsum
-              </Text>
+              <View style={styles.boxContainer}>
+                <Text style={styles.text}>
+                  There are many variations of passages of Lorem Ipsum
+                  available, but the majority have suffered alteration in some
+                  form, by injected humour, or randomised words which don't look
+                  even slightly believable. If you are going to use a passage of
+                  Lorem Ipsum
+                </Text>
+              </View>
             </View>
 
             <View style={styles.sub_container}>
               <Text style={styles.textTitle}>Lorem Ipsum</Text>
               {/* subtitle */}
-              <Text style={styles.text}>
-                There are many variations of passages of Lorem Ipsum available,
-                but the majority have suffered alteration in some form, by
-                injected humour, or randomised words which don't look even
-                slightly believable. If you are going to use a passage of Lorem
-                Ipsum There are many variations of passages of Lorem Ipsum
-                available, but the majority have suffered alteration in some
-                form, by injected humour, or randomised words which don't look
-                even slightly believable. If you are going to use a passage of
-                Lorem Ipsum
-              </Text>
+              <View style={styles.boxContainer}>
+                <Text style={styles.text}>
+                  There are many variations of passages of Lorem Ipsum
+                  available, but the majority have suffered alteration in some
+                  form, by injected humour, or randomised words which don't look
+                  even slightly believable. If you are going to use a passage of
+                  Lorem Ipsum There are many variations of passages of Lorem
+                  Ipsum available, but the majority have suffered alteration in
+                  some form, by injected humour, or randomised words which don't
+                  look even slightly believable. If you are going to use a
+                  passage of Lorem Ipsum
+                </Text>
+              </View>
             </View>
 
             {/* blue box for special condtion */}
@@ -60,29 +64,33 @@ const Privacy = () => {
             <View style={styles.sub_container}>
               <Text style={styles.textTitle}>Lorem Ipsum</Text>
               {/* subtitle */}
-              <Text style={styles.text}>
-                There are many variations of passages of Lorem Ipsum available,
-                but the majority have suffered alteration in some form, by
-                injected humour, or randomised words which don't look even
-                slightly believable. If you are going to use a passage of Lorem
-                Ipsum
-              </Text>
+              <View style={styles.boxContainer}>
+                <Text style={styles.text}>
+                  There are many variations of passages of Lorem Ipsum
+                  available, but the majority have suffered alteration in some
+                  form, by injected humour, or randomised words which don't look
+                  even slightly believable. If you are going to use a passage of
+                  Lorem Ipsum
+                </Text>
+              </View>
             </View>
 
             <View style={styles.sub_container}>
               <Text style={styles.textTitle}>Lorem Ipsum</Text>
               {/* subtitle */}
-              <Text style={styles.text}>
-                There are many variations of passages of Lorem Ipsum available,
-                but the majority have suffered alteration in some form, by
-                injected humour, or randomised words which don't look even
-                slightly believable. If you are going to use a passage of Lorem
-                Ipsum There are many variations of passages of Lorem Ipsum
-                available, but the majority have suffered alteration in some
-                form, by injected humour, or randomised words which don't look
-                even slightly believable. If you are going to use a passage of
-                Lorem Ipsum
-              </Text>
+              <View style={styles.boxContainer}>
+                <Text style={styles.text}>
+                  There are many variations of passages of Lorem Ipsum
+                  available, but the majority have suffered alteration in some
+                  form, by injected humour, or randomised words which don't look
+                  even slightly believable. If you are going to use a passage of
+                  Lorem Ipsum There are many variations of passages of Lorem
+                  Ipsum available, but the majority have suffered alteration in
+                  some form, by injected humour, or randomised words which don't
+                  look even slightly believable. If you are going to use a
+                  passage of Lorem Ipsum
+                </Text>
+              </View>
             </View>
 
             {/* blue box for special condtion */}

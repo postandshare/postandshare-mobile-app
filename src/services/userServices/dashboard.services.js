@@ -1,6 +1,8 @@
 import {authAxiosInstance} from '../AxiosInstance';
 
-const baseURL = 'https://postandshare-content-service-zm5xloquaa-em.a.run.app';
+import Config from 'react-native-config';
+
+const baseURL = Config.AUTH_URL;
 const dashboard_route = `${baseURL}/dashboard`;
 
 export const getTemplatesForQuotes = params => {
@@ -14,9 +16,12 @@ export const getTemplatesByDate = params => {
   });
 };
 export const getTemplatesOfGreatLeaders = params => {
-  return authAxiosInstance.get(`${dashboard_route}/getTemplatesOfGreatLeaders`, {
-    params,
-  });
+  return authAxiosInstance.get(
+    `${dashboard_route}/getTemplatesOfGreatLeaders`,
+    {
+      params,
+    },
+  );
 };
 export const getTrendingTemlpates = params => {
   return authAxiosInstance.get(`${dashboard_route}/getTrendingTemlpates`, {

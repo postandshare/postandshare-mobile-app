@@ -248,72 +248,73 @@ const PoliticalVolunteer = ({route, navigation}) => {
             />
           }
           contentContainerStyle={styles.root}>
-          {/* profile pic container */}
-          <View style={styles.image_wrap}>
-            <ProfilePic
-              imageUrl={profilePic}
-              TakePhotofromGallery={TakePhotofromGallery}
-            />
-            {profileVolunteerFormik?.errors?.profilePic &&
-              profileVolunteerFormik?.touched?.profilePic && (
-                <Text style={{color: 'red'}}>
-                  {profileVolunteerFormik?.errors?.profilePic}
-                </Text>
-              )}
-            <Text style={styles.tittle}>Upload Your ProfilePic</Text>
+          <View style={styles.boxContainer}>
+            {/* profile pic container */}
+            <View style={styles.image_wrap}>
+              <ProfilePic
+                imageUrl={profilePic}
+                TakePhotofromGallery={TakePhotofromGallery}
+              />
+              {profileVolunteerFormik?.errors?.profilePic &&
+                profileVolunteerFormik?.touched?.profilePic && (
+                  <Text style={{color: 'red'}}>
+                    {profileVolunteerFormik?.errors?.profilePic}
+                  </Text>
+                )}
+              <Text style={styles.tittle}>Upload Your ProfilePic</Text>
+            </View>
+            {/* your name */}
+            <View style={styles.textInputField}>
+              {/* <Text style={{color: Colors.TEXT1}}>Your Name</Text> */}
+              <CustomTextInputFormik
+                formik={profileVolunteerFormik}
+                name={'name'}
+                label={'Your Name'}
+              />
+            </View>
+            {/* designation */}
+            <View style={styles.textInputField}>
+              {/* <Text style={{color: Colors.TEXT1}}>Designation</Text> */}
+              <CustomTextInputFormik
+                formik={profileVolunteerFormik}
+                name={'desingation'}
+                label={'Your Designation'}
+              />
+            </View>
+            {/* mobile */}
+            <View style={styles.textInputField}>
+              {/* <Text style={{color: Colors.TEXT1}}>Mobile</Text> */}
+              <CustomTextInputFormik
+                formik={profileVolunteerFormik}
+                name={'mobile'}
+                label={'Your Mobile'}
+                keyboardType="number-pad"
+                maxLength={10}
+              />
+            </View>
+            {/* whatsapp number */}
+            <View style={styles.textInputField}>
+              {/* <Text style={{color: Colors.TEXT1}}>Whatsapp Number</Text> */}
+              <CustomTextInputFormik
+                formik={profileVolunteerFormik}
+                name={'whatsappNumber'}
+                label={'Whatsapp Number'}
+                keyboardType={'number-pad'}
+                maxLength={10}
+              />
+            </View>
+            {/* about youself */}
+            <View style={styles.textInputField}>
+              {/* <Text style={{color: Colors.TEXT1}}>About Yourself</Text> */}
+              <CustomTextInputFormik
+                formik={profileVolunteerFormik}
+                name={'aboutYourself'}
+                label={'About Yourself'}
+                numberOfLines={4}
+                maxLength={1000}
+              />
+            </View>
           </View>
-          {/* your name */}
-          <View style={styles.textInputField}>
-            <Text style={{color: Colors.TEXT1}}>Your Name</Text>
-            <CustomTextInputFormik
-              formik={profileVolunteerFormik}
-              name={'name'}
-              label={'Your Name'}
-            />
-          </View>
-          {/* designation */}
-          <View style={styles.textInputField}>
-            <Text style={{color: Colors.TEXT1}}>Designation</Text>
-            <CustomTextInputFormik
-              formik={profileVolunteerFormik}
-              name={'desingation'}
-              label={'Your Designation'}
-            />
-          </View>
-          {/* mobile */}
-          <View style={styles.textInputField}>
-            <Text style={{color: Colors.TEXT1}}>Mobile</Text>
-            <CustomTextInputFormik
-              formik={profileVolunteerFormik}
-              name={'mobile'}
-              label={'Your Mobile'}
-              keyboardType="number-pad"
-              maxLength={10}
-            />
-          </View>
-          {/* whatsapp number */}
-          <View style={styles.textInputField}>
-            <Text style={{color: Colors.TEXT1}}>Whatsapp Number</Text>
-            <CustomTextInputFormik
-              formik={profileVolunteerFormik}
-              name={'whatsappNumber'}
-              label={'Whatsapp Number'}
-              keyboardType={'number-pad'}
-              maxLength={10}
-            />
-          </View>
-          {/* about youself */}
-          <View style={styles.textInputField}>
-            <Text style={{color: Colors.TEXT1}}>About Yourself</Text>
-            <CustomTextInputFormik
-              formik={profileVolunteerFormik}
-              name={'aboutYourself'}
-              label={'About Yourself'}
-              numberOfLines={4}
-              maxLength={1000}
-            />
-          </View>
-
           <CustomButton
             title={'Submit'}
             onPress={() => {
@@ -352,7 +353,17 @@ const styles = StyleSheet.create({
   },
   textInputField: {
     width: '95%',
-    marginTop: 10,
+
     alignSelf: 'center',
+  },
+  boxContainer: {
+    backgroundColor: Colors.white,
+    borderWidth: 1,
+    borderRadius: 10,
+    width: '90%',
+    alignSelf: 'center',
+    padding: 10,
+    marginTop: 20,
+    borderColor: Colors.borderColor,
   },
 });

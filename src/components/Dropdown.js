@@ -16,6 +16,7 @@ const Dropdown = ({
   onChangeValue = () => {},
   data = [],
   refetch = () => {},
+  width = '100%',
 }) => {
   const [state, setState] = useState({
     show: false,
@@ -32,6 +33,7 @@ const Dropdown = ({
         borderStyle: 'solid',
         backgroundColor: '#fff',
         borderRadius: 10,
+        width: width,
       }}>
       <TouchableOpacity
         onPress={() => {

@@ -37,9 +37,12 @@ const ViewBussinessModal = ({
     });
   };
 
-  const maxDisplay = 3;
+  const maxDisplay = 2;
 
-  console.log(detailedBussiness);
+  console.log(
+    detailedBussiness?.fetchExistingPoliticalBusiness?.partyDocId?.partyName,
+    'detailedBussiness',
+  );
 
   return (
     <>
@@ -63,13 +66,13 @@ const ViewBussinessModal = ({
               source={{
                 uri:
                   detailedBussiness?.fetchBusiness?.logo ??
-                  detailedBussiness?.fetchBusiness?.partyLogo,
+                  detailedBussiness?.fetchExistingPoliticalBusiness?.partyLogo,
               }}
               style={styles.image}
             />
           </View>
 
-          {detailedBussiness?.leaderDetail && (
+          {detailedBussiness?.fetchPoliticalLeaders && (
             <View
               style={{
                 flex: 0.4,
@@ -78,7 +81,7 @@ const ViewBussinessModal = ({
                 gap: 5,
                 padding: 10,
               }}>
-              {detailedBussiness?.leaderDetail
+              {detailedBussiness?.fetchPoliticalLeaders
                 ?.slice(0, maxDisplay)
                 .map(item => {
                   return (
@@ -105,7 +108,8 @@ const ViewBussinessModal = ({
                     </View>
                   );
                 })}
-              {detailedBussiness?.leaderDetail?.length > maxDisplay && (
+              {/* {detailedBussiness?.fetchPoliticalLeaders?.length >
+                maxDisplay && (
                 <Text
                   style={{
                     fontSize: 20,
@@ -114,8 +118,8 @@ const ViewBussinessModal = ({
                   }}>
                   +{detailedBussiness?.businessPartnerList?.length - maxDisplay}
                 </Text>
-              )}
-              <TouchableOpacity>
+              )} */}
+              {/* <TouchableOpacity>
                 <FontAwesome
                   name="pencil"
                   size={24}
@@ -123,10 +127,10 @@ const ViewBussinessModal = ({
                   alignSelf={'center'}
                   style={{padding: 5}}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           )}
-          {!detailedBussiness?.leaderDetail && (
+          {!detailedBussiness?.fetchPoliticalLeaders && (
             <View
               style={{
                 flex: 0.4,
@@ -162,7 +166,7 @@ const ViewBussinessModal = ({
                     </View>
                   );
                 })}
-              {detailedBussiness?.businessPartnerList?.length > maxDisplay && (
+              {/* {detailedBussiness?.businessPartnerList?.length > maxDisplay && (
                 <Text
                   style={{
                     fontSize: 20,
@@ -180,7 +184,7 @@ const ViewBussinessModal = ({
                   alignSelf={'center'}
                   style={{padding: 5}}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           )}
         </View>
@@ -193,18 +197,22 @@ const ViewBussinessModal = ({
           <Text
             style={{fontSize: 20, fontWeight: 'bold', color: Colors.PRIMARY}}>
             {detailedBussiness?.fetchBusiness?.businessName ??
-              detailedBussiness?.fetchBusiness?.partyDocId?.partyName}
+              detailedBussiness?.fetchExistingPoliticalBusiness?.partyDocId
+                ?.partyName}
           </Text>
           {/* bussiness details */}
           <Text style={{fontSize: 15, color: Colors.TEXT1}}>
             {detailedBussiness?.fetchBusiness?.category ??
-              detailedBussiness?.fetchBusiness?.volunteerName}{' '}
+              detailedBussiness?.fetchExistingPoliticalBusiness
+                ?.volunteerName}{' '}
             ||{' '}
             {detailedBussiness?.fetchBusiness?.subCategory ??
-              detailedBussiness?.fetchBusiness?.designation}{' '}
+              detailedBussiness?.fetchExistingPoliticalBusiness
+                ?.designation}{' '}
             || {'\n'}
             {detailedBussiness?.fetchBusiness?.description ??
-              detailedBussiness?.fetchBusiness?.volunteerDetail ??
+              detailedBussiness?.fetchExistingPoliticalBusiness
+                ?.volunteerDetail ??
               '--'}
           </Text>
         </View>
@@ -217,42 +225,50 @@ const ViewBussinessModal = ({
           <View style={styles.detailedCard}>
             <AntDesign name="phone" size={24} color={Colors.PRIMARY} />
             <Text style={{fontSize: 15, color: Colors.TEXT1}}>
-              {detailedBussiness?.fetchBusiness?.mobileNumber ?? '--'}
+              {detailedBussiness?.fetchBusiness?.mobileNumber ??
+                detailedBussiness?.fetchExistingPoliticalBusiness
+                  ?.mobileNumber ??
+                '--'}
             </Text>
           </View>
           <View style={styles.detailedCard}>
             <AntDesign name="mail" size={24} color={Colors.PRIMARY} />
             <Text style={{fontSize: 15, color: Colors.TEXT1}}>
-              {detailedBussiness?.fetchBusiness?.email ?? '--'}
+              {detailedBussiness?.fetchBusiness?.email ??
+                detailedBussiness?.fetchExistingPoliticalBusiness?.email ??
+                '--'}
             </Text>
           </View>
           <View style={styles.detailedCard}>
             <Foundation name="web" size={24} color={Colors.PRIMARY} left={2} />
             <Text style={{fontSize: 15, color: Colors.TEXT1}}>
-              {detailedBussiness?.fetchBusiness?.web ?? '--'}
+              {detailedBussiness?.fetchBusiness?.web ??
+                detailedBussiness?.fetchExistingPoliticalBusiness?.web ??
+                '--'}
             </Text>
           </View>
           <View style={styles.detailedCard}>
             <Entypo name="location-pin" size={24} color={Colors.PRIMARY} />
             <Text style={{fontSize: 15, color: Colors.TEXT1}}>
               {detailedBussiness?.fetchBusiness?.address?.address ??
-                detailedBussiness?.fetchBusiness?.legislativeAssembly ??
+                detailedBussiness?.fetchExistingPoliticalBusiness
+                  ?.legislativeAssembly ??
                 '--'}{' '}
               {detailedBussiness?.fetchBusiness?.address?.dist ??
-                detailedBussiness?.fetchBusiness?.district ??
+                detailedBussiness?.fetchExistingPoliticalBusiness?.district ??
                 '--'}{' '}
               {detailedBussiness?.fetchBusiness?.address?.state ??
-                detailedBussiness?.fetchBusiness?.state ??
+                detailedBussiness?.fetchExistingPoliticalBusiness?.state ??
                 '--'}{' '}
               {detailedBussiness?.fetchBusiness?.address?.pinCode ??
-                detailedBussiness?.fetchBusiness?.pinCode ??
+                detailedBussiness?.fetchExistingPoliticalBusiness?.pinCode ??
                 ' '}
             </Text>
           </View>
         </View>
         <Divider style={{borderColor: Colors.TEXT1, height: 1}} />
         {/* delete the bussiness */}
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{
             padding: 10,
             flexDirection: 'row',
@@ -276,7 +292,7 @@ const ViewBussinessModal = ({
             Delete Bussiness
           </Text>
           <AntDesign name="delete" size={24} color={Colors.PRIMARY} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <View
           style={{
@@ -325,7 +341,7 @@ export default ViewBussinessModal;
 
 const styles = StyleSheet.create({
   container: {
-    height: Sizes.hp('60%'),
+    height: Sizes.hp('55%'),
     width: Sizes.wp('90%'),
     alignSelf: 'center',
     backgroundColor: Colors.white,
