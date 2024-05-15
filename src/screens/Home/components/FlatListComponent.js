@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import styles from '../style';
@@ -38,7 +39,10 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
           showsHorizontalScrollIndicator={false}
           data={data}
           renderItem={({item}) => (
-            <>
+            <View
+              style={{
+                alignItems: 'center',
+              }}>
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate(NavigationScreenName.PHOTO_NAVIGATOR, {
@@ -46,16 +50,12 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
                   })
                 }
                 style={styles.uploadpic_container_image_view}>
-                <View style={styles.uploadpic_container_dateview}>
+                {/* <View style={styles.uploadpic_container_dateview}>
                   <Text style={styles.uploadpic_container_date}>
                     {moment(item?.date).format('MMM Do')}
                   </Text>
-                </View>
-                <View style={styles.uploadpic_container_eventview}>
-                  <Text style={styles.uploadpic_container_eventname}>
-                    {item?.name ?? null}
-                  </Text>
-                </View>
+                </View> */}
+
                 {loading && (
                   <ActivityIndicator
                     style={{
@@ -74,7 +74,26 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
                   style={styles.uploadpic_container_image}
                 />
               </TouchableOpacity>
-            </>
+              <View style={styles.uploadpic_container_eventview}>
+                <Text style={styles.uploadpic_container_eventname}>
+                  {moment().diff(moment(item?.createdOn), 'days') < 1
+                    ? `${moment().diff(
+                        moment(item?.createdOn),
+                        'hours',
+                      )} hours ago`
+                    : `${moment().diff(
+                        moment(item?.createdOn),
+                        'days',
+                      )} days ago`}
+                </Text>
+                <Text
+                  style={styles.uploadpic_container_eventname}
+                  numberOfLines={1}
+                  ellipsizeMode="tail">
+                  {item?.name ?? null}
+                </Text>
+              </View>
+            </View>
           )}
           keyExtractor={index => index._id}
           extraData={uploadedImages}

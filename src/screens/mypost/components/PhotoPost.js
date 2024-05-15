@@ -6,6 +6,7 @@ import {
   ImageBackground,
   RefreshControl,
   ScrollView,
+  Share,
   StyleSheet,
   Text,
   ToastAndroid,
@@ -20,7 +21,13 @@ import {
 } from '../../../services/userServices/userpost.services';
 import Colors from '../../../constants/Colors';
 import {useFocusEffect} from '@react-navigation/native';
-import {ActivityIndicator, Modal, Portal} from 'react-native-paper';
+import {
+  ActivityIndicator,
+  Menu,
+  Modal,
+  Portal,
+  TextInput,
+} from 'react-native-paper';
 import ImageView from 'react-native-image-zoom-viewer';
 import Loader from '../../../components/Loader';
 import moment from 'moment';
@@ -28,6 +35,78 @@ import Sizes from '../../../constants/Sizes';
 import globalStyles from '../../../styles/globalStyles';
 import Images from '../../../constants/images';
 import DeleteAlert from '../../../components/DeleteAlert';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import RNFS from 'react-native-fs';
+
+const SearchSortFilter = ({
+  searchQuery,
+  setSearchQuery,
+  sortOption,
+  setSortOption,
+}) => {
+  const [visible, setVisible] = React.useState(false);
+  return (
+    <View style={styles.row_container}>
+      <TextInput
+        mode="outlined"
+        label={'Search'}
+        style={styles.searchInput}
+        placeholder="Search"
+        onChangeText={text => setSearchQuery(text)}
+        value={searchQuery}
+      />
+      <Menu
+        visible={visible}
+        contentStyle={{
+          backgroundColor: Colors.Background,
+        }}
+        onDismiss={() => setVisible(false)}
+        anchor={
+          <TouchableOpacity
+            style={styles.sortButtonContainer}
+            onPress={() => setVisible(true)}>
+            <FontAwesome name="sort" size={15} color={Colors.white} />
+            <Text style={styles.sortText}>
+              {sortOption === 'Newest' ? 'Newest' : sortOption}
+            </Text>
+          </TouchableOpacity>
+        }>
+        <Menu.Item
+          title="A to Z"
+          onPress={() => {
+            setSortOption('AtoZ');
+            setVisible(false);
+          }}
+          icon={sortOption === 'AtoZ' ? 'check' : 'none'}
+        />
+        <Menu.Item
+          title="Z to A"
+          onPress={() => {
+            setSortOption('ZtoA');
+            setVisible(false);
+          }}
+          icon={sortOption === 'ZtoA' ? 'check' : 'none'}
+        />
+        <Menu.Item
+          title="Newest"
+          onPress={() => {
+            setSortOption('Newest');
+            setVisible(false);
+          }}
+          icon={sortOption === 'Newest' ? 'check' : 'none'}
+        />
+        <Menu.Item
+          title="Oldest"
+          onPress={() => {
+            setSortOption('Oldest');
+            setVisible(false);
+          }}
+          icon={sortOption === 'Oldest' ? 'check' : 'none'}
+        />
+      </Menu>
+    </View>
+  );
+};
 
 const PhotoPost = ({navigation}) => {
   const [postData, setPostData] = useState({
@@ -41,6 +120,14 @@ const PhotoPost = ({navigation}) => {
   const [images, setImages] = useState([]);
   const [deleteAlertVisible, setDeleteAlertVisible] = useState(false);
   const [deletePostDocId, setDeletePostDocId] = useState('');
+  const [imageIndexId, setImageIndexId] = useState();
+
+  /******************************************************************************* */
+  /*****************************SearchSortFilterWork****************************** */
+  /******************************************************************************* */
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortOption, setSortOption] = useState('Newest');
+
   const {
     isLoading: getUserPostLoading,
     isFetching: getUserPostFetching,
@@ -80,20 +167,11 @@ const PhotoPost = ({navigation}) => {
       },
     });
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     getUserPostRefetch();
-  //     // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   }, [getUserPostRefetch, navigation]),
-  // );
-
   const fetchMore = () => {
     if (postData.page < postData.pages) {
       setPostData(prev => ({...prev, page: prev.page + 1}));
     }
   };
-
-  console.log(postData?.page);
 
   useEffect(() => {
     const unsubscribeBlur = navigation.addListener('blur', () => {
@@ -120,6 +198,71 @@ const PhotoPost = ({navigation}) => {
 
   const scrollViewRef = useRef(null);
 
+  const HandleRefresh = () => {
+    setPostData(prev => ({
+      ...prev,
+      list: [],
+      page: 1,
+      count: 0,
+      pages: 1,
+    }));
+  };
+
+  useEffect(() => {
+    if (postData.page === 1 && postData.list.length === 0) {
+      getUserPostRefetch();
+    }
+  }, [getUserPostRefetch, postData]);
+
+  // use this when the post name from the server would come
+  const filteredPostData = postData?.list?.filter(post =>
+    post?.postName?.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
+  const sortedBusinesses = [...(postData?.list || [])].sort((a, b) => {
+    switch (sortOption) {
+      case 'AtoZ':
+        return a?.postName?.localeCompare(b?.postName);
+      case 'ZtoA':
+        return b?.postName?.localeCompare(a?.postName);
+      case 'Newest':
+        return new Date(b?.createdOn) - new Date(a?.createdOn);
+      case 'Oldest':
+        return new Date(a?.createdOn) - new Date(b?.createdOn);
+      default:
+        return 0;
+    }
+  });
+
+  // Map all post images to required format
+  const allImages =
+    postData?.list?.map(post => {
+      return {
+        url: post?.postLink,
+      };
+    }) || [];
+
+  // Find the index of the selected image
+  const selectedIndex = postData?.list?.findIndex(
+    post => post?._id === imageIndexId,
+  );
+
+  const shareImage = async imageUrl => {
+    try {
+      const localImageUrl = await RNFS.downloadFile({
+        fromUrl: imageUrl,
+        toFile: `${RNFS.DocumentDirectoryPath}/temp.jpg`,
+      }).promise;
+
+      await Share.share({
+        url: `file://${localImageUrl}`,
+        title: 'Share image',
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Loader open={deleteUserPostLoading} text="Deleting Post..." />
@@ -127,6 +270,7 @@ const PhotoPost = ({navigation}) => {
       <Portal>
         <Modal
           visible={modalVisible}
+          transparent={true}
           onDismiss={() => {
             setModalVisible(false);
             setImages([]); // Clear images when modal is dismissed
@@ -135,9 +279,11 @@ const PhotoPost = ({navigation}) => {
           dismissableBackButton={true}
           contentContainerStyle={{flex: 1}}>
           <ImageView
-            imageUrls={images.map(url => ({url}))} // Map images to required format
+            imageUrls={allImages}
+            index={selectedIndex} // Show the selected image first
             enableSwipeDown={true}
             onSwipeDown={() => setModalVisible(false)}
+            useNativeDriver={true}
           />
         </Modal>
 
@@ -157,30 +303,21 @@ const PhotoPost = ({navigation}) => {
       <ImageBackground
         source={Images?.background}
         style={globalStyles.backgroundImage}>
-        <Text>Count: {postData?.count}</Text>
+        {/* <Text>Count: {postData?.count}</Text> */}
+        <SearchSortFilter
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          sortOption={sortOption}
+          setSortOption={setSortOption}
+        />
         <FlatList
           ref={scrollViewRef}
+          data={sortedBusinesses || []}
           contentContainerStyle={{
             padding: 10,
             justifyContent: 'center',
             alignItems: 'center',
           }}
-          refreshControl={
-            <RefreshControl
-              refreshing={getUserPostLoading || getUserPostFetching}
-              onRefresh={() => {
-                setPostData(prev => ({
-                  ...prev,
-                  list: [],
-                  page: 1,
-                  count: 0,
-                  pages: 1,
-                }));
-                getUserPostRefetch();
-              }}
-            />
-          }
-          data={postData?.list}
           renderItem={({item, index}) => {
             return (
               <TouchableOpacity
@@ -191,7 +328,8 @@ const PhotoPost = ({navigation}) => {
                   setDeletePostDocId(item?._id);
                 }}
                 onPress={() => {
-                  setImages([item?.postLink]);
+                  setImageIndexId(item?._id);
+                  // setImages([item?.postLink]);
                   setModalVisible(true);
                 }}
                 style={{
@@ -236,7 +374,15 @@ const PhotoPost = ({navigation}) => {
                       padding: 5,
                       textAlign: 'center',
                     }}>
-                    {moment(item?.createdOn).format('DD-MM-YYYY')}
+                    {moment().diff(moment(item?.createdOn), 'days') < 1
+                      ? `${moment().diff(
+                          moment(item?.createdOn),
+                          'hours',
+                        )} hours ago`
+                      : `${moment().diff(
+                          moment(item?.createdOn),
+                          'days',
+                        )} days ago`}
                   </Text>
                 </ImageBackground>
               </TouchableOpacity>
@@ -250,7 +396,15 @@ const PhotoPost = ({navigation}) => {
           )}
           keyExtractor={(item, index) => index?.toString()}
           onEndReached={postData.page < postData.pages ? fetchMore : null}
-          onEndReachedThreshold={0.5}
+          onEndReachedThreshold={0.2}
+          refreshControl={
+            <RefreshControl
+              refreshing={getUserPostLoading || getUserPostFetching}
+              onRefresh={async () => {
+                HandleRefresh();
+              }}
+            />
+          }
           ListFooterComponent={ListEndLoader}
           numColumns={2}
         />
@@ -261,4 +415,36 @@ const PhotoPost = ({navigation}) => {
 
 export default PhotoPost;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  row_container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  searchInput: {
+    width: '75%',
+    borderRadius: 10,
+    height: 40,
+    alignSelf: 'center',
+    margin: 5,
+  },
+  sortButtonContainer: {
+    backgroundColor: Colors.PRIMARY,
+    padding: 7,
+    height: Sizes.height * 0.04,
+    width: Sizes.width * 0.2,
+    margin: 5,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 5,
+  },
+  sortText: {
+    color: Colors.white,
+    fontWeight: '400',
+    fontSize: 14,
+    textAlign: 'center',
+    alignSelf: 'center',
+  },
+});

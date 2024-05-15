@@ -1,7 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
 import {
-  FlatList,
-  Image,
   ImageBackground,
   RefreshControl,
   ScrollView,
@@ -10,10 +8,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import styles from './style';
 import DashboardTopHeader from '../../components/DashboardTopHeader';
-import Images from '../../constants/images';
 import Sizes from '../../constants/Sizes';
 import Colors from '../../constants/Colors';
 import CustomCarousel from '../../components/CustomCarousel';
@@ -38,6 +35,7 @@ import {useDispatch} from 'react-redux';
 import {setUserDetails} from '../../services/reducer/CommonReducer';
 import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Home = ({navigation}) => {
   const [value, setValue] = React.useState('photo');
@@ -277,60 +275,81 @@ const Home = ({navigation}) => {
               <View style={styles.box_root}>
                 <TouchableOpacity
                   style={[
-                    styles.box,
+                    styles.naviContainer,
                     screenName === 'photo'
-                      ? {backgroundColor: '#FFB33920', borderColor: '#FFB339'}
+                      ? {
+                          backgroundColor: '#E9EEFE',
+                          borderColor: Colors.borderColor,
+                        }
                       : null,
                   ]}
                   onPress={() => setScreenName('photo')}>
-                  <Image
-                    source={Images.photo_video_icon}
-                    style={styles.box_image}
-                  />
+                  <View style={styles.iconContainer}>
+                    <MaterialIcons
+                      name="photo-library"
+                      size={24}
+                      alignSelf="center"
+                      color={Colors.PRIMARY}
+                    />
+                  </View>
+                  <View style={{height: Sizes.hp('4%'), top: 15}}>
+                    <Text style={styles.box_tittle}>Photos and Status</Text>
+                  </View>
                 </TouchableOpacity>
-                <View style={{height: Sizes.hp('4%')}}>
-                  <Text style={styles.box_tittle}>Photos and Status</Text>
-                </View>
               </View>
 
               {/* box for the remainder */}
               <View style={styles.box_root}>
                 <TouchableOpacity
                   style={[
-                    styles.box,
+                    styles.naviContainer,
                     screenName === 'remainder'
-                      ? {backgroundColor: '#20B2FB20', borderColor: '#20B2FB'}
+                      ? {
+                          backgroundColor: '#F6E8FB',
+                          borderColor: Colors.borderColor,
+                        }
                       : null,
                   ]}
                   onPress={() => setScreenName('remainder')}>
-                  <Image
-                    source={Images.remainder_icon}
-                    style={styles.box_image}
-                  />
+                  <View style={styles.iconContainer}>
+                    <MaterialIcons
+                      name="event-note"
+                      size={24}
+                      alignSelf="center"
+                      color={Colors.SECONDRY}
+                    />
+                  </View>
+                  <View style={{height: Sizes.hp('4%'), top: 15}}>
+                    <Text style={styles.box_tittle}>Events Remainder</Text>
+                  </View>
                 </TouchableOpacity>
-                <View style={{height: Sizes.hp('4%')}}>
-                  <Text style={styles.box_tittle}>Events Remainder</Text>
-                </View>
               </View>
 
               {/* box for the wallpaper */}
-              <View style={styles.box_root}>
+              <View style={styles.box_root1}>
                 <TouchableOpacity
                   style={[
-                    styles.box,
+                    styles.naviContainer,
                     screenName === 'wallpaper'
-                      ? {backgroundColor: '#D6363520', borderColor: '#D63635'}
+                      ? {
+                          backgroundColor: '#E9EEFE',
+                          borderColor: Colors.borderColor,
+                        }
                       : null,
                   ]}
                   onPress={() => setScreenName('wallpaper')}>
-                  <Image
-                    source={Images.wallpaper_icon}
-                    style={styles.box_image}
-                  />
+                  <View style={styles.iconContainer}>
+                    <MaterialIcons
+                      name="now-wallpaper"
+                      size={24}
+                      alignSelf="center"
+                      color={Colors.SECONDRY}
+                    />
+                  </View>
+                  <View style={{height: Sizes.hp('4%'), top: 15}}>
+                    <Text style={styles.box_tittle}>Wallpaper/RingTone</Text>
+                  </View>
                 </TouchableOpacity>
-                <View style={{height: Sizes.hp('4%')}}>
-                  <Text style={styles.box_tittle}>Wallpaper</Text>
-                </View>
               </View>
             </View>
 

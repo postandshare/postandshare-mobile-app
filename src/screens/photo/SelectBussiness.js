@@ -7,7 +7,7 @@ import {
   ToastAndroid,
   View,
 } from 'react-native';
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import MyBussinessCard from '../../components/MyBussinessCard';
 import images from '../../constants/images';
 import styles from './style';
@@ -18,10 +18,16 @@ import {useFocusEffect} from '@react-navigation/native';
 import NavigationScreenName from '../../constants/NavigationScreenName';
 import {getUserProfile} from '../../services/userServices/profile.services';
 import globalStyles from '../../styles/globalStyles';
+import CustomButton from '../../components/CustomButton';
+import SearchSortFilter from '../../components/SearchSortFilter';
 
 const SelectBussiness = ({route, navigation}) => {
   const {picData} = route?.params;
-  console.log(picData, 'selectbussiness');
+  /******************************************************************************* */
+  /*****************************SearchSortFilterWork****************************** */
+  /******************************************************************************* */
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortOption, setSortOption] = useState('Newest');
 
   const {
     isLoading: getAllBusinessListLoading,
@@ -70,6 +76,35 @@ const SelectBussiness = ({route, navigation}) => {
     }, [getAllBusinessListRefetch, navigation]),
   );
 
+  const filteredBusinesses = getAllBusinessList_Data?.data?.list?.filter(
+    business =>
+      business?.businessName
+        ?.toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      business?.volunteerName
+        ?.toLowerCase()
+        .includes(searchQuery.toLowerCase()),
+  );
+
+  const sortedBusinesses = [...(filteredBusinesses || [])].sort((a, b) => {
+    switch (sortOption) {
+      case 'AtoZ':
+        return (a?.businessName ?? a?.volunteerName)?.localeCompare(
+          b?.businessName ?? b?.volunteerName,
+        );
+      case 'ZtoA':
+        return (b?.businessName ?? b?.volunteerName)?.localeCompare(
+          a?.businessName ?? a?.volunteerName,
+        );
+      case 'Newest':
+        return new Date(b?.createdOn) - new Date(a?.createdOn);
+      case 'Oldest':
+        return new Date(a?.createdOn) - new Date(b?.createdOn);
+      default:
+        return 0;
+    }
+  });
+
   return (
     <>
       <TopHeader
@@ -105,8 +140,25 @@ const SelectBussiness = ({route, navigation}) => {
             </View>
           )}
 
+          {searchQuery.length > 0 && sortedBusinesses.length === 0 && (
+            <View style={styles.padded}>
+              <CustomButton
+                title={'No Business Found'}
+                secondary={false}
+                customStyle={styles.premium_Buttton}
+              />
+            </View>
+          )}
+
           <View style={styles.container}>
-            {getAllBusinessList_Data?.data?.list?.map((item, index) => (
+            <SearchSortFilter
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              sortOption={sortOption}
+              setSortOption={setSortOption}
+            />
+
+            {sortedBusinesses?.map((item, index) => (
               <MyBussinessCard
                 key={index}
                 name={item?.businessName ?? item?.volunteerName}
