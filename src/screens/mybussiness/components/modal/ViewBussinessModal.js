@@ -39,11 +39,6 @@ const ViewBussinessModal = ({
 
   const maxDisplay = 2;
 
-  console.log(
-    detailedBussiness?.fetchExistingPoliticalBusiness?.partyDocId?.partyName,
-    'detailedBussiness',
-  );
-
   return (
     <>
       <Modal
@@ -97,37 +92,44 @@ const ViewBussinessModal = ({
                         borderColor: Colors.borderColor,
                       }}
                       key={item?._id}>
-                      <Text
+                      <Image
+                        source={{
+                          uri: item?.leaderDocId?.leaderPhoto,
+                        }}
                         style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          color: Colors.TEXT1,
-                        }}>
-                        {String(item?.leaderDocId?.leaderName).slice(0, 1)}
-                      </Text>
+                          height: 40,
+                          width: 40,
+                          borderRadius: 50,
+                        }}
+                      />
                     </View>
                   );
                 })}
-              {/* {detailedBussiness?.fetchPoliticalLeaders?.length >
+              {detailedBussiness?.fetchPoliticalLeaders?.length >
                 maxDisplay && (
-                <Text
+                <View
                   style={{
-                    fontSize: 20,
-                    fontWeight: 'bold',
-                    color: Colors.TEXT1,
+                    height: 40,
+                    width: 40,
+                    borderRadius: 50,
+                    backgroundColor: Colors.white,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderWidth: 1,
+                    borderColor: Colors.borderColor,
                   }}>
-                  +{detailedBussiness?.businessPartnerList?.length - maxDisplay}
-                </Text>
-              )} */}
-              {/* <TouchableOpacity>
-                <FontAwesome
-                  name="pencil"
-                  size={24}
-                  color="black"
-                  alignSelf={'center'}
-                  style={{padding: 5}}
-                />
-              </TouchableOpacity> */}
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                      color: Colors.TEXT1,
+                    }}>
+                    +
+                    {detailedBussiness?.fetchPoliticalLeaders?.length -
+                      maxDisplay}
+                  </Text>
+                </View>
+              )}
             </View>
           )}
           {!detailedBussiness?.fetchPoliticalLeaders && (
@@ -155,36 +157,43 @@ const ViewBussinessModal = ({
                         borderColor: Colors.borderColor,
                       }}
                       key={item?._id}>
-                      <Text
+                      <Image
+                        source={{
+                          uri: item?.photo,
+                        }}
                         style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          color: Colors.TEXT1,
-                        }}>
-                        {String(item?.name).slice(0, 1)}
-                      </Text>
+                          height: 40,
+                          width: 40,
+                          borderRadius: 50,
+                        }}
+                      />
                     </View>
                   );
                 })}
-              {/* {detailedBussiness?.businessPartnerList?.length > maxDisplay && (
-                <Text
+              {detailedBussiness?.businessPartnerList?.length > maxDisplay && (
+                <View
                   style={{
-                    fontSize: 20,
-                    fontWeight: 'bold',
-                    color: Colors.TEXT1,
+                    height: 40,
+                    width: 40,
+                    borderRadius: 50,
+                    backgroundColor: Colors.white,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderWidth: 1,
+                    borderColor: Colors.borderColor,
                   }}>
-                  +{detailedBussiness?.businessPartnerList?.length - maxDisplay}
-                </Text>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                      color: Colors.TEXT1,
+                    }}>
+                    +
+                    {detailedBussiness?.businessPartnerList?.length -
+                      maxDisplay}
+                  </Text>
+                </View>
               )}
-              <TouchableOpacity>
-                <FontAwesome
-                  name="pencil"
-                  size={24}
-                  color="black"
-                  alignSelf={'center'}
-                  style={{padding: 5}}
-                />
-              </TouchableOpacity> */}
             </View>
           )}
         </View>

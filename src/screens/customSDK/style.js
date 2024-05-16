@@ -49,12 +49,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: Colors.PRIMARY,
+    borderColor: Colors.TEXT1,
     margin: 10,
   },
   frameText: {
     fontSize: 10,
-    color: Colors.SECONDRY,
+    color: Colors.TEXT1,
     fontWeight: 'bold',
   },
   button: {

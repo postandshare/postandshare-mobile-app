@@ -170,5 +170,22 @@ const globalStyles = StyleSheet.create({
     borderRadius: 10,
     shadowColor: 'rgba(61, 57, 137, 0.05)',
   },
+  add_button: {
+    height: Sizes.hp('6%'),
+    width: Sizes.hp('6%'),
+    borderRadius: Sizes.hp('5%'),
+    backgroundColor: Colors.PRIMARY,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    right: 20,
+    bottom: 30,
+    zIndex: 1,
+  },
+  add_icon: {
+    fontSize: scale(30),
+    color: '#fff',
+    elevation: 5,
+  },
 });
 export default globalStyles;

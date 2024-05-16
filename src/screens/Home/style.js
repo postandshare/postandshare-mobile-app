@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#3D398930',
+    borderColor: Colors.borderColor,
     justifyContent: 'center',
     marginVertical: 5,
   },
@@ -118,6 +118,8 @@ const styles = StyleSheet.create({
     width: Sizes.wp('30%'),
     resizeMode: 'cover',
     borderRadius: 10,
+    borderWidth: 1,
+    borderColor: Colors.borderColor,
   },
   uploadpic_container_dateview: {
     height: Sizes.hp('2%'),

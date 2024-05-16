@@ -1,3 +1,4 @@
+/* eslint-disable curly */
 /* eslint-disable react-native/no-inline-styles */
 import {
   ImageBackground,
@@ -356,7 +357,7 @@ const Home = ({navigation}) => {
             {screenName === 'photo' ? (
               <>
                 {/* container for photo and video status */}
-                <View
+                {/* <View
                   style={{
                     height: Sizes.hp('6%'),
                     width: Sizes.wp('90%'),
@@ -397,7 +398,7 @@ const Home = ({navigation}) => {
                       Videos
                     </Text>
                   </TouchableOpacity>
-                </View>
+                </View> */}
 
                 {value === 'photo' ? (
                   <>
@@ -449,14 +450,15 @@ const Home = ({navigation}) => {
                     {getTemplatesByBusiness_Data?.data?.list?.length > 0
                       ? getTemplatesByBusiness_Data?.data?.list?.map(
                           (item, index) => {
-                            return (
-                              <FlatListComponent
-                                key={index}
-                                navigation={navigation}
-                                data={item?.photoList}
-                                byLabel={item?.businessName}
-                              />
-                            );
+                            if (item?.photoList?.length > 0)
+                              return (
+                                <FlatListComponent
+                                  key={index}
+                                  navigation={navigation}
+                                  data={item?.photoList}
+                                  byLabel={item?.businessName}
+                                />
+                              );
                           },
                         )
                       : null}
@@ -485,6 +487,32 @@ const Home = ({navigation}) => {
             ) : null}
           </View>
         </ScrollView>
+
+        {value === 'video' ? (
+          <TouchableOpacity
+            style={globalStyles.add_button}
+            onPress={() => {
+              setValue('photo');
+            }}>
+            <MaterialIcons
+              name={'photo-camera-back'}
+              size={30}
+              style={globalStyles.add_icon}
+            />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={globalStyles.add_button}
+            onPress={() => {
+              setValue('video');
+            }}>
+            <MaterialIcons
+              name={'photo-camera-front'}
+              size={30}
+              style={globalStyles.add_icon}
+            />
+          </TouchableOpacity>
+        )}
       </ImageBackground>
     </>
   );

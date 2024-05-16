@@ -12,16 +12,17 @@ import Custom from '../screens/Custom';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import AddNavigatior from '../screens/add/index';
+import Colors from '../constants/Colors';
 
-// const Tab = createBottomTabNavigator();
-const Tab = createMaterialTopTabNavigator();
+const Tab = createBottomTabNavigator();
+// const Tab = createMaterialTopTabNavigator();
 const BottomTab = () => {
   return (
     <Tab.Navigator
-      tabBarPosition="bottom"
+      // tabBarPosition="bottom"
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#0A85FE',
+        tabBarActiveTintColor: Colors.PRIMARY,
         tabBarInactiveTintColor: '#0B1F32',
         swipeEnabled: true,
         animationEnabled: true,
@@ -40,7 +41,7 @@ const BottomTab = () => {
             <AntDesign
               name="home"
               size={focused ? 24 : 24}
-              color={focused ? '#0A85FE' : '#0B1F32'}
+              color={focused ? Colors.PRIMARY : '#0B1F32'}
             />
           ),
         }}
@@ -54,7 +55,7 @@ const BottomTab = () => {
             <AntDesign
               name="pluscircleo"
               size={focused ? 24 : 24}
-              color={focused ? '#0A85FE' : '#0B1F32'}
+              color={focused ? Colors.PRIMARY : '#0B1F32'}
             />
           ),
         }}
@@ -68,7 +69,7 @@ const BottomTab = () => {
             <AntDesign
               name="appstore-o"
               size={focused ? 24 : 24}
-              color={focused ? '#0A85FE' : '#0B1F32'}
+              color={focused ? Colors.PRIMARY : '#0B1F32'}
             />
           ),
         }}

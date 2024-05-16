@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   Dimensions,
   FlatList,
@@ -159,7 +160,12 @@ const CustomColorChange = ({
         <Text
           onLongPress={() => setShowModal(true)}
           // onPress={() => setShowTools(!showTools)}
-          style={{color: color, fontSize: fontSize, fontWeight: fontWeight}}>
+          style={{
+            color: color,
+            fontSize: fontSize,
+            fontWeight: fontWeight,
+            textAlign: 'center',
+          }}>
           {data}
         </Text>
       )}
@@ -1031,14 +1037,15 @@ const CustomSDK = ({route, navigation}) => {
                                   BusinessData?.address?.dist +
                                   ' ' +
                                   '\n' +
-                                  BusinessData?.address?.state +
-                                  ' ' +
-                                  '\n' +
-                                  BusinessData?.address?.pinCode +
-                                  ' ' +
-                                  '||' +
-                                  BusinessData?.address?.tehsil
-                                : BusinessData?.state
+                                  BusinessData?.address?.state
+                                : // +
+                                // ' ' +
+                                // '\n' +
+                                // BusinessData?.address?.pinCode +
+                                // ' ' +
+                                // '||' +
+                                // BusinessData?.address?.tehsil
+                                BusinessData?.state
                                 ? BusinessData?.state +
                                   ' ' +
                                   '||' +
@@ -1053,11 +1060,12 @@ const CustomSDK = ({route, navigation}) => {
                                   BusinessData?.currentAddress?.dist +
                                   ' ' +
                                   '\n' +
-                                  BusinessData?.currentAddress?.state +
-                                  ' ' +
-                                  '\n' +
-                                  BusinessData?.currentAddress?.pinCode
-                                : ToastAndroid.show(
+                                  BusinessData?.currentAddress?.state
+                                : // +
+                                  // ' ' +
+                                  // '\n' +
+                                  // BusinessData?.currentAddress?.pinCode
+                                  ToastAndroid.show(
                                     'Address is not available',
                                     ToastAndroid.LONG,
                                   )
@@ -1309,7 +1317,7 @@ const CustomSDK = ({route, navigation}) => {
               <MaterialCommunityIcons
                 name="text-recognition"
                 size={20}
-                color={Colors.SECONDRY}
+                color={Colors.TEXT1}
               />
               <Text style={styles.frameText}>Add Text</Text>
             </TouchableOpacity>
@@ -1326,7 +1334,7 @@ const CustomSDK = ({route, navigation}) => {
             <MaterialCommunityIcons
               name="sticker-emoji"
               size={20}
-              color={Colors.SECONDRY}
+              color={Colors.TEXT1}
             />
             <Text style={styles.frameText}>Sticker</Text>
           </TouchableOpacity> */}
@@ -1336,7 +1344,7 @@ const CustomSDK = ({route, navigation}) => {
               <MaterialCommunityIcons
                 name="draw"
                 size={30}
-                color={Colors.SECONDRY}
+                color={Colors.TEXT1}
               />
               <Text style={styles.frameText}>Font Style</Text>
             </TouchableOpacity>
@@ -1346,7 +1354,7 @@ const CustomSDK = ({route, navigation}) => {
               <MaterialCommunityIcons
                 name="star-four-points-outline"
                 size={20}
-                color={Colors.SECONDRY}
+                color={Colors.TEXT1}
               />
               <Text style={styles.frameText}>Glow</Text>
             </TouchableOpacity>

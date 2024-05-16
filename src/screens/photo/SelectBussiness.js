@@ -151,12 +151,14 @@ const SelectBussiness = ({route, navigation}) => {
           )}
 
           <View style={styles.container}>
-            <SearchSortFilter
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              sortOption={sortOption}
-              setSortOption={setSortOption}
-            />
+            {!getAllBusinessList_Data?.data?.list?.length === 0 && (
+              <SearchSortFilter
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                sortOption={sortOption}
+                setSortOption={setSortOption}
+              />
+            )}
 
             {sortedBusinesses?.map((item, index) => (
               <MyBussinessCard

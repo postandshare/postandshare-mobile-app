@@ -29,7 +29,7 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
                 byLabel,
               })
             }>
-            <Text style={styles.uploadpic_container_viewText}>View All</Text>
+            <Text style={styles.uploadpic_container_viewText}>see more</Text>
           </TouchableOpacity>
         </View>
 

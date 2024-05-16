@@ -63,7 +63,7 @@ const DashboardTopHeader = ({
               }}
             /> */}
                 {/* ) : ( */}
-                <FontAwesome5 name="user-alt" style={styles.userIcon} />
+                {/* <FontAwesome5 name="user-alt" style={styles.userIcon} /> */}
                 {/* )} */}
               </TouchableOpacity>
             </View>
