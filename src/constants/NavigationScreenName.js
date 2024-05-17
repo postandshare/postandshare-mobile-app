@@ -31,5 +31,6 @@ export default {
   TUTORIALS: 'Tutorial',
   Privacy_Policy: 'Privacy',
   FEEDBACK: 'FeedBack',
-  HELPSUPPORT:'HelpSupport'
+  HELPSUPPORT: 'HelpSupport',
+  NOTIFICATION: 'Notification',
 };

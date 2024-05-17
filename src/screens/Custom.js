@@ -39,6 +39,7 @@ import DashboardTopHeader from '../components/DashboardTopHeader';
 import Sizes from '../constants/Sizes';
 import images from '../constants/images';
 import globalStyles from '../styles/globalStyles';
+import NavigationScreenName from '../constants/NavigationScreenName';
 
 const generateSkiaImage = async path => {
   return await Skia.Data.fromURI(path).then(data =>
@@ -126,7 +127,7 @@ const Custom = ({navigation}) => {
   };
 
   const onPressNotification = () => {
-    // navigation.navigate('Notification');
+    navigation.navigate(NavigationScreenName.NOTIFICATION);
   };
 
   const onPresProfile = () => {

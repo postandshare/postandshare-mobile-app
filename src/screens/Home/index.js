@@ -37,6 +37,7 @@ import {setUserDetails} from '../../services/reducer/CommonReducer';
 import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import NavigationScreenName from '../../constants/NavigationScreenName';
 
 const Home = ({navigation}) => {
   const [value, setValue] = React.useState('photo');
@@ -47,7 +48,7 @@ const Home = ({navigation}) => {
     navigation.getParent('leftDrawer').openDrawer();
   };
   const onPressNotification = () => {
-    ToastAndroid.show('Notification is release soon', ToastAndroid.SHORT);
+    navigation.navigate(NavigationScreenName.NOTIFICATION);
   };
   const onPresProfile = () => {
     navigation.navigate('ProfileNavigator');

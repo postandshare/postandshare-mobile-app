@@ -1,11 +1,4 @@
-import {
-  Alert,
-  ImageBackground,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {StatusBar, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
@@ -14,12 +7,10 @@ import Splash from '../screens/onBoarding/Splash';
 import DrawerStack from './DrawerStack';
 import AuthStack from './AuthStack';
 import {useDispatch, useSelector} from 'react-redux';
-import {store} from '../services/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LocalStorageKey from '../constants/LocalStorageKey';
 import {setOnBoarding} from '../services/reducer/AuthSlice';
 import OnBoarding from '../screens/onBoarding';
-import BottomTab from './BottomTab';
 import ProfileNavigator from '../screens/profile/index';
 import TermAndCondtion from '../screens/term&condition';
 import MyBussinessNavigator from '../screens/mybussiness';
@@ -35,9 +26,9 @@ import HelpSupport from '../screens/helpSupport';
 import MonthPhotos from '../screens/thismonth';
 import OneSignal from 'react-native-onesignal';
 import Deeplinking from '../utils/linking';
-import images from '../constants/images';
 import Sizes from '../constants/Sizes';
 import Colors from '../constants/Colors';
+import Notification from '../screens/notification';
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -159,6 +150,10 @@ const Routes = () => {
                   component={HelpSupport}
                 />
                 <Stack.Screen name="MonthPhoto" component={MonthPhotos} />
+                <Stack.Screen
+                  name={NavigationScreenName.NOTIFICATION}
+                  component={Notification}
+                />
               </>
             )
           ) : (

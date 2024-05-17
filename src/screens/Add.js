@@ -2,6 +2,7 @@ import {Dimensions, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import DragDrop from '../components/DragDrop';
 import DashboardTopHeader from '../components/DashboardTopHeader';
+import NavigationScreenName from '../constants/NavigationScreenName';
 
 const Add = ({navigation}) => {
   const [dropInThePit, setDropInThePit] = React.useState(false);
@@ -20,7 +21,7 @@ const Add = ({navigation}) => {
   };
 
   const onPressNotification = () => {
-    // navigation.navigate('Notification');
+    navigation.navigate(NavigationScreenName.NOTIFICATION);
   };
 
   const onPresProfile = () => {
