@@ -350,7 +350,8 @@ export default ViewBussinessModal;
 
 const styles = StyleSheet.create({
   container: {
-    height: Sizes.hp('55%'),
+    // flex: 1,
+    height: Sizes.hp('60%'),
     width: Sizes.wp('90%'),
     alignSelf: 'center',
     backgroundColor: Colors.white,

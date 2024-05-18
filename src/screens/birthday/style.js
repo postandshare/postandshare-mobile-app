@@ -26,13 +26,20 @@ const styles = StyleSheet.create({
     color: Colors.TEXT1,
     margin: 10,
   },
+  Labeltitle: {
+    marginTop: 10,
+    paddingHorizontal: 10,
+    fontSize: 15,
+    fontWeight: '500',
+    color: Colors.TEXT1,
+  },
   textInputField: {
     width: '95%',
     marginTop: 5,
     alignSelf: 'center',
   },
   date_container: {
-    width: '95%',
+    width: '100%',
     marginTop: 5,
     alignSelf: 'center',
     borderWidth: 1,
@@ -51,7 +58,7 @@ const styles = StyleSheet.create({
   },
   photo_container: {
     flex: 1,
-    width: Sizes.wp('95%'),
+    width: '95%',
     height: Sizes.hp('20%'),
     backgroundColor: '#3D398910',
     justifyContent: 'center',
@@ -99,7 +106,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: Colors.TEXT1
+    borderColor: Colors.TEXT1,
   },
   textsms_view: {
     flexDirection: 'row',
@@ -120,7 +127,7 @@ const styles = StyleSheet.create({
   //create post
   container_textsms: {
     flexDirection: 'row',
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   view_container: {
     flex: 1,
@@ -128,7 +135,16 @@ const styles = StyleSheet.create({
     width: Sizes.wp('95%'),
     alignSelf: 'center',
     alignItems: 'center',
-  }
+  },
+  cardContainer: {
+    backgroundColor: Colors.white,
+    borderWidth: 1,
+    borderRadius: 10,
+    width: Sizes.wp('95%'),
+    alignSelf: 'center',
+    padding: 10,
+    borderColor: Colors.borderColor,
+  },
 });
 
 export default styles;

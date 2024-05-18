@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   },
   navigation_box_content: {flex: 1, flexDirection: 'row', alignItems: 'center'},
   uploadpic_container: {
-    height: Sizes.hp('22%'),
+    height: Sizes.hp('23%'),
     width: Sizes.wp('94%'),
     alignSelf: 'center',
     marginVertical: 10,
@@ -133,9 +133,9 @@ const styles = StyleSheet.create({
   },
   uploadpic_container_eventview: {
     zIndex: 1,
-    position: 'absolute',
-    bottom: 0,
-    marginVertical: -2,
+    // position: 'absolute',
+    // bottom: 0,
+    // marginVertical: -2,
   },
   uploadpic_container_date: {
     fontSize: 12,

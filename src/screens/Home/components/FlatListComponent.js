@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import {Image, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import {Dimensions, Image, Text, TouchableOpacity, View} from 'react-native';
+import React, {useCallback, useEffect, useRef} from 'react';
 import styles from '../style';
 import {FlatList} from 'react-native-actions-sheet';
 import {uploadedImages} from '../../../constants/images';
@@ -8,6 +8,39 @@ import NavigationScreenName from '../../../constants/NavigationScreenName';
 import moment from 'moment';
 import Colors from '../../../constants/Colors';
 import {ActivityIndicator} from 'react-native-paper';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from 'react-native-reanimated';
+import Sizes from '../../../constants/Sizes';
+const ScrollingText = ({style, children, cardWidth}) => {
+  const translateX = useSharedValue(cardWidth);
+
+  useEffect(() => {
+    translateX.value = withRepeat(
+      withTiming(-cardWidth, {duration: 500}),
+      -1,
+      true,
+    );
+  }, []);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{translateX: translateX.value}],
+    };
+  });
+
+  return (
+    <Animated.Text
+      style={[style, animatedStyle]}
+      numberOfLines={1}
+      ellipsizeMode="clip">
+      {children}
+    </Animated.Text>
+  );
+};
 
 const FlatListComponent = ({navigation, data, byLabel}) => {
   const [loading, setIsLoading] = React.useState(false);
@@ -87,11 +120,16 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
                       )} days ago`}
                 </Text>
                 <Text
-                  style={styles.uploadpic_container_eventname}
-                  numberOfLines={1}
-                  ellipsizeMode="tail">
+                  // numberOfLines={1}
+                  // ellipsizeMode="tail"
+                  style={styles.uploadpic_container_eventname}>
                   {item?.name ?? null}
                 </Text>
+                {/* <ScrollingText
+                  style={styles.uploadpic_container_eventname}
+                  cardWidth={50}>
+                  {item?.name ?? null}
+                </ScrollingText> */}
               </View>
             </View>
           )}

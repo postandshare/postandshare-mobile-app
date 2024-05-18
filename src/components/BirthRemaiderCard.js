@@ -52,37 +52,41 @@ const BirthRemaiderCard = ({item, navigation}) => {
           />
         </View>
         <View style={styles.item_details_container}>
-          <Text style={styles.item_name}>{item?.name}</Text>
-          <Text style={styles.item_date}>{item?.date}</Text>
-        </View>
-        {/* remaindee  */}
-        <View
-          style={[
-            styles.event_container,
-            {
-              borderColor: randomColor,
-              // backgroundColor:
-              //   LightColors_Card[Math.floor(Math.random() * Colors_Card.length)],
-            },
-          ]}>
-          <Text
+          <View style={{width: '50%'}}>
+            <Text style={styles.item_name}>{item?.name}</Text>
+            <Text style={styles.item_date}>
+              {item?.date}
+              {/* {moment(new Date(item?.date)).format('LLL')} */}
+            </Text>
+          </View>
+          {/* remaindee  */}
+          <View
             style={[
-              styles.event_text,
+              styles.event_container,
               {
-                color: randomColor,
+                borderColor: randomColor,
+                backgroundColor: randomColor + '20',
               },
             ]}>
-            {item?.event}
-          </Text>
+            <Text
+              style={[
+                styles.event_text,
+                {
+                  color: randomColor,
+                },
+              ]}>
+              {item?.event}
+            </Text>
+          </View>
         </View>
 
         {/* no of days remaining from the todays date */}
-        <View style={styles.event_remainder_container}>
+        {/* <View style={styles.event_remainder_container}>
           <Text style={styles.event_remainder_text}>
             {item?.day - new Date().getDay()}
           </Text>
           <Text style={styles.event_remainder_text}>Days</Text>
-        </View>
+        </View> */}
       </TouchableOpacity>
     </>
   );
@@ -105,7 +109,6 @@ const styles = StyleSheet.create({
     marginVertical: 12,
   },
   item_image_container: {
-    flex: 0.2,
     height: 55,
     width: 60,
     borderRadius: 50,
@@ -119,14 +122,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   item_details_container: {
-    flex: 0.6,
-    marginVertical: 2,
-    justifyContent: 'center',
+    alignSelf: 'center',
+    gap: 50,
+    flexDirection: 'row',
   },
   item_name: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: Colors.TEXT1,
+    color: Colors.PRIMARY,
   },
   item_date: {
     fontSize: 14,
@@ -136,31 +139,21 @@ const styles = StyleSheet.create({
   event_container: {
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'absolute',
-    right: 20,
-    top: -15,
-    zIndex: 1,
     borderWidth: 1,
+    width: Sizes.wp('20%'),
+    height: 30,
+    alignSelf: 'center',
     borderRadius: 10,
-    padding: 3,
-    marginVertical: 5,
   },
   event_text: {
     fontSize: 12,
     fontWeight: '500',
   },
   event_remainder_container: {
-    right: 30,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
     borderRadius: 30,
-    padding: 3,
-    height: 45,
-    width: 45,
-    top: 5,
-    borderColor: Colors.PRIMARY,
-    alignSelf: 'center',
   },
   event_remainder_text: {
     fontSize: 14,

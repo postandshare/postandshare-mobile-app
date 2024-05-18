@@ -1,14 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {ImageBackground} from 'react-native';
 import React, {useEffect} from 'react';
-import Animated , {
-    useSharedValue,
-    useAnimatedStyle,
-    withTiming,
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
 } from 'react-native-reanimated';
 import styles from './style';
 import Images from '../../constants/images';
-
 
 const Splash = () => {
   const Imagescale = useSharedValue(0);
@@ -18,7 +17,7 @@ const Splash = () => {
     };
   }, []);
   useEffect(() => {
-    Imagescale.value = withTiming(1, {duration: 2500});
+    Imagescale.value = withTiming(1, {duration: 1000});
   }, []);
 
   return (

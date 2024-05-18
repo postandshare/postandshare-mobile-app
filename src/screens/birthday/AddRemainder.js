@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   Image,
   PermissionsAndroid,
@@ -86,7 +87,6 @@ const AddRemainder = ({navigation}) => {
     }
   };
 
-
   const TakePhotofromGallery = async ({setValues, photo}) => {
     try {
       await PermissionsAndroid.request(
@@ -152,131 +152,150 @@ const AddRemainder = ({navigation}) => {
         nestedScrollEnabled
         contentContainerStyle={{
           flexGrow: 1,
+          paddingBottom: 20,
           backgroundColor: Colors.Background,
         }}>
-        <View style={styles.textInputField}>
-          <Text style={{color: Colors.TEXT1}}>Event Date</Text>
-          <TouchableOpacity
-            style={styles.date_container}
-            onPress={() => {
-              eventsAddFormik.setValues(prev => ({
-                ...prev,
-                open: true,
-              }));
-            }}>
-            <Text style={styles.placeHolder}>
-              {eventsAddFormik?.values?.eventDate
-                ? moment(eventsAddFormik?.values?.eventDate).format('LL')
-                : 'Please Select Date'}
-            </Text>
-            <Entypo name="calendar" size={24} color={Colors.TEXT1} />
-          </TouchableOpacity>
-        </View>
-        {eventsAddFormik.errors.eventDate && (
-          <Text style={globalStyles.error_text}>
-            {eventsAddFormik.errors.eventDate}
-          </Text>
-        )}
-        <View style={styles.textInputField}>
-          <Text style={{color: Colors.TEXT1}}>Select Event</Text>
-          <Dropdown
-            value={eventsAddFormik.values.selectedEvent}
-            label="Select Event*"
-            data={[
-              {label: 'Birthday', value: 'Birthday'},
-              {label: 'Anniversary', value: 'Anniversary'},
-              {label: 'Other', value: 'Other'},
-            ]}
-            onChangeValue={res => {
-              eventsAddFormik.setValues(prev => ({
-                ...prev,
-                selectedEvent: res,
-                eventName: res,
-              }));
-            }}
-          />
-        </View>
-        {eventsAddFormik.errors.selectedEvent && (
-          <Text style={globalStyles.error_text}>
-            {eventsAddFormik.errors.selectedEvent}
-          </Text>
-        )}
-
-        {eventsAddFormik?.values?.selectedEvent === 'Other' && (
+        <Text style={styles.Labeltitle}>Event</Text>
+        {/* container for selection of date and event name*/}
+        <View style={styles.cardContainer}>
           <View style={styles.textInputField}>
-            <Text style={{color: Colors.TEXT1}}>Event Name</Text>
-            <CustomTextInputFormik
-              formik={eventsAddFormik}
-              name="eventName"
-              label="Event Name"
+            <Text style={{color: Colors.TEXT1, fontWeight: '600'}}>
+              Event Date
+            </Text>
+            <TouchableOpacity
+              style={styles.date_container}
+              onPress={() => {
+                eventsAddFormik.setValues(prev => ({
+                  ...prev,
+                  open: true,
+                }));
+              }}>
+              <Text style={styles.placeHolder}>
+                {eventsAddFormik?.values?.eventDate
+                  ? moment(eventsAddFormik?.values?.eventDate).format('LL')
+                  : 'Please Select Date'}
+              </Text>
+              <Entypo name="calendar" size={24} color={Colors.TEXT1} />
+            </TouchableOpacity>
+          </View>
+          {eventsAddFormik.errors.eventDate && (
+            <Text style={globalStyles.error_text}>
+              {eventsAddFormik.errors.eventDate}
+            </Text>
+          )}
+          <View style={styles.textInputField}>
+            <Text style={{color: Colors.TEXT1, fontWeight: '600'}}>
+              Select Event
+            </Text>
+            <Dropdown
+              value={eventsAddFormik.values.selectedEvent}
+              label="Select Event*"
+              data={[
+                {label: 'Birthday', value: 'Birthday'},
+                {label: 'Anniversary', value: 'Anniversary'},
+                {label: 'Other', value: 'Other'},
+              ]}
+              onChangeValue={res => {
+                eventsAddFormik.setValues(prev => ({
+                  ...prev,
+                  selectedEvent: res,
+                  eventName: res,
+                }));
+              }}
             />
           </View>
-        )}
+          {eventsAddFormik.errors.selectedEvent && (
+            <Text style={globalStyles.error_text}>
+              {eventsAddFormik.errors.selectedEvent}
+            </Text>
+          )}
 
-        <View style={styles.textInputField}>
-          <Text style={{color: Colors.TEXT1}}>Person Name</Text>
-          <CustomTextInputFormik
-            formik={eventsAddFormik}
-            name="eventPerson"
-            label="Person Name"
-          />
-        </View>
-
-        <Text style={{color: Colors.TEXT1, paddingHorizontal: 10}}>
-          Event Photo
-        </Text>
-        <View style={styles.photo_container}>
-          {eventsAddFormik?.values?.eventPhoto ? (
-            <Image
-              source={{uri: eventsAddFormik?.values?.eventPhoto}}
-              style={{width: '100%', height: '100%', borderRadius: 10 , resizeMode: 'contain'}}
-            />
-          ) : (
-            <TouchableOpacity
-              onPress={() =>
-                TakePhotofromGallery({
-                  setValues: eventsAddFormik.setValues,
-                  photo: eventsAddFormik?.values?.eventPhoto,
-                })
-              }
-              style={styles.photo_button_container}>
-              <Text style={styles.photo_button_text}>Upload Photo</Text>
-            </TouchableOpacity>
+          {eventsAddFormik?.values?.selectedEvent === 'Other' && (
+            <View style={styles.textInputField}>
+              <Text style={{color: Colors.TEXT1, fontWeight: '600'}}>
+                Event Name
+              </Text>
+              <CustomTextInputFormik
+                formik={eventsAddFormik}
+                name="eventName"
+                label="Event Name"
+              />
+            </View>
           )}
         </View>
 
-        <View style={styles.textInputField}>
-          <Text style={{color: Colors.TEXT1}}>Person Nick Name</Text>
-          <CustomTextInputFormik
-            formik={eventsAddFormik}
-            name="eventPersonNickName"
-            label="Person Nick Name"
-          />
-        </View>
+        <Text style={styles.Labeltitle}>Person Details</Text>
+        {/* container for person name and photo */}
+        <View style={[styles.cardContainer]}>
+          <Text style={{color: Colors.TEXT1, paddingHorizontal: 10}}>
+            Event Photo
+          </Text>
+          <View style={styles.photo_container}>
+            {eventsAddFormik?.values?.eventPhoto ? (
+              <Image
+                source={{uri: eventsAddFormik?.values?.eventPhoto}}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: 10,
+                  resizeMode: 'contain',
+                }}
+              />
+            ) : (
+              <TouchableOpacity
+                onPress={() =>
+                  TakePhotofromGallery({
+                    setValues: eventsAddFormik.setValues,
+                    photo: eventsAddFormik?.values?.eventPhoto,
+                  })
+                }
+                style={styles.photo_button_container}>
+                <Text style={styles.photo_button_text}>Upload Photo</Text>
+              </TouchableOpacity>
+            )}
+          </View>
 
-        {eventsAddFormik?.values?.selectedEvent === 'Anniversary' && (
           <View style={styles.textInputField}>
-            <Text style={{color: Colors.TEXT1}}> Second Person Name</Text>
+            <Text style={{color: Colors.TEXT1}}>Person Name</Text>
             <CustomTextInputFormik
               formik={eventsAddFormik}
-              name="eventPerson1"
-              label=" Second Person Name"
+              name="eventPerson"
+              label="Person Name"
             />
           </View>
-        )}
 
-        {eventsAddFormik?.values?.selectedEvent === 'Anniversary' && (
           <View style={styles.textInputField}>
-            <Text style={{color: Colors.TEXT1}}>Second Person Nick Name</Text>
+            <Text style={{color: Colors.TEXT1}}>Person Nick Name</Text>
             <CustomTextInputFormik
               formik={eventsAddFormik}
-              name="eventPersonNickName1"
-              label="Second Person Nick Name"
+              name="eventPersonNickName"
+              label="Person Nick Name"
             />
           </View>
-        )}
 
-        {/* {eventsAddFormik?.values?.selectedEvent === 'Anniversary' && (
+          {eventsAddFormik?.values?.selectedEvent === 'Anniversary' && (
+            <View style={styles.textInputField}>
+              <Text style={{color: Colors.TEXT1}}> Second Person Name</Text>
+              <CustomTextInputFormik
+                formik={eventsAddFormik}
+                name="eventPerson1"
+                label=" Second Person Name"
+              />
+            </View>
+          )}
+
+          {eventsAddFormik?.values?.selectedEvent === 'Anniversary' && (
+            <View style={styles.textInputField}>
+              <Text style={{color: Colors.TEXT1}}>Second Person Nick Name</Text>
+              <CustomTextInputFormik
+                formik={eventsAddFormik}
+                name="eventPersonNickName1"
+                label="Second Person Nick Name"
+              />
+            </View>
+          )}
+
+          {/* {eventsAddFormik?.values?.selectedEvent === 'Anniversary' && (
           <>
             <Text style={{color: Colors.TEXT1, paddingHorizontal: 10}}>
               Second Person Photo
@@ -303,14 +322,15 @@ const AddRemainder = ({navigation}) => {
           </>
         )} */}
 
-        <View style={styles.textInputField}>
-          <Text style={{color: Colors.TEXT1}}>Note</Text>
-          <CustomTextInputFormik
-            formik={eventsAddFormik}
-            name="note"
-            label="Note"
-            numberOfLines={3}
-          />
+          <View style={styles.textInputField}>
+            <Text style={{color: Colors.TEXT1}}>Note</Text>
+            <CustomTextInputFormik
+              formik={eventsAddFormik}
+              name="note"
+              label="Note"
+              numberOfLines={3}
+            />
+          </View>
         </View>
 
         <CustomButton

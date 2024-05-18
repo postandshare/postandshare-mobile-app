@@ -59,7 +59,7 @@ const Routes = () => {
       setState(false);
       OneSignal.setAppId('81677935-54bb-44f5-ade2-2b4ea34c4eba');
       console.log('OneSignal');
-    }, 3000);
+    }, 1000);
     getOnboarding();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
