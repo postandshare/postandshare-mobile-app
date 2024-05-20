@@ -7,13 +7,12 @@ import {
   ToastAndroid,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback} from 'react';
 import TopHeader from '../../components/TopHeader';
 import styles from './style';
 import {getUserProfile} from '../../services/userServices/profile.services';
 import {useQuery} from '@tanstack/react-query';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import moment from 'moment';
 import Colors from '../../constants/Colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Skeleton} from 'moti/skeleton';
@@ -74,6 +73,7 @@ const ProfileView = ({}) => {
   useFocusEffect(
     useCallback(() => {
       getUserProfileRefetch();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigation]),
   );
 

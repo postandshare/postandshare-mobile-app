@@ -176,16 +176,13 @@ const CustomColorChange = ({
 const FrameSelection = ({
   setFrameImg,
   setShowFrameImg,
-  state,
   setState,
   item,
   setSelectedIndex,
   selectedIndex,
   showFrameImg,
+  getOrgFrame_Data,
   index,
-  position,
-  setPosition,
-  logoPosition,
   setLogoPosition,
   setMobileNumPosition,
   setEmailPosition,
@@ -195,6 +192,62 @@ const FrameSelection = ({
   const [laoding, setLoading] = useState(false);
   const isSelected = selectedIndex === index;
 
+  const handleFrameSelection = async () => {
+    setLoading(true);
+    await setLogoPosition({
+      x: item?.contentLocation?.logo?.x_axis ?? 0,
+      y: item?.contentLocation?.logo?.y_axis ?? 0,
+      color: item?.contentLocation?.logo?.fontColor ?? '#fff',
+      fontSize: item?.contentLocation?.logo?.fontSize ?? 18,
+    });
+    await setMobileNumPosition({
+      x: item?.contentLocation?.mobileNumber?.x_axis ?? 100,
+      y: item?.contentLocation?.mobileNumber?.y_axis ?? 200,
+      color: item?.contentLocation?.mobileNumber?.fontColor ?? '#fff',
+      fontSize: item?.contentLocation?.mobileNumber?.fontSize ?? 18,
+    });
+    await setEmailPosition({
+      x: item?.contentLocation?.email?.x_axis ?? 50,
+      y: item?.contentLocation?.email?.y_axis ?? 100,
+      color: item?.contentLocation?.email?.fontColor ?? '#7160c7',
+      fontSize: item?.contentLocation?.email?.fontSize ?? 18,
+    });
+    await setLocationPosition({
+      x: item?.contentLocation?.address?.x_axis ?? 80,
+      y: item?.contentLocation?.address?.y_axis ?? 100,
+      color: item?.contentLocation?.address?.fontColor ?? '#2d235f',
+      fontSize: item?.contentLocation?.address?.fontSize ?? 18,
+    });
+    await setWhatsAppPosition({
+      x: item?.contentLocation?.whatsappNumber?.x_axis ?? 120,
+      y: item?.contentLocation?.whatsappNumber?.y_axis ?? 100,
+      color: item?.contentLocation?.whatsappNumber?.fontColor ?? '#fff',
+      fontSize: item?.contentLocation?.whatsappNumber?.fontSize ?? 18,
+    });
+
+    setState(prev => ({
+      ...prev,
+      location: false,
+      mobile: false,
+      email: false,
+      whatsApp: false,
+      logo: false,
+    }));
+    setShowFrameImg(true);
+    setFrameImg(item?.framePic);
+    setSelectedIndex(index);
+
+    setState(prev => ({
+      ...prev,
+      location: true,
+      mobile: true,
+      email: true,
+      whatsApp: true,
+      logo: true,
+    }));
+    setLoading(false);
+  };
+
   return (
     <TouchableOpacity
       style={[
@@ -203,61 +256,7 @@ const FrameSelection = ({
           : {backgroundColor: Colors.white},
         styles.frame,
       ]}
-      onPress={async () => {
-        setLoading(true);
-        await setLogoPosition({
-          x: item?.contentLocation?.logo?.x_axis ?? 0,
-          y: item?.contentLocation?.logo?.y_axis ?? 0,
-          color: item?.contentLocation?.logo?.fontColor ?? '#fff',
-          fontSize: item?.contentLocation?.logo?.fontSize ?? 18,
-        });
-        await setMobileNumPosition({
-          x: item?.contentLocation?.mobileNumber?.x_axis ?? 100,
-          y: item?.contentLocation?.mobileNumber?.y_axis ?? 200,
-          color: item?.contentLocation?.mobileNumber?.fontColor ?? '#fff',
-          fontSize: item?.contentLocation?.mobileNumber?.fontSize ?? 18,
-        });
-        await setEmailPosition({
-          x: item?.contentLocation?.email?.x_axis ?? 50,
-          y: item?.contentLocation?.email?.y_axis ?? 100,
-          color: item?.contentLocation?.email?.fontColor ?? '#7160c7',
-          fontSize: item?.contentLocation?.email?.fontSize ?? 18,
-        });
-        await setLocationPosition({
-          x: item?.contentLocation?.address?.x_axis ?? 80,
-          y: item?.contentLocation?.address?.y_axis ?? 100,
-          color: item?.contentLocation?.address?.fontColor ?? '#2d235f',
-          fontSize: item?.contentLocation?.address?.fontSize ?? 18,
-        });
-        await setWhatsAppPosition({
-          x: item?.contentLocation?.whatsappNumber?.x_axis ?? 120,
-          y: item?.contentLocation?.whatsappNumber?.y_axis ?? 100,
-          color: item?.contentLocation?.whatsappNumber?.fontColor ?? '#fff',
-          fontSize: item?.contentLocation?.whatsappNumber?.fontSize ?? 18,
-        });
-
-        setState(prev => ({
-          ...prev,
-          location: false,
-          mobile: false,
-          email: false,
-          whatsApp: false,
-          logo: false,
-        }));
-        setShowFrameImg(true);
-        setFrameImg(item?.framePic);
-        setSelectedIndex(index);
-
-        setState(prev => ({
-          ...prev,
-          location: true,
-          mobile: true,
-          email: true,
-          whatsApp: true,
-          logo: true,
-        }));
-        setLoading(false);
-      }}>
+      onPress={handleFrameSelection}>
       <Image
         source={{uri: item?.framePic}}
         style={{
@@ -266,8 +265,6 @@ const FrameSelection = ({
           borderRadius: 5,
         }}
       />
-
-      {/* <Text style={styles.frameText}>{item?.frameCode}</Text> */}
     </TouchableOpacity>
   );
 };
@@ -312,7 +309,7 @@ const CustomSDK = ({route, navigation}) => {
   const [showBorderBox, setShowBorderBox] = useState(false);
   const imgData = picData;
   const BusinessData = businessDetails;
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [showSticker, setShowSticker] = useState(false);
   const [stickers, setStickers] = useState();
   const [picUrl, setPicUrl] = React.useState('');
@@ -643,7 +640,11 @@ const CustomSDK = ({route, navigation}) => {
                     ]}>
                     <Text
                       style={[
-                        fontFamily === item ? {color: Colors.PRIMARY} : null,
+                        fontFamily === item
+                          ? {color: Colors.PRIMARY}
+                          : {
+                              color: Colors.TEXT1,
+                            },
                         {fontFamily: item},
                         styles.item_content,
                       ]}>
@@ -889,10 +890,7 @@ const CustomSDK = ({route, navigation}) => {
                         onDrag={drag}
                         onDrop={drop}
                         intialX={logoPosition?.x}
-                        intialY={logoPosition?.y}
-                        // intialX={position?.logo?.x}
-                        // intialY={position?.logo?.y}
-                      >
+                        intialY={logoPosition?.y}>
                         <Image
                           source={
                             BusinessData
@@ -927,10 +925,7 @@ const CustomSDK = ({route, navigation}) => {
                         onDrag={drag}
                         onDrop={drop}
                         intialX={mobileNumPosition?.x}
-                        intialY={mobileNumPosition?.y}
-                        // intialX={150}
-                        // intialY={300}
-                      >
+                        intialY={mobileNumPosition?.y}>
                         <View
                           style={{
                             position: 'absolute',
@@ -985,10 +980,7 @@ const CustomSDK = ({route, navigation}) => {
                         onDrag={drag}
                         onDrop={drop}
                         intialX={emailPosition?.x}
-                        intialY={emailPosition?.y}
-
-                        // setShowModal={setShowModal}
-                      >
+                        intialY={emailPosition?.y}>
                         <Text
                           style={{
                             fontSize: 18,
@@ -1170,45 +1162,46 @@ const CustomSDK = ({route, navigation}) => {
           )}
 
           {/* aditional details like logo, location etc */}
-          <ScrollView
-            horizontal
-            contentContainerStyle={styles.additionalDetailsContainer}
-            showsHorizontalScrollIndicator={false}>
-            <TouchableOpacity
-              style={[
-                state?.location ? {backgroundColor: Colors.PRIMARY} : {},
-                styles.additionalDetails,
-              ]}
-              onPress={() =>
-                setState(prev => ({...prev, location: !state?.location}))
-              }>
-              <Entypo
-                name="location-pin"
-                size={30}
-                color={state?.location ? Colors.white : Colors.TEXT1}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() =>
-                setState(prev => ({
-                  ...prev,
-                  logo: !state?.logo,
-                }))
-              }
-              style={[
-                state?.logo ? {backgroundColor: Colors.PRIMARY} : {},
-                styles.additionalDetails,
-              ]}>
-              <Text
+          {showFrameImg && (
+            <ScrollView
+              horizontal
+              contentContainerStyle={styles.additionalDetailsContainer}
+              showsHorizontalScrollIndicator={false}>
+              <TouchableOpacity
                 style={[
-                  state?.logo ? {color: Colors.white} : {color: Colors.TEXT1},
-                  styles.additionalDetailsText,
-                  {fontStyle: 'italic'},
+                  state?.location ? {backgroundColor: Colors.PRIMARY} : {},
+                  styles.additionalDetails,
+                ]}
+                onPress={() =>
+                  setState(prev => ({...prev, location: !state?.location}))
+                }>
+                <Entypo
+                  name="location-pin"
+                  size={30}
+                  color={state?.location ? Colors.white : Colors.TEXT1}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  setState(prev => ({
+                    ...prev,
+                    logo: !state?.logo,
+                  }))
+                }
+                style={[
+                  state?.logo ? {backgroundColor: Colors.PRIMARY} : {},
+                  styles.additionalDetails,
                 ]}>
-                LOGO
-              </Text>
-            </TouchableOpacity>
-            {/* <TouchableOpacity
+                <Text
+                  style={[
+                    state?.logo ? {color: Colors.white} : {color: Colors.TEXT1},
+                    styles.additionalDetailsText,
+                    {fontStyle: 'italic'},
+                  ]}>
+                  LOGO
+                </Text>
+              </TouchableOpacity>
+              {/* <TouchableOpacity
             style={[
               state?.image ? {backgroundColor: Colors.PRIMARY} : {},
               styles.additionalDetails,
@@ -1221,49 +1214,49 @@ const CustomSDK = ({route, navigation}) => {
               }
             />
           </TouchableOpacity> */}
-            <TouchableOpacity
-              style={[
-                state?.mobile ? {backgroundColor: Colors.PRIMARY} : {},
-                styles.additionalDetails,
-              ]}
-              onPress={() =>
-                setState(prev => ({...prev, mobile: !state?.mobile}))
-              }>
-              <AntDesign
-                name="mobile1"
-                size={30}
-                color={state?.mobile ? Colors.white : Colors.TEXT1}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                state?.whatsApp ? {backgroundColor: Colors.PRIMARY} : {},
-                styles.additionalDetails,
-              ]}
-              onPress={() =>
-                setState(prev => ({...prev, whatsApp: !state?.whatsApp}))
-              }>
-              <FontAwesome
-                name="whatsapp"
-                size={30}
-                color={state?.whatsApp ? Colors.white : Colors.TEXT1}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                state?.email ? {backgroundColor: Colors.PRIMARY} : {},
-                styles.additionalDetails,
-              ]}
-              onPress={() =>
-                setState(prev => ({...prev, email: !state?.email}))
-              }>
-              <AntDesign
-                name="mail"
-                size={30}
-                color={state?.email ? Colors.white : Colors.TEXT1}
-              />
-            </TouchableOpacity>
-            {/* <TouchableOpacity
+              <TouchableOpacity
+                style={[
+                  state?.mobile ? {backgroundColor: Colors.PRIMARY} : {},
+                  styles.additionalDetails,
+                ]}
+                onPress={() =>
+                  setState(prev => ({...prev, mobile: !state?.mobile}))
+                }>
+                <AntDesign
+                  name="mobile1"
+                  size={30}
+                  color={state?.mobile ? Colors.white : Colors.TEXT1}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  state?.whatsApp ? {backgroundColor: Colors.PRIMARY} : {},
+                  styles.additionalDetails,
+                ]}
+                onPress={() =>
+                  setState(prev => ({...prev, whatsApp: !state?.whatsApp}))
+                }>
+                <FontAwesome
+                  name="whatsapp"
+                  size={30}
+                  color={state?.whatsApp ? Colors.white : Colors.TEXT1}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  state?.email ? {backgroundColor: Colors.PRIMARY} : {},
+                  styles.additionalDetails,
+                ]}
+                onPress={() =>
+                  setState(prev => ({...prev, email: !state?.email}))
+                }>
+                <AntDesign
+                  name="mail"
+                  size={30}
+                  color={state?.email ? Colors.white : Colors.TEXT1}
+                />
+              </TouchableOpacity>
+              {/* <TouchableOpacity
             style={[
               state?.facebook ? {backgroundColor: Colors.PRIMARY} : {},
               styles.additionalDetails,
@@ -1274,12 +1267,13 @@ const CustomSDK = ({route, navigation}) => {
               color={state?.facebook ? Colors.white : Colors.TEXT1}
             />
           </TouchableOpacity> */}
-          </ScrollView>
+            </ScrollView>
+          )}
 
           {/* for frame selection  */}
           <ScrollView
             horizontal
-            contentContainerStyle={styles.frameContainer}
+            contentContainerStyle={showFrameImg && styles.frameContainer}
             showsHorizontalScrollIndicator={false}>
             {getOrgFrame_Data?.data?.list?.map((item, index) => (
               <FrameSelection
@@ -1290,11 +1284,9 @@ const CustomSDK = ({route, navigation}) => {
                 setSelectedIndex={setSelectedIndex}
                 selectedIndex={selectedIndex}
                 index={index}
-                setShowFrame1={setShowFrame1}
-                setShowFrame2={setShowFrame2}
-                setShowFrame3={setShowFrame3}
                 setFrame={setFrame}
                 key={index}
+                getOrgFrame_Data={getOrgFrame_Data}
                 setLogoPosition={setLogoPosition}
                 state={state}
                 setState={setState}
@@ -1307,22 +1299,23 @@ const CustomSDK = ({route, navigation}) => {
           </ScrollView>
 
           {/* effects on screen */}
-          <ScrollView
-            horizontal
-            contentContainerStyle={styles.frameContainer}
-            showsHorizontalScrollIndicator={false}>
-            <TouchableOpacity
-              style={styles.frame}
-              onPress={() => setVisible(true)}>
-              <MaterialCommunityIcons
-                name="text-recognition"
-                size={20}
-                color={Colors.TEXT1}
-              />
-              <Text style={styles.frameText}>Add Text</Text>
-            </TouchableOpacity>
-            {/* sticker */}
-            {/* <TouchableOpacity
+          {showFrameImg && (
+            <ScrollView
+              horizontal
+              contentContainerStyle={styles.frameContainer}
+              showsHorizontalScrollIndicator={false}>
+              <TouchableOpacity
+                style={styles.frame}
+                onPress={() => setVisible(true)}>
+                <MaterialCommunityIcons
+                  name="text-recognition"
+                  size={20}
+                  color={Colors.TEXT1}
+                />
+                <Text style={styles.frameText}>Add Text</Text>
+              </TouchableOpacity>
+              {/* sticker */}
+              {/* <TouchableOpacity
             onPress={() => {
               if (stickers) {
                 setShowSticker(!showSticker);
@@ -1338,45 +1331,46 @@ const CustomSDK = ({route, navigation}) => {
             />
             <Text style={styles.frameText}>Sticker</Text>
           </TouchableOpacity> */}
-            <TouchableOpacity
-              onPress={() => setShowFontFamily(true)}
-              style={styles.frame}>
-              <MaterialCommunityIcons
-                name="draw"
-                size={30}
-                color={Colors.TEXT1}
-              />
-              <Text style={styles.frameText}>Font Style</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setShowModal(true)}
-              style={styles.frame}>
-              <MaterialCommunityIcons
-                name="star-four-points-outline"
-                size={20}
-                color={Colors.TEXT1}
-              />
-              <Text style={styles.frameText}>Glow</Text>
-            </TouchableOpacity>
-            <View style={styles.frame}>
-              <Text style={styles.frameText}>Effect 5</Text>
-            </View>
-            <View style={styles.frame}>
-              <Text style={styles.frameText}>Effect 6</Text>
-            </View>
-            <View style={styles.frame}>
-              <Text style={styles.frameText}>Effect 7</Text>
-            </View>
-            <View style={styles.frame}>
-              <Text style={styles.frameText}>Effect 8</Text>
-            </View>
-            <View style={styles.frame}>
-              <Text style={styles.frameText}>Effect 9</Text>
-            </View>
-            <View style={styles.frame}>
-              <Text style={styles.frameText}>Effect 10</Text>
-            </View>
-          </ScrollView>
+              <TouchableOpacity
+                onPress={() => setShowFontFamily(true)}
+                style={styles.frame}>
+                <MaterialCommunityIcons
+                  name="draw"
+                  size={30}
+                  color={Colors.TEXT1}
+                />
+                <Text style={styles.frameText}>Font Style</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setShowModal(true)}
+                style={styles.frame}>
+                <MaterialCommunityIcons
+                  name="star-four-points-outline"
+                  size={20}
+                  color={Colors.TEXT1}
+                />
+                <Text style={styles.frameText}>Glow</Text>
+              </TouchableOpacity>
+              <View style={styles.frame}>
+                <Text style={styles.frameText}>Effect 5</Text>
+              </View>
+              <View style={styles.frame}>
+                <Text style={styles.frameText}>Effect 6</Text>
+              </View>
+              <View style={styles.frame}>
+                <Text style={styles.frameText}>Effect 7</Text>
+              </View>
+              <View style={styles.frame}>
+                <Text style={styles.frameText}>Effect 8</Text>
+              </View>
+              <View style={styles.frame}>
+                <Text style={styles.frameText}>Effect 9</Text>
+              </View>
+              <View style={styles.frame}>
+                <Text style={styles.frameText}>Effect 10</Text>
+              </View>
+            </ScrollView>
+          )}
         </ScrollView>
       </ImageBackground>
     </>

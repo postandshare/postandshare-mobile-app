@@ -430,7 +430,7 @@ const styles = StyleSheet.create({
   },
   sortButtonContainer: {
     backgroundColor: Colors.PRIMARY,
-    padding: 7,
+    // padding: 7,
     height: Sizes.height * 0.04,
     width: Sizes.width * 0.2,
     margin: 5,

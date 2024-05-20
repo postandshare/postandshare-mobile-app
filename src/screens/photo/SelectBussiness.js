@@ -163,6 +163,12 @@ const SelectBussiness = ({route, navigation}) => {
             {sortedBusinesses?.map((item, index) => (
               <MyBussinessCard
                 key={index}
+                details={
+                  item?.description ??
+                  (item?.volunteerDetail === ''
+                    ? 'No Description'
+                    : item?.volunteerDetail)
+                }
                 name={item?.businessName ?? item?.volunteerName}
                 EstblishmentDate={item?.createdOn}
                 image={item?.logo ?? item?.partyLogo}

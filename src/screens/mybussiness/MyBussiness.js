@@ -268,6 +268,12 @@ const MyBussiness = ({navigation, route}) => {
                 image={item?.logo ?? item?.partyLogo}
                 userDocId={item?._id}
                 lastUpdated={item?.lastUpdated ?? item?.createdOn}
+                details={
+                  item?.description ??
+                  (item?.volunteerDetail === ''
+                    ? 'No Description'
+                    : item?.volunteerDetail)
+                }
                 onPress={() =>
                   picData
                     ? navigation.navigate('CustomSDK', {

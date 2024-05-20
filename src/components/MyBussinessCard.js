@@ -17,6 +17,7 @@ const MyBussinessCard = ({
   onPressEdit,
   onPressForPhotoEdit,
   data = {},
+  details,
 }) => {
   return (
     <TouchableOpacity
@@ -45,6 +46,7 @@ const MyBussinessCard = ({
       {/* bussiness name and est date */}
       <View style={styles.name_container}>
         <Text style={styles.bussinessName}>{name}</Text>
+        <Text style={styles.est_date}>{details ?? '--'}</Text>
         <Text style={styles.est_date}>
           {moment(EstblishmentDate).format('LL')}
         </Text>
@@ -66,7 +68,6 @@ const styles = StyleSheet.create({
   root_container: {
     flex: 1,
     width: Sizes.wp('95%'),
-    maxHeight: Sizes.hp('10%'),
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#3D398945',
@@ -90,7 +91,6 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   est_date: {
-    flex: 1,
     color: Colors.TEXT1,
     fontSize: 14,
     fontWeight: '500',

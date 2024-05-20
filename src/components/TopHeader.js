@@ -16,6 +16,7 @@ import {useDispatch} from 'react-redux';
 import {setLogout} from '../services/reducer/AuthSlice';
 import Images from '../constants/images';
 import Sizes from '../constants/Sizes';
+import Colors from '../constants/Colors';
 
 const TopHeader = ({
   titile,
@@ -72,7 +73,7 @@ const TopHeader = ({
         </View>
       ) : add ? (
         <TouchableOpacity onPress={onPress}>
-          <AntDesign name={'plussquareo'} size={26} color="white" />
+          <AntDesign name={'plussquareo'} size={26} color={Colors.TEXT1} />
         </TouchableOpacity>
       ) : icon ? (
         <TouchableOpacity onPress={onPress}>
@@ -101,9 +102,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: Sizes.wp('5%'),
-    backgroundColor: 'rgba(64, 64, 64, 0.46)',
+    backgroundColor: '#FAFAFA',
+    borderWidth: 1,
+    borderColor: '#40404029',
     opacity: 1,
     paddingTop: Sizes.hp('5%'),
+    elevation: 5,
   },
   left_wrap: {
     flexDirection: 'row',
@@ -130,7 +134,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1.2,
   },
   icon: {
-    color: '#fff',
+    color: Colors.TEXT1,
     fontSize: scale(25),
   },
   notificationIconContainer: {

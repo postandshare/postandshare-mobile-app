@@ -93,7 +93,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: Sizes.wp('3%'),
     paddingTop: Sizes.hp('5%'),
-    backgroundColor: 'rgba(64, 64, 64, 0.46)',
+    backgroundColor: '#FAFAFA',
+    borderWidth: 1,
+    borderColor: '#40404029',
+    opacity: 1,
+    elevation: 5,
   },
   left_wrap: {
     flexDirection: 'row',

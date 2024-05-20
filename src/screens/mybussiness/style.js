@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   searchInput: {
-    width: '80%',
+    width: '75%',
     borderRadius: 10,
     height: 40,
     alignSelf: 'center',
@@ -43,9 +43,10 @@ const styles = StyleSheet.create({
   },
   sortButtonContainer: {
     backgroundColor: Colors.PRIMARY,
-    padding: 7,
+    // padding: 7,
     height: Sizes.height * 0.04,
-    width: Sizes.width * 0.15,
+    width: Sizes.width * 0.2,
+    margin: 5,
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',

@@ -66,7 +66,11 @@ const Routes = () => {
 
   return (
     <>
-      <StatusBar backgroundColor={'transparent'} translucent />
+      <StatusBar
+        backgroundColor={'transparent'}
+        translucent
+        barStyle={'dark-content'}
+      />
       <NavigationContainer
         theme={{
           colors: {
