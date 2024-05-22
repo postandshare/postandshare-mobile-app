@@ -29,6 +29,7 @@ import Deeplinking from '../utils/linking';
 import Sizes from '../constants/Sizes';
 import Colors from '../constants/Colors';
 import Notification from '../screens/notification';
+import BirthdayRemainderNavigator from '../screens/birthday';
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -157,6 +158,10 @@ const Routes = () => {
                 <Stack.Screen
                   name={NavigationScreenName.NOTIFICATION}
                   component={Notification}
+                />
+                <Stack.Screen
+                  name={NavigationScreenName.BIRTHDAY_REMAINDER_NAVIGATOR}
+                  component={BirthdayRemainderNavigator}
                 />
               </>
             )

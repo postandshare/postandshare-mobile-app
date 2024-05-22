@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {StyleSheet, Text} from 'react-native';
 import React from 'react';
 import globalStyles from '../styles/globalStyles';
@@ -11,6 +12,7 @@ const CustomTextInputFormik = ({
   keyboardType = 'default',
   numberOfLines = 1,
   width = '100%',
+  error,
 }) => {
   return (
     <>
@@ -30,6 +32,7 @@ const CustomTextInputFormik = ({
         numberOfLines={numberOfLines}
         multiline={numberOfLines > 1}
       />
+      {error && <Text style={globalStyles.error_text}>{error}</Text>}
       {formik.errors[name] && (
         <Text style={globalStyles.error_text}>{formik.errors[name]}</Text>
       )}

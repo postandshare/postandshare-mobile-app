@@ -23,46 +23,83 @@ import globalStyles from '../../styles/globalStyles';
 import CustomButton from '../../components/CustomButton';
 import uploadFile from '../../utils/uploadFile';
 import ImageCropPicker from 'react-native-image-crop-picker';
+import ProfilePic from '../../components/ProfilePic';
+import Loader from '../../components/Loader';
+import {useMutation} from '@tanstack/react-query';
+import {addNewEvent} from '../../services/userServices/personalEvent.services';
 
 const AddRemainder = ({navigation}) => {
   const eventsAddFormik = useFormik({
     initialValues: {
       eventDate: '',
       selectedEvent: '',
-      eventPhoto: '',
-      eventPerson: '',
-      eventPersonNickName: '',
-      eventName: '',
-      eventPerson1: '',
-      eventPersonNickName1: '',
-      eventPhoto1: '',
-      note: '',
+      personDetails: [
+        {
+          profilePic: '',
+          personName: '',
+          contactNumber: '',
+          notes: '',
+        },
+      ],
       open: false,
     },
     validationSchema: yup.object({
       eventDate: yup.string().required('Event Date is Required'),
       selectedEvent: yup.string().required('Event is Required'),
-      eventPhoto: yup.string().optional(''),
-      eventPerson: yup.string().required('Event Person is Required'),
-      eventName: yup.string().when('selectedEvent', {
-        is: 'Other',
-        then: () => yup.string().required('Event Name is Required'),
-      }),
-      eventPerson1: yup.string().when('selectedEvent', {
-        is: 'Anniversary',
-        then: () => yup.string().required('Second Person Name is Required'),
-      }),
-      eventPersonNickName: yup.string().optional(),
-      note: yup.string().optional(''),
+      personDetails: yup.array().of(
+        yup.object().shape({
+          profilePic: yup.string().required('Profile Photo is Required'),
+          personName: yup.string().required('Event Person is Required'),
+          contactNumber: yup
+            .string()
+            .required('Contact Number is Required')
+            .matches(/^[0-9]+$/, 'Must be only digits')
+            .min(10, 'Must be exactly 10 digits')
+            .max(10, 'Must be exactly 10 digits'),
+          notes: yup.string().required('note is Required').min(3, 'Min 3 Char'),
+        }),
+      ),
     }),
     onSubmit: values => {
       console.log(values, 'values');
+      let body = {
+        eventDate: moment(values.eventDate).format('YYYY-MM-DD'),
+        eventType: values?.eventName,
+        personDetails: values?.personDetails,
+      };
+      addNewEventlMutate(body);
     },
   });
 
+  const addPerson = () => {
+    const newPerson = {
+      profilePic: '',
+      personName: '',
+      contactNumber: '',
+      notes: '',
+    };
+    eventsAddFormik.setValues(prev => ({
+      ...prev,
+      personDetails: [...prev.personDetails, newPerson],
+    }));
+  };
+
   const [imageUploading, setImageUploading] = useState(false);
 
-  const uploadePhoto = async (path, mime, setValues, photo) => {
+  const {mutate: addNewEventlMutate, isLoading: addNewEventlLoading} =
+    useMutation(addNewEvent, {
+      onSuccess: ({data}) => {
+        ToastAndroid.show(data?.message, ToastAndroid.LONG);
+        eventsAddFormik?.resetForm();
+        navigation.goBack();
+      },
+      onError: err => {
+        console.log(err?.response?.data?.message, 'err');
+        ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+      },
+    });
+
+  const uploadePhoto = async (path, mime, index) => {
     try {
       console.log(path, 'in uploade photo');
       setImageUploading(true);
@@ -73,21 +110,24 @@ const AddRemainder = ({navigation}) => {
       });
       setImageUploading(false);
       console.log(uplode?.fileURL, 'uplode file url');
-      setValues(prev => ({
+      eventsAddFormik.setValues(prev => ({
         ...prev,
-        photo: uplode?.fileURL,
+        personDetails: prev.personDetails.map((person, i) => {
+          if (i === index) {
+            return {
+              ...person,
+              profilePic: uplode?.fileURL,
+            };
+          }
+          return person;
+        }),
       }));
-      //   eventsAddFormik.setValues(prev => ({
-      //     ...prev,
-      //     logo: uplode?.fileURL,
-      //   }));
-      // setprofilePic(uplode?.fileURL);
     } catch (error) {
       setImageUploading(false);
     }
   };
 
-  const TakePhotofromGallery = async ({setValues, photo}) => {
+  const TakePhotofromGallery = async index => {
     try {
       await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
@@ -105,7 +145,7 @@ const AddRemainder = ({navigation}) => {
       })
         .then(image => {
           console.log(image, 'imgae in the edit profile');
-          uploadePhoto(image.path, image.mime, setValues, photo);
+          uploadePhoto(image.path, image.mime, index);
         })
         .catch(err => {
           console.log(err);
@@ -146,6 +186,7 @@ const AddRemainder = ({navigation}) => {
         mode="date"
       />
 
+      <Loader open={imageUploading} text="Uploading Image" />
       <TopHeader titile={'Add Events'} />
 
       <ScrollView
@@ -224,114 +265,79 @@ const AddRemainder = ({navigation}) => {
           )}
         </View>
 
-        <Text style={styles.Labeltitle}>Person Details</Text>
-        {/* container for person name and photo */}
-        <View style={[styles.cardContainer]}>
-          <Text style={{color: Colors.TEXT1, paddingHorizontal: 10}}>
-            Event Photo
-          </Text>
-          <View style={styles.photo_container}>
-            {eventsAddFormik?.values?.eventPhoto ? (
-              <Image
-                source={{uri: eventsAddFormik?.values?.eventPhoto}}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: 10,
-                  resizeMode: 'contain',
-                }}
-              />
-            ) : (
-              <TouchableOpacity
-                onPress={() =>
-                  TakePhotofromGallery({
-                    setValues: eventsAddFormik.setValues,
-                    photo: eventsAddFormik?.values?.eventPhoto,
-                  })
-                }
-                style={styles.photo_button_container}>
-                <Text style={styles.photo_button_text}>Upload Photo</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-
-          <View style={styles.textInputField}>
-            <Text style={{color: Colors.TEXT1}}>Person Name</Text>
-            <CustomTextInputFormik
-              formik={eventsAddFormik}
-              name="eventPerson"
-              label="Person Name"
-            />
-          </View>
-
-          <View style={styles.textInputField}>
-            <Text style={{color: Colors.TEXT1}}>Person Nick Name</Text>
-            <CustomTextInputFormik
-              formik={eventsAddFormik}
-              name="eventPersonNickName"
-              label="Person Nick Name"
-            />
-          </View>
-
-          {eventsAddFormik?.values?.selectedEvent === 'Anniversary' && (
-            <View style={styles.textInputField}>
-              <Text style={{color: Colors.TEXT1}}> Second Person Name</Text>
-              <CustomTextInputFormik
-                formik={eventsAddFormik}
-                name="eventPerson1"
-                label=" Second Person Name"
-              />
-            </View>
-          )}
-
-          {eventsAddFormik?.values?.selectedEvent === 'Anniversary' && (
-            <View style={styles.textInputField}>
-              <Text style={{color: Colors.TEXT1}}>Second Person Nick Name</Text>
-              <CustomTextInputFormik
-                formik={eventsAddFormik}
-                name="eventPersonNickName1"
-                label="Second Person Nick Name"
-              />
-            </View>
-          )}
-
-          {/* {eventsAddFormik?.values?.selectedEvent === 'Anniversary' && (
-          <>
-            <Text style={{color: Colors.TEXT1, paddingHorizontal: 10}}>
-              Second Person Photo
+        <View
+          style={{
+            flexDirection: 'row',
+            alignContent: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <Text style={styles.Labeltitle}>Person Details</Text>
+          <TouchableOpacity onPress={addPerson}>
+            <Text style={[styles.Labeltitle, {color: Colors.PRIMARY}]}>
+              Add Person
             </Text>
-                   <View style={styles.photo_container}>
-          {eventsAddFormik?.values?.eventPhoto ? (
-            <Image
-              source={{uri: eventsAddFormik?.values?.eventPhoto}}
-              style={{width: '100%', height: '100%', borderRadius: 10 , resizeMode: 'contain'}}
-            />
-          ) : (
-            <TouchableOpacity
-              onPress={() =>
-                TakePhotofromGallery({
-                  setValues: eventsAddFormik.setValues,
-                  photo: eventsAddFormik?.values?.eventPhoto,
-                })
-              }
-              style={styles.photo_button_container}>
-              <Text style={styles.photo_button_text}>Upload Photo</Text>
-            </TouchableOpacity>
-          )}
+          </TouchableOpacity>
         </View>
-          </>
-        )} */}
+        {eventsAddFormik?.values?.personDetails.map((person, index) => (
+          <View key={index} style={[styles.cardContainer, {marginBottom: 10}]}>
+            <Text style={{color: Colors.TEXT1, paddingHorizontal: 10}}>
+              Event Photo
+            </Text>
 
-          <View style={styles.textInputField}>
-            <Text style={{color: Colors.TEXT1}}>Note</Text>
-            <CustomTextInputFormik
-              formik={eventsAddFormik}
-              name="note"
-              label="Note"
-              numberOfLines={3}
-            />
+            <View style={styles.image_wrap}>
+              <ProfilePic
+                imageUrl={person.profilePic}
+                TakePhotofromGallery={() => TakePhotofromGallery(index)}
+              />
+              {eventsAddFormik.errors.personDetails &&
+                eventsAddFormik.errors.personDetails[index] &&
+                eventsAddFormik.errors.personDetails[index].profilePic && (
+                  <Text style={globalStyles.error_text}>
+                    {eventsAddFormik.errors.personDetails[index].profilePic}
+                  </Text>
+                )}
+            </View>
+
+            <View style={styles.textInputField}>
+              <Text style={{color: Colors.TEXT1}}>Person Name</Text>
+              <CustomTextInputFormik
+                formik={eventsAddFormik}
+                name={`personDetails[${index}].personName`}
+                label="Person Name"
+                error={
+                  eventsAddFormik.errors.personDetails &&
+                  eventsAddFormik.errors.personDetails[index] &&
+                  eventsAddFormik.errors.personDetails[index].personName
+                }
+              />
+            </View>
+
+            <View style={styles.textInputField}>
+              <Text style={{color: Colors.TEXT1}}>Person Contact Number</Text>
+              <CustomTextInputFormik
+                formik={eventsAddFormik}
+                name={`personDetails[${index}].contactNumber`}
+                label="Person Contact Number"
+                keyboardType="numeric"
+                error={
+                  eventsAddFormik.errors.personDetails &&
+                  eventsAddFormik.errors.personDetails[index] &&
+                  eventsAddFormik.errors.personDetails[index].contactNumber
+                }
+              />
+            </View>
+
+            <View style={styles.textInputField}>
+              <Text style={{color: Colors.TEXT1}}>notes</Text>
+              <CustomTextInputFormik
+                formik={eventsAddFormik}
+                name={`personDetails[${index}].notes`}
+                label="notes"
+                numberOfLines={3}
+              />
+            </View>
           </View>
-        </View>
+        ))}
 
         <CustomButton
           title={'Add Event'}

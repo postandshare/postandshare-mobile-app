@@ -46,17 +46,18 @@ const BirthRemaiderCard = ({item, navigation}) => {
         }}>
         <View style={styles.item_image_container}>
           <Image
-            source={item?.image}
+            source={{uri: item?.personDetails[0]?.profilePic}}
             style={styles.item_image}
             // resizeMode="cover"
           />
         </View>
         <View style={styles.item_details_container}>
           <View style={{width: '50%'}}>
-            <Text style={styles.item_name}>{item?.name}</Text>
+            <Text style={styles.item_name}>
+              {item?.personDetails[0]?.personName}
+            </Text>
             <Text style={styles.item_date}>
-              {item?.date}
-              {/* {moment(new Date(item?.date)).format('LLL')} */}
+              {moment(new Date(item?.eventDate)).format('LLL')}
             </Text>
           </View>
           {/* remaindee  */}
@@ -75,7 +76,7 @@ const BirthRemaiderCard = ({item, navigation}) => {
                   color: randomColor,
                 },
               ]}>
-              {item?.event}
+              {item?.eventType}
             </Text>
           </View>
         </View>

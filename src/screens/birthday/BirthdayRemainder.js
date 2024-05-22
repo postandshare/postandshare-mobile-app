@@ -1,404 +1,93 @@
-import {FlatList, Image, ScrollView, Text, View} from 'react-native';
-import React from 'react';
+import {
+  ImageBackground,
+  ScrollView,
+  Text,
+  ToastAndroid,
+  View,
+} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
 import TopHeader from '../../components/TopHeader';
 import images from '../../constants/images';
 import styles from './style';
-import CustomCarousel from '../../components/CustomCarousel';
+import globalStyles from '../../styles/globalStyles';
+import {useQuery} from '@tanstack/react-query';
+import {getEvents} from '../../services/userServices/personalEvent.services';
+import SearchSortFilter from './components/SearchSortFilter';
 import BirthRemaiderCard from '../../components/BirthRemaiderCard';
-
-const BirthdayRemainder_Data = [
-  {
-    monthName: 'January',
-    data: [
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Birthday',
-      },
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Anniversary',
-      },
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Birthday',
-      },
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Death Anniversary',
-      },
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Birthday',
-      },
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Birthday',
-      },
-    ],
-    id: '1',
-  },
-  {
-    id: '2',
-    monthName: 'February',
-    data: [
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Birthday',
-      },
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Anniversary',
-      },
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Birthday',
-      },
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Death Anniversary',
-      },
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Jaynti',
-      },
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Birthday',
-      },
-    ],
-  },
-  {
-    id: '3',
-    monthName: 'March',
-    data: [
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2022',
-        image: images.profile_placeholder1,
-        event: 'Birthday',
-      },
-    ],
-  },
-  {
-    id: '4',
-    monthName: 'April',
-    data: [
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/13/2022',
-        image: images.profile_placeholder1,
-        event: 'Birthday',
-      },
-    ],
-  },
-  {
-    id: '5',
-    monthName: 'May',
-    data: [
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '1/12/2022',
-        image: images.profile_placeholder1,
-        event: 'Social Event',
-      },
-    ],
-  },
-
-  {
-    id: '6',
-    monthName: 'June',
-    data: [
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Birthday',
-      },
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Birthday',
-      },
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Social Event',
-      },
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Celebtration',
-      },
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Ecological Event',
-      },
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Social Event',
-      },
-    ],
-  },
-  {
-    id: '7',
-    monthName: 'July',
-    data: [
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2022',
-        image: images.profile_placeholder1,
-        event: 'Birthday',
-      },
-    ],
-  },
-  {
-    id: '8',
-    monthName: 'August',
-    data: [
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/13/2022',
-        image: images.profile_placeholder1,
-        event: 'Birthday',
-      },
-    ],
-  },
-  {
-    id: '9',
-    monthName: 'September',
-    data: [
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '1/12/2022',
-        image: images.profile_placeholder1,
-        event: 'Social Event',
-      },
-    ],
-  },
-  {
-    id: '10',
-    monthName: 'October',
-    data: [
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Birthday',
-      },
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Social Event',
-      },
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Birthday',
-      },
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Birthday',
-      },
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Social Event',
-      },
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2021',
-        image: images.profile_placeholder1,
-        event: 'Birthday',
-      },
-    ],
-  },
-  {
-    monthName: 'November',
-    data: [
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/12/2022',
-        image: images.profile_placeholder1,
-        event: 'Birthday',
-      },
-    ],
-  },
-  {
-    monthName: 'December',
-    data: [
-      {
-        id: '1',
-        day: 1,
-        time: '10:00 AM',
-        name: 'Rajesh',
-        date: '12/13/2022',
-        image: images.profile_placeholder1,
-        event: 'Birthday',
-      },
-    ],
-  },
-];
+import {useFocusEffect} from '@react-navigation/native';
 
 const BirthdayRemainder = ({navigation}) => {
-  const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-
-  const currentMonthIndex = new Date().getMonth();
-
-  // Sort the data so that the current month comes first and the following months come after
-  const sortedData = [...BirthdayRemainder_Data].sort((a, b) => {
-    const aIndex = monthNames.indexOf(a?.monthName);
-    const bIndex = monthNames.indexOf(b?.monthName);
-
-    if (aIndex >= currentMonthIndex && bIndex < currentMonthIndex) {
-      return -1;
-    }
-    if (bIndex >= currentMonthIndex && aIndex < currentMonthIndex) {
-      return 1;
-    }
-    return aIndex - bIndex;
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortOption, setSortOption] = useState('Newest');
+  const [events, setEvents] = useState({
+    page: 1,
+    pages: 1,
+    list: [],
+    count: 0,
   });
+  const {
+    isLoading: getEventsLoading,
+    isFetching: getEventsFetching,
+    refetch: getEventsRefetch,
+    data: getEvents_Data,
+    isError: getEvents_isError,
+  } = useQuery({
+    queryKey: ['getEvents'],
+    queryFn: () => getEvents({}),
+    onSuccess: success => {
+      // console.log(success?.data, 'success');
+      setEvents(prev => ({
+        ...prev,
+        list: success?.data?.data,
+        // page: success?.data?.data?.page,
+        // pages: success?.data?.data?.pages,
+        // count: success?.data?.data?.count,
+      }));
+    },
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
+
+  const filteredEvents = events?.list?.filter(event =>
+    event?.personDetails[0]?.personName
+      ?.toLowerCase()
+      .includes(searchQuery.toLowerCase()),
+  );
+
+  const sortedBusinesses = [...(filteredEvents || [])].sort((a, b) => {
+    switch (sortOption) {
+      case 'AtoZ':
+        return a?.eventType?.localeCompare(b?.eventType);
+      case 'ZtoA':
+        return b?.eventType?.localeCompare(a?.eventType);
+      case 'Newest':
+        return new Date(b?.eventDate) - new Date(a?.eventDate);
+      case 'Oldest':
+        return new Date(a?.eventDate) - new Date(b?.eventDate);
+      default:
+        return 0;
+    }
+  });
+
+  useEffect(() => {
+    const unsubscribeBlur = navigation.addListener('blur', () => {
+      setEvents(prev => ({...prev, list: [], page: 1, count: 0}));
+    });
+    return () => {
+      unsubscribeBlur();
+    };
+  }, [navigation]);
+
+  useFocusEffect(
+    useCallback(() => {
+      getEventsRefetch();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [navigation, getEventsRefetch]),
+  );
+
+  console.log(getEvents_Data, 'getEvents_Data');
 
   return (
     <>
@@ -407,32 +96,25 @@ const BirthdayRemainder = ({navigation}) => {
         icon={images.add_birthday_icon}
         onPress={() => navigation.navigate('AddRemainder')}
       />
-
-      <ScrollView
-        contentContainerStyle={styles.root}
-        showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Today</Text>
-        {/* carousel for today birthday remainders */}
-        <View style={styles.today_carousel}>
-          <CustomCarousel />
-        </View>
-
-        {/* list for the upcoming birthday details or events */}
-        <ScrollView contentContainerStyle={{}}>
-          {sortedData?.map((item, index) => {
-            return (
-              <View key={index} style={{marginVertical: 10}}>
-                <Text style={styles.title}>{item?.monthName}</Text>
-                <ScrollView contentContainerStyle={styles.root}>
-                  {item?.data?.map((item, index) => {
-                    return <BirthRemaiderCard key={index} item={item} navigation={navigation} />;
-                  })}
-                </ScrollView>
-              </View>
-            );
-          })}
+      <ImageBackground
+        source={images.background}
+        style={globalStyles.backgroundImage}>
+        <SearchSortFilter
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          sortOption={sortOption}
+          setSortOption={setSortOption}
+        />
+        <ScrollView
+          contentContainerStyle={styles.root}
+          showsVerticalScrollIndicator={false}>
+          {/* <View style={styles.cardContainer}> */}
+          {sortedBusinesses.map((event, index) => (
+            <BirthRemaiderCard item={event} key={index} />
+          ))}
+          {/* </View> */}
         </ScrollView>
-      </ScrollView>
+      </ImageBackground>
     </>
   );
 };

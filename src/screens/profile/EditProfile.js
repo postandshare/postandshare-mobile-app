@@ -4,37 +4,24 @@ import {
   ScrollView,
   Text,
   ToastAndroid,
-  TouchableNativeFeedback,
   TouchableOpacity,
-  View,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
 import TopHeader from '../../components/TopHeader';
 import styles from './style';
-import ProfilePic from '../../components/ProfilePic';
 import ImagePicker from 'react-native-image-crop-picker';
 // import uploadFile from '../../utils/uploadFile';
 import * as Yup from 'yup';
 import {useFormik} from 'formik';
-import Dropdown from '../../components/Dropdown';
-import DatePicker from 'react-native-date-picker';
-import CustomInput from '../../components/CustomInput';
-import moment from 'moment';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Colors from '../../constants/Colors';
 import uploadFile from '../../utils/uploadFile';
 import Loader from '../../components/Loader';
-import {DISTRICTS, STATES} from '../../constants';
-import {Checkbox} from 'react-native-paper';
 import {useMutation} from '@tanstack/react-query';
 import {
   updateSelfPhoto,
   updateUserProfile,
 } from '../../services/userServices/profile.services';
-import Sizes from '../../constants/Sizes';
 import {useDispatch} from 'react-redux';
 import {setProfileUpdated} from '../../services/reducer/CommonReducer';
-import CustomTextInputFormik from '../../components/CustomTextInputFormik';
 import BasicEdit from './components/EditProfile/BasicEdit';
 import SocialMediaEdit from './components/EditProfile/SocialMediaEdit';
 import AddressEdit from './components/EditProfile/AddressEdit';
@@ -62,10 +49,6 @@ const validationSchema = Yup.object().shape({
   cdist: Yup.string().trim().required(),
   cpinCode: Yup.number().required(),
   cstate: Yup.string().trim().required(),
-  // paddress: Yup.string().trim().required(),
-  // pdist: Yup.string().trim().required(),
-  // ppinCode: Yup.number().required(),
-  // pstate: Yup.string().trim().required(),
 });
 
 const genderList = [
@@ -212,8 +195,6 @@ const EditProfile = ({route, navigation}) => {
       updateUserProfileMutate(body);
     },
   });
-
-  console.log(personalProfileFormik?.errors, 'errors');
 
   return (
     <>

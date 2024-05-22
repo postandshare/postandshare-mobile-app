@@ -6,7 +6,11 @@ const {StyleSheet} = require('react-native');
 const styles = StyleSheet.create({
   root: {
     flexGrow: 1,
-    backgroundColor: Colors.Background,
+    backgroundColor: Colors.transparent,
+  },
+  image_wrap: {
+    alignItems: 'center',
+    marginTop: 20,
   },
   container: {
     flex: 1,

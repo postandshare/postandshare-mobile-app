@@ -362,6 +362,7 @@ const CustomSDK = ({route, navigation}) => {
         contentType: mime,
       });
       addUserPostMuatate({
+        postName: `Post ${Date.now()}`,
         postLink: uplode.fileURL,
         businessDocId: businessDetails?._id,
         businessType: businessDetails?.businessType,

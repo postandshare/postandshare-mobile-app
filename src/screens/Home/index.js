@@ -294,7 +294,12 @@ const Home = ({navigation}) => {
                           }
                         : null,
                     ]}
-                    onPress={() => setScreenName('remainder')}>
+                    onPress={() => {
+                      // setScreenName('remainder');
+                      navigation.navigate(
+                        NavigationScreenName.BIRTHDAY_REMAINDER_NAVIGATOR,
+                      );
+                    }}>
                     <View style={styles.iconContainer}>
                       <MaterialIcons
                         name="event-note"
