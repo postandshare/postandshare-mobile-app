@@ -4,7 +4,7 @@ import Sizes from '../../constants/Sizes';
 
 const styles = StyleSheet.create({
   root: {
-    flexGrow: 1,
+    // flexGrow: 1,
     backgroundColor: Colors.transparent,
   },
   chooseImageContainer: {
@@ -16,17 +16,17 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 20,
+    marginVertical: 10,
     borderWidth: 1,
     borderColor: Colors.PRIMARY,
   },
   additionalDetailsContainer: {
-    marginVertical: 10,
+    marginVertical: 0,
     alignItems: 'center',
   },
   additionalDetails: {
-    height: 50,
-    width: 50,
+    height: 40,
+    width: 40,
     borderRadius: 40,
     justifyContent: 'center',
     alignItems: 'center',
@@ -48,8 +48,19 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
+    // borderWidth: 1,
+    // borderColor: Colors.TEXT1,
+    margin: 10,
+  },
+  frame1: {
+    height: 50,
+    width: 50,
+    // padding: 10,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
     borderWidth: 1,
-    borderColor: Colors.TEXT1,
+    borderColor: Colors.borderColor,
     margin: 10,
   },
   frameText: {

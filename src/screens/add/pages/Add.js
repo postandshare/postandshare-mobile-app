@@ -50,6 +50,7 @@ import CustomColorChange from '../components/CustomColorChange';
 import {getUserProfile} from '../../../services/userServices/profile.services';
 import images from '../../../constants/images';
 import globalStyles from '../../../styles/globalStyles';
+import TopHeader from '../../../components/TopHeader';
 
 const Add = ({navigation, route}) => {
   const {picData, businessDetails} = route.params || {};
@@ -331,13 +332,16 @@ const Add = ({navigation, route}) => {
 
   return (
     <>
-      <DashboardTopHeader
-        onPressMenu={onPressMenu}
-        onPressNotification={onPressNotification}
-        onPresProfile={onPresProfile}
-        title="ADD"
+      <TopHeader
+        titile={'ADD'}
+        onPress={() => {
+          if (picUrl) {
+            onCapture();
+          } else {
+            ToastAndroid.show('Please select the image', ToastAndroid.SHORT);
+          }
+        }}
         next={'Next'}
-        onPress={onCapture}
       />
       <Loader open={imageUploading || addUserPostLoading} text="Loading..." />
 

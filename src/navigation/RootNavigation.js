@@ -4,7 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import NavigationScreenName from '../constants/NavigationScreenName';
 import Splash from '../screens/onBoarding/Splash';
-import DrawerStack from './DrawerStack';
+import DrawerStack, {MainDrawer} from './DrawerStack';
 import AuthStack from './AuthStack';
 import {useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -30,6 +30,8 @@ import Sizes from '../constants/Sizes';
 import Colors from '../constants/Colors';
 import Notification from '../screens/notification';
 import BirthdayRemainderNavigator from '../screens/birthday';
+import AddNavigatior from '../screens/add/index';
+import PhotoPost from '../screens/mypost/components/PhotoPost';
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -109,8 +111,8 @@ const Routes = () => {
             ) : (
               <>
                 <Stack.Screen
-                  name={NavigationScreenName.DRWAER_NAVIGATOR}
-                  component={DrawerStack}
+                  name={NavigationScreenName.MAIN_NAVIGATOR}
+                  component={MainDrawer}
                 />
                 <Stack.Screen
                   name="ProfileNavigator"
@@ -128,6 +130,7 @@ const Routes = () => {
                   name={NavigationScreenName.MY_POST}
                   component={MyPost}
                 />
+                <Stack.Screen name={'PhotoPost'} component={PhotoPost} />
                 <Stack.Screen
                   name={NavigationScreenName.TUTORIALS}
                   component={Tutorial}
@@ -162,6 +165,10 @@ const Routes = () => {
                 <Stack.Screen
                   name={NavigationScreenName.BIRTHDAY_REMAINDER_NAVIGATOR}
                   component={BirthdayRemainderNavigator}
+                />
+                <Stack.Screen
+                  name={NavigationScreenName.ADD_NAVIGATOR}
+                  component={AddNavigatior}
                 />
               </>
             )

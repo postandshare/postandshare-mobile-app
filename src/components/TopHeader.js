@@ -52,15 +52,12 @@ const TopHeader = ({
         {/* Back button */}
         {showBackIcon && (
           <TouchableOpacity style={styles.left_icon_wrap} onPress={onPressBack}>
-            <MaterialIcons
-              name="keyboard-arrow-left"
-              style={styles.left_icon}
-            />
+            <MaterialIcons name="arrow-back" style={styles.left_icon} />
           </TouchableOpacity>
         )}
         {/* title */}
-        <Text style={styles.title}>{titile}</Text>
       </View>
+      <Text style={styles.title}>{titile}</Text>
       {right ? (
         <TouchableOpacity onPress={onPress}>
           <AntDesign name="delete" style={styles.icon} />
@@ -114,24 +111,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   left_icon_wrap: {
-    height: 30,
-    width: 30,
-    borderRadius: 7,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    marginRight: 13,
-    borderWidth: 1,
-    borderColor: 'rgba(64, 64, 64, 1)',
+    // height: 30,
+    // width: 30,
+    // borderRadius: 7,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // backgroundColor: 'rgba(255,255,255,0.1)',
+    // marginRight: 13,
+    // borderWidth: 1,
+    // borderColor: 'rgba(64, 64, 64, 1)',
   },
   left_icon: {
     color: 'rgba(64, 64, 64, 1)',
-    fontSize: scale(20),
+    fontSize: scale(30),
   },
   title: {
     color: 'rgba(64, 64, 64, 1)',
     fontSize: scale(19),
     letterSpacing: 1.2,
+    alignSelf: 'center',
   },
   icon: {
     color: Colors.TEXT1,

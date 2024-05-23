@@ -21,6 +21,9 @@ const DashboardTopHeader = ({
   title = '',
   next,
   onPress,
+  edit = true,
+  IconProp,
+  onPressIcon,
 }) => {
   return (
     <View source={Images.topHeader} style={styles.root}>
@@ -32,10 +35,10 @@ const DashboardTopHeader = ({
         </TouchableOpacity>
         {/* )} */}
         {/* title */}
-        <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
-          {title ? title : 'Dashboard'}
-        </Text>
       </View>
+      <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+        {title ? title : 'Dashboard'}
+      </Text>
       <View style={[styles.right_container, next ? {flex: 0.5} : null]}>
         {/* notification container */}
         <View>
@@ -76,6 +79,13 @@ const DashboardTopHeader = ({
               <Text style={styles.title}>{next}</Text>
             </TouchableOpacity>
           ) : null}
+          {edit && IconProp && (
+            <TouchableOpacity
+              onPress={onPressIcon}
+              style={styles.rightIconProp}>
+              {IconProp}
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </View>
@@ -127,6 +137,12 @@ const styles = StyleSheet.create({
     marginTop: Sizes.hp('1%'),
     left: 10,
   },
+  rightIconProp: {
+    color: Colors.TEXT1,
+    fontSize: scale(30),
+    marginTop: Sizes.hp('1%'),
+    left: 10,
+  },
   title: {
     color: Colors.TEXT1,
     fontWeight: '700',
@@ -134,6 +150,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1.2,
     width: Sizes.wp('63%'),
     marginBottom: -1,
+    alignSelf: 'center',
   },
   userIcon: {
     marginLeft: 15,

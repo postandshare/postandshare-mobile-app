@@ -1,10 +1,4 @@
-import {
-  ImageBackground,
-  ScrollView,
-  Text,
-  ToastAndroid,
-  View,
-} from 'react-native';
+import {ImageBackground, ScrollView, ToastAndroid} from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import TopHeader from '../../components/TopHeader';
 import images from '../../constants/images';
@@ -15,6 +9,8 @@ import {getEvents} from '../../services/userServices/personalEvent.services';
 import SearchSortFilter from './components/SearchSortFilter';
 import BirthRemaiderCard from '../../components/BirthRemaiderCard';
 import {useFocusEffect} from '@react-navigation/native';
+import DashboardTopHeader from '../../components/DashboardTopHeader';
+import NavigationScreenName from '../../constants/NavigationScreenName';
 
 const BirthdayRemainder = ({navigation}) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -87,15 +83,27 @@ const BirthdayRemainder = ({navigation}) => {
     }, [navigation, getEventsRefetch]),
   );
 
-  console.log(getEvents_Data, 'getEvents_Data');
+  const onPressMenu = () => {
+    navigation.openDrawer();
+    navigation.getParent('leftDrawer').openDrawer();
+  };
+  const onPressNotification = () => {
+    navigation.navigate(NavigationScreenName.NOTIFICATION);
+  };
 
   return (
     <>
-      <TopHeader
+      <DashboardTopHeader
+        title="Events"
+        onPressMenu={onPressMenu}
+        onPressNotification={onPressNotification}
+      />
+
+      {/* <TopHeader
         titile={'Birthday Remainder'}
         icon={images.add_birthday_icon}
         onPress={() => navigation.navigate('AddRemainder')}
-      />
+      /> */}
       <ImageBackground
         source={images.background}
         style={globalStyles.backgroundImage}>

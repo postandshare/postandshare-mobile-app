@@ -6,10 +6,11 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import BirthdayRemainderNavigator from '../screens/birthday';
 import PhotoSDK from '../screens/sdk';
 import CustomDrawerLeft from '../components/CustomDrawerLeft';
+import CurvedBottomTab from './CurvedBottomTab';
 
 const LeftDrawer = createDrawerNavigator();
 const RightDrawer = createDrawerNavigator();
-const MainDrawer = () => {
+export const MainDrawer = () => {
   return (
     <LeftDrawer.Navigator
       id="leftDrawer"
@@ -25,6 +26,23 @@ const MainDrawer = () => {
       )}>
       <LeftDrawer.Screen
         name="DashBoard"
+        component={CurvedBottomTab}
+        options={{
+          title: 'Dashboard',
+          drawerActiveBackgroundColor: Colors.PRIMARY,
+          drawerInactiveBackgroundColor: 'transparent',
+          drawerIcon: ({focused}) => (
+            <AntDesign
+              name="home"
+              size={24}
+              color={focused ? Colors.white : Colors.text1}
+            />
+          ),
+        }}
+      />
+
+      {/* <LeftDrawer.Screen
+        name="DashBoard"
         component={BottomTab}
         options={{
           title: 'Dashboard',
@@ -39,7 +57,7 @@ const MainDrawer = () => {
             />
           ),
         }}
-      />
+      /> */}
     </LeftDrawer.Navigator>
   );
 };

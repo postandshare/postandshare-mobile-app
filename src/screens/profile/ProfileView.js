@@ -25,6 +25,7 @@ import SocialMediaDetails from './components/SocialMediaDetails';
 import AddressDetails from './components/AddressDetails';
 import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
+import DashboardTopHeader from '../../components/DashboardTopHeader';
 
 const ProfileView = ({}) => {
   const navigation = useNavigation();
@@ -123,7 +124,18 @@ const ProfileView = ({}) => {
 
   return (
     <>
-      <TopHeader
+      <DashboardTopHeader
+        title="Profile"
+        onPressMenu={() => navigation.openDrawer()}
+        onPressNotification={() => navigation.navigate('Notification')}
+        IconProp={<FontAwesome name={'edit'} size={25} color={Colors.TEXT1} />}
+        onPressIcon={() =>
+          navigation.navigate('EditProfile', {
+            data: getUserProfile_Data?.data?.obj,
+          })
+        }
+      />
+      {/* <TopHeader
         titile={'Profile'}
         IconProp={<FontAwesome name={'edit'} size={25} color={Colors.TEXT1} />}
         onPress={() =>
@@ -131,7 +143,7 @@ const ProfileView = ({}) => {
             data: getUserProfile_Data?.data?.obj,
           })
         }
-      />
+      /> */}
       <ImageBackground
         source={images.background}
         style={globalStyles.backgroundImage}>

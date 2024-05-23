@@ -38,58 +38,55 @@ const BirthRemaiderCard = ({item, navigation}) => {
   const randomColor =
     Colors_Card[Math.floor(Math.random() * Colors_Card.length)];
   return (
-    <>
-      <TouchableOpacity
-        style={styles.item_container}
-        onPress={() => {
-          navigation.navigate('BirthdayRemainderDetail');
-        }}>
-        <View style={styles.item_image_container}>
-          <Image
-            source={{uri: item?.personDetails[0]?.profilePic}}
-            style={styles.item_image}
-            // resizeMode="cover"
-          />
+    <TouchableOpacity
+      style={styles.item_container}
+      onPress={() => {
+        navigation.navigate('BirthdayRemainderDetail');
+      }}>
+      <View style={styles.item_image_container}>
+        <Image
+          source={{uri: item?.personDetails[0]?.profilePic}}
+          style={styles.item_image}
+        />
+      </View>
+      <View style={styles.item_details_container}>
+        <View style={{alignSelf: 'center'}}>
+          <Text style={styles.item_name}>
+            {item?.personDetails[0]?.personName}
+          </Text>
+          <Text style={styles.item_date}>
+            {moment(new Date(item?.eventDate)).format('LLL')}
+          </Text>
         </View>
-        <View style={styles.item_details_container}>
-          <View style={{width: '50%'}}>
-            <Text style={styles.item_name}>
-              {item?.personDetails[0]?.personName}
-            </Text>
-            <Text style={styles.item_date}>
-              {moment(new Date(item?.eventDate)).format('LLL')}
-            </Text>
-          </View>
-          {/* remaindee  */}
-          <View
+        {/* remaindee  */}
+        <View
+          style={[
+            styles.event_container,
+            {
+              borderColor: randomColor,
+              backgroundColor: randomColor + '20',
+            },
+          ]}>
+          <Text
             style={[
-              styles.event_container,
+              styles.event_text,
               {
-                borderColor: randomColor,
-                backgroundColor: randomColor + '20',
+                color: randomColor,
               },
             ]}>
-            <Text
-              style={[
-                styles.event_text,
-                {
-                  color: randomColor,
-                },
-              ]}>
-              {item?.eventType}
-            </Text>
-          </View>
+            {item?.eventType}
+          </Text>
         </View>
+      </View>
 
-        {/* no of days remaining from the todays date */}
-        {/* <View style={styles.event_remainder_container}>
+      {/* no of days remaining from the todays date */}
+      {/* <View style={styles.event_remainder_container}>
           <Text style={styles.event_remainder_text}>
             {item?.day - new Date().getDay()}
           </Text>
           <Text style={styles.event_remainder_text}>Days</Text>
         </View> */}
-      </TouchableOpacity>
-    </>
+    </TouchableOpacity>
   );
 };
 
@@ -97,7 +94,6 @@ export default BirthRemaiderCard;
 
 const styles = StyleSheet.create({
   item_container: {
-    flex: 1,
     backgroundColor: Colors.white,
     alignSelf: 'center',
     borderWidth: 1,
@@ -106,14 +102,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderColor: '#3D398920',
-    maxHeight: 80,
+    minHeight: 80,
+    padding: 10,
     marginVertical: 12,
   },
   item_image_container: {
     height: 55,
     width: 60,
     borderRadius: 50,
-    justifyContent: 'center',
+    alignSelf: 'center',
     margin: 10,
   },
   item_image: {
@@ -124,13 +121,14 @@ const styles = StyleSheet.create({
   },
   item_details_container: {
     alignSelf: 'center',
-    gap: 50,
+    justifyContent: 'space-between',
     flexDirection: 'row',
   },
   item_name: {
     fontSize: 16,
     fontWeight: 'bold',
     color: Colors.PRIMARY,
+    width: Sizes.wp('40%'),
   },
   item_date: {
     fontSize: 14,
@@ -138,11 +136,13 @@ const styles = StyleSheet.create({
     color: Colors.TEXT1,
   },
   event_container: {
+    flex: 0.61,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    width: Sizes.wp('20%'),
-    height: 30,
+    // height: 30,
+    padding: 5,
+    margin: 10,
     alignSelf: 'center',
     borderRadius: 10,
   },

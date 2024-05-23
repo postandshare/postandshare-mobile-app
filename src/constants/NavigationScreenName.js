@@ -2,8 +2,10 @@ export default {
   //Navigator Screen Name
   ATUH_NAVIGATOR: 'AuthNavigator',
   BOTOOM_TAB_NAVIGATOR: 'BottomTabNavigator',
+  CURVED_BOTTOM_TAB_NAVIGATOR: 'CurvedBottomTabNavigator',
   DRWAER_NAVIGATOR: 'DrawerStack',
   ADD_NAVIGATOR: 'AddNavigator',
+  MAIN_NAVIGATOR: 'leftDrawer',
 
   //Navigator in the Screen Name
   PHOTO_NAVIGATOR: 'PhotoNavigator',

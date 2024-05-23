@@ -42,10 +42,10 @@ const UserProfileCard = ({profileData}) => {
   const navigation = useNavigation();
   return (
     <>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('ProfileNavigator');
-        }}
+      <View
+        // onPress={() => {
+        //   navigation.navigate('ProfileNavigator');
+        // }}
         style={styles.userProfileCard}>
         <View style={styles.image_wrap}>
           <Image
@@ -68,7 +68,7 @@ const UserProfileCard = ({profileData}) => {
           </Text>
           <Text style={styles.schoole_name}>{profileData?.email ?? '-'}</Text>
         </View>
-      </TouchableOpacity>
+      </View>
     </>
   );
 };
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderWidth: 0.5,
+    borderWidth: 2,
     borderColor: Colors.borderColor,
     borderRadius: 5,
     marginVertical: 5,

@@ -178,6 +178,7 @@ const FrameSelection = ({
   setShowFrameImg,
   setState,
   item,
+  imgData,
   setSelectedIndex,
   selectedIndex,
   showFrameImg,
@@ -249,23 +250,31 @@ const FrameSelection = ({
   };
 
   return (
-    <TouchableOpacity
+    <ImageBackground
+      source={{uri: imgData}}
       style={[
-        isSelected && showFrameImg
-          ? {backgroundColor: Colors.PRIMARY}
-          : {backgroundColor: Colors.white},
         styles.frame,
-      ]}
-      onPress={handleFrameSelection}>
-      <Image
-        source={{uri: item?.framePic}}
-        style={{
-          height: 50,
-          width: 50,
-          borderRadius: 5,
-        }}
-      />
-    </TouchableOpacity>
+        {overflow: 'hidden'},
+        isSelected && showFrameImg
+          ? {
+              backgroundColor: Colors.transparent,
+              borderColor: Colors.PRIMARY,
+              borderWidth: 2,
+              elevation: 5,
+            }
+          : {backgroundColor: Colors.transparent},
+      ]}>
+      <TouchableOpacity style={[styles.frame]} onPress={handleFrameSelection}>
+        <Image
+          source={{uri: item?.framePic}}
+          style={{
+            height: 50,
+            width: 50,
+            borderRadius: 5,
+          }}
+        />
+      </TouchableOpacity>
+    </ImageBackground>
   );
 };
 
@@ -1178,7 +1187,7 @@ const CustomSDK = ({route, navigation}) => {
                 }>
                 <Entypo
                   name="location-pin"
-                  size={30}
+                  size={25}
                   color={state?.location ? Colors.white : Colors.TEXT1}
                 />
               </TouchableOpacity>
@@ -1225,7 +1234,7 @@ const CustomSDK = ({route, navigation}) => {
                 }>
                 <AntDesign
                   name="mobile1"
-                  size={30}
+                  size={25}
                   color={state?.mobile ? Colors.white : Colors.TEXT1}
                 />
               </TouchableOpacity>
@@ -1239,7 +1248,7 @@ const CustomSDK = ({route, navigation}) => {
                 }>
                 <FontAwesome
                   name="whatsapp"
-                  size={30}
+                  size={25}
                   color={state?.whatsApp ? Colors.white : Colors.TEXT1}
                 />
               </TouchableOpacity>
@@ -1253,7 +1262,7 @@ const CustomSDK = ({route, navigation}) => {
                 }>
                 <AntDesign
                   name="mail"
-                  size={30}
+                  size={25}
                   color={state?.email ? Colors.white : Colors.TEXT1}
                 />
               </TouchableOpacity>
@@ -1264,7 +1273,7 @@ const CustomSDK = ({route, navigation}) => {
             ]}>
             <Entypo
               name="facebook"
-              size={30}
+              size={25}
               color={state?.facebook ? Colors.white : Colors.TEXT1}
             />
           </TouchableOpacity> */}
@@ -1290,6 +1299,7 @@ const CustomSDK = ({route, navigation}) => {
                 getOrgFrame_Data={getOrgFrame_Data}
                 setLogoPosition={setLogoPosition}
                 state={state}
+                imgData={imgData}
                 setState={setState}
                 setMobileNumPosition={setMobileNumPosition}
                 setEmailPosition={setEmailPosition}
@@ -1306,7 +1316,7 @@ const CustomSDK = ({route, navigation}) => {
               contentContainerStyle={styles.frameContainer}
               showsHorizontalScrollIndicator={false}>
               <TouchableOpacity
-                style={styles.frame}
+                style={styles.frame1}
                 onPress={() => setVisible(true)}>
                 <MaterialCommunityIcons
                   name="text-recognition"
@@ -1334,7 +1344,7 @@ const CustomSDK = ({route, navigation}) => {
           </TouchableOpacity> */}
               <TouchableOpacity
                 onPress={() => setShowFontFamily(true)}
-                style={styles.frame}>
+                style={styles.frame1}>
                 <MaterialCommunityIcons
                   name="draw"
                   size={30}
@@ -1344,7 +1354,7 @@ const CustomSDK = ({route, navigation}) => {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => setShowModal(true)}
-                style={styles.frame}>
+                style={styles.frame1}>
                 <MaterialCommunityIcons
                   name="star-four-points-outline"
                   size={20}
@@ -1352,7 +1362,7 @@ const CustomSDK = ({route, navigation}) => {
                 />
                 <Text style={styles.frameText}>Glow</Text>
               </TouchableOpacity>
-              <View style={styles.frame}>
+              {/* <View style={styles.frame1}>
                 <Text style={styles.frameText}>Effect 5</Text>
               </View>
               <View style={styles.frame}>
@@ -1369,7 +1379,7 @@ const CustomSDK = ({route, navigation}) => {
               </View>
               <View style={styles.frame}>
                 <Text style={styles.frameText}>Effect 10</Text>
-              </View>
+              </View> */}
             </ScrollView>
           )}
         </ScrollView>

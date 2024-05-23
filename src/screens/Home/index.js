@@ -25,8 +25,6 @@ import {
   getTrendingTemlpates,
 } from '../../services/userServices/dashboard.services';
 import {useFocusEffect} from '@react-navigation/native';
-import {MotiText, MotiView} from 'moti';
-import {Skeleton} from 'moti/skeleton';
 import OneSignal from 'react-native-onesignal';
 import {
   getUserProfile,
@@ -243,6 +241,11 @@ const Home = ({navigation}) => {
               }}
             />
           }
+          contentContainerStyle={
+            {
+              // marginBottom: Sizes.hp('10%'),
+            }
+          }
           nestedScrollEnabled>
           {getTemplatesByDateLoading ||
           getTemplatesForQuotesLoading ||
@@ -287,12 +290,13 @@ const Home = ({navigation}) => {
                   <TouchableOpacity
                     style={[
                       styles.naviContainer,
-                      screenName === 'remainder'
-                        ? {
-                            backgroundColor: '#F6E8FB',
-                            borderColor: Colors.borderColor,
-                          }
-                        : null,
+                      // screenName === 'remainder'
+                      // ?
+                      {
+                        backgroundColor: '#F6E8FB',
+                        borderColor: Colors.borderColor,
+                      },
+                      // : null,
                     ]}
                     onPress={() => {
                       // setScreenName('remainder');
@@ -319,12 +323,13 @@ const Home = ({navigation}) => {
                   <TouchableOpacity
                     style={[
                       styles.naviContainer,
-                      screenName === 'wallpaper'
-                        ? {
-                            backgroundColor: '#E9EEFE',
-                            borderColor: Colors.borderColor,
-                          }
-                        : null,
+                      // screenName === 'wallpaper'
+                      // ?
+                      {
+                        backgroundColor: '#E9EEFE',
+                        borderColor: Colors.borderColor,
+                      },
+                      // : null,
                     ]}
                     onPress={() => setScreenName('wallpaper')}>
                     <View style={styles.iconContainer}>
@@ -396,6 +401,7 @@ const Home = ({navigation}) => {
                           fontSize: 18,
                           fontWeight: 'bold',
                           color: Colors.TEXT1,
+                          paddingHorizontal: 5,
                         }}>
                         Trending
                       </Text>

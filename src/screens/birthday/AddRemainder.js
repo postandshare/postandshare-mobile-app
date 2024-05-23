@@ -272,11 +272,13 @@ const AddRemainder = ({navigation}) => {
             justifyContent: 'space-between',
           }}>
           <Text style={styles.Labeltitle}>Person Details</Text>
-          <TouchableOpacity onPress={addPerson}>
-            <Text style={[styles.Labeltitle, {color: Colors.PRIMARY}]}>
-              Add Person
-            </Text>
-          </TouchableOpacity>
+          {eventsAddFormik?.values?.selectedEvent === 'Anniversary' && (
+            <TouchableOpacity onPress={addPerson}>
+              <Text style={[styles.Labeltitle, {color: Colors.PRIMARY}]}>
+                Add Person
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
         {eventsAddFormik?.values?.personDetails.map((person, index) => (
           <View key={index} style={[styles.cardContainer, {marginBottom: 10}]}>

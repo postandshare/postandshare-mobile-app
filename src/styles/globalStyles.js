@@ -179,7 +179,7 @@ const globalStyles = StyleSheet.create({
     alignItems: 'center',
     position: 'absolute',
     right: 20,
-    bottom: 30,
+    bottom: 70,
     zIndex: 1,
   },
   add_icon: {
