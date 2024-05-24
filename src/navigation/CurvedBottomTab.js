@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Alert,
-  Animated,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Animated, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {CurvedBottomBarExpo} from 'react-native-curved-bottom-bar';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Colors from '../constants/Colors';
@@ -13,13 +7,8 @@ import Home from '../screens/Home';
 import NavigationScreenName from '../constants/NavigationScreenName';
 import MyPost from '../screens/mypost';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import BirthdayRemainder from '../screens/birthday/BirthdayRemainder';
 import BirthdayRemainderNavigator from '../screens/birthday';
-import ProfileNavigator from '../screens/profile';
-
-const Screen2 = () => {
-  return <View style={styles.screen2} />;
-};
+import ProfileNavigator from '../screens/profile/index';
 
 const CurvedBottomTab = ({navigation}) => {
   const _renderIcon = (routeName, selectedTab) => {
@@ -61,12 +50,15 @@ const CurvedBottomTab = ({navigation}) => {
         onPress={() => navigate(routeName)}
         style={styles.tabbarItem}>
         {_renderIcon(routeName, selectedTab)}
+        <Text
+          style={{color: routeName === selectedTab ? Colors.PRIMARY : 'gray'}}>
+          {routeName}
+        </Text>
       </TouchableOpacity>
     );
   };
 
   return (
-    // <NavigationContainer>
     <CurvedBottomBarExpo.Navigator
       type="DOWN"
       style={styles.bottomBar}
@@ -87,7 +79,7 @@ const CurvedBottomTab = ({navigation}) => {
             onPress={() =>
               navigation.navigate(NavigationScreenName.ADD_NAVIGATOR)
             }>
-            <Ionicons name={'add-sharp'} color="#404040" size={35} />
+            <Ionicons name={'add-circle-outline'} color="#404040" size={45} />
           </TouchableOpacity>
         </Animated.View>
       )}
@@ -113,8 +105,6 @@ const CurvedBottomTab = ({navigation}) => {
         position="RIGHT"
       />
     </CurvedBottomBarExpo.Navigator>
-
-    // </NavigationContainer>
   );
 };
 
@@ -171,13 +161,5 @@ export const styles = StyleSheet.create({
   img: {
     width: 30,
     height: 30,
-  },
-  screen1: {
-    flex: 1,
-    backgroundColor: '#BFEFFF',
-  },
-  screen2: {
-    flex: 1,
-    backgroundColor: '#FFEBCD',
   },
 });

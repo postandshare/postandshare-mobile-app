@@ -120,13 +120,13 @@ const CustomDrawerLeft = ({navigation, route}) => {
             navigation.navigate(NavigationScreenName.TERM_AND_CONDITION)
           }
         />
-        <Item
+        {/* <Item
           icon={<Entypo name={'images'} style={styles.icon} />}
           text="My Post"
           path={NavigationScreenName.MY_POST}
           onPress={() => navigation.navigate(NavigationScreenName.MY_POST)}
           isActive={route?.name === NavigationScreenName.MY_POST}
-        />
+        /> */}
         <Item
           icon={<Entypo name={'video'} style={styles.icon} />}
           text="Tutorials"

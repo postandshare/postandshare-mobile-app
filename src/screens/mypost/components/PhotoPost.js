@@ -37,6 +37,8 @@ import Images from '../../../constants/images';
 import DeleteAlert from '../../../components/DeleteAlert';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import RNFS from 'react-native-fs';
+import PhotoPostCard from '../cards/PhotoPostCard';
+import ModalPhotoPostCard from '../cards/ModalPhotoPostCard';
 
 const SearchSortFilter = ({
   searchQuery,
@@ -158,6 +160,11 @@ const PhotoPost = ({navigation}) => {
   const {mutate: deleteUserPostMuatate, isLoading: deleteUserPostLoading} =
     useMutation(deleteUserPost, {
       onSuccess: success => {
+        setPostData(prev => ({
+          ...prev,
+          list: prev?.list?.filter(post => post?._id !== deletePostDocId),
+          count: prev?.count - 1,
+        }));
         setDeleteAlertVisible(false);
         ToastAndroid.show(success?.data?.message, ToastAndroid.SHORT);
         getUserPostRefetch();
@@ -319,76 +326,29 @@ const PhotoPost = ({navigation}) => {
             alignItems: 'center',
             paddingBottom: 100,
           }}
-          renderItem={({item, index}) => {
-            return (
-              <TouchableOpacity
-                ref={scrollViewRef}
-                key={index}
-                onLongPress={() => {
-                  setDeleteAlertVisible(true);
-                  setDeletePostDocId(item?._id);
-                }}
-                onPress={() => {
-                  setImageIndexId(item?._id);
-                  // setImages([item?.postLink]);
-                  setModalVisible(true);
-                }}
-                style={{
-                  width: Sizes.wp('45%'),
-                  height: 180,
-                  borderWidth: 1,
-                  borderColor: Colors.PRIMARY,
-                  marginVertical: 10,
-                  borderRadius: 10,
-                  overflow: 'hidden',
-                  marginHorizontal: 5,
-                }}>
-                {isLoading && (
-                  <ActivityIndicator
-                    style={{
-                      position: 'absolute',
-                      zIndex: 1,
-                      alignSelf: 'center',
-                      top: '40%',
-                    }}
-                    size="small"
-                    color={Colors.PRIMARY}
-                  />
-                )}
-                <ImageBackground
-                  onLoadEnd={() => setIsLoading(false)}
-                  source={{uri: item?.postLink}}
-                  style={{
-                    width: '100%',
-                    zIndex: 1,
-                    height: '100%',
-                  }}
-                  borderRadius={10}
-                  resizeMode="contain">
-                  <Text
-                    style={{
-                      position: 'absolute',
-                      bottom: 0,
-                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                      color: 'white',
-                      width: '100%',
-                      padding: 5,
-                      textAlign: 'center',
-                    }}>
-                    {moment().diff(moment(item?.createdOn), 'days') < 1
-                      ? `${moment().diff(
-                          moment(item?.createdOn),
-                          'hours',
-                        )} hours ago`
-                      : `${moment().diff(
-                          moment(item?.createdOn),
-                          'days',
-                        )} days ago`}
-                  </Text>
-                </ImageBackground>
-              </TouchableOpacity>
-            );
-          }}
+          renderItem={({item, index}) => (
+            <ModalPhotoPostCard
+              item={item}
+              scrollViewRef={scrollViewRef}
+              index={index}
+              setDeleteAlertVisible={setDeleteAlertVisible}
+              setDeletePostDocId={setDeletePostDocId}
+              isLoading={isLoading}
+              setIsLoading={setIsLoading}
+            />
+            // for gallery view
+            // <PhotoPostCard
+            //   scrollViewRef={scrollViewRef}
+            //   index={index}
+            //   setDeleteAlertVisible={setDeleteAlertVisible}
+            //   setDeletePostDocId={setDeletePostDocId}
+            //   item={item}
+            //   setImageIndexId={setImageIndexId}
+            //   setModalVisible={setModalVisible}
+            //   isLoading={isLoading}
+            //   setIsLoading={setIsLoading}
+            // />
+          )}
           ListEmptyComponent={() => (
             <Text
               style={{alignSelf: 'center', fontSize: 15, fontWeight: '500'}}>
@@ -407,7 +367,7 @@ const PhotoPost = ({navigation}) => {
             />
           }
           ListFooterComponent={ListEndLoader}
-          numColumns={2}
+          numColumns={3}
         />
       </ImageBackground>
     </>
