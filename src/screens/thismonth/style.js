@@ -1,9 +1,10 @@
 import {StyleSheet} from 'react-native';
+import Colors from '../../constants/Colors';
 
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: Colors.transparent,
   },
   image: {
     width: 120,

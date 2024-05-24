@@ -300,9 +300,9 @@ const Home = ({navigation}) => {
                     ]}
                     onPress={() => {
                       // setScreenName('remainder');
-                      navigation.navigate(
-                        NavigationScreenName.BIRTHDAY_REMAINDER_NAVIGATOR,
-                      );
+                      // navigation.navigate(
+                      //   NavigationScreenName.BIRTHDAY_REMAINDER_NAVIGATOR,
+                      // );
                     }}>
                     <View style={styles.iconContainer}>
                       <MaterialIcons

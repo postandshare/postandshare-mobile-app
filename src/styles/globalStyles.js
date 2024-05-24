@@ -9,11 +9,11 @@ const globalStyles = StyleSheet.create({
     borderRadius: 10,
   },
   backgroundImage: {
-    flex: 1,
+    flexGrow: 1,
     resizeMode: 'cover',
     justifyContent: 'center',
     width: '100%',
-    height: '100%',
+    // height: '100%',
   },
   input_label: {
     color: '#0C2F49',
@@ -179,7 +179,8 @@ const globalStyles = StyleSheet.create({
     alignItems: 'center',
     position: 'absolute',
     right: 20,
-    bottom: 70,
+    bottom: 170,
+    // bottom: 70,
     zIndex: 1,
   },
   add_icon: {

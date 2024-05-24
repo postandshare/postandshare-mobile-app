@@ -324,7 +324,7 @@ const PhotoPost = ({navigation}) => {
             padding: 10,
             justifyContent: 'center',
             alignItems: 'center',
-            paddingBottom: 100,
+            paddingBottom: 200,
           }}
           renderItem={({item, index}) => (
             <ModalPhotoPostCard

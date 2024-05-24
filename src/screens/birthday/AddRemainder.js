@@ -182,7 +182,7 @@ const AddRemainder = ({navigation}) => {
             open: false,
           }));
         }}
-        maximumDate={new Date()}
+        // maximumDate={new Date()}
         mode="date"
       />
 
@@ -193,7 +193,7 @@ const AddRemainder = ({navigation}) => {
         nestedScrollEnabled
         contentContainerStyle={{
           flexGrow: 1,
-          paddingBottom: 20,
+          paddingBottom: 100,
           backgroundColor: Colors.Background,
         }}>
         <Text style={styles.Labeltitle}>Event</Text>

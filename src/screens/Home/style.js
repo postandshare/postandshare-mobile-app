@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
   root: {
     backgroundColor: 'transparent',
     minHeight: Sizes.hp('86%'),
-    paddingBottom: Sizes.hp('10%'),
+    paddingBottom: Sizes.hp('25%'),
   },
   box_card_wrapper: {
     flexDirection: 'row',

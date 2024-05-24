@@ -5,8 +5,13 @@ const {StyleSheet} = require('react-native');
 
 const styles = StyleSheet.create({
   root: {
-    flexGrow: 1,
+    // flexGrow: 1,
     backgroundColor: Colors.transparent,
+  },
+  noEventsText: {
+    fontSize: 16,
+    color: Colors.TEXT1,
+    textAlign: 'center',
   },
   image_wrap: {
     alignItems: 'center',
@@ -24,11 +29,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    flex: 1,
+    // flex: 1,
     fontSize: 15,
     fontWeight: '500',
     color: Colors.TEXT1,
-    margin: 10,
+    paddingHorizontal: 10,
+    marginVertical: 2,
   },
   Labeltitle: {
     marginTop: 10,

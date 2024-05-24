@@ -1,5 +1,12 @@
 import React from 'react';
-import {Animated, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Animated,
+  Keyboard,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {CurvedBottomBarExpo} from 'react-native-curved-bottom-bar';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Colors from '../constants/Colors';
@@ -11,6 +18,8 @@ import BirthdayRemainderNavigator from '../screens/birthday';
 import ProfileNavigator from '../screens/profile/index';
 
 const CurvedBottomTab = ({navigation}) => {
+  const [isKeyboardVisible, setKeyboardVisible] = React.useState(false);
+  const tabRef = React.useRef(null);
   const _renderIcon = (routeName, selectedTab) => {
     let icon = '';
 
@@ -58,8 +67,33 @@ const CurvedBottomTab = ({navigation}) => {
     );
   };
 
+  React.useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        if (tabRef.current) {
+          tabRef.current.setVisible(false);
+        }
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        if (tabRef.current) {
+          tabRef.current.setVisible(true);
+        }
+      },
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
   return (
     <CurvedBottomBarExpo.Navigator
+      ref={tabRef}
       type="DOWN"
       style={styles.bottomBar}
       shadowStyle={styles.shawdow}

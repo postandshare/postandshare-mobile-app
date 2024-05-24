@@ -55,7 +55,7 @@ const BirthRemaiderCard = ({item, navigation}) => {
             {item?.personDetails[0]?.personName}
           </Text>
           <Text style={styles.item_date}>
-            {moment(new Date(item?.eventDate)).format('LLL')}
+            {moment(new Date(item?.eventDate)).format('LL')}
           </Text>
         </View>
         {/* remaindee  */}
@@ -63,15 +63,30 @@ const BirthRemaiderCard = ({item, navigation}) => {
           style={[
             styles.event_container,
             {
-              borderColor: randomColor,
-              backgroundColor: randomColor + '20',
+              borderColor:
+                item?.eventType === 'Birthday'
+                  ? '#CD40FF'
+                  : item?.eventType === 'Anniversary'
+                  ? '#E9EEFE'
+                  : randomColor,
+              backgroundColor:
+                item?.eventType === 'Birthday'
+                  ? '#CD40FF20'
+                  : item?.eventType === 'Anniversary'
+                  ? '#E9EEFE20'
+                  : randomColor,
             },
           ]}>
           <Text
             style={[
               styles.event_text,
               {
-                color: randomColor,
+                color:
+                  item?.eventType === 'Birthday'
+                    ? '#CD40FF'
+                    : item?.eventType === 'Anniversary'
+                    ? '#E9EEFE'
+                    : randomColor,
               },
             ]}>
             {item?.eventType}
@@ -104,19 +119,21 @@ const styles = StyleSheet.create({
     borderColor: '#3D398920',
     minHeight: 80,
     padding: 10,
+    alignItems: 'center',
     marginVertical: 12,
+    elevation: 5,
   },
   item_image_container: {
     height: 55,
-    width: 60,
+    width: 55,
     borderRadius: 50,
     alignSelf: 'center',
-    margin: 10,
+    // margin: 10,
   },
   item_image: {
     height: 55,
-    width: 60,
-    borderRadius: 10,
+    width: 55,
+    borderRadius: 50,
     alignSelf: 'center',
   },
   item_details_container: {
@@ -139,12 +156,12 @@ const styles = StyleSheet.create({
     flex: 0.61,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 1,
+    borderWidth: 0.1,
     // height: 30,
     padding: 5,
     margin: 10,
     alignSelf: 'center',
-    borderRadius: 10,
+    borderRadius: 2,
   },
   event_text: {
     fontSize: 12,
