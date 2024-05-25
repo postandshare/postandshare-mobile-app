@@ -124,29 +124,22 @@ const ProfileView = ({}) => {
 
   return (
     <>
-      <DashboardTopHeader
-        title="Profile"
-        onPressMenu={() => navigation.openDrawer()}
-        onPressNotification={() => navigation.navigate('Notification')}
-        IconProp={<FontAwesome name={'edit'} size={25} color={Colors.TEXT1} />}
-        onPressIcon={() =>
-          navigation.navigate('EditProfile', {
-            data: getUserProfile_Data?.data?.obj,
-          })
-        }
-      />
-      {/* <TopHeader
-        titile={'Profile'}
-        IconProp={<FontAwesome name={'edit'} size={25} color={Colors.TEXT1} />}
-        onPress={() =>
-          navigation.navigate('EditProfile', {
-            data: getUserProfile_Data?.data?.obj,
-          })
-        }
-      /> */}
       <ImageBackground
         source={images.background}
         style={globalStyles.backgroundImage}>
+        <DashboardTopHeader
+          title="Profile"
+          onPressMenu={() => navigation.openDrawer()}
+          onPressNotification={() => navigation.navigate('Notification')}
+          IconProp={
+            <FontAwesome name={'edit'} size={25} color={Colors.TEXT1} />
+          }
+          onPressIcon={() =>
+            navigation.navigate('EditProfile', {
+              data: getUserProfile_Data?.data?.obj,
+            })
+          }
+        />
         <ScrollView
           contentContainerStyle={styles.root}
           refreshControl={

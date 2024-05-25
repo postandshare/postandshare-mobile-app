@@ -127,13 +127,13 @@ const ChangeLeader = ({route, navigation}) => {
           legislativeAssembly={legislativeAssembly}
         />
       </ActionSheet>
-      <TopHeader titile={'Change Leader'} />
       <Loader open={updatePoliticalBusinessLeaderLoading} text="Updating..." />
       <Loader open={addPoliticalLeaderLoading} text="Adding..." />
 
       <ImageBackground
         source={images.background}
         style={globalStyles.backgroundImage}>
+        <TopHeader titile={'Change Leader'} />
         <ScrollView
           refreshControl={
             <RefreshControl

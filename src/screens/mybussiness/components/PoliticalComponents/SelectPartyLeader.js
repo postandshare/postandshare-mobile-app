@@ -238,18 +238,18 @@ const SelectPartyLeader = ({route, navigation}) => {
           <View style={styles.partyLeaderContainer}>
             <View style={styles.row_text_container}>
               <Text style={styles.title}>Selected Leader</Text>
-              {businessId && (
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('Change Leader', {
-                      partyDocId: partyDocId,
-                      bussinessDocId: businessId,
-                      buinessDtata: politicalData,
-                    });
-                  }}>
-                  <Text style={styles.changeLeader_text}>Change</Text>
-                </TouchableOpacity>
-              )}
+              {/* {businessId && ( */}
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Change Leader', {
+                    partyDocId: partyDocId,
+                    bussinessDocId: businessId,
+                    buinessDtata: politicalData,
+                  });
+                }}>
+                <Text style={styles.changeLeader_text}>Change</Text>
+              </TouchableOpacity>
+              {/* )} */}
             </View>
             <View style={styles.imageWrap}>
               {businessId
@@ -342,6 +342,7 @@ const styles = StyleSheet.create({
   root: {
     flexGrow: 1,
     backgroundColor: Colors.transparent,
+    paddingBottom: 200,
   },
   partyLogoContainer: {
     margin: 10,

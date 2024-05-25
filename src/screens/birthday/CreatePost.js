@@ -1,162 +1,75 @@
 /* eslint-disable react-native/no-inline-styles */
-import {ScrollView, Text, View} from 'react-native';
-import React from 'react';
+import {
+  ImageBackground,
+  ScrollView,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useCallback, useState} from 'react';
 import styles from './style';
 import TopHeader from '../../components/TopHeader';
-import {RadioButton} from 'react-native-paper';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import CustomButton from '../../components/CustomButton';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import images from '../../constants/images';
+import globalStyles from '../../styles/globalStyles';
+import {useQuery} from '@tanstack/react-query';
+import {getTemplets} from '../../services/userServices/eventTemplate.services';
+import {useFocusEffect} from '@react-navigation/native';
 
-const TextSms_Data = [
-  {
-    id: '1',
-    number: '+918957339512',
-    text:
-      'Wish you a very happy birthday' +
-      '\n' +
-      'May your all dreams come true' +
-      '\n' +
-      'Stay blessed' +
-      '\n' +
-      'Stay happy',
-  },
-  {
-    id: '2',
-    number: '+918957339512',
-    text:
-      'Wish you a very happy birthday' +
-      '\n' +
-      'May your all dreams come true' +
-      '\n' +
-      'Stay blessed' +
-      '\n' +
-      'Stay happy',
-  },
-  {
-    id: '3',
-    number: '+918957339512',
-    text:
-      'Wish you a very happy birthday' +
-      '\n' +
-      'May your all dreams come true' +
-      '\n' +
-      'Stay blessed' +
-      '\n' +
-      'Stay happy',
-  },
-  {
-    id: '4',
-    number: '+918957339512',
-    text:
-      'Wish you a very happy birthday' +
-      '\n' +
-      'May your all dreams come true' +
-      '\n' +
-      'Stay blessed' +
-      '\n' +
-      'Stay happy',
-  },
-  {
-    id: '5',
-    number: '+918957339512',
-    text:
-      'Wish you a very happy birthday' +
-      '\n' +
-      'May your all dreams come true' +
-      '\n' +
-      'Stay blessed' +
-      '\n' +
-      'Stay happy',
-  },
-];
+const CreatePost = ({route, navigation}) => {
+  const {eventType, selectedFilter} = route?.params || {};
 
-const CreatePost = () => {
-  const [checked, setChecked] = React.useState('textsms');
+  const {
+    isLoading: getTempletsLoading,
+    isFetching: getTempletsFetching,
+    refetch: getTempletsRefetch,
+    data: getTemplets_Data,
+    isError: getTemplets_isError,
+  } = useQuery({
+    queryKey: ['getTemplets'],
+    queryFn: () =>
+      getTemplets({
+        templetType: selectedFilter,
+
+        eventType: eventType,
+      }),
+    onSuccess: success => {
+      console.log(success?.data, 'sucess?.data');
+    },
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
+
+  useFocusEffect(
+    useCallback(() => {
+      getTempletsRefetch();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [navigation, getTempletsRefetch]),
+  );
+
   return (
     <>
-      <TopHeader titile={'Create Post'} />
-
-      <ScrollView
-        contentContainerStyle={styles.root}
-        showsVerticalScrollIndicator={false}>
-        {/* container for text and whatsapp option */}
-        <View style={styles.container_textsms}>
-          <View style={styles.view_container}>
-            <RadioButton
-              value="textsms"
-              status={checked === 'textsms' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('textsms')}
-            />
-            <Text style={styles.title}>Text SMS</Text>
-          </View>
-          <View style={styles.view_container}>
-            <RadioButton
-              value="whatsapp"
-              status={checked === 'whatsapp' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('whatsapp')}
-            />
-            <Text style={styles.title}>Whatsapp</Text>
-          </View>
-        </View>
-
-        {/* text sms container*/}
-        {checked === 'textsms' ? (
-          <>
-            {/* border for selection of the nnumber that would used for sending */}
-            <View style={styles.textsms_container}>
-              <View style={styles.textsms_option_border}>
-                <AntDesign name="message1" size={24} color="black" />
-                <Text style={styles.textsms_text}>+918957339512</Text>
-              </View>
-            </View>
-
-            {/* text sms data */}
-            {TextSms_Data.map((item, index) => {
-              return (
-                <View
-                  style={[styles.textsms_container, {marginVertical: 10}]}
-                  key={index}>
-                  <View style={styles.textsms_view}>
-                    <Text style={styles.textsms_text}>{item.text}</Text>
-                    <AntDesign name="edit" size={24} color="black" />
-                  </View>
-                </View>
-              );
-            })}
-
-            <CustomButton title={'Save'} customStyle={{bottom: 10}} />
-          </>
-        ) : null}
-        {/* whatsapp container */}
-        {checked === 'whatsapp' ? (
-          <>
-            {/* border for selection of the nnumber that would used for sending */}
-            <View style={styles.textsms_container}>
-              <View style={styles.textsms_option_border}>
-                <FontAwesome name="whatsapp" size={24} color="black" />
-                <Text style={styles.textsms_text}>+918957339512</Text>
-              </View>
-            </View>
-
-            {/* text sms data */}
-            {TextSms_Data.map((item, index) => {
-              return (
-                <View
-                  style={[styles.textsms_container, {marginVertical: 10}]}
-                  key={index}>
-                  <View style={styles.textsms_view}>
-                    <Text style={styles.textsms_text}>{item.text}</Text>
-                    <AntDesign name="edit" size={24} color="black" />
-                  </View>
-                </View>
-              );
-            })}
-
-            <CustomButton title={'Save'} customStyle={{bottom: 10}} />
-          </>
-        ) : null}
-      </ScrollView>
+      <ImageBackground
+        source={images?.background}
+        style={globalStyles?.backgroundImage}>
+        <TopHeader titile={'Create Post'} />
+        <ScrollView
+          contentContainerStyle={styles.root}
+          showsVerticalScrollIndicator={false}>
+          {getTemplets_Data?.data?.data?.map((item, index) => {
+            return (
+              <TouchableOpacity
+                activeOpacity={0.8}
+                key={index}
+                style={styles?.templet}>
+                <Text style={{}}>Create Post Templated</Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+      </ImageBackground>
     </>
   );
 };

@@ -20,7 +20,7 @@ const SkeletonLoading = () => {
         style={[styles.container, {}]}
         animate={{backgroundColor: Colors.transparent}}>
         {/* boxes for the navigation */}
-        <View
+        {/* <View
           style={{
             flexDirection: 'row',
             gap: 30,
@@ -105,7 +105,7 @@ const SkeletonLoading = () => {
             />
           </View>
         </View>
-        <Spacer />
+        <Spacer /> */}
 
         {/* trending part */}
         <Skeleton

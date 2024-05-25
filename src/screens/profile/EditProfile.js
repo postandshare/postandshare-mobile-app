@@ -200,10 +200,10 @@ const EditProfile = ({route, navigation}) => {
     <>
       <Loader open={imageUploading} text="Uploading Image" />
       <Loader open={updateUserProfileLoading} text="Updating Deatils..." />
-      <TopHeader titile={'Edit Profile'} />
       <ImageBackground
         source={images.background}
         style={globalStyles.backgroundImage}>
+        <TopHeader titile={'Edit Profile'} />
         <ScrollView
           keyboardDismissMode="on-drag"
           contentContainerStyle={styles.root}>

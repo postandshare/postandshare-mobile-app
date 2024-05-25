@@ -34,15 +34,11 @@ const LightColors_Card = [
   '#80000020',
 ];
 
-const BirthRemaiderCard = ({item, navigation}) => {
+const BirthRemaiderCard = ({item, onPress}) => {
   const randomColor =
     Colors_Card[Math.floor(Math.random() * Colors_Card.length)];
   return (
-    <TouchableOpacity
-      style={styles.item_container}
-      onPress={() => {
-        navigation.navigate('BirthdayRemainderDetail');
-      }}>
+    <TouchableOpacity style={styles.item_container} onPress={onPress}>
       <View style={styles.item_image_container}>
         <Image
           source={{uri: item?.personDetails[0]?.profilePic}}

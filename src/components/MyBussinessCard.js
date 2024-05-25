@@ -47,9 +47,9 @@ const MyBussinessCard = ({
       <View style={styles.name_container}>
         <Text style={styles.bussinessName}>{name}</Text>
         <Text style={styles.est_date}>{details ?? '--'}</Text>
-        <Text style={styles.est_date}>
+        {/* <Text style={styles.est_date}>
           {moment(EstblishmentDate).format('LL')}
-        </Text>
+        </Text> */}
       </View>
 
       {/* edit button */}

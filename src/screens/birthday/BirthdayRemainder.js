@@ -1,4 +1,5 @@
 import {
+  FlatList,
   ImageBackground,
   ScrollView,
   Text,
@@ -20,7 +21,8 @@ import NavigationScreenName from '../../constants/NavigationScreenName';
 import Colors from '../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
 
-const Tray = ({backgroundColor, textColor, title, onPress}) => {
+// for the filteration in the events list
+export const Tray = ({backgroundColor, textColor, title, onPress}) => {
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -71,9 +73,9 @@ const BirthdayRemainder = ({navigation}) => {
       setEvents(prev => ({
         ...prev,
         list: success?.data?.data,
-        // page: success?.data?.data?.page,
-        // pages: success?.data?.data?.pages,
-        // count: success?.data?.data?.count,
+        page: success?.data?.page,
+        pages: success?.data?.totalPage,
+        count: success?.data?.totalDocuments,
       }));
     },
     onError: err => {
@@ -140,6 +142,7 @@ const BirthdayRemainder = ({navigation}) => {
           <Text style={styles.title}>see all</Text>
         </View>
 
+        {/* tray for the filter the events */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -185,28 +188,48 @@ const BirthdayRemainder = ({navigation}) => {
           />
         </ScrollView>
 
-        <ScrollView
+        {/* list for the today events */}
+        <FlatList
           contentContainerStyle={{...styles.root, paddingBottom: 0}}
-          showsVerticalScrollIndicator={false}>
-          {todaysEvents?.length === 0 && (
+          data={todaysEvents}
+          keyExtractor={(item, index) => index.toString()}
+          ListEmptyComponent={
             <Text style={styles.noEventsText}>No Events Today</Text>
+          }
+          renderItem={({item, index}) => (
+            <BirthRemaiderCard
+              item={item}
+              key={index}
+              onPress={() =>
+                navigation.navigate('BirthdayRemainderDetail', {
+                  event: item,
+                })
+              }
+            />
           )}
-          {todaysEvents?.map((event, index) => (
-            <BirthRemaiderCard item={event} key={index} />
-          ))}
-        </ScrollView>
+        />
 
         <Text style={styles.title}>Upcoming</Text>
-        <ScrollView
+        {/* list for the upcoming list */}
+        <FlatList
           contentContainerStyle={{...styles.root, paddingBottom: 400}}
-          showsVerticalScrollIndicator={false}>
-          {upcomingEvents?.length === 0 && (
+          data={upcomingEvents}
+          keyExtractor={(item, index) => index.toString()}
+          ListEmptyComponent={
             <Text style={styles.noEventsText}>No Upcoming Events</Text>
+          }
+          renderItem={({item, index}) => (
+            <BirthRemaiderCard
+              item={item}
+              key={index}
+              onPress={() =>
+                navigation.navigate('BirthdayRemainderDetail', {
+                  event: item,
+                })
+              }
+            />
           )}
-          {upcomingEvents?.map((event, index) => (
-            <BirthRemaiderCard item={event} key={index} />
-          ))}
-        </ScrollView>
+        />
       </ImageBackground>
     </>
   );

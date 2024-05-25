@@ -108,8 +108,14 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
                 />
               </TouchableOpacity>
               <View style={styles.uploadpic_container_eventview}>
+                <Text
+                  // numberOfLines={1}
+                  // ellipsizeMode="tail"
+                  style={styles.uploadpic_container_eventname}>
+                  {item?.name ?? null}
+                </Text>
                 <Text style={styles.uploadpic_container_eventname}>
-                  {moment().diff(moment(item?.createdOn), 'days') < 1
+                  {/* {moment().diff(moment(item?.createdOn), 'days') < 1
                     ? `${moment().diff(
                         moment(item?.createdOn),
                         'hours',
@@ -117,13 +123,8 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
                     : `${moment().diff(
                         moment(item?.createdOn),
                         'days',
-                      )} days ago`}
-                </Text>
-                <Text
-                  // numberOfLines={1}
-                  // ellipsizeMode="tail"
-                  style={styles.uploadpic_container_eventname}>
-                  {item?.name ?? null}
+                      )} days ago`} */}
+                  {moment(item?.createdOn).format('MMM Do')}
                 </Text>
                 {/* <ScrollingText
                   style={styles.uploadpic_container_eventname}

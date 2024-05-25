@@ -107,18 +107,18 @@ const SelectBussiness = ({route, navigation}) => {
 
   return (
     <>
-      <TopHeader
-        titile={'Select Bussiness'}
-        add
-        onPress={() =>
-          navigation.navigate(NavigationScreenName.MY_BUSSINESS, {
-            screen: 'Add Bussiness',
-          })
-        }
-      />
       <ImageBackground
         source={images.background}
         style={globalStyles.backgroundImage}>
+        <TopHeader
+          titile={'Select Bussiness'}
+          add
+          onPress={() =>
+            navigation.navigate(NavigationScreenName.MY_BUSSINESS, {
+              screen: 'Add Bussiness',
+            })
+          }
+        />
         <ScrollView
           refreshControl={
             <RefreshControl
@@ -130,7 +130,39 @@ const SelectBussiness = ({route, navigation}) => {
           }
           contentContainerStyle={styles.root}>
           {/* card for the bussiness name and update */}
-
+          <SearchSortFilter
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            sortOption={sortOption}
+            setSortOption={setSortOption}
+          />
+          <Text style={styles.text}>Your Profile</Text>
+          {/* <MyBussinessCard */}
+          <MyBussinessCard
+            name={
+              getUserProfile_Data?.data?.obj?.firstName
+                ? getUserProfile_Data?.data?.obj?.firstName
+                : '-' + getAllBusinessList_Data?.data?.obj?.middleName
+                ? getUserProfile_Data?.data?.obj?.middleName
+                : '-' + getUserProfile_Data?.data?.obj?.lastName
+                ? getUserProfile_Data?.data?.obj?.lastName
+                : '-'
+            }
+            EstblishmentDate={getUserProfile_Data?.data?.obj?.DOB}
+            image={getUserProfile_Data?.data?.obj?.profilePic}
+            userDocId={getUserProfile_Data?.data?.obj?._id}
+            // lastUpdated={item?.lastUpdated ?? item?.createdOn}
+            onPress={() =>
+              picData
+                ? navigation.navigate('CustomSDK', {
+                    picData: picData?.photo,
+                    picDeatils: picData,
+                    businessDetails: getUserProfile_Data?.data?.obj,
+                  })
+                : null
+            }
+          />
+          <Text style={styles.text}>Your Business</Text>
           {getAllBusinessList_Data?.data?.list?.length === 0 && (
             <View style={styles.noData}>
               <Text style={styles.noDataText}>
@@ -180,6 +212,7 @@ const SelectBussiness = ({route, navigation}) => {
                     ? navigation.navigate('CustomSDK', {
                         picData: picData?.photo,
                         businessDetails: item,
+                        picDeatils: picData,
                       })
                     : navigation.navigate('View Bussiness', {
                         businessId: item?._id,
@@ -188,37 +221,6 @@ const SelectBussiness = ({route, navigation}) => {
                 }
               />
             ))}
-
-            <Text style={styles.text}>Your Profile</Text>
-            {/* <MyBussinessCard */}
-            <MyBussinessCard
-              name={
-                getUserProfile_Data?.data?.obj?.firstName
-                  ? getUserProfile_Data?.data?.obj?.firstName
-                  : '-' + getAllBusinessList_Data?.data?.obj?.middleName
-                  ? getUserProfile_Data?.data?.obj?.middleName
-                  : '-' + getUserProfile_Data?.data?.obj?.lastName
-                  ? getUserProfile_Data?.data?.obj?.lastName
-                  : '-'
-              }
-              EstblishmentDate={getUserProfile_Data?.data?.obj?.DOB}
-              image={getUserProfile_Data?.data?.obj?.profilePic}
-              userDocId={getUserProfile_Data?.data?.obj?._id}
-              // lastUpdated={item?.lastUpdated ?? item?.createdOn}
-              onPress={
-                () =>
-                  picData
-                    ? navigation.navigate('CustomSDK', {
-                        picData: picData?.photo,
-                        businessDetails: getUserProfile_Data?.data?.obj,
-                      })
-                    : null
-                // : navigation.navigate('View Bussiness', {
-                //     businessId: item?._id,
-                //     businessType: item?.businessType,
-                //   })
-              }
-            />
           </View>
         </ScrollView>
       </ImageBackground>

@@ -9,6 +9,14 @@ export const getEvents = params => {
     params,
   });
 };
+export const getEvent = params => {
+  return authAxiosInstance.get(
+    `${personalEvent_route}/getEvent/${params?.eventDocId}`,
+    {
+      params,
+    },
+  );
+};
 export const getReminder = params => {
   return authAxiosInstance.get(`${personalEvent_route}/getReminder`, {
     params,

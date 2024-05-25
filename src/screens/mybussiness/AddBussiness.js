@@ -26,10 +26,10 @@ const AddBussiness = ({route}) => {
   );
   return (
     <>
-      <TopHeader titile={'AddBussiness'} />
       <ImageBackground
         source={images.background}
         style={globalStyles.backgroundImage}>
+        <TopHeader titile={'AddBussiness'} />
         <View style={{backgroundColor: Colors.transparent, flex: 1}}>
           {/* bussiness selection */}
           {!orgBussinessType && (

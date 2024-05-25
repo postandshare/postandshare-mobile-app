@@ -268,8 +268,8 @@ const FrameSelection = ({
         <Image
           source={{uri: item?.framePic}}
           style={{
-            height: 50,
-            width: 50,
+            height: 60,
+            width: 60,
             borderRadius: 5,
           }}
         />
@@ -279,7 +279,8 @@ const FrameSelection = ({
 };
 
 const CustomSDK = ({route, navigation}) => {
-  const {picData, businessDetails} = route.params || {};
+  const {picData, businessDetails, picDeatils} = route.params || {};
+
   const [logoPosition, setLogoPosition] = useState({
     x: 0,
     y: 0,
@@ -523,7 +524,6 @@ const CustomSDK = ({route, navigation}) => {
 
   return (
     <>
-      <TopHeader titile={'Custom SDK'} next={'Next'} onPress={onCapture} />
       <Loader open={imageUploading || addUserPostLoading} text="Loading..." />
       <Loader
         open={getOrgFrameLoading || getOrgFrameFetching}
@@ -702,6 +702,11 @@ const CustomSDK = ({route, navigation}) => {
       <ImageBackground
         source={images.background}
         style={globalStyles.backgroundImage}>
+        <TopHeader
+          titile={picDeatils?.name ?? 'Custom SDK'}
+          next={'Next'}
+          onPress={onCapture}
+        />
         <ScrollView
           refreshControl={
             <RefreshControl

@@ -1,9 +1,21 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {
+  Image,
+  PermissionsAndroid,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  View,
+} from 'react-native';
+import React, {useState} from 'react';
 import Colors from '../../../constants/Colors';
 import images from '../../../constants/images';
 import Sizes from '../../../constants/Sizes';
 import moment from 'moment';
+import ImagePicker from 'react-native-image-crop-picker';
+import ProfilePic from '../../../components/ProfilePic';
+import {useMutation} from '@tanstack/react-query';
+import {updateSelfPhoto} from '../../../services/userServices/profile.services';
+import uploadFile from '../../../utils/uploadFile';
 
 const LabelText = ({label, value}) => {
   return (
@@ -19,15 +31,75 @@ const LabelText = ({label, value}) => {
 };
 
 const ProfileDetails = ({data}) => {
+  const [profilePic, setprofilePic] = useState(data?.profilePic ?? '');
+  const [imageUploading, setImageUploading] = useState(false);
+  const {mutate: updateSelfPhotoMutate, isLoading: updateSelfPhotoLoading} =
+    useMutation(updateSelfPhoto, {
+      onSuccess: ({data}) => {
+        ToastAndroid.show(data?.message, ToastAndroid.LONG);
+      },
+      onError: err =>
+        ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG),
+      enabled: false,
+    });
+
+  const uploadePhoto = async (path, mime) => {
+    try {
+      setImageUploading(true);
+      const uplode = await uploadFile({
+        filePath: {path: path},
+        fileLocation: `profile/${Date.now()}`,
+        contentType: mime,
+      });
+      setImageUploading(false);
+      updateSelfPhotoMutate({
+        profilePic: uplode?.fileURL,
+      });
+      setprofilePic(uplode?.fileURL);
+    } catch (error) {
+      setImageUploading(false);
+    }
+  };
+
+  // profile pic image picker
+  const TakePhotofromGallery = async () => {
+    try {
+      await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        {
+          title: 'Post And Share App',
+          message:
+            'We want to access your photos' +
+            'so you can take awesome pictures.',
+        },
+      );
+      ImagePicker.openPicker({
+        width: 300,
+        height: 400,
+        cropping: true,
+      })
+        .then(image => {
+          console.log(image, 'imgae in the edit profile');
+          uploadePhoto(image.path, image.mime);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.log(error);
+      ToastAndroid.show('Permission Denied', ToastAndroid.LONG);
+    }
+  };
+
   return (
     <View style={styles.container}>
       {/* profile image */}
-      <Image
-        source={
-          data?.profilePic ? {uri: data?.profilePic} : images.akSchoolIcon
-        }
-        style={styles.profile_pic}
-      />
+      <View style={styles.profile_pic}>
+        <ProfilePic
+          imageUrl={profilePic}
+          TakePhotofromGallery={TakePhotofromGallery}
+        />
+      </View>
       {/* name */}
       <Text style={styles.name_text}>
         {data?.firstName} {data?.middle} {data?.lastName}
@@ -65,9 +137,14 @@ const styles = StyleSheet.create({
     marginTop: 30,
     alignItems: 'center',
   },
+  image_wrap: {
+    alignItems: 'center',
+    marginTop: 0,
+  },
   profile_pic: {
     width: 100,
     height: 100,
+    alignSelf: 'center',
     borderRadius: 50,
     resizeMode: 'center',
     top: -30,
