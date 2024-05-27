@@ -14,7 +14,15 @@ export const getSelectedRegionalLanguages = params => {
     params,
   });
 };
+export const getRatingBySelf = params => {
+  return authAxiosInstance.get(`${user_route}/getRatingBySelf`, {
+    params,
+  });
+};
 
+export const upsertRatingBySelf = body => {
+  return authAxiosInstance.put(`${user_route}/upsertRatingBySelf`, body);
+};
 export const updateUserProfile = body => {
   return authAxiosInstance.put(`${user_route}/updateSelfProfile`, body);
 };

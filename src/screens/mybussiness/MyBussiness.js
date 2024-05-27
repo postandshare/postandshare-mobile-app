@@ -138,11 +138,6 @@ const MyBussiness = ({navigation, route}) => {
 
   return (
     <>
-      <TopHeader
-        titile={'MyBussiness'}
-        add
-        onPress={() => navigation.navigate('Add Bussiness')}
-      />
       <Portal>
         <ViewBussinessModal
           detailedBussiness={detailedBussiness}
@@ -179,6 +174,11 @@ const MyBussiness = ({navigation, route}) => {
       <ImageBackground
         source={images.background}
         style={globalStyles.backgroundImage}>
+        <TopHeader
+          titile={'MyBussiness'}
+          add
+          onPress={() => navigation.navigate('Add Bussiness')}
+        />
         <ScrollView
           refreshControl={
             <RefreshControl

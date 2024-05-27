@@ -59,17 +59,17 @@ const NotificationCard = ({
   });
   const navigation = useNavigation();
 
-  //   const handlePress = () => {
-  //     const screenName = item.data?.screen;
-  //     if (screenName) {
-  //       navigation.navigate(screenName);
-  //       updateReadStatusMutate({
-  //         notificationDocId: item?._id,
-  //         read: true,
-  //       });
-  //     }
-  //     console.log('press');
-  //   };
+  const handlePress = () => {
+    const screenName = item.data?.screen;
+    if (screenName) {
+      navigation.navigate(screenName);
+      updateReadStatusMutate({
+        notificationDocId: item?._id,
+        read: true,
+      });
+    }
+    console.log('press');
+  };
   return (
     <>
       {/* dialouge box for deleting the notification */}
@@ -82,7 +82,7 @@ const NotificationCard = ({
           <Dialog.Actions>
             <Button
               onPress={() => {
-                // deleteNotificationMutate(item?._id);
+                deleteNotificationMutate(item?._id);
                 hideDialog();
               }}>
               Delete
@@ -131,7 +131,7 @@ const NotificationCard = ({
           rStyle,
         ]}>
         <Pressable
-          //   onPress={() => handlePress()}
+          onPress={() => handlePress()}
           onLongPress={() => {
             return setVisible(true);
           }}

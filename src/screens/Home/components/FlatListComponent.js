@@ -114,7 +114,12 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
                   style={styles.uploadpic_container_eventname}>
                   {item?.name ?? null}
                 </Text>
-                <Text style={styles.uploadpic_container_eventname}>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: Colors.TEXT1,
+                    fontWeight: '400',
+                  }}>
                   {/* {moment().diff(moment(item?.createdOn), 'days') < 1
                     ? `${moment().diff(
                         moment(item?.createdOn),

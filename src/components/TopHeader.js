@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     fontSize: scale(19),
     letterSpacing: 1.2,
     alignSelf: 'center',
+    fontWeight: 'bold',
   },
   icon: {
     color: Colors.TEXT1,

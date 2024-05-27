@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     marginTop: Sizes.hp('4%'),
   },
   skip_button: {
-    // color: Colors.TEXT1,
+    color: Colors.TEXT1,
     fontSize: scale(15),
     fontWeight: '400',
     letterSpacing: 0.7,
@@ -76,6 +76,10 @@ const styles = StyleSheet.create({
   onboarding_flatlist_wrap: {
     width: Sizes.width,
   },
+  onboarding_flatlist_wrap_background: {
+    width: Sizes.width,
+    height: Sizes.height,
+  },
   onboarding_flatlist_upper_card: {
     flex: 1,
     justifyContent: 'center',
@@ -94,14 +98,14 @@ const styles = StyleSheet.create({
     paddingTop: Sizes.hp('5%'),
   },
   onboarding_flatlist_lower_card_title: {
-    color: Colors.TEXT1,
-    fontSize: scale(22),
+    color: Colors.PRIMARY,
+    fontSize: scale(26),
     fontWeight: '700',
     textAlign: 'center',
   },
   onboarding_flatlist_lower_card_text: {
     color: Colors.TEXT1,
-    fontSize: scale(15),
+    fontSize: scale(12),
     lineHeight: scale(22),
     fontWeight: '400',
     opacity: 0.75,

@@ -1,4 +1,13 @@
-import {ImageBackground, StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import React, {useState} from 'react';
 import TopHeader from '../components/TopHeader';
 import StarRating from 'react-native-star-rating';
@@ -6,10 +15,55 @@ import {Button, TextInput} from 'react-native-paper';
 import Colors from '../constants/Colors';
 import images from '../constants/images';
 import globalStyles from '../styles/globalStyles';
+import Sizes from '../constants/Sizes';
+import {useMutation, useQuery} from '@tanstack/react-query';
+import {
+  getRatingBySelf,
+  upsertRatingBySelf,
+} from '../services/userServices/profile.services';
 
-const FeedBack = () => {
+const FeedBack = ({navigation}) => {
   const [onPressRating, setOnPressRating] = useState(0);
   const [feedback, setFeedback] = useState('');
+  const [selectedFeatureFeedback, setSelectedFeatureFeedback] =
+    useState('Features');
+
+  const {
+    data: getRatingBySelf_data,
+    isLoading: getRatingBySelfLoading,
+    isFetching: getRatingBySelfFetching,
+    refetch: getRatingBySelf_refetch,
+  } = useQuery({
+    queryKey: ['getRatingBySelf'],
+    queryFn: () => getRatingBySelf(),
+    onSuccess: ({data}) => {},
+    onError: err =>
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG),
+    enabled: false,
+  });
+
+  const {
+    mutate: upsertRatingBySelfMutate,
+    isLoading: upsertRatingBySelfLoading,
+  } = useMutation(upsertRatingBySelf, {
+    onSuccess: ({data}) => {
+      ToastAndroid.show(data?.message, ToastAndroid.LONG);
+      Alert.alert('Thank you for your feedback', '', [
+        {
+          text: 'OK',
+          onPress: () => {
+            setOnPressRating(0);
+            setFeedback('');
+            setSelectedFeatureFeedback('Features');
+            navigation.goBack();
+          },
+        },
+      ]);
+    },
+    onError: err =>
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG),
+    enabled: false,
+  });
 
   const handleRatingSubmitted = () => {
     if (!feedback.trim()) {
@@ -22,42 +76,31 @@ const FeedBack = () => {
     }
 
     console.log('rating', onPressRating, 'feedback', feedback);
-    // rateComplaintSolutionMutate({
-    //   complaintDocId: complainId,
-    //   satisfactionRating: String(onPressRating),
-    //   feedbackRemarks: feedback,
-    // });
+    upsertRatingBySelfMutate({
+      ratingCategory: selectedFeatureFeedback,
+      ratings: String(onPressRating),
+      description: feedback,
+    });
   };
   return (
     <>
-      <TopHeader titile="FeedBack" />
-
       <ImageBackground
         source={images.background}
         style={globalStyles.backgroundImage}>
+        <TopHeader titile="Rate Us" />
         <View style={styles.root}>
           {/* box for putting rating */}
+          <Text
+            style={{
+              marginTop: 10,
+              paddingHorizontal: 10,
+              fontSize: 20,
+              fontWeight: 'bold',
+              color: Colors.TEXT1,
+            }}>
+            Are You Satisfied With Our Service?
+          </Text>
           <View style={styles.box_rate}>
-            <View>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  color: Colors.PRIMARY,
-                }}>
-                Rate Your Experience
-              </Text>
-
-              <Text
-                style={{
-                  fontSize: 15,
-                  textAlign: 'center',
-                  color: Colors.PRIMARY,
-                }}>
-                How was your overall experience?
-              </Text>
-            </View>
             <View style={styles.rate_container}>
               <StarRating
                 style={{}}
@@ -72,14 +115,68 @@ const FeedBack = () => {
             </View>
           </View>
           {/* container for typing */}
-          <View style={styles.feedback_container}>
-            <Text
-              style={{fontSize: 20, fontWeight: 'bold', color: Colors.PRIMARY}}>
-              Feedback
-            </Text>
-            <Text style={{fontSize: 15, color: Colors.PRIMARY}}>
-              Please write your feedback
-            </Text>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: 'bold',
+              marginTop: 10,
+              color: Colors.TEXT1,
+            }}>
+            Tell us about your experience
+          </Text>
+          <View
+            style={{
+              margin: 10,
+              borderRadius: 10,
+              elevation: 5,
+              backgroundColor: '#fff',
+              padding: 10,
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginBottom: 10,
+                flexWrap: 'wrap',
+              }}>
+              {['Features', 'SDK EDIT', 'FRAME', 'TEMPLATE'].map(
+                (item, index) => {
+                  return (
+                    <TouchableOpacity
+                      key={index}
+                      style={[
+                        {
+                          borderRadius: 5,
+                          borderWidth: 0.7,
+                          elevation: 5,
+                          backgroundColor: '#fff',
+                          borderColor: Colors.borderColor,
+                        },
+                        selectedFeatureFeedback === item && {
+                          backgroundColor: Colors.PRIMARY,
+                          borderColor: Colors.PRIMARY,
+                        },
+                      ]}
+                      onPress={() => setSelectedFeatureFeedback(item)}>
+                      <Text
+                        style={[
+                          {
+                            fontSize: 15,
+                            padding: 5,
+                            fontWeight: '400',
+                            color: Colors.TEXT1,
+                          },
+                          selectedFeatureFeedback === item && {
+                            color: Colors.white,
+                          },
+                        ]}>
+                        {item}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                },
+              )}
+            </View>
             <TextInput
               style={{
                 height: 100,
@@ -95,6 +192,7 @@ const FeedBack = () => {
               value={feedback}
             />
           </View>
+
           {/* button for submit*/}
           <View style={{alignItems: 'center'}}>
             <Button
@@ -125,26 +223,22 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: Colors.transparent,
+    padding: 10,
   },
   rate_container: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 15,
+    marginVertical: 10,
   },
   rate_star: {
     marginRight: 5,
   },
   box_rate: {
     backgroundColor: '#fff',
-    padding: 20,
-    margin: 10,
     borderRadius: 10,
     elevation: 3,
-  },
-  feedback_container: {
-    padding: 20,
-    margin: 10,
-    borderRadius: 10,
+    width: Sizes.wp('90%'),
+    alignSelf: 'center',
   },
 });

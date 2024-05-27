@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   FlatList,
   Animated,
+  ImageBackground,
 } from 'react-native';
 import React, {useRef, useState} from 'react';
 import styles from './style';
@@ -15,6 +16,7 @@ import {useDispatch} from 'react-redux';
 import {setOnBoarding} from '../../services/reducer/AuthSlice';
 import OnboardingNextButton from '../../components/OnboardingNextButton';
 import Paginator from '../../components/Paginator';
+import images from '../../constants/images';
 
 const onBoardingContent = [
   {
@@ -77,7 +79,9 @@ const OnBoarding = ({navigation}) => {
         style={styles.onboarding_flatlist_root}
         data={onBoardingContent}
         renderItem={({item}) => (
-          <View style={styles.onboarding_flatlist_wrap}>
+          <ImageBackground
+            source={Images.onBoardingBackground}
+            style={styles.onboarding_flatlist_wrap_background}>
             <View style={styles.onboarding_flatlist_upper_card}>
               <Image
                 source={item.img}
@@ -94,7 +98,7 @@ const OnBoarding = ({navigation}) => {
                 </Text>
               </View>
             </View>
-          </View>
+          </ImageBackground>
         )}
         keyExtractor={(item, index) => index}
         horizontal={true}
