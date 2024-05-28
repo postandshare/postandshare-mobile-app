@@ -38,6 +38,7 @@ export default {
   profile_placeholder1: require('../assets/placeholder/placeholder1.png'),
   profile_placeholder2: require('../assets/placeholder/placeholder2.png'),
   profilePlaceholder: require('../assets/images/profile-placeholder.png'),
+  coupleAniverssary: require('../assets/images/coupleAniverssary.png'),
 
   //frames
   frame1: require('../assets/frames/Frame 1.png'),

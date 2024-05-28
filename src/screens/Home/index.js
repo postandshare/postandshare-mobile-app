@@ -4,16 +4,12 @@ import {
   ImageBackground,
   RefreshControl,
   ScrollView,
-  Text,
   ToastAndroid,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useCallback, useState} from 'react';
 import styles from './style';
 import DashboardTopHeader from '../../components/DashboardTopHeader';
-import Sizes from '../../constants/Sizes';
-import Colors from '../../constants/Colors';
 import CustomCarousel from '../../components/CustomCarousel';
 import FlatListComponent from './components/FlatListComponent';
 import {useQuery} from '@tanstack/react-query';
@@ -34,7 +30,6 @@ import {useDispatch} from 'react-redux';
 import {setUserDetails} from '../../services/reducer/CommonReducer';
 import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import NavigationScreenName from '../../constants/NavigationScreenName';
 import SkeletonLoading from './components/SkeletonLoading';
 
@@ -183,8 +178,8 @@ const Home = ({navigation}) => {
         await getUserProfileRefetch();
         getOnesignalData();
       };
-
       fetchData();
+
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
       getTemplatesForQuotesRefetch,

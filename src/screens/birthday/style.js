@@ -5,7 +5,6 @@ const {StyleSheet} = require('react-native');
 
 const styles = StyleSheet.create({
   root: {
-    // flexGrow: 1,
     backgroundColor: Colors.transparent,
   },
   noEventsText: {

@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.transparent,
   },
   container: {
-    // flex: 1,
     backgroundColor: Colors.transparent,
     justifyContent: 'center',
     margin: 10,
@@ -27,8 +26,6 @@ const styles = StyleSheet.create({
   uploadpic_container: {
     flexWrap: 'wrap',
     flexDirection: 'row',
-    marginVertical: 5,
-    marginHorizontal: 5,
     padding: 5,
   },
   imageGrid: {
@@ -37,21 +34,21 @@ const styles = StyleSheet.create({
   },
   uploadpic_container_image_view: {
     height: Sizes.hp('5%'),
-    width: '30%',
+    width: '22%',
     aspectRatio: 1,
     marginHorizontal: 5,
-    borderRadius: 10,
+    borderRadius: 5,
     borderWidth: 1,
     borderColor: '#3D398930',
     justifyContent: 'center',
-    margin: 15,
+    margin: 5,
   },
   uploadpic_container_image: {
     height: '100%',
     width: '100%',
     resizeMode: 'contain',
-    borderRadius: 10,
-    padding: 10,
+    borderRadius: 5,
+    padding: 1,
   },
   noData: {
     flex: 1,

@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import Colors from '../constants/Colors';
@@ -89,14 +90,6 @@ const BirthRemaiderCard = ({item, onPress}) => {
           </Text>
         </View>
       </View>
-
-      {/* no of days remaining from the todays date */}
-      {/* <View style={styles.event_remainder_container}>
-          <Text style={styles.event_remainder_text}>
-            {item?.day - new Date().getDay()}
-          </Text>
-          <Text style={styles.event_remainder_text}>Days</Text>
-        </View> */}
     </TouchableOpacity>
   );
 };
@@ -153,11 +146,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 0.1,
-    // height: 30,
     padding: 5,
     margin: 10,
     alignSelf: 'center',
     borderRadius: 2,
+    bottom: 0,
   },
   event_text: {
     fontSize: 12,

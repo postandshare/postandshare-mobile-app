@@ -20,12 +20,14 @@ import {
 import {useFocusEffect} from '@react-navigation/native';
 import {getRegionalLanguages} from '../../services/userServices/monitoring.services';
 import NavigationScreenName from '../../constants/NavigationScreenName';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import TopHeader from '../../components/TopHeader';
 import {Checkbox} from 'react-native-paper';
 import Sizes from '../../constants/Sizes';
 import globalStyles from '../../styles/globalStyles';
 import images from '../../constants/images';
+import {setLoginState} from '../../services/reducer/AuthSlice';
+import {setProfileUpdated} from '../../services/reducer/CommonReducer';
 
 const LanguageSelection = ({navigation}) => {
   const {isProfileUpdated} = useSelector(store => store.commonStore);
@@ -99,15 +101,15 @@ const LanguageSelection = ({navigation}) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []),
   );
+  const dispatch = useDispatch();
 
   return (
     <>
-      <TopHeader titile={'Select Language'} />
-
       {/* imagebackground */}
       <ImageBackground
         source={images.background}
         style={globalStyles.backgroundImage}>
+        <TopHeader titile={'Select Language'} logout={true} />
         <View
           style={{
             marginHorizontal: 10,
@@ -209,8 +211,14 @@ const LanguageSelection = ({navigation}) => {
               setTimeout(() => {
                 setLoading(false);
                 isProfileUpdated === false
-                  ? navigation.navigate('ProfileNavigator')
-                  : navigation.navigate(NavigationScreenName.DRWAER_NAVIGATOR);
+                  ? navigation.navigate(NavigationScreenName?.MAIN_NAVIGATOR, {
+                      screen: 'DashBoard',
+                      params: {screen: 'Profile'},
+                    })
+                  : navigation.navigate(NavigationScreenName?.MAIN_NAVIGATOR, {
+                      screen: 'DashBoard',
+                      params: {screen: 'Home'},
+                    });
               }, 1000);
             }}>
             <Text style={authStyle.signin_text_Language}>

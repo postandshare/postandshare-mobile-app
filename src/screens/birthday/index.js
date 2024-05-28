@@ -5,7 +5,7 @@ import BirthdayRemainder from './BirthdayRemainder';
 import BirthdayRemainderDetail from './BirthdayRemainderDetail';
 import AddRemainder from './AddRemainder';
 import RemainderSetting from './RemainderSetting';
-import CreatePost from './CreatePost';
+import CreateEvent from './CreateEvent';
 
 const Stack = createStackNavigator();
 const BirthdayRemainderNavigator = () => {
@@ -16,10 +16,13 @@ const BirthdayRemainderNavigator = () => {
         headerShown: false,
       }}>
       <Stack.Screen name="BirthdayRemainder" component={BirthdayRemainder} />
-      <Stack.Screen name="BirthdayRemainderDetail" component={BirthdayRemainderDetail} />
+      <Stack.Screen
+        name="BirthdayRemainderDetail"
+        component={BirthdayRemainderDetail}
+      />
       <Stack.Screen name="RemainderSetting" component={RemainderSetting} />
       <Stack.Screen name="AddRemainder" component={AddRemainder} />
-      <Stack.Screen name="CreatePost" component={CreatePost} />
+      <Stack.Screen name="CreateEvent" component={CreateEvent} />
     </Stack.Navigator>
   );
 };

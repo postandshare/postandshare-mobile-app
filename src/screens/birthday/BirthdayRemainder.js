@@ -20,6 +20,7 @@ import DashboardTopHeader from '../../components/DashboardTopHeader';
 import NavigationScreenName from '../../constants/NavigationScreenName';
 import Colors from '../../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
+import Sizes from '../../constants/Sizes';
 
 // for the filteration in the events list
 export const Tray = ({backgroundColor, textColor, title, onPress}) => {
@@ -33,6 +34,8 @@ export const Tray = ({backgroundColor, textColor, title, onPress}) => {
         alignItems: 'center',
         justifyContent: 'center',
         borderColor: Colors.borderColor,
+        elevation: 5,
+        height: 40,
       }}>
       <Text
         style={{
@@ -121,36 +124,30 @@ const BirthdayRemainder = ({navigation}) => {
 
   return (
     <>
-      <DashboardTopHeader
-        title="Events"
-        onPressMenu={onPressMenu}
-        onPressNotification={onPressNotification}
-        onPressIcon={() => navigation.navigate('AddRemainder')}
-        IconProp={
-          <Feather name="calendar" size={28} style={{color: Colors.TEXT1}} />
-        }
-      />
       <ImageBackground
         source={images.background}
         style={globalStyles.backgroundImage}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <Text style={styles.title}>Today</Text>
-          <Text style={styles.title}>see all</Text>
-        </View>
+        <DashboardTopHeader
+          title="Events"
+          onPressMenu={onPressMenu}
+          onPressNotification={onPressNotification}
+          onPressIcon={() => navigation.navigate('AddRemainder')}
+          IconProp={
+            <Feather name="calendar" size={28} style={{color: Colors.TEXT1}} />
+          }
+        />
 
         {/* tray for the filter the events */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
+          style={{
+            height: 120,
+          }}
           contentContainerStyle={{
-            height: 40,
+            height: 50,
             width: '100%',
-            marginTop: 10,
-            // backgroundColor: 'red',
+            marginVertical: 10,
           }}>
           <Tray
             backgroundColor={
@@ -188,10 +185,20 @@ const BirthdayRemainder = ({navigation}) => {
           />
         </ScrollView>
 
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <Text style={styles.title}>Today</Text>
+          <Text style={[styles.title, {color: Colors.PRIMARY}]}>see all</Text>
+        </View>
+
         {/* list for the today events */}
         <FlatList
-          contentContainerStyle={{...styles.root, paddingBottom: 0}}
+          contentContainerStyle={{...styles.root, height: Sizes.hp('40%')}}
           data={todaysEvents}
+          showsVerticalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}
           ListEmptyComponent={
             <Text style={styles.noEventsText}>No Events Today</Text>
@@ -212,8 +219,9 @@ const BirthdayRemainder = ({navigation}) => {
         <Text style={styles.title}>Upcoming</Text>
         {/* list for the upcoming list */}
         <FlatList
-          contentContainerStyle={{...styles.root, paddingBottom: 400}}
+          contentContainerStyle={{...styles.root, paddingBottom: 200}}
           data={upcomingEvents}
+          showsVerticalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}
           ListEmptyComponent={
             <Text style={styles.noEventsText}>No Upcoming Events</Text>

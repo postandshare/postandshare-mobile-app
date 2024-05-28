@@ -93,7 +93,7 @@ const Routes = () => {
               component={OnBoarding}
             />
           ) : login_Data ? (
-            isProfileUpdated == false ? (
+            isProfileUpdated === false ? (
               <>
                 <Stack.Screen
                   name={NavigationScreenName.LANGUAGE_SELECTION}
@@ -104,8 +104,8 @@ const Routes = () => {
                   component={ProfileNavigator}
                 />
                 <Stack.Screen
-                  name={NavigationScreenName.DRWAER_NAVIGATOR}
-                  component={DrawerStack}
+                  name={NavigationScreenName.MAIN_NAVIGATOR}
+                  component={MainDrawer}
                 />
               </>
             ) : (

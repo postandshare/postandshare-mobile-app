@@ -11,7 +11,7 @@ const globalStyles = StyleSheet.create({
   backgroundImage: {
     flexGrow: 1,
     resizeMode: 'cover',
-    justifyContent: 'center',
+    // justifyContent: 'center',
     width: '100%',
     height: '100%',
     // position: 'absolute',

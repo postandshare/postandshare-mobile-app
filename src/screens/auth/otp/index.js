@@ -79,7 +79,7 @@ const VerifyOTP = ({navigation, route}) => {
     queryFn: () => getUserProfile(),
     onSuccess: async success => {
       console.log(success?.data, 'isProfileUpdated');
-      if (success?.data?.obj?.isProfileUpdated == false) {
+      if (success?.data?.obj?.isProfileUpdated === false) {
         dispatch(setProfileUpdated(false));
         navigation.navigate(NavigationScreenName.LANGUAGE_SELECTION, {
           loginStateData: loginStateData,
@@ -87,7 +87,7 @@ const VerifyOTP = ({navigation, route}) => {
         console.log('success?.data?.isProfileUpdated == false');
       } else {
         dispatch(setProfileUpdated(true));
-        await navigation.navigate(NavigationScreenName.DRWAER_NAVIGATOR);
+        await navigation.navigate(NavigationScreenName.MAIN_NAVIGATOR);
         console.log('else part of success?.data?.isProfileUpdated == false');
       }
     },

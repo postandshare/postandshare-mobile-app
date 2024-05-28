@@ -26,6 +26,7 @@ import AddressDetails from './components/AddressDetails';
 import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
 import DashboardTopHeader from '../../components/DashboardTopHeader';
+import NavigationScreenName from '../../constants/NavigationScreenName';
 
 const ProfileView = ({}) => {
   const navigation = useNavigation();
@@ -47,7 +48,8 @@ const ProfileView = ({}) => {
           [
             {
               text: 'Cancel',
-              onPress: () => navigation.goBack(),
+              onPress: () =>
+                navigation.navigate(NavigationScreenName?.LANGUAGE_SELECTION),
               style: 'cancel',
             },
             {

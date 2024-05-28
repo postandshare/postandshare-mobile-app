@@ -154,7 +154,7 @@ const SelectBussiness = ({route, navigation}) => {
             // lastUpdated={item?.lastUpdated ?? item?.createdOn}
             onPress={() =>
               picData
-                ? navigation.navigate('CustomSDK', {
+                ? navigation.navigate('PhotoStatus', {
                     picData: picData?.photo,
                     picDeatils: picData,
                     businessDetails: getUserProfile_Data?.data?.obj,

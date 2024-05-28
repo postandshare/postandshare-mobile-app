@@ -13,10 +13,11 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {scale} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
-import {setLogout} from '../services/reducer/AuthSlice';
+import {setLoginState, setLogout} from '../services/reducer/AuthSlice';
 import Images from '../constants/images';
 import Sizes from '../constants/Sizes';
 import Colors from '../constants/Colors';
+import {setProfileUpdated} from '../services/reducer/CommonReducer';
 
 const TopHeader = ({
   titile,
@@ -36,7 +37,8 @@ const TopHeader = ({
   const dispatch = useDispatch();
   const onPressBack = () => {
     if (logout) {
-      dispatch(setLogout());
+      dispatch(setLoginState(''));
+      dispatch(setProfileUpdated(false));
     } else {
       if (path) {
         navigation.navigate(path);
