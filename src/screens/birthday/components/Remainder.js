@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   ScrollView,
   StyleSheet,
@@ -14,10 +15,13 @@ import DatePicker from 'react-native-date-picker';
 
 const Remainder = ({
   item,
-  onDeletePress,
-  handleDateChange,
-  handleTimeChange,
+  onDeletePress = () => {},
+  handleDateChange = () => {},
+  handleTimeChange = () => {},
   index,
+  showTittle = true,
+  showDelete = true,
+  handleChange = true,
 }) => {
   const [dateVisible, setDateVisible] = React.useState(false);
   const [timeVisible, setTimeVisible] = React.useState(false);
@@ -28,7 +32,7 @@ const Remainder = ({
         textColor="black"
         modal
         open={dateVisible}
-        date={item?.remainderDate ? new Date(item?.remainderDate) : new Date()}
+        date={item?.date ? new Date(item?.date) : new Date()}
         onConfirm={date => {
           handleDateChange(date);
           setDateVisible(false);
@@ -42,7 +46,7 @@ const Remainder = ({
         textColor="black"
         modal
         open={timeVisible}
-        date={item?.remainderTime ? new Date(item?.remainderTime) : new Date()}
+        date={item?.time ? new Date(item?.time) : new Date()}
         onConfirm={date => {
           handleTimeChange(date);
           setTimeVisible(false);
@@ -52,19 +56,20 @@ const Remainder = ({
         }}
         mode="time"
       />
-
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          margin: 5,
-        }}>
-        <Text style={styles.title}>{`Remainder ${index}`}</Text>
-        <TouchableOpacity onPress={() => onDeletePress()}>
-          <AntDesign name="delete" size={24} color={Colors.PRIMARY} />
-        </TouchableOpacity>
-      </View>
+      {showTittle && showDelete && (
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 250,
+            alignSelf: 'center',
+            alignItems: 'center',
+          }}>
+          <Text style={styles.title}>{`Remainder ${index}`}</Text>
+          <TouchableOpacity onPress={() => onDeletePress()}>
+            <AntDesign name="delete" size={24} color={Colors.PRIMARY} />
+          </TouchableOpacity>
+        </View>
+      )}
       <View
         style={{
           width: Sizes.wp('90%'),
@@ -76,14 +81,17 @@ const Remainder = ({
           flexDirection: 'row',
           justifyContent: 'space-between',
           marginVertical: 5,
+          elevation: 1,
+          backgroundColor: Colors.white,
         }}>
         {/* remainder date */}
         <View>
-          <Text style={{color: Colors.TEXT1}}>Remainder Date</Text>
+          <Text style={{color: Colors.TEXT1}}>Date</Text>
           <TouchableOpacity
             onPress={() => {
-              setDateVisible(true);
+              if (handleChange) setDateVisible(true);
             }}
+            activeOpacity={handleChange ? 0.5 : 1}
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
@@ -95,7 +103,7 @@ const Remainder = ({
               width: Sizes.wp('40%'),
             }}>
             <Text style={{color: Colors.TEXT1}}>
-              {moment(item?.remainderDate).format('DD-MM-YYYY')}
+              {moment(item?.date).format('DD-MM-YYYY')}
             </Text>
 
             <AntDesign name="calendar" size={24} color={Colors.PRIMARY} />
@@ -103,9 +111,12 @@ const Remainder = ({
         </View>
         {/* remainder time */}
         <View>
-          <Text style={{color: Colors.TEXT1}}>Remainder Time</Text>
+          <Text style={{color: Colors.TEXT1}}>Time</Text>
           <TouchableOpacity
-            onPress={() => setTimeVisible(true)}
+            onPress={() => {
+              if (handleChange) setTimeVisible(true);
+            }}
+            activeOpacity={handleChange ? 0.5 : 1}
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
@@ -117,7 +128,7 @@ const Remainder = ({
               width: Sizes.wp('40%'),
             }}>
             <Text style={{color: Colors.TEXT1}}>
-              {moment(item?.remainderTime).format('hh:mm A')}
+              {moment(item?.time).format('hh:mm A')}
             </Text>
             <AntDesign name="clockcircle" size={24} color={Colors.PRIMARY} />
           </TouchableOpacity>

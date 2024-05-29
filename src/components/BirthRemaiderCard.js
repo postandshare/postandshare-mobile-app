@@ -4,6 +4,7 @@ import React from 'react';
 import Colors from '../constants/Colors';
 import Sizes from '../constants/Sizes';
 import moment from 'moment';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Colors_Card = [
   '#FFC0CB',
@@ -35,11 +36,21 @@ const LightColors_Card = [
   '#80000020',
 ];
 
-const BirthRemaiderCard = ({item, onPress}) => {
+const BirthRemaiderCard = ({
+  item,
+  onPress,
+  handleSendSms = () => {},
+  handleWhatsAppSend = () => {},
+  handleDeleteEvent = () => {},
+}) => {
   const randomColor =
     Colors_Card[Math.floor(Math.random() * Colors_Card.length)];
+
   return (
-    <TouchableOpacity style={styles.item_container} onPress={onPress}>
+    <TouchableOpacity
+      style={styles.item_container}
+      onPress={onPress}
+      onLongPress={handleDeleteEvent}>
       <View style={styles.item_image_container}>
         <Image
           source={{uri: item?.personDetails[0]?.profilePic}}
@@ -56,38 +67,60 @@ const BirthRemaiderCard = ({item, onPress}) => {
           </Text>
         </View>
         {/* remaindee  */}
-        <View
-          style={[
-            styles.event_container,
-            {
-              borderColor:
-                item?.eventType === 'Birthday'
-                  ? '#CD40FF'
-                  : item?.eventType === 'Anniversary'
-                  ? '#E9EEFE'
-                  : randomColor,
-              backgroundColor:
-                item?.eventType === 'Birthday'
-                  ? '#CD40FF20'
-                  : item?.eventType === 'Anniversary'
-                  ? '#E9EEFE20'
-                  : randomColor,
-            },
-          ]}>
-          <Text
+        <View>
+          <View
             style={[
-              styles.event_text,
+              styles.event_container,
               {
-                color:
+                borderColor:
                   item?.eventType === 'Birthday'
                     ? '#CD40FF'
+                    : item?.eventType === 'Anniversary'
+                    ? '#E9EEFE20'
+                    : randomColor,
+                backgroundColor:
+                  item?.eventType === 'Birthday'
+                    ? '#CD40FF20'
                     : item?.eventType === 'Anniversary'
                     ? '#E9EEFE'
                     : randomColor,
               },
             ]}>
-            {item?.eventType}
-          </Text>
+            <Text
+              style={[
+                styles.event_text,
+                {
+                  color:
+                    item?.eventType === 'Birthday'
+                      ? '#CD40FF'
+                      : item?.eventType === 'Anniversary'
+                      ? Colors.TEXT1
+                      : randomColor,
+                },
+              ]}>
+              {item?.eventType}
+            </Text>
+          </View>
+          <View style={{flexDirection: 'row', alignSelf: 'center', gap: 10}}>
+            {item?.smsTemplet && (
+              <TouchableOpacity onPress={handleWhatsAppSend}>
+                <MaterialCommunityIcons
+                  name="whatsapp"
+                  size={30}
+                  color={Colors.TEXT1}
+                />
+              </TouchableOpacity>
+            )}
+            {item?.whatsAppTemplet && (
+              <TouchableOpacity onPress={handleSendSms}>
+                <MaterialCommunityIcons
+                  name="message-text-outline"
+                  size={30}
+                  color={Colors.TEXT1}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -117,7 +150,7 @@ const styles = StyleSheet.create({
     width: 55,
     borderRadius: 50,
     alignSelf: 'center',
-    // margin: 10,
+    margin: 5,
   },
   item_image: {
     height: 55,
@@ -126,6 +159,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   item_details_container: {
+    flex: 1,
     alignSelf: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
@@ -142,7 +176,7 @@ const styles = StyleSheet.create({
     color: Colors.TEXT1,
   },
   event_container: {
-    flex: 0.61,
+    flex: 0.7,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 0.1,

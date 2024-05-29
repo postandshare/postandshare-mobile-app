@@ -39,12 +39,16 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import RNFS from 'react-native-fs';
 import PhotoPostCard from '../cards/PhotoPostCard';
 import ModalPhotoPostCard from '../cards/ModalPhotoPostCard';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const SearchSortFilter = ({
   searchQuery,
   setSearchQuery,
   sortOption,
   setSortOption,
+  width = '75%',
+  favorite,
+  handleHeartPress = () => {},
 }) => {
   const [visible, setVisible] = React.useState(false);
   return (
@@ -52,11 +56,29 @@ const SearchSortFilter = ({
       <TextInput
         mode="outlined"
         label={'Search'}
-        style={styles.searchInput}
+        style={[styles.searchInput, {width: width}]}
         placeholder="Search"
         onChangeText={text => setSearchQuery(text)}
         value={searchQuery}
       />
+      {/* heart buton */}
+      <TouchableOpacity
+        onPress={handleHeartPress}
+        style={{
+          borderWidth: 1,
+          borderRadius: 5,
+          borderColor: Colors.borderColor,
+          padding: 5,
+          backgroundColor: Colors.white,
+          alignSelf: 'center',
+        }}>
+        <AntDesign
+          name="heart"
+          size={20}
+          color={favorite ? Colors.SECONDRY : 'grey'}
+          alignSelf={'center'}
+        />
+      </TouchableOpacity>
       <Menu
         visible={visible}
         contentStyle={{
@@ -123,6 +145,7 @@ const PhotoPost = ({navigation}) => {
   const [deleteAlertVisible, setDeleteAlertVisible] = useState(false);
   const [deletePostDocId, setDeletePostDocId] = useState('');
   const [imageIndexId, setImageIndexId] = useState();
+  const [favorite, setFavorite] = useState(false);
 
   /******************************************************************************* */
   /*****************************SearchSortFilterWork****************************** */
@@ -187,7 +210,7 @@ const PhotoPost = ({navigation}) => {
     return () => {
       unsubscribeBlur();
     };
-  }, [navigation]);
+  }, [navigation, favorite]);
 
   const ListEndLoader = () => {
     return (
@@ -315,7 +338,12 @@ const PhotoPost = ({navigation}) => {
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
           sortOption={sortOption}
+          favorite={favorite}
+          handleHeartPress={() => {
+            setFavorite(!favorite);
+          }}
           setSortOption={setSortOption}
+          width="60%"
         />
         <FlatList
           ref={scrollViewRef}

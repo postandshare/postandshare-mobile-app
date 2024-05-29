@@ -1,6 +1,8 @@
 import {
+  Alert,
   FlatList,
   ImageBackground,
+  RefreshControl,
   ScrollView,
   Text,
   ToastAndroid,
@@ -12,8 +14,13 @@ import TopHeader from '../../components/TopHeader';
 import images from '../../constants/images';
 import styles from './style';
 import globalStyles from '../../styles/globalStyles';
-import {useQuery} from '@tanstack/react-query';
-import {getEvents} from '../../services/userServices/personalEvent.services';
+import {useMutation, useQuery} from '@tanstack/react-query';
+import {
+  deleteEvent,
+  getEvents,
+  sendSms,
+  sendWhatsApp,
+} from '../../services/userServices/personalEvent.services';
 import BirthRemaiderCard from '../../components/BirthRemaiderCard';
 import {useFocusEffect} from '@react-navigation/native';
 import DashboardTopHeader from '../../components/DashboardTopHeader';
@@ -86,6 +93,40 @@ const BirthdayRemainder = ({navigation}) => {
     },
     enabled: false,
   });
+
+  const {mutate: sendWhatsAppMutate, isLoading: sendWhatsAppLoading} =
+    useMutation(sendWhatsApp, {
+      onSuccess: ({data}) => {
+        getEventsRefetch();
+      },
+      onError: err => {
+        ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+      },
+      enabled: false,
+    });
+
+  const {mutate: sendSmsMutate, isLoading: sendSmsLoading} = useMutation(
+    sendSms,
+    {
+      onSuccess: ({data}) => {
+        getEventsRefetch();
+      },
+      onError: err => {
+        ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+      },
+      enabled: false,
+    },
+  );
+  const {mutate: deleteEventMutate, isLoading: deleteEventLoading} =
+    useMutation(deleteEvent, {
+      onSuccess: ({data}) => {
+        getEventsRefetch();
+      },
+      onError: err => {
+        ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+      },
+      enabled: false,
+    });
 
   useEffect(() => {
     const unsubscribeBlur = navigation.addListener('blur', () => {
@@ -196,8 +237,14 @@ const BirthdayRemainder = ({navigation}) => {
 
         {/* list for the today events */}
         <FlatList
-          contentContainerStyle={{...styles.root, height: Sizes.hp('40%')}}
+          contentContainerStyle={{...styles.root}}
           data={todaysEvents}
+          refreshControl={
+            <RefreshControl
+              refreshing={getEventsFetching || getEventsLoading}
+              onRefresh={() => getEventsRefetch()}
+            />
+          }
           showsVerticalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}
           ListEmptyComponent={
@@ -207,6 +254,70 @@ const BirthdayRemainder = ({navigation}) => {
             <BirthRemaiderCard
               item={item}
               key={index}
+              handleDeleteEvent={() => {
+                Alert.alert(
+                  'Post and Share App',
+                  'Are you sure want to Send WhatsApp Message?',
+                  [
+                    {
+                      text: 'Cancel',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'Delete',
+                      style: 'destructive',
+                      onPress: () => {
+                        deleteEventMutate({
+                          eventDocId: item?._id,
+                        });
+                      },
+                    },
+                  ],
+                );
+              }}
+              handleWhatsAppSend={() => {
+                Alert.alert(
+                  'Post and Share App',
+                  'Are you sure want to Send WhatsApp Message?',
+                  [
+                    {
+                      text: 'Cancel',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'Send',
+                      onPress: () => {
+                        sendWhatsApp({
+                          eventDocId: item?._id,
+                        });
+                      },
+                    },
+                  ],
+                );
+              }}
+              handleSendSms={() => {
+                Alert.alert(
+                  'Post and Share App',
+                  'Are you sure want to Send SMS ?',
+                  [
+                    {
+                      text: 'Cancel',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'Send',
+                      onPress: () => {
+                        sendSmsMutate({
+                          eventDocId: item?._id,
+                        });
+                      },
+                    },
+                  ],
+                );
+              }}
               onPress={() =>
                 navigation.navigate('BirthdayRemainderDetail', {
                   event: item,
@@ -230,6 +341,70 @@ const BirthdayRemainder = ({navigation}) => {
             <BirthRemaiderCard
               item={item}
               key={index}
+              handleDeleteEvent={() => {
+                Alert.alert(
+                  'Post and Share App',
+                  'Are you sure want to Send WhatsApp Message?',
+                  [
+                    {
+                      text: 'Cancel',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'Delete',
+                      style: 'destructive',
+                      onPress: () => {
+                        deleteEventMutate({
+                          eventDocId: item?._id,
+                        });
+                      },
+                    },
+                  ],
+                );
+              }}
+              handleWhatsAppSend={() => {
+                Alert.alert(
+                  'Post and Share App',
+                  'Are you sure want to Send WhatsApp Message?',
+                  [
+                    {
+                      text: 'Cancel',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'Send',
+                      onPress: () => {
+                        sendWhatsApp({
+                          eventDocId: item?._id,
+                        });
+                      },
+                    },
+                  ],
+                );
+              }}
+              handleSendSms={() => {
+                Alert.alert(
+                  'Post and Share App',
+                  'Are you sure want to Send SMS ?',
+                  [
+                    {
+                      text: 'Cancel',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'Send',
+                      onPress: () => {
+                        sendSmsMutate({
+                          eventDocId: item?._id,
+                        });
+                      },
+                    },
+                  ],
+                );
+              }}
               onPress={() =>
                 navigation.navigate('BirthdayRemainderDetail', {
                   event: item,

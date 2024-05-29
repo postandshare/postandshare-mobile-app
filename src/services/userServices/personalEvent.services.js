@@ -18,12 +18,21 @@ export const getEvent = params => {
   );
 };
 export const getReminder = params => {
-  return authAxiosInstance.get(`${personalEvent_route}/getReminder`, {
-    params,
-  });
+  return authAxiosInstance.get(
+    `${personalEvent_route}/getReminder/${params?.eventDocId}`,
+    {
+      params,
+    },
+  );
 };
 export const addNewEvent = body => {
   return authAxiosInstance.post(`${personalEvent_route}/addNewEvent`, body);
+};
+export const sendSms = body => {
+  return authAxiosInstance.post(`${personalEvent_route}/sendSms`, body);
+};
+export const sendWhatsApp = body => {
+  return authAxiosInstance.post(`${personalEvent_route}/sendWhatsApp`, body);
 };
 export const updateEvent = body => {
   return authAxiosInstance.patch(`${personalEvent_route}/updateEvent`, body);
