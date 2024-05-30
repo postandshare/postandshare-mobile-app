@@ -209,10 +209,10 @@ const SelectBussiness = ({route, navigation}) => {
                 data={item}
                 onPress={() =>
                   picData
-                    ? navigation.navigate('CustomSDK', {
+                    ? navigation.navigate('PhotoStatus', {
                         picData: picData?.photo,
-                        businessDetails: item,
                         picDeatils: picData,
+                        businessDetails: getUserProfile_Data?.data?.obj,
                       })
                     : navigation.navigate('View Bussiness', {
                         businessId: item?._id,

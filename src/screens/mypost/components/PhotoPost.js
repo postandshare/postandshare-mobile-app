@@ -1,11 +1,9 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react-native/no-inline-styles */
 import {
-  Alert,
   FlatList,
   ImageBackground,
   RefreshControl,
-  ScrollView,
   Share,
   StyleSheet,
   Text,
@@ -13,14 +11,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {
   deleteUserPost,
   getUserPost,
 } from '../../../services/userServices/userpost.services';
 import Colors from '../../../constants/Colors';
-import {useFocusEffect} from '@react-navigation/native';
 import {
   ActivityIndicator,
   Menu,
@@ -30,16 +27,15 @@ import {
 } from 'react-native-paper';
 import ImageView from 'react-native-image-zoom-viewer';
 import Loader from '../../../components/Loader';
-import moment from 'moment';
 import Sizes from '../../../constants/Sizes';
 import globalStyles from '../../../styles/globalStyles';
 import Images from '../../../constants/images';
 import DeleteAlert from '../../../components/DeleteAlert';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import RNFS from 'react-native-fs';
-import PhotoPostCard from '../cards/PhotoPostCard';
 import ModalPhotoPostCard from '../cards/ModalPhotoPostCard';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {useFocusEffect} from '@react-navigation/native';
 
 const SearchSortFilter = ({
   searchQuery,
@@ -164,6 +160,7 @@ const PhotoPost = ({navigation}) => {
     queryFn: () =>
       getUserPost({
         page: postData?.page,
+        ...(favorite && {favorite: true}),
       }),
     onSuccess: async success => {
       setPostData(prev => ({
@@ -210,7 +207,7 @@ const PhotoPost = ({navigation}) => {
     return () => {
       unsubscribeBlur();
     };
-  }, [navigation, favorite]);
+  }, [navigation]);
 
   const ListEndLoader = () => {
     return (
@@ -263,6 +260,13 @@ const PhotoPost = ({navigation}) => {
         return 0;
     }
   });
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getUserPostRefetch();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [getUserPostRefetch, favorite]),
+  );
 
   // Map all post images to required format
   const allImages =
@@ -341,6 +345,7 @@ const PhotoPost = ({navigation}) => {
           favorite={favorite}
           handleHeartPress={() => {
             setFavorite(!favorite);
+            HandleRefresh();
           }}
           setSortOption={setSortOption}
           width="60%"

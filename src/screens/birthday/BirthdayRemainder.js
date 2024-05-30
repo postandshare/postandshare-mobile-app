@@ -182,11 +182,8 @@ const BirthdayRemainder = ({navigation}) => {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          style={{
-            height: 120,
-          }}
+          style={{}}
           contentContainerStyle={{
-            height: 50,
             width: '100%',
             marginVertical: 10,
           }}>

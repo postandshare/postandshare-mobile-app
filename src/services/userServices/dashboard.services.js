@@ -33,3 +33,11 @@ export const getTemplatesByBusiness = params => {
     params,
   });
 };
+export const getRelatedTemplet = params => {
+  return authAxiosInstance.get(
+    `${dashboard_route}/getRelatedTemplet/${params?._id}`,
+    {
+      params,
+    },
+  );
+};

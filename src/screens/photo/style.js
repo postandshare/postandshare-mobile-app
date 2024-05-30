@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   uploadpic_container_image_view: {
-    height: Sizes.hp('5%'),
-    width: '22%',
+    height: 100,
+    width: '30%',
     aspectRatio: 1,
     marginHorizontal: 5,
     borderRadius: 5,
