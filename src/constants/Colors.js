@@ -1,6 +1,7 @@
 export default {
   PRIMARY: '#F95F32',
   SECONDRY: '#FF0A00',
+  PRIMARY_LIGHT: '#F95F3270',
   TEXT1: '#020C0A',
   Background: '#f5f5f5',
   borderColor: '#4141412F',

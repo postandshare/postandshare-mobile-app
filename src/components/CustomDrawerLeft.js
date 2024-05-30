@@ -25,6 +25,7 @@ import {setLoginState} from '../services/reducer/AuthSlice';
 import {setProfileUpdated} from '../services/reducer/CommonReducer';
 import images from '../constants/images';
 import {useNavigation} from '@react-navigation/native';
+import {Divider} from 'react-native-paper';
 
 const Item = ({icon, text, path, onPress = () => {}, isActive}) => (
   <TouchableOpacity
@@ -112,6 +113,12 @@ const CustomDrawerLeft = ({navigation, route}) => {
           path={NavigationScreenName.MY_BUSSINESS}
           onPress={() => navigation.navigate(NavigationScreenName.MY_BUSSINESS)}
         />
+        {/* <Divider
+          style={{
+            height: 1,
+            backgroundColor: Colors?.PRIMARY_LIGHT,
+          }}
+        /> */}
         <Item
           icon={<AntDesign name={'filetext1'} style={styles.icon} />}
           text="Terms & Conditions"
@@ -180,6 +187,18 @@ const CustomDrawerLeft = ({navigation, route}) => {
             handlePressLogout();
           }}
         />
+
+        <Text
+          style={{
+            bottom: -18,
+            textAlign: 'center',
+            color: Colors.TEXT1,
+            marginTop: 10,
+            fontWeight: '100',
+          }}>
+          Post and Share App {'\n'}
+          Version 1.0.0
+        </Text>
       </View>
     </DrawerContentScrollView>
   );
@@ -262,11 +281,11 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderWidth: 0.5,
-    borderColor: '#3D398960',
-    borderRadius: 5,
+    // borderWidth: 0.5,
+    // borderColor: '#3D398960',
+    // borderRadius: 5,
     marginVertical: 5,
-    backgroundColor: Colors.white,
+    // backgroundColor: Colors.white,
   },
   icon: {
     color: Colors.PRIMARY,
