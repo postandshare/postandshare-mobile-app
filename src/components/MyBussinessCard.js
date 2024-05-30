@@ -66,8 +66,9 @@ export default MyBussinessCard;
 
 const styles = StyleSheet.create({
   root_container: {
-    flex: 1,
+    // flex: 1,
     width: Sizes.wp('95%'),
+    minHeight: Sizes.hp('10%'),
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#3D398945',

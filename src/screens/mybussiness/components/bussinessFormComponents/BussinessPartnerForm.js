@@ -21,11 +21,13 @@ import Colors from '../../../../constants/Colors';
 import images from '../../../../constants/images';
 import {useMutation} from '@tanstack/react-query';
 import {addBusinessPartner} from '../../../../services/userServices/bussiness.servies';
+import Loader from '../../../../components/Loader';
 
 const BussinessPartnerForm = ({bussinessTypeFormik, bussinessDetails}) => {
   const [profilePic, setprofilePic] = useState(
     bussinessTypeFormik?.values?.bussinessOwnerPhoto,
   );
+  const [edit, setEdit] = useState(false);
   const [bussinessPartnerDetails, setBussinessPartnerDetails] = useState();
   // console.log(bussinessTypeFormik?.values?.bussinessPartner, 'bussiness partner')
   const [bussinessPartner, setBussinessPartner] = useState(
@@ -52,7 +54,8 @@ const BussinessPartnerForm = ({bussinessTypeFormik, bussinessDetails}) => {
         designation: formValues?.bussinessPartnerDessignation,
         photo: formValues?.bussinessPartnerPhoto,
       };
-      setBussinessPartner(prev => [...prev, formValues]);
+      setBussinessPartner(prev => [...prev, {...formValues}]);
+
       // addBusinessPartnerlMutate(formValues);
       bussinessTypeFormik.setValues(prev => ({
         ...prev,
@@ -145,6 +148,7 @@ const BussinessPartnerForm = ({bussinessTypeFormik, bussinessDetails}) => {
   };
   return (
     <>
+      <Loader visible={imageUploading} text="loading..." />
       <ActionSheet
         ref={actionSheetRef}
         closeOnTouchBackdrop={false}
@@ -157,6 +161,7 @@ const BussinessPartnerForm = ({bussinessTypeFormik, bussinessDetails}) => {
         <AddBussinessPartnerSheet
           bussinessPartnerDetails={bussinessPartnerDetails}
           onPressCross={onPressCross}
+          edit={edit}
           bussinessTypeFormik={bussinessPartnerDetailsFormik}
           addBusinessPartner={AddBussinessPartner}
         />
@@ -304,13 +309,16 @@ const BussinessPartnerForm = ({bussinessTypeFormik, bussinessDetails}) => {
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => {
+                      console.log(item, 'item');
+                      setEdit(true);
                       actionSheetRef?.current?.show();
                       setBussinessPartnerDetails(item);
                       bussinessPartnerDetailsFormik.setValues(prev => ({
                         ...prev,
-                        bussinessPartnerName: item?.name,
-                        bussinessPartnerDessignation: item?.designation,
-                        bussinessPartnerPhoto: item?.photo,
+                        bussinessPartnerName: item?.bussinessPartnerName,
+                        bussinessPartnerDessignation:
+                          item?.bussinessPartnerDessignation,
+                        bussinessPartnerPhoto: item?.bussinessPartnerPhoto,
                       }));
                     }}>
                     <Text style={{color: 'blue', fontStyle: 'italic'}}>

@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
   onboarding_flatlist_wrap_background: {
     width: Sizes.width,
     height: Sizes.height,
+    resizeMode: 'cover',
   },
   onboarding_flatlist_upper_card: {
     flex: 1,

@@ -150,7 +150,12 @@ const Notification = ({navigation}) => {
             keyExtractor={(_, i) => i}
             ListEmptyComponent={() => (
               <Text
-                style={{alignSelf: 'center', fontSize: 15, fontWeight: '500'}}>
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 15,
+                  fontWeight: '500',
+                  color: Colors.TEXT1,
+                }}>
                 There is No Notification.....
               </Text>
             )}

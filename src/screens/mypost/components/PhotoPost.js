@@ -164,24 +164,37 @@ const PhotoPost = ({navigation}) => {
         ...(favorite && {favorite: true}),
       }),
     onSuccess: async success => {
-      setPostData(prev => ({
-        ...prev,
-        page: success?.data?.currentPage,
-        pages: success?.data?.totalPages,
-        list: [...prev?.list, ...success?.data?.list],
-        count: prev?.count + success?.data?.count,
-      }));
+      setPostData(prev => {
+        // Combine old and new posts
+        const combinedList = [...prev?.list, ...success?.data?.list];
+
+        // Create a Set with unique posts
+        const uniqueSet = new Set(
+          combinedList.map(item => JSON.stringify(item)),
+        );
+
+        // Convert the Set back to an array of objects
+        const uniqueList = Array.from(uniqueSet).map(item => JSON.parse(item));
+
+        return {
+          ...prev,
+          page: success?.data?.currentPage,
+          pages: success?.data?.totalPages,
+          list: uniqueList,
+          count: uniqueList.length,
+        };
+      });
     },
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
-    enabled: postData?.pages > postData?.page ? false : true, //please recheck it
+    enabled: false, //please recheck it
   });
 
   const {mutate: updateUserPostMuatate, isLoading: updateUserPostLoading} =
     useMutation(updateUserPost, {
       onSuccess: async success => {
-        await HandleRefresh();
+        getUserPostRefetch();
       },
       onError: error => {
         ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
@@ -205,9 +218,11 @@ const PhotoPost = ({navigation}) => {
       },
     });
 
-  const fetchMore = () => {
+  const fetchMore = async () => {
     if (postData.page < postData.pages) {
-      setPostData(prev => ({...prev, page: prev.page + 1}));
+      const nextPage = postData.page + 1;
+      await setPostData(prev => ({...prev, page: nextPage}));
+      await getUserPostRefetch();
     }
   };
 
@@ -250,7 +265,7 @@ const PhotoPost = ({navigation}) => {
     if (postData.page === 1 && postData.list.length === 0) {
       getUserPostRefetch();
     }
-  }, [getUserPostRefetch, postData]);
+  }, [getUserPostRefetch, postData?.page]);
 
   // use this when the post name from the server would come
   const filteredPostData = postData?.list?.filter(post =>
@@ -379,8 +394,15 @@ const PhotoPost = ({navigation}) => {
               setDeletePostDocId={setDeletePostDocId}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
-              handlePostLike={() => {
-                updateUserPostMuatate({
+              handlePostLike={async () => {
+                await setPostData(prev => ({
+                  ...prev,
+                  list: [],
+                  page: 1,
+                  count: 0,
+                  pages: 1,
+                }));
+                await updateUserPostMuatate({
                   userPostDocId: item?._id,
                   favorite: !item?.favorite,
                 });

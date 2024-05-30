@@ -20,6 +20,7 @@ const AddBussinessPartnerSheet = ({
   onPressCross,
   addBusinessPartner,
   bussinessTypeFormik,
+  edit = false,
 }) => {
   const [profilePic, setprofilePic] = useState(
     bussinessTypeFormik?.values?.bussinessPartnerPhoto ?? '',
@@ -138,7 +139,16 @@ const AddBussinessPartnerSheet = ({
           )}
         </TouchableOpacity>
 
-        <CustomButton title={'Add'} onPress={() => addBusinessPartner()} />
+        <CustomButton
+          title={
+            imageUploading
+              ? 'Uploading...'
+              : edit
+              ? 'Update Partner'
+              : 'Add Partner'
+          }
+          onPress={() => addBusinessPartner()}
+        />
       </View>
     </>
   );

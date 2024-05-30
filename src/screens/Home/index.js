@@ -261,30 +261,30 @@ const Home = ({navigation}) => {
 
               {/* container for showing the templates by date */}
 
-              {/* {getTemplatesByDate_Data?.data?.list?.length > 0 ? ( */}
-              <FlatListComponent
-                navigation={navigation}
-                data={getTemplatesByDate_Data?.data?.list}
-                byLabel={'By Date'}
-              />
-              {/* // ) : null} */}
+              {getTemplatesByDate_Data?.data?.list?.length > 0 ? (
+                <FlatListComponent
+                  navigation={navigation}
+                  data={getTemplatesByDate_Data?.data?.list}
+                  byLabel={'By Date'}
+                />
+              ) : null}
 
               {/* container for showing the templates for quotes */}
-              {/* // {getTemplatesForQuotes_Data?.data?.list?.length > 0 ? ( */}
-              <FlatListComponent
-                navigation={navigation}
-                data={getTemplatesForQuotes_Data?.data?.list}
-                byLabel={'For Quotes'}
-              />
-              {/* // ) : null} */}
+              {getTemplatesForQuotes_Data?.data?.list?.length > 0 ? (
+                <FlatListComponent
+                  navigation={navigation}
+                  data={getTemplatesForQuotes_Data?.data?.list}
+                  byLabel={'For Quotes'}
+                />
+              ) : null}
               {/* container for showing the templates for great leaders */}
-              {/* {getTemplatesOfGreatLeaders_Data?.data?.list?.length > 0 ? ( */}
-              <FlatListComponent
-                navigation={navigation}
-                data={getTemplatesOfGreatLeaders_Data?.data?.list}
-                byLabel={'For Great Leaders'}
-              />
-              {/* // ) : null} */}
+              {getTemplatesOfGreatLeaders_Data?.data?.list?.length > 0 ? (
+                <FlatListComponent
+                  navigation={navigation}
+                  data={getTemplatesOfGreatLeaders_Data?.data?.list}
+                  byLabel={'For Great Leaders'}
+                />
+              ) : null}
 
               {/* CONTAINER FOR ALL TYPES OF BUSSINESS THAT USER HAVE IN HIS PROFILE */}
               {

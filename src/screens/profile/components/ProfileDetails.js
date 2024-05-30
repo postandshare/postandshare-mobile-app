@@ -102,13 +102,13 @@ const ProfileDetails = ({data}) => {
       </View>
       {/* name */}
       <Text style={styles.name_text}>
-        {data?.firstName} {data?.middle} {data?.lastName}
+        {data?.firstName} {data?.middleName} {data?.lastName}
       </Text>
 
       {/* name of the user */}
       <View style={styles.other_details}>
         <LabelText label={'First Name'} value={data?.firstName ?? '--'} />
-        <LabelText label={'Middle Name'} value={data?.middle ?? '--'} />
+        <LabelText label={'Middle Name'} value={data?.middleName ?? '--'} />
         <LabelText label={'Last Name'} value={data?.lastName ?? '--'} />
       </View>
       {/* other details */}

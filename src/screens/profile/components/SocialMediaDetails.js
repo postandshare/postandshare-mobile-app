@@ -16,10 +16,22 @@ const IconText = ({icon, text}) => {
 const SocialMediaDetails = ({data}) => {
   return (
     <View style={styles.container}>
-      <IconText icon={'facebook'} text={data?.facebookLink ?? '--'} />
-      <IconText icon={'twitter'} text={data?.twitterLink ?? '--'} />
-      <IconText icon={'phone'} text={data?.mobileNumber ?? '--'} />
-      <IconText icon={'whatsapp'} text={data?.whatsappNumber ?? '--'} />
+      <IconText
+        icon={'facebook'}
+        text={data?.facebookLink === '' ? '--' : data?.facebookLink}
+      />
+      <IconText
+        icon={'twitter'}
+        text={data?.twitterLink === '' ? '--' : data?.twitterLink}
+      />
+      <IconText
+        icon={'phone'}
+        text={data?.mobileNumber === '' ? '--' : data?.mobileNumber}
+      />
+      <IconText
+        icon={'whatsapp'}
+        text={data?.whatsappNumber === '' ? '--' : data?.whatsappNumber}
+      />
     </View>
   );
 };

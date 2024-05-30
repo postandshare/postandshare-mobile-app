@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
   uploadpic_container_image_view: {
     height: 100,
-    width: '30%',
+    width: 100,
     aspectRatio: 1,
     marginHorizontal: 5,
     borderRadius: 5,
@@ -44,8 +44,8 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   uploadpic_container_image: {
-    height: '100%',
-    width: '100%',
+    height: 100,
+    width: 100,
     resizeMode: 'contain',
     borderRadius: 5,
     padding: 1,

@@ -20,16 +20,19 @@ const MonthPhotos = ({navigation, route}) => {
   const [loading, setLoading] = React.useState(true);
   return (
     <>
-      <TopHeader titile={byLabel} />
       <ImageBackground
         source={images.background}
         style={globalStyles?.backgroundImage}>
+        <TopHeader titile={byLabel} />
         <ScrollView style={styles.root} nestedScrollEnabled>
           <View style={styles.imageWrap}>
             {data.length === 0 && (
               <View style={styles.noData}>
-                <Text style={styles.noDataText}>
-                  No photos uploaded for this month
+                <Text
+                  style={{
+                    color: Colors.TEXT1,
+                  }}>
+                  No photos
                 </Text>
               </View>
             )}

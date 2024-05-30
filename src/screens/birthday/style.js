@@ -6,6 +6,7 @@ const {StyleSheet} = require('react-native');
 const styles = StyleSheet.create({
   root: {
     backgroundColor: Colors.transparent,
+    alignSelf: 'center',
   },
   noEventsText: {
     fontSize: 16,

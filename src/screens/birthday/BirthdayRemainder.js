@@ -177,239 +177,269 @@ const BirthdayRemainder = ({navigation}) => {
             <Feather name="calendar" size={28} style={{color: Colors.TEXT1}} />
           }
         />
+        <View>
+          {/* tray for the filter the events */}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={{
+              height: 80,
+            }}
+            contentContainerStyle={{
+              width: '100%',
+              alignItems: 'center',
+              marginVertical: 10,
+            }}>
+            <Tray
+              backgroundColor={
+                selectedFilter === 'All' ? Colors.PRIMARY : '#E9EEFE'
+              }
+              textColor={selectedFilter === 'All' ? Colors.white : Colors.TEXT1}
+              title="All"
+              onPress={() => {
+                setSelectedFilter('All');
+              }}
+            />
+            <Tray
+              backgroundColor={
+                selectedFilter === 'Birthday' ? Colors.PRIMARY : '#E9EEFE'
+              }
+              textColor={
+                selectedFilter === 'Birthday' ? Colors.white : Colors.TEXT1
+              }
+              title="Birthday"
+              onPress={() => {
+                setSelectedFilter('Birthday');
+              }}
+            />
+            <Tray
+              backgroundColor={
+                selectedFilter === 'Anniversary' ? Colors.PRIMARY : '#E9EEFE'
+              }
+              textColor={
+                selectedFilter === 'Anniversary' ? Colors.white : Colors.TEXT1
+              }
+              title="Anniversary"
+              onPress={() => {
+                setSelectedFilter('Anniversary');
+              }}
+            />
+          </ScrollView>
+          {todaysEvents.length === 0 && upcomingEvents.length === 0 && (
+            <View
+              style={{
+                alignSelf: 'center',
+              }}>
+              <Text
+                style={{
+                  color: Colors.TEXT1,
+                  fontSize: Sizes.hp('2%'),
+                }}>
+                No Events
+              </Text>
+            </View>
+          )}
 
-        {/* tray for the filter the events */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={{}}
-          contentContainerStyle={{
-            width: '100%',
-            marginVertical: 10,
-          }}>
-          <Tray
-            backgroundColor={
-              selectedFilter === 'All' ? Colors.PRIMARY : '#E9EEFE'
-            }
-            textColor={selectedFilter === 'All' ? Colors.white : Colors.TEXT1}
-            title="All"
-            onPress={() => {
-              setSelectedFilter('All');
-            }}
-          />
-          <Tray
-            backgroundColor={
-              selectedFilter === 'Birthday' ? Colors.PRIMARY : '#E9EEFE'
-            }
-            textColor={
-              selectedFilter === 'Birthday' ? Colors.white : Colors.TEXT1
-            }
-            title="Birthday"
-            onPress={() => {
-              setSelectedFilter('Birthday');
-            }}
-          />
-          <Tray
-            backgroundColor={
-              selectedFilter === 'Anniversary' ? Colors.PRIMARY : '#E9EEFE'
-            }
-            textColor={
-              selectedFilter === 'Anniversary' ? Colors.white : Colors.TEXT1
-            }
-            title="Anniversary"
-            onPress={() => {
-              setSelectedFilter('Anniversary');
-            }}
-          />
-        </ScrollView>
+          {todaysEvents?.length > 0 && (
+            <>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <Text style={styles.title}>Today</Text>
+                <Text style={[styles.title, {color: Colors.PRIMARY}]}>
+                  see all
+                </Text>
+              </View>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <Text style={styles.title}>Today</Text>
-          <Text style={[styles.title, {color: Colors.PRIMARY}]}>see all</Text>
+              <FlatList
+                contentContainerStyle={{...styles.root}}
+                data={todaysEvents}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={getEventsFetching || getEventsLoading}
+                    onRefresh={() => getEventsRefetch()}
+                  />
+                }
+                showsVerticalScrollIndicator={false}
+                keyExtractor={(item, index) => index.toString()}
+                ListEmptyComponent={
+                  <Text style={styles.noEventsText}>No Events Today</Text>
+                }
+                renderItem={({item, index}) => (
+                  <BirthRemaiderCard
+                    item={item}
+                    key={index}
+                    handleDeleteEvent={() => {
+                      Alert.alert(
+                        'Post and Share App',
+                        'Are you sure want to Send WhatsApp Message?',
+                        [
+                          {
+                            text: 'Cancel',
+                            onPress: () => console.log('Cancel Pressed'),
+                            style: 'cancel',
+                          },
+                          {
+                            text: 'Delete',
+                            style: 'destructive',
+                            onPress: () => {
+                              deleteEventMutate({
+                                eventDocId: item?._id,
+                              });
+                            },
+                          },
+                        ],
+                      );
+                    }}
+                    handleWhatsAppSend={() => {
+                      Alert.alert(
+                        'Post and Share App',
+                        'Are you sure want to Send WhatsApp Message?',
+                        [
+                          {
+                            text: 'Cancel',
+                            onPress: () => console.log('Cancel Pressed'),
+                            style: 'cancel',
+                          },
+                          {
+                            text: 'Send',
+                            onPress: () => {
+                              sendWhatsApp({
+                                eventDocId: item?._id,
+                              });
+                            },
+                          },
+                        ],
+                      );
+                    }}
+                    handleSendSms={() => {
+                      Alert.alert(
+                        'Post and Share App',
+                        'Are you sure want to Send SMS ?',
+                        [
+                          {
+                            text: 'Cancel',
+                            onPress: () => console.log('Cancel Pressed'),
+                            style: 'cancel',
+                          },
+                          {
+                            text: 'Send',
+                            onPress: () => {
+                              sendSmsMutate({
+                                eventDocId: item?._id,
+                              });
+                            },
+                          },
+                        ],
+                      );
+                    }}
+                    onPress={() =>
+                      navigation.navigate('BirthdayRemainderDetail', {
+                        event: item,
+                      })
+                    }
+                  />
+                )}
+              />
+            </>
+          )}
+
+          {
+            // list for the upcoming list
+            upcomingEvents.length > 0 && (
+              <>
+                <Text style={styles.title}>Upcoming</Text>
+                {/* list for the upcoming list */}
+                <FlatList
+                  contentContainerStyle={{...styles.root, paddingBottom: 200}}
+                  data={upcomingEvents}
+                  showsVerticalScrollIndicator={false}
+                  keyExtractor={(item, index) => index.toString()}
+                  ListEmptyComponent={
+                    <Text style={styles.noEventsText}>No Upcoming Events</Text>
+                  }
+                  renderItem={({item, index}) => (
+                    <BirthRemaiderCard
+                      item={item}
+                      key={index}
+                      handleDeleteEvent={() => {
+                        Alert.alert(
+                          'Post and Share App',
+                          'Are you sure want to Send WhatsApp Message?',
+                          [
+                            {
+                              text: 'Cancel',
+                              onPress: () => console.log('Cancel Pressed'),
+                              style: 'cancel',
+                            },
+                            {
+                              text: 'Delete',
+                              style: 'destructive',
+                              onPress: () => {
+                                deleteEventMutate({
+                                  eventDocId: item?._id,
+                                });
+                              },
+                            },
+                          ],
+                        );
+                      }}
+                      handleWhatsAppSend={() => {
+                        Alert.alert(
+                          'Post and Share App',
+                          'Are you sure want to Send WhatsApp Message?',
+                          [
+                            {
+                              text: 'Cancel',
+                              onPress: () => console.log('Cancel Pressed'),
+                              style: 'cancel',
+                            },
+                            {
+                              text: 'Send',
+                              onPress: () => {
+                                sendWhatsApp({
+                                  eventDocId: item?._id,
+                                });
+                              },
+                            },
+                          ],
+                        );
+                      }}
+                      handleSendSms={() => {
+                        Alert.alert(
+                          'Post and Share App',
+                          'Are you sure want to Send SMS ?',
+                          [
+                            {
+                              text: 'Cancel',
+                              onPress: () => console.log('Cancel Pressed'),
+                              style: 'cancel',
+                            },
+                            {
+                              text: 'Send',
+                              onPress: () => {
+                                sendSmsMutate({
+                                  eventDocId: item?._id,
+                                });
+                              },
+                            },
+                          ],
+                        );
+                      }}
+                      onPress={() =>
+                        navigation.navigate('BirthdayRemainderDetail', {
+                          event: item,
+                        })
+                      }
+                    />
+                  )}
+                />
+              </>
+            )
+          }
         </View>
-
-        {/* list for the today events */}
-        <FlatList
-          contentContainerStyle={{...styles.root}}
-          data={todaysEvents}
-          refreshControl={
-            <RefreshControl
-              refreshing={getEventsFetching || getEventsLoading}
-              onRefresh={() => getEventsRefetch()}
-            />
-          }
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item, index) => index.toString()}
-          ListEmptyComponent={
-            <Text style={styles.noEventsText}>No Events Today</Text>
-          }
-          renderItem={({item, index}) => (
-            <BirthRemaiderCard
-              item={item}
-              key={index}
-              handleDeleteEvent={() => {
-                Alert.alert(
-                  'Post and Share App',
-                  'Are you sure want to Send WhatsApp Message?',
-                  [
-                    {
-                      text: 'Cancel',
-                      onPress: () => console.log('Cancel Pressed'),
-                      style: 'cancel',
-                    },
-                    {
-                      text: 'Delete',
-                      style: 'destructive',
-                      onPress: () => {
-                        deleteEventMutate({
-                          eventDocId: item?._id,
-                        });
-                      },
-                    },
-                  ],
-                );
-              }}
-              handleWhatsAppSend={() => {
-                Alert.alert(
-                  'Post and Share App',
-                  'Are you sure want to Send WhatsApp Message?',
-                  [
-                    {
-                      text: 'Cancel',
-                      onPress: () => console.log('Cancel Pressed'),
-                      style: 'cancel',
-                    },
-                    {
-                      text: 'Send',
-                      onPress: () => {
-                        sendWhatsApp({
-                          eventDocId: item?._id,
-                        });
-                      },
-                    },
-                  ],
-                );
-              }}
-              handleSendSms={() => {
-                Alert.alert(
-                  'Post and Share App',
-                  'Are you sure want to Send SMS ?',
-                  [
-                    {
-                      text: 'Cancel',
-                      onPress: () => console.log('Cancel Pressed'),
-                      style: 'cancel',
-                    },
-                    {
-                      text: 'Send',
-                      onPress: () => {
-                        sendSmsMutate({
-                          eventDocId: item?._id,
-                        });
-                      },
-                    },
-                  ],
-                );
-              }}
-              onPress={() =>
-                navigation.navigate('BirthdayRemainderDetail', {
-                  event: item,
-                })
-              }
-            />
-          )}
-        />
-
-        <Text style={styles.title}>Upcoming</Text>
-        {/* list for the upcoming list */}
-        <FlatList
-          contentContainerStyle={{...styles.root, paddingBottom: 200}}
-          data={upcomingEvents}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item, index) => index.toString()}
-          ListEmptyComponent={
-            <Text style={styles.noEventsText}>No Upcoming Events</Text>
-          }
-          renderItem={({item, index}) => (
-            <BirthRemaiderCard
-              item={item}
-              key={index}
-              handleDeleteEvent={() => {
-                Alert.alert(
-                  'Post and Share App',
-                  'Are you sure want to Send WhatsApp Message?',
-                  [
-                    {
-                      text: 'Cancel',
-                      onPress: () => console.log('Cancel Pressed'),
-                      style: 'cancel',
-                    },
-                    {
-                      text: 'Delete',
-                      style: 'destructive',
-                      onPress: () => {
-                        deleteEventMutate({
-                          eventDocId: item?._id,
-                        });
-                      },
-                    },
-                  ],
-                );
-              }}
-              handleWhatsAppSend={() => {
-                Alert.alert(
-                  'Post and Share App',
-                  'Are you sure want to Send WhatsApp Message?',
-                  [
-                    {
-                      text: 'Cancel',
-                      onPress: () => console.log('Cancel Pressed'),
-                      style: 'cancel',
-                    },
-                    {
-                      text: 'Send',
-                      onPress: () => {
-                        sendWhatsApp({
-                          eventDocId: item?._id,
-                        });
-                      },
-                    },
-                  ],
-                );
-              }}
-              handleSendSms={() => {
-                Alert.alert(
-                  'Post and Share App',
-                  'Are you sure want to Send SMS ?',
-                  [
-                    {
-                      text: 'Cancel',
-                      onPress: () => console.log('Cancel Pressed'),
-                      style: 'cancel',
-                    },
-                    {
-                      text: 'Send',
-                      onPress: () => {
-                        sendSmsMutate({
-                          eventDocId: item?._id,
-                        });
-                      },
-                    },
-                  ],
-                );
-              }}
-              onPress={() =>
-                navigation.navigate('BirthdayRemainderDetail', {
-                  event: item,
-                })
-              }
-            />
-          )}
-        />
       </ImageBackground>
     </>
   );

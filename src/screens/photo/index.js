@@ -78,23 +78,19 @@ const PhotoStatus = ({navigation, route}) => {
         </View>
         <Text style={styles.text}>Select Photo</Text>
         <ScrollView style={{flexGrow: 1, backgroundColor: Colors.transparent}}>
-          <ScrollView
-            showsHorizontalScrollIndicator={false}
-            style={styles.uploadpic_container}>
-            <View style={styles.imageGrid}>
-              {getRelatedTemplet_Data?.data?.list?.map((item, index) => (
-                <TouchableOpacity
-                  onPress={() => setPhotoData(item?.photo)}
-                  key={index}
-                  style={styles.uploadpic_container_image_view}>
-                  <Image
-                    source={{uri: item?.photo}}
-                    style={styles.uploadpic_container_image}
-                  />
-                </TouchableOpacity>
-              ))}
-            </View>
-          </ScrollView>
+          <View style={styles.imageGrid}>
+            {getRelatedTemplet_Data?.data?.list?.map((item, index) => (
+              <TouchableOpacity
+                onPress={() => setPhotoData(item?.photo)}
+                key={index}
+                style={styles.uploadpic_container_image_view}>
+                <Image
+                  source={{uri: item?.photo}}
+                  style={styles.uploadpic_container_image}
+                />
+              </TouchableOpacity>
+            ))}
+          </View>
         </ScrollView>
       </ImageBackground>
     </>

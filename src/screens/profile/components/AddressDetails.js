@@ -45,9 +45,12 @@ const AddressDetails = ({data}) => {
       <View style={styles.other_details}>
         <LabelText
           label={'District'}
-          value={data?.currentAddress?.dist + '--'}
+          value={data?.currentAddress?.dist ?? '--'}
         />
-        <LabelText label={'State'} value={data?.currentAddress?.state + '--'} />
+        <LabelText
+          label={'State'}
+          value={data?.currentAddress?.state ?? '--'}
+        />
       </View>
     </View>
   );
