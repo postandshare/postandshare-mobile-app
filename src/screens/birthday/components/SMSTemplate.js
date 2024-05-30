@@ -18,14 +18,16 @@ const SMSTemplate = ({
   onEditPress,
   width = '90%',
   showEdit = true,
+  msgImage,
 }) => {
+  console.log(item);
   return (
     <View style={[styles.template, {width: width}]}>
       {item?.templetType === 'WhatsApp' && (
         <ImageBackground
           source={
-            item?.msgImage
-              ? {uri: item?.msgImage}
+            msgImage
+              ? {uri: msgImage}
               : item?.messageThumbnail
               ? {uri: item?.messageThumbnail}
               : images?.coupleAniverssary

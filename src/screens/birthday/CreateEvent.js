@@ -126,9 +126,8 @@ const CreateEvent = ({navigation, route}) => {
       onSuccess: ({data}) => {
         if (selectedFilter === 'WhatsApp' || selectedFilter === 'SMS') {
           getTempletsRefetch();
-        } else {
-          getEventRefetch();
         }
+        getEventRefetch();
       },
       onError: err => {
         ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
@@ -313,7 +312,7 @@ const CreateEvent = ({navigation, route}) => {
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{
-            height: 100,
+            height: 50,
             width: '100%',
             marginVertical: 10,
           }}>

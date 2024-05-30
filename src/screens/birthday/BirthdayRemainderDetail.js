@@ -1,6 +1,7 @@
 import {
   Image,
   ImageBackground,
+  RefreshControl,
   ScrollView,
   Text,
   ToastAndroid,
@@ -52,6 +53,11 @@ const BirthdayRemainderDetail = ({data, navigation, route}) => {
     }, [navigation, getEventRefetch, selectedFilter]),
   );
 
+  console.log(
+    getEvent_Data?.data?.data?.msgImage,
+    'getEvent_Data?.data?.data?.msgImage',
+  );
+
   return (
     <>
       <ImageBackground
@@ -59,6 +65,7 @@ const BirthdayRemainderDetail = ({data, navigation, route}) => {
         style={globalStyles?.backgroundImage}>
         <TopHeader
           titile={getEvent_Data?.data?.data?.eventType ?? 'Event Details'}
+          path="BirthdayRemainder"
           // IconProp={<Feather name="settings" size={30} color={Colors.TEXT1} />}
           // onPress={() => {
           //   navigation.navigate('RemainderSetting');
@@ -66,6 +73,12 @@ const BirthdayRemainderDetail = ({data, navigation, route}) => {
         />
         <ScrollView
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={getEventFetching}
+              onRefresh={getEventRefetch}
+            />
+          }
           contentContainerStyle={{
             paddingBottom: 100,
           }}>
@@ -176,6 +189,7 @@ const BirthdayRemainderDetail = ({data, navigation, route}) => {
                 item={getEvent_Data?.data?.data?.whatsAppTempletDetails}
                 onPress={() => {}}
                 isSelected={false}
+                msgImage={getEvent_Data?.data?.data?.msgImage}
                 onEditPress={() => {}}
                 showEdit={false}
               />
