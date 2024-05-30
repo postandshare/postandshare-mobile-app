@@ -8,6 +8,9 @@ const userPost_route = `${baseURL}/userPost`;
 export const addUserPost = body => {
   return authAxiosInstance.post(`${userPost_route}/addUserPost`, body);
 };
+export const updateUserPost = body => {
+  return authAxiosInstance.put(`${userPost_route}/updateUserPost`, body);
+};
 export const getUserPost = params => {
   return authAxiosInstance.get(`${userPost_route}/getUserPost`, {
     params,

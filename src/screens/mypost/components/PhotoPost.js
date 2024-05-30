@@ -16,6 +16,7 @@ import {useMutation, useQuery} from '@tanstack/react-query';
 import {
   deleteUserPost,
   getUserPost,
+  updateUserPost,
 } from '../../../services/userServices/userpost.services';
 import Colors from '../../../constants/Colors';
 import {
@@ -177,6 +178,16 @@ const PhotoPost = ({navigation}) => {
     enabled: postData?.pages > postData?.page ? false : true, //please recheck it
   });
 
+  const {mutate: updateUserPostMuatate, isLoading: updateUserPostLoading} =
+    useMutation(updateUserPost, {
+      onSuccess: async success => {
+        await HandleRefresh();
+      },
+      onError: error => {
+        ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
+      },
+      enabled: false,
+    });
   const {mutate: deleteUserPostMuatate, isLoading: deleteUserPostLoading} =
     useMutation(deleteUserPost, {
       onSuccess: success => {
@@ -265,7 +276,7 @@ const PhotoPost = ({navigation}) => {
     React.useCallback(() => {
       getUserPostRefetch();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [getUserPostRefetch, favorite]),
+    }, [favorite]),
   );
 
   // Map all post images to required format
@@ -368,6 +379,12 @@ const PhotoPost = ({navigation}) => {
               setDeletePostDocId={setDeletePostDocId}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
+              handlePostLike={() => {
+                updateUserPostMuatate({
+                  userPostDocId: item?._id,
+                  favorite: !item?.favorite,
+                });
+              }}
             />
             // for gallery view
             // <PhotoPostCard

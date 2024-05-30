@@ -1,5 +1,6 @@
 import {
   Image,
+  ImageBackground,
   Share,
   StyleSheet,
   Text,
@@ -22,6 +23,7 @@ const ModalPhotoPostCard = ({
   item,
   isLoading,
   setIsLoading,
+  handlePostLike = () => {},
 }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const showModal = () => setModalVisible(true);
@@ -142,11 +144,20 @@ const ModalPhotoPostCard = ({
               color={Colors.PRIMARY}
             />
           )}
-          <Image
+          <ImageBackground
             onLoadEnd={() => setIsLoading(false)}
             source={{uri: item?.postLink}}
-            style={styles.image}
-          />
+            style={styles.image}>
+            {/* heart icon for like the post */}
+            <TouchableOpacity activeOpacity={0.7} onPress={handlePostLike}>
+              <AntDesign
+                name="heart"
+                size={24}
+                color={item?.favorite ? 'red' : 'white'}
+                style={{position: 'absolute', top: 10, right: 5}}
+              />
+            </TouchableOpacity>
+          </ImageBackground>
         </TouchableOpacity>
 
         <Text style={{textAlign: 'center', fontSize: 12, color: Colors.text1}}>
