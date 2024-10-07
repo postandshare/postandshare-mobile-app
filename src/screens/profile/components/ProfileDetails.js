@@ -1,5 +1,4 @@
 import {
-  Image,
   PermissionsAndroid,
   StyleSheet,
   Text,
@@ -8,7 +7,6 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import Colors from '../../../constants/Colors';
-import images from '../../../constants/images';
 import Sizes from '../../../constants/Sizes';
 import moment from 'moment';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -74,8 +72,6 @@ const ProfileDetails = ({data}) => {
         },
       );
       ImagePicker.openPicker({
-        width: 300,
-        height: 400,
         cropping: true,
       })
         .then(image => {
