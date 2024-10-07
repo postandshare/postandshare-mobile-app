@@ -18,14 +18,13 @@ import BirthdayRemainderNavigator from '../screens/birthday';
 import ProfileNavigator from '../screens/profile/index';
 
 const CurvedBottomTab = ({navigation}) => {
-  const [isKeyboardVisible, setKeyboardVisible] = React.useState(false);
   const tabRef = React.useRef(null);
   const _renderIcon = (routeName, selectedTab) => {
     let icon = '';
 
     switch (routeName) {
       case 'Home':
-        icon = 'ios-home-outline';
+        icon = 'home-outline';
         break;
       case 'events':
         icon = 'calendar-outline';

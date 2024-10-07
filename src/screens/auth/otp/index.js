@@ -167,7 +167,7 @@ const VerifyOTP = ({navigation, route}) => {
             Secure your account, one code at a time
           </Text>
         </ImageBackground>
-        <Pressable style={{}}>
+        <Pressable>
           <View style={authStyle.middleContainer}>
             <View style={authStyle.input}>
               <TextInput
@@ -219,12 +219,6 @@ const VerifyOTP = ({navigation, route}) => {
                 </Text>
               </TouchableOpacity>
             )}
-            {/* <TouchableOpacity>
-                <Text style={{ fontSize: 18 }}>
-                  Did not recive code?
-                  <Text style={{ color: "#164B92" }}> Resend Code</Text>
-                </Text>
-              </TouchableOpacity> */}
           </View>
         </Pressable>
       </ScrollView>

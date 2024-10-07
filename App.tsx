@@ -19,13 +19,15 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: false,
-      //refetchOnWindowFocus: false,
+      refetchOnWindowFocus: false,
     },
   },
 });
 
-const App = () => {
-  const [isConnected, setIsConnected] = useState(true);
+function App(): React.JSX.Element {
+  const [isConnected, setIsConnected] = useState<
+    boolean | undefined | null | string
+  >(true);
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
@@ -69,6 +71,6 @@ const App = () => {
       </QueryClientProvider>
     </GestureHandlerRootView>
   );
-};
+}
 
 export default App;
