@@ -1039,40 +1039,23 @@ const CustomSDK = ({route, navigation}) => {
                             data={
                               BusinessData?.address
                                 ? BusinessData?.address?.address +
-                                  ' ' +
-                                  '||' +
+                                  ', ' +
                                   BusinessData?.address?.dist +
                                   ' ' +
-                                  '\n' +
                                   BusinessData?.address?.state
-                                : // +
-                                // ' ' +
-                                // '\n' +
-                                // BusinessData?.address?.pinCode +
-                                // ' ' +
-                                // '||' +
-                                // BusinessData?.address?.tehsil
-                                BusinessData?.state
+                                : BusinessData?.state
                                 ? BusinessData?.state +
-                                  ' ' +
-                                  '||' +
+                                  ',' +
                                   BusinessData?.district +
                                   ' ' +
-                                  '\n' +
                                   BusinessData?.legislativeAssembly
                                 : BusinessData?.currentAddress
                                 ? BusinessData?.currentAddress?.address +
-                                  ' ' +
-                                  '||' +
+                                  ', ' +
                                   BusinessData?.currentAddress?.dist +
                                   ' ' +
-                                  '\n' +
                                   BusinessData?.currentAddress?.state
-                                : // +
-                                  // ' ' +
-                                  // '\n' +
-                                  // BusinessData?.currentAddress?.pinCode
-                                  ToastAndroid.show(
+                                : ToastAndroid.show(
                                     'Address is not available',
                                     ToastAndroid.LONG,
                                   )

@@ -679,19 +679,16 @@ const Add = ({navigation, route}) => {
                               getUserProfile_Data?.data?.obj?.currentAddress
                                 ? getUserProfile_Data?.data?.obj?.currentAddress
                                     ?.address +
-                                  ' ' +
-                                  '||' +
+                                  '' +
+                                  ', ' +
                                   getUserProfile_Data?.data?.obj?.currentAddress
                                     ?.dist +
-                                  ' ' +
-                                  '\n' +
+                                  ', ' +
                                   getUserProfile_Data?.data?.obj?.currentAddress
                                     ?.state +
-                                  ' ' +
-                                  '\n' +
+                                  ', ' +
                                   getUserProfile_Data?.data?.obj?.currentAddress
-                                    ?.pinCode +
-                                  ' '
+                                    ?.pinCode
                                 : ToastAndroid.show(
                                     'Address is not available',
                                     ToastAndroid.LONG,

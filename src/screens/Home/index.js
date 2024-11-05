@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable curly */
 /* eslint-disable react-native/no-inline-styles */
 import {
@@ -7,7 +8,7 @@ import {
   ToastAndroid,
   View,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import styles from './style';
 import DashboardTopHeader from '../../components/DashboardTopHeader';
 import CustomCarousel from '../../components/CustomCarousel';
@@ -48,13 +49,7 @@ const Home = ({navigation}) => {
     navigation.navigate('ProfileNavigator');
   };
 
-  const {
-    isLoading: getUserProfileLoading,
-    isFetching: getUserProfileFetching,
-    refetch: getUserProfileRefetch,
-    data: getUserProfile_Data,
-    isError: getUserProfile_isError,
-  } = useQuery({
+  const {refetch: getUserProfileRefetch, data: getUserProfile_Data} = useQuery({
     queryKey: ['getUserProfile'],
     queryFn: () => getUserProfile(),
     onSuccess: success => {
@@ -71,16 +66,13 @@ const Home = ({navigation}) => {
     isFetching: getTemplatesForQuotesFetching,
     refetch: getTemplatesForQuotesRefetch,
     data: getTemplatesForQuotes_Data,
-    isError: getTemplatesForQuotes_isError,
   } = useQuery({
     queryKey: ['getTemplatesForQuotes'],
     queryFn: () =>
       getTemplatesForQuotes({
         allData: false,
       }),
-    onSuccess: success => {
-      // console.log(success?.data , "success in my bussiness")
-    },
+
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
@@ -91,7 +83,6 @@ const Home = ({navigation}) => {
     isFetching: getTemplatesByDateFetching,
     refetch: getTemplatesByDateRefetch,
     data: getTemplatesByDate_Data,
-    isError: getTemplatesByDate_isError,
   } = useQuery({
     queryKey: ['getTemplatesByDate'],
     queryFn: () =>
@@ -111,27 +102,21 @@ const Home = ({navigation}) => {
     isFetching: getTemplatesOfGreatLeadersFetching,
     refetch: getTemplatesOfGreatLeadersRefetch,
     data: getTemplatesOfGreatLeaders_Data,
-    isError: getTemplatesOfGreatLeaders_isError,
   } = useQuery({
     queryKey: ['getTemplatesOfGreatLeaders'],
     queryFn: () =>
       getTemplatesOfGreatLeaders({
         allData: false,
       }),
-    onSuccess: success => {
-      // console.log(success?.data , "success in my bussiness")
-    },
+
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
     enabled: false,
   });
   const {
-    isLoading: getTemplatesByBusinessLoading,
-    isFetching: getTemplatesByBusinessFetching,
     refetch: getTemplatesByBusinessRefetch,
     data: getTemplatesByBusiness_Data,
-    isError: getTemplatesByBusiness_isError,
   } = useQuery({
     queryKey: ['getTemplatesByBusiness'],
     queryFn: () =>
@@ -147,49 +132,20 @@ const Home = ({navigation}) => {
     enabled: false,
   });
   const {
-    isLoading: getTrendingTemlpatesLoading,
-    isFetching: getTrendingTemlpatesFetching,
     refetch: getTrendingTemlpatesRefetch,
     data: getTrendingTemlpates_Data,
-    isError: getTrendingTemlpates_isError,
   } = useQuery({
     queryKey: ['getTrendingTemlpates'],
     queryFn: () =>
       getTrendingTemlpates({
         allData: false,
       }),
-    onSuccess: success => {
-      // console.log(success?.data , "success in my bussiness")
-    },
+
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
     enabled: false,
   });
-
-  useFocusEffect(
-    useCallback(() => {
-      const fetchData = async () => {
-        await getTemplatesByDateRefetch();
-        await getTemplatesForQuotesRefetch();
-        await getTemplatesOfGreatLeadersRefetch();
-        await getTemplatesByBusinessRefetch();
-        await getTrendingTemlpatesRefetch();
-        await getUserProfileRefetch();
-        getOnesignalData();
-      };
-      fetchData();
-
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-      getTemplatesForQuotesRefetch,
-      getTemplatesByDateRefetch,
-      navigation,
-      getTemplatesByBusinessRefetch,
-      getTemplatesOfGreatLeadersRefetch,
-      getTrendingTemlpatesRefetch,
-    ]),
-  );
 
   const getOnesignalData = useCallback(async () => {
     const data = await OneSignal.getDeviceState();
@@ -206,6 +162,15 @@ const Home = ({navigation}) => {
       OneSignal.promptForPushNotificationsWithUserResponse();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    getTemplatesByDateRefetch();
+    getTemplatesForQuotesRefetch();
+    getTemplatesOfGreatLeadersRefetch();
+    getTemplatesByBusinessRefetch();
+    getTrendingTemlpatesRefetch();
+    getUserProfileRefetch();
+    getOnesignalData();
   }, []);
 
   return (
