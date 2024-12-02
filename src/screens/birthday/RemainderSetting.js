@@ -1,4 +1,5 @@
-import {ScrollView, Text, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
+import {Text} from 'react-native-paper';
 import React from 'react';
 import TopHeader from '../../components/TopHeader';
 import styles from './style';

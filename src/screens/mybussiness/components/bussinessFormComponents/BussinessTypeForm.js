@@ -3,10 +3,10 @@ import {
   RefreshControl,
   ScrollView,
   StyleSheet,
-  Text,
   ToastAndroid,
   View,
 } from 'react-native';
+import {Text} from 'react-native-paper';
 import React, {useState} from 'react';
 import ProfilePic from '../../../../components/ProfilePic';
 import Dropdown from '../../../../components/Dropdown';

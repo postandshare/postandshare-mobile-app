@@ -1,19 +1,17 @@
 import {
-  FlatList,
   Image,
   ImageBackground,
   ScrollView,
-  Text,
   ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useState} from 'react';
 import TopHeader from '../../components/TopHeader';
-import NavigationScreenName from '../../constants/NavigationScreenName';
+import {Text} from 'react-native-paper';
 import styles from './style';
 import Colors from '../../constants/Colors';
-import images, {uploadedImages} from '../../constants/images';
+import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
 import {useQuery} from '@tanstack/react-query';
 import {getRelatedTemplet} from '../../services/userServices/dashboard.services';

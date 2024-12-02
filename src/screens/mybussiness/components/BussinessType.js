@@ -1,17 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
-import {
-  Alert,
-  ScrollView,
-  StyleSheet,
-  Text,
-  ToastAndroid,
-  View,
-} from 'react-native';
+import {Alert, ScrollView, StyleSheet, ToastAndroid, View} from 'react-native';
 import React, {useEffect} from 'react';
-import Entypo from 'react-native-vector-icons/Entypo';
 import Colors from '../../../constants/Colors';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import {Text} from 'react-native-paper';
 import CustomButton from '../../../components/CustomButton';
 import BussinessTypeForm from './bussinessFormComponents/BussinessTypeForm';
 import {useFormik} from 'formik';

@@ -1,10 +1,10 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import React, {useCallback, useRef} from 'react';
 import ActionSheet from 'react-native-actions-sheet';
 import globalStyles from '../../styles/globalStyles';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {useFocusEffect} from '@react-navigation/native';
-
+import {Text} from 'react-native-paper';
 const HelpSupport = ({navigation}) => {
   const actionSheetRef = useRef(null);
   const onPressCross = () => {
@@ -16,7 +16,7 @@ const HelpSupport = ({navigation}) => {
       return () => {
         actionSheetRef?.current?.hide();
       };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigation]),
   );
   return (

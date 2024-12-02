@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import React from 'react';
 import CustomTextInputFormik from '../../../../components/CustomTextInputFormik';
 import Dropdown from '../../../../components/Dropdown';
@@ -6,7 +6,7 @@ import {DISTRICTS, STATES} from '../../../../constants';
 import globalStyles from '../../../../styles/globalStyles';
 import Sizes from '../../../../constants/Sizes';
 import Colors from '../../../../constants/Colors';
-
+import {Text} from 'react-native-paper';
 const BussinessProfileForm = ({bussinessTypeFormik}) => {
   return (
     <ScrollView

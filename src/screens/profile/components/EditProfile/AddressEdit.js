@@ -1,12 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React from 'react';
 import CustomTextInputFormik from '../../../../components/CustomTextInputFormik';
 import Sizes from '../../../../constants/Sizes';
 import Colors from '../../../../constants/Colors';
 import Dropdown from '../../../../components/Dropdown';
 import {DISTRICTS, STATES} from '../../../../constants';
-
+import {Text} from 'react-native-paper';
 const AddressEdit = ({personalProfileFormik}) => {
   return (
     <View style={styles.container}>

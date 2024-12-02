@@ -2,10 +2,10 @@ import {
   ImageBackground,
   PermissionsAndroid,
   ScrollView,
-  Text,
   ToastAndroid,
   TouchableOpacity,
 } from 'react-native';
+import {Text} from 'react-native-paper';
 import React, {useState} from 'react';
 import TopHeader from '../../components/TopHeader';
 import styles from './style';

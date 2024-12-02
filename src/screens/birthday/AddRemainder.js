@@ -1,14 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import {
-  Image,
   ImageBackground,
   PermissionsAndroid,
   ScrollView,
-  Text,
   ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
+import {Text} from 'react-native-paper';
 import React, {useState} from 'react';
 import TopHeader from '../../components/TopHeader';
 import {useFormik} from 'formik';

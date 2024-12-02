@@ -1,12 +1,11 @@
-import {ImageBackground, Text, View} from 'react-native';
+import {ImageBackground, View} from 'react-native';
 import React from 'react';
 import styles from './style';
 import TopHeader from '../../components/TopHeader';
-import NavigationScreenName from '../../constants/NavigationScreenName';
 import {ScrollView} from 'react-native-gesture-handler';
 import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
-
+import {Text} from 'react-native-paper';
 const TermAndCondtion = () => {
   return (
     <>

@@ -1,5 +1,4 @@
 import {
-  Text,
   View,
   Image,
   TouchableOpacity,
@@ -7,6 +6,7 @@ import {
   Animated,
   ImageBackground,
 } from 'react-native';
+import {Text} from 'react-native-paper';
 import React, {useRef, useState} from 'react';
 import styles from './style';
 import Images from '../../constants/images';
@@ -16,7 +16,6 @@ import {useDispatch} from 'react-redux';
 import {setOnBoarding} from '../../services/reducer/AuthSlice';
 import OnboardingNextButton from '../../components/OnboardingNextButton';
 import Paginator from '../../components/Paginator';
-import images from '../../constants/images';
 
 const onBoardingContent = [
   {

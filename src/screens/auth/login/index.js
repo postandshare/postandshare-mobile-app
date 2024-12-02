@@ -1,5 +1,4 @@
 import {
-  Text,
   View,
   ImageBackground,
   TouchableOpacity,
@@ -15,7 +14,7 @@ import authStyle from '../authStyle';
 import {SendOTPonMobile} from '../../../services/authServices/auth.services';
 import {useMutation} from '@tanstack/react-query';
 import Loader from '../../../components/Loader';
-import {Checkbox, TextInput} from 'react-native-paper';
+import {Checkbox, Text} from 'react-native-paper';
 
 const Login = ({navigation}) => {
   const [state, setState] = useState({

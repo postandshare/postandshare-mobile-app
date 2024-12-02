@@ -1,11 +1,10 @@
-import {ImageBackground, ScrollView, Text, View} from 'react-native';
+import {ImageBackground, ScrollView, View} from 'react-native';
 import React from 'react';
 import styles from './style';
-import NavigationScreenName from '../../constants/NavigationScreenName';
 import TopHeader from '../../components/TopHeader';
 import globalStyles from '../../styles/globalStyles';
 import images from '../../constants/images';
-
+import {Text} from 'react-native-paper';
 const Privacy = () => {
   return (
     <>

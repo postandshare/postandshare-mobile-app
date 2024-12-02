@@ -1,8 +1,8 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React from 'react';
 import Sizes from '../../../constants/Sizes';
 import Colors from '../../../constants/Colors';
-
+import {Text} from 'react-native-paper';
 const LabelText = ({label, value}) => {
   return (
     <View style={styles.textinputView}>

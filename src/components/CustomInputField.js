@@ -1,16 +1,10 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, View, TextInput, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {scale} from 'react-native-size-matters';
 import Feather from 'react-native-vector-icons/Feather';
 import Colors from '../constants/Colors';
 import Sizes from '../constants/Sizes';
-
+import {Text} from 'react-native-paper';
 const CustomInputField = ({
   label = 'Label',
   placeholder = 'placeholder',

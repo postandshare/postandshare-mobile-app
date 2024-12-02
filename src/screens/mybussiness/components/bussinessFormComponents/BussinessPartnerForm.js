@@ -3,11 +3,11 @@ import {
   PermissionsAndroid,
   ScrollView,
   StyleSheet,
-  Text,
   ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
+import {Text} from 'react-native-paper';
 import React, {useRef, useState} from 'react';
 import ProfilePic from '../../../../components/ProfilePic';
 import uploadFile from '../../../../utils/uploadFile';

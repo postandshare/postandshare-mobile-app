@@ -2,13 +2,13 @@ import {
   Image,
   ImageBackground,
   ScrollView,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import {Text} from 'react-native-paper';
 import React from 'react';
 import TopHeader from '../../components/TopHeader';
-import images, {uploadedImages} from '../../constants/images';
+import images from '../../constants/images';
 import styles from './style';
 import NavigationScreenName from '../../constants/NavigationScreenName';
 import {ActivityIndicator} from 'react-native-paper';

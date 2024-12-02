@@ -1,21 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
-import {
-  Alert,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {Divider, Modal, Portal} from 'react-native-paper';
+import {Image, StyleSheet, View} from 'react-native';
+import React from 'react';
+import {Divider, Modal} from 'react-native-paper';
 import Colors from '../../../../constants/Colors';
 import Sizes from '../../../../constants/Sizes';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Foundation from 'react-native-vector-icons/Foundation';
 import Entypo from 'react-native-vector-icons/Entypo';
 import CustomButton from '../../../../components/CustomButton';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {Text} from 'react-native-paper';
 
 const ViewBussinessModal = ({
   showBussiness,

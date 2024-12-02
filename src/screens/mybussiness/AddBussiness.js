@@ -1,4 +1,4 @@
-import {ImageBackground, Text, View} from 'react-native';
+import {ImageBackground, View} from 'react-native';
 import React, {useState} from 'react';
 import TopHeader from '../../components/TopHeader';
 import BussinessSelect from './components/BussinessSelect';
@@ -8,7 +8,7 @@ import Colors from '../../constants/Colors';
 import PartySelect from './components/PartySelect';
 import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
-
+import {Text} from 'react-native-paper';
 const AddBussiness = ({route}) => {
   const {businessId, bussinessDetails} = route.params ?? {};
   // console.log(bussinessDetails?.businessType, 'bussinessId');

@@ -1,11 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
-import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import {scale} from 'react-native-size-matters';
 import Sizes from '../constants/Sizes';
 import Colors from '../constants/Colors';
+import {Text} from 'react-native-paper';
 
 const CustomButton = ({
   secondary = false,

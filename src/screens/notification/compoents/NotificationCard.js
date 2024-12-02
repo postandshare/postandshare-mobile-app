@@ -12,7 +12,6 @@ import {Pressable, TouchableOpacity, View} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import Colors from '../../../constants/Colors';
 import styles from '../style';
-import {PanGestureHandler} from 'react-native-gesture-handler';
 
 const NotificationCard = ({
   item,

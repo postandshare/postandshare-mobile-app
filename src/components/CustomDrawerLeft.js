@@ -3,12 +3,12 @@ import {
   Image,
   Share,
   StyleSheet,
-  Text,
   ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import {Text} from 'react-native-paper';
+import React from 'react';
 import Sizes from '../constants/Sizes';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -17,7 +17,6 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {scale} from 'react-native-size-matters';
 import Colors from '../constants/Colors';
-import Images from '../constants/images';
 import NavigationScreenName from '../constants/NavigationScreenName';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch, useSelector} from 'react-redux';
@@ -25,7 +24,6 @@ import {setLoginState} from '../services/reducer/AuthSlice';
 import {setProfileUpdated} from '../services/reducer/CommonReducer';
 import images from '../constants/images';
 import {useNavigation} from '@react-navigation/native';
-import {Divider} from 'react-native-paper';
 
 const Item = ({icon, text, path, onPress = () => {}, isActive}) => (
   <TouchableOpacity

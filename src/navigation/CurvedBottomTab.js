@@ -3,7 +3,6 @@ import {
   Animated,
   Keyboard,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -11,11 +10,12 @@ import {CurvedBottomBarExpo} from 'react-native-curved-bottom-bar';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Colors from '../constants/Colors';
 import Home from '../screens/Home';
-import NavigationScreenName from '../constants/NavigationScreenName';
+import {Text} from 'react-native-paper';
 import MyPost from '../screens/mypost';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import BirthdayRemainderNavigator from '../screens/birthday';
 import ProfileNavigator from '../screens/profile/index';
+import Choose from '../screens/add/pages/Choose';
 
 const CurvedBottomTab = ({navigation}) => {
   const tabRef = React.useRef(null);
@@ -109,9 +109,7 @@ const CurvedBottomTab = ({navigation}) => {
         <Animated.View style={styles.btnCircleUp}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() =>
-              navigation.navigate(NavigationScreenName.ADD_NAVIGATOR)
-            }>
+            onPress={() => navigation.navigate('Choose')}>
             <Ionicons name={'add-circle-outline'} color="#404040" size={45} />
           </TouchableOpacity>
         </Animated.View>
@@ -137,6 +135,7 @@ const CurvedBottomTab = ({navigation}) => {
         component={ProfileNavigator}
         position="RIGHT"
       />
+      <CurvedBottomBarExpo.Screen name="Choose" component={Choose} />
     </CurvedBottomBarExpo.Navigator>
   );
 };

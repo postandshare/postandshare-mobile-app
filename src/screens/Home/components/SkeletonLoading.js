@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import React from 'react';
 import {MotiScrollView, MotiView} from 'moti';
 import {Skeleton} from 'moti/skeleton';

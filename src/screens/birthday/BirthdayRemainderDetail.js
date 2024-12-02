@@ -3,7 +3,6 @@ import {
   ImageBackground,
   RefreshControl,
   ScrollView,
-  Text,
   ToastAndroid,
   TouchableOpacity,
   View,
@@ -13,7 +12,7 @@ import TopHeader from '../../components/TopHeader';
 import styles from './style';
 import images from '../../constants/images';
 import Entypo from 'react-native-vector-icons/Entypo';
-import Feather from 'react-native-vector-icons/Feather';
+import {Text} from 'react-native-paper';
 import Colors from '../../constants/Colors';
 import globalStyles from '../../styles/globalStyles';
 import moment from 'moment';

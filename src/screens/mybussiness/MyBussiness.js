@@ -3,7 +3,6 @@ import {
   ImageBackground,
   RefreshControl,
   ScrollView,
-  Text,
   ToastAndroid,
   View,
 } from 'react-native';
@@ -17,7 +16,7 @@ import {getAllBusinessList} from '../../services/userServices/bussiness.servies'
 import {useFocusEffect} from '@react-navigation/native';
 import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
-import {Button, Menu, Portal, TextInput} from 'react-native-paper';
+import {Menu, Portal, TextInput, Text} from 'react-native-paper';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Colors from '../../constants/Colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';

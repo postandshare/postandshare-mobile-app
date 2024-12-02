@@ -2,10 +2,10 @@ import {
   FlatList,
   ImageBackground,
   RefreshControl,
-  Text,
   ToastAndroid,
   View,
 } from 'react-native';
+import {Text} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 import TopHeader from '../../components/TopHeader';
 import Loader from '../../components/Loader';

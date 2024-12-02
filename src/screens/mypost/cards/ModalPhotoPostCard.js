@@ -3,10 +3,10 @@ import {
   ImageBackground,
   Share,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import {Text} from 'react-native-paper';
 import React from 'react';
 import Sizes from '../../../constants/Sizes';
 import Colors from '../../../constants/Colors';

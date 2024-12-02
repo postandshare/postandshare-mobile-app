@@ -1,9 +1,9 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React from 'react';
 import Sizes from '../../../constants/Sizes';
 import Colors from '../../../constants/Colors';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import {Text} from 'react-native-paper';
 const IconText = ({icon, text}) => {
   return (
     <View style={styles.iconContainer}>

@@ -5,11 +5,11 @@ import {
   RefreshControl,
   ScrollView,
   StyleSheet,
-  Text,
   ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
+import {Text} from 'react-native-paper';
 import React, {useCallback, useEffect, useState} from 'react';
 import TopHeader from '../../../../components/TopHeader';
 import Colors from '../../../../constants/Colors';

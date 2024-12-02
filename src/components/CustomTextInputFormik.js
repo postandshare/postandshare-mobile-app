@@ -1,5 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import {StyleSheet, Text} from 'react-native';
+import {StyleSheet} from 'react-native';
+import {Text} from 'react-native-paper';
 import React from 'react';
 import globalStyles from '../styles/globalStyles';
 import {TextInput} from 'react-native-paper';

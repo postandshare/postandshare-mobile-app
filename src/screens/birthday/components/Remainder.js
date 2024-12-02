@@ -1,11 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Text} from 'react-native-paper';
 import React from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Colors from '../../../constants/Colors';

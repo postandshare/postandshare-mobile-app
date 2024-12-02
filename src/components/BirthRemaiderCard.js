@@ -1,10 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+
 import React from 'react';
 import Colors from '../constants/Colors';
 import Sizes from '../constants/Sizes';
 import moment from 'moment';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Text} from 'react-native-paper';
 
 const Colors_Card = [
   '#FFC0CB',

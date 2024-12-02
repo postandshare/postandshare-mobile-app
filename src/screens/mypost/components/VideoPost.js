@@ -1,8 +1,8 @@
-import {ImageBackground, StyleSheet, Text, View} from 'react-native';
+import {ImageBackground, StyleSheet, View} from 'react-native';
 import React from 'react';
 import images from '../../../constants/images';
 import globalStyles from '../../../styles/globalStyles';
-
+import {Text} from 'react-native-paper';
 const VideoPost = () => {
   return (
     <ImageBackground

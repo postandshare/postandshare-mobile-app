@@ -2,11 +2,11 @@ import {
   ImageBackground,
   PermissionsAndroid,
   Platform,
-  Text,
   ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
+import {Text} from 'react-native-paper';
 import React, {useState} from 'react';
 import Colors from '../../constants/Colors';
 import styles from './style';

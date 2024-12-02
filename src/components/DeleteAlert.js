@@ -1,9 +1,9 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React from 'react';
 import {Modal} from 'react-native-paper';
 import CustomButton from './CustomButton';
 import Colors from '../constants/Colors';
-
+import {Text} from 'react-native-paper';
 const DeleteAlert = ({
   visible = false,
   onDismiss = () => {},

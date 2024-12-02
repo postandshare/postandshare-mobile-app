@@ -1,10 +1,10 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Menu, TextInput} from 'react-native-paper';
 import Colors from '../../../constants/Colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Sizes from '../../../constants/Sizes';
-
+import {Text} from 'react-native-paper';
 const SearchSortFilter = ({
   searchQuery,
   setSearchQuery,

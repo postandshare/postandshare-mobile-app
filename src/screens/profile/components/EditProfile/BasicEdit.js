@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import {StyleSheet, Text, TouchableNativeFeedback, View} from 'react-native';
+import {StyleSheet, TouchableNativeFeedback, View} from 'react-native';
 import React, {useState} from 'react';
 import ProfilePic from '../../../../components/ProfilePic';
 import CustomTextInputFormik from '../../../../components/CustomTextInputFormik';
@@ -10,7 +10,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import DatePicker from 'react-native-date-picker';
 import Dropdown from '../../../../components/Dropdown';
 import globalStyles from '../../../../styles/globalStyles';
-
+import {Text} from 'react-native-paper';
 const genderList = [
   {
     label: 'Male',

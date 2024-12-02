@@ -1,11 +1,4 @@
-import {
-  Image,
-  ImageBackground,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -13,8 +6,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {scale} from 'react-native-size-matters';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
-import {setLoginState, setLogout} from '../services/reducer/AuthSlice';
-import Images from '../constants/images';
+import {setLoginState} from '../services/reducer/AuthSlice';
+import {Text} from 'react-native-paper';
 import Sizes from '../constants/Sizes';
 import Colors from '../constants/Colors';
 import {setProfileUpdated} from '../services/reducer/CommonReducer';

@@ -1,23 +1,16 @@
 import React from 'react';
-import {
-  Text,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  TextInput,
-} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, TextInput} from 'react-native';
 import Colors from '../constants/Colors';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-
-
+import {Text} from 'react-native-paper';
 
 export const LeadingText = ({text, onPress, style}) => {
-    return (
-        <TouchableOpacity onPress={onPress}>
-            <Text style={[styles.leading, style]}>{text}</Text>
-        </TouchableOpacity>
-    );
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <Text style={[styles.leading, style]}>{text}</Text>
+    </TouchableOpacity>
+  );
 };
 
 const CustomInput = React.forwardRef((props, ref) => {
@@ -104,7 +97,7 @@ const CustomInput = React.forwardRef((props, ref) => {
         {leading}
         <TextInput
           ref={ref}
-          mode='Outlined'
+          mode="Outlined"
           style={[styles.textInput, inputStyle, textinputStyle]}
           value={value}
           placeholder={placeholder}
@@ -144,7 +137,6 @@ const CustomInput = React.forwardRef((props, ref) => {
     </View>
   );
 });
-
 
 export default CustomInput;
 

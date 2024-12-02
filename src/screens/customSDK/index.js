@@ -8,12 +8,12 @@ import {
   PermissionsAndroid,
   RefreshControl,
   ScrollView,
-  Text,
   ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {Text} from 'react-native-paper';
+import React, {useRef, useState} from 'react';
 import styles from './style';
 import TopHeader from '../../components/TopHeader';
 import Colors from '../../constants/Colors';
@@ -45,7 +45,6 @@ import {useMutation, useQuery} from '@tanstack/react-query';
 import {getOrgFrame} from '../../services/userServices/frame.services';
 import {useFocusEffect} from '@react-navigation/native';
 import Loader from '../../components/Loader';
-import Sizes from '../../constants/Sizes';
 import uploadFile from '../../utils/uploadFile';
 import {addUserPost} from '../../services/userServices/userpost.services';
 import images from '../../constants/images';

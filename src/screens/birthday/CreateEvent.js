@@ -6,11 +6,11 @@ import {
   RefreshControl,
   ScrollView,
   StyleSheet,
-  Text,
   ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
+import {Text} from 'react-native-paper';
 import React, {useCallback, useState} from 'react';
 import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';

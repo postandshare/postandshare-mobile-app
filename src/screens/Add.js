@@ -1,21 +1,9 @@
-import {Dimensions, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import React from 'react';
-import DragDrop from '../components/DragDrop';
 import DashboardTopHeader from '../components/DashboardTopHeader';
 import NavigationScreenName from '../constants/NavigationScreenName';
-
+import {Text} from 'react-native-paper';
 const Add = ({navigation}) => {
-  const [dropInThePit, setDropInThePit] = React.useState(false);
-  const drag = (x, y) => {
-    console.log('Dragging', x, y);
-  };
-  const drop = (x, y) => {
-    if (y > Dimensions.get('screen').height - 150) {
-      console.log('Drop in the pit');
-    }
-    console.log('Dropping', x, y);
-  };
-
   const onPressMenu = () => {
     navigation.getParent('leftDrawer').openDrawer();
   };

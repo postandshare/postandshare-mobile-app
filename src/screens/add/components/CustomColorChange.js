@@ -1,6 +1,6 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
-import {Button, Dialog, Portal} from 'react-native-paper';
+import {Button, Dialog, Portal, Text} from 'react-native-paper';
 import Colors from '../../../constants/Colors';
 import ColorPicker, {
   HueSlider,

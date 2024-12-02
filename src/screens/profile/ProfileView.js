@@ -3,12 +3,11 @@ import {
   ImageBackground,
   RefreshControl,
   ScrollView,
-  Text,
   ToastAndroid,
   View,
 } from 'react-native';
+import {Text} from 'react-native-paper';
 import React, {useCallback} from 'react';
-import TopHeader from '../../components/TopHeader';
 import styles from './style';
 import {getUserProfile} from '../../services/userServices/profile.services';
 import {useQuery} from '@tanstack/react-query';

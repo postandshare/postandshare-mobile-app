@@ -2,16 +2,14 @@ import {
   Alert,
   ImageBackground,
   StyleSheet,
-  Text,
   ToastAndroid,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import React, {useState} from 'react';
 import TopHeader from '../components/TopHeader';
 import StarRating from 'react-native-star-rating';
-import {Button, TextInput} from 'react-native-paper';
+import {Button, TextInput, Text} from 'react-native-paper';
 import Colors from '../constants/Colors';
 import images from '../constants/images';
 import globalStyles from '../styles/globalStyles';

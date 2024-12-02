@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   ToastAndroid,
   PermissionsAndroid,
   Dimensions,
@@ -12,8 +11,8 @@ import {
   ImageBackground,
   Image,
 } from 'react-native';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import DashboardTopHeader from '../../../components/DashboardTopHeader';
+import React, {useRef, useState} from 'react';
+
 import {addUserPost} from '../../../services/userServices/userpost.services';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import uploadFile from '../../../utils/uploadFile';
@@ -27,6 +26,7 @@ import {
   Dialog,
   Portal,
   TextInput,
+  Text,
 } from 'react-native-paper';
 import Colors from '../../../constants/Colors';
 import FontFamily from '../../../constants/FontFamily';

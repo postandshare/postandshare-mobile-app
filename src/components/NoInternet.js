@@ -1,17 +1,15 @@
-import { ImageBackground, StyleSheet, Text, View} from 'react-native';
+import {ImageBackground, StyleSheet, View} from 'react-native';
 import React from 'react';
 import images from '../constants/images';
 import Colors from '../constants/Colors';
 import Sizes from '../constants/Sizes';
-
+import {Text} from 'react-native-paper';
 
 const NoInternet = ({setIsConnected}) => {
   return (
     <View style={styles.root}>
-      <View style={{flex: 1 , marginTop: Sizes.hp('30%')}}>
-        <ImageBackground
-          source={images.error}
-          style={styles.image}/>
+      <View style={{flex: 1, marginTop: Sizes.hp('30%')}}>
+        <ImageBackground source={images.error} style={styles.image} />
         <Text
           style={
             styles.errorText

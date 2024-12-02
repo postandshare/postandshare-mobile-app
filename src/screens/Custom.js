@@ -2,41 +2,24 @@ import {
   Button,
   StyleSheet,
   Image as RNImage,
-  Text as RNText,
   PanResponder,
   View,
   useWindowDimensions,
   ToastAndroid,
   ImageBackground,
 } from 'react-native';
-import React, {useEffect, useMemo, useState} from 'react';
-import TopHeader from '../components/TopHeader';
-import RNFS from 'react-native-fs';
+import React, {useEffect, useState} from 'react';
+import {Text as RNText} from 'react-native-paper';
+
+import {Skia, useCanvasRef} from '@shopify/react-native-skia';
+import {Gesture} from 'react-native-gesture-handler';
 import {
-  BlendMode,
-  Canvas,
-  Circle,
-  Fill,
-  Image,
-  ImageFormat,
-  Picture,
-  Skia,
-  Text,
-  TextBlob,
-  createPicture,
-  useCanvasRef,
-  useFont,
-  useImage,
-} from '@shopify/react-native-skia';
-import {Gesture, GestureDetector} from 'react-native-gesture-handler';
-import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withDecay,
 } from 'react-native-reanimated';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import DashboardTopHeader from '../components/DashboardTopHeader';
-import Sizes from '../constants/Sizes';
 import images from '../constants/images';
 import globalStyles from '../styles/globalStyles';
 import NavigationScreenName from '../constants/NavigationScreenName';

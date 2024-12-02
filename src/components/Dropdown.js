@@ -1,15 +1,9 @@
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {TouchableRipple} from 'react-native-paper';
 import Colors from '../constants/Colors';
-
+import {Text} from 'react-native-paper';
 const Dropdown = ({
   label = 'Select',
   value = '',

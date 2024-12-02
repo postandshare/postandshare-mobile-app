@@ -2,7 +2,6 @@ import {
   Image,
   PermissionsAndroid,
   StyleSheet,
-  Text,
   ToastAndroid,
   TouchableOpacity,
   View,
@@ -15,7 +14,7 @@ import Colors from '../../../../constants/Colors';
 import CustomButton from '../../../../components/CustomButton';
 import uploadFile from '../../../../utils/uploadFile';
 import ImageCropPicker from 'react-native-image-crop-picker';
-
+import {Text} from 'react-native-paper';
 const AddBussinessPartnerSheet = ({
   onPressCross,
   addBusinessPartner,

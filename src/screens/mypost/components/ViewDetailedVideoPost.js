@@ -1,14 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-
+import {StyleSheet, View} from 'react-native';
+import React from 'react';
+import {Text} from 'react-native-paper';
 const ViewDetailedVideoPost = () => {
   return (
     <View>
       <Text>ViewDetailedVideoPost</Text>
     </View>
-  )
-}
+  );
+};
 
-export default ViewDetailedVideoPost
+export default ViewDetailedVideoPost;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

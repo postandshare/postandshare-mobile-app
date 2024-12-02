@@ -14,11 +14,11 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-postandshare_mobile_app-postandshare_mobile_appTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-postandshare_mobile_app-postandshare_mobile_appTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		742AE14A3D064F10B6426F25 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ECD699A2638240D8964B81F5 /* OpenSans-Bold.ttf */; };
-		C4BB04E8B70440319AF094A8 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EE17D4C5FEDE466EB801A096 /* OpenSans-Light.ttf */; };
-		0A8C350FA7F64316BC6EC908 /* OpenSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 71E55BCE2FBF48C5A28C0133 /* OpenSans-Medium.ttf */; };
-		30703342AC5A4B688291AB09 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8999BF81B34149348BC3E098 /* OpenSans-Regular.ttf */; };
-		51F2FCBF9E2346658784E0FD /* OpenSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B7B0F40D85CE4C5190A1BE02 /* OpenSans-SemiBold.ttf */; };
+		EE5CCF303E9047AD829253C2 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F57BA240D9384E6EBA8C4793 /* OpenSans-Bold.ttf */; };
+		ED891895F2E440EBBEEA00AE /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E250E6026C3849FFAD0C56CF /* OpenSans-Light.ttf */; };
+		FC5335A46F974AE8811462AC /* OpenSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CB73256CD656489DB3BEB9CB /* OpenSans-Medium.ttf */; };
+		B33D4A67162E46348CED1D32 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3FF24636D26E4F9A98AC77CC /* OpenSans-Regular.ttf */; };
+		1B510FCA459F4C608C1DEF21 /* OpenSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC5A6286B79C42659AC43A8D /* OpenSans-SemiBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,11 +49,11 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = postandshare_mobile_app/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-postandshare_mobile_app-postandshare_mobile_appTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-postandshare_mobile_app-postandshare_mobile_appTests.release.xcconfig"; path = "Target Support Files/Pods-postandshare_mobile_app-postandshare_mobile_appTests/Pods-postandshare_mobile_app-postandshare_mobile_appTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		ECD699A2638240D8964B81F5 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; name = "OpenSans-Bold.ttf"; path = "../assets/fonts/OpenSans-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		EE17D4C5FEDE466EB801A096 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; name = "OpenSans-Light.ttf"; path = "../assets/fonts/OpenSans-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		71E55BCE2FBF48C5A28C0133 /* OpenSans-Medium.ttf */ = {isa = PBXFileReference; name = "OpenSans-Medium.ttf"; path = "../assets/fonts/OpenSans-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		8999BF81B34149348BC3E098 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; name = "OpenSans-Regular.ttf"; path = "../assets/fonts/OpenSans-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		B7B0F40D85CE4C5190A1BE02 /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; name = "OpenSans-SemiBold.ttf"; path = "../assets/fonts/OpenSans-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F57BA240D9384E6EBA8C4793 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; name = "OpenSans-Bold.ttf"; path = "../src/assets/fonts/OpenSans-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E250E6026C3849FFAD0C56CF /* OpenSans-Light.ttf */ = {isa = PBXFileReference; name = "OpenSans-Light.ttf"; path = "../src/assets/fonts/OpenSans-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		CB73256CD656489DB3BEB9CB /* OpenSans-Medium.ttf */ = {isa = PBXFileReference; name = "OpenSans-Medium.ttf"; path = "../src/assets/fonts/OpenSans-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3FF24636D26E4F9A98AC77CC /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; name = "OpenSans-Regular.ttf"; path = "../src/assets/fonts/OpenSans-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		FC5A6286B79C42659AC43A8D /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; name = "OpenSans-SemiBold.ttf"; path = "../src/assets/fonts/OpenSans-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,11 +162,11 @@
 		625A4F86CA9145A2A831ED13 /* Resources */ = {
 			isa = "PBXGroup";
 			children = (
-				ECD699A2638240D8964B81F5 /* OpenSans-Bold.ttf */,
-				EE17D4C5FEDE466EB801A096 /* OpenSans-Light.ttf */,
-				71E55BCE2FBF48C5A28C0133 /* OpenSans-Medium.ttf */,
-				8999BF81B34149348BC3E098 /* OpenSans-Regular.ttf */,
-				B7B0F40D85CE4C5190A1BE02 /* OpenSans-SemiBold.ttf */,
+				F57BA240D9384E6EBA8C4793 /* OpenSans-Bold.ttf */,
+				E250E6026C3849FFAD0C56CF /* OpenSans-Light.ttf */,
+				CB73256CD656489DB3BEB9CB /* OpenSans-Medium.ttf */,
+				3FF24636D26E4F9A98AC77CC /* OpenSans-Regular.ttf */,
+				FC5A6286B79C42659AC43A8D /* OpenSans-SemiBold.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -267,11 +267,11 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				742AE14A3D064F10B6426F25 /* OpenSans-Bold.ttf in Resources */,
-				C4BB04E8B70440319AF094A8 /* OpenSans-Light.ttf in Resources */,
-				0A8C350FA7F64316BC6EC908 /* OpenSans-Medium.ttf in Resources */,
-				30703342AC5A4B688291AB09 /* OpenSans-Regular.ttf in Resources */,
-				51F2FCBF9E2346658784E0FD /* OpenSans-SemiBold.ttf in Resources */,
+				EE5CCF303E9047AD829253C2 /* OpenSans-Bold.ttf in Resources */,
+				ED891895F2E440EBBEEA00AE /* OpenSans-Light.ttf in Resources */,
+				FC5335A46F974AE8811462AC /* OpenSans-Medium.ttf in Resources */,
+				B33D4A67162E46348CED1D32 /* OpenSans-Regular.ttf in Resources */,
+				1B510FCA459F4C608C1DEF21 /* OpenSans-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -447,7 +447,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = postandshare_mobile_appTests/Info.plist;
-			IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -471,7 +471,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = postandshare_mobile_appTests/Info.plist;
-			IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -589,7 +589,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-	IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -606,7 +606,7 @@
 					"-DFOLLY_NO_CONFIG",
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
-					"DFOLLY_CFG_NO_COROUTINES=1"
+					"DFOLLY_CFG_NO_COROUTINES=1",
 				);
 				SDKROOT = iphoneos;
 			};
@@ -670,7 +670,7 @@
 					"-DFOLLY_NO_CONFIG",
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
-					"DFOLLY_CFG_NO_COROUTINES=1"
+					"DFOLLY_CFG_NO_COROUTINES=1",
 				);
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

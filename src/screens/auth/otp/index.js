@@ -1,15 +1,14 @@
 import {
-  Image,
   ImageBackground,
   Pressable,
   ScrollView,
-  Text,
   TextInput,
   ToastAndroid,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import {Text} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 import Images from '../../../constants/images';
 import authStyle from '../authStyle';

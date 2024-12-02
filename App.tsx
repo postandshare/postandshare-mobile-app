@@ -1,7 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Provider} from 'react-redux';
-import {Provider as PaperProvider, DefaultTheme} from 'react-native-paper';
+import {
+  Provider as PaperProvider,
+  DefaultTheme,
+  configureFonts,
+} from 'react-native-paper';
 import './src/language/i18n';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {PersistGate} from 'redux-persist/integration/react';
@@ -54,12 +58,9 @@ function App(): React.JSX.Element {
                     ...DefaultTheme.colors,
                     primary: '#F95F32',
                     secondary: '#404040',
-                    placeholder: '#fff',
-                    label: ' #6A6A6A',
                     outline: '#F95F3240',
                     surface: ' #F95F3250',
                     surfaceVariant: '#F95F32',
-                    desturctive: ' #FF0A00',
                     background: '#fff',
                   },
                 }}>

@@ -4,10 +4,10 @@ import {
   ImageBackground,
   Pressable,
   RefreshControl,
-  Text,
   ToastAndroid,
   View,
 } from 'react-native';
+import {Text} from 'react-native-paper';
 import React, {useCallback, useState} from 'react';
 import authStyle from './authStyle';
 import Colors from '../../constants/Colors';
@@ -23,11 +23,8 @@ import NavigationScreenName from '../../constants/NavigationScreenName';
 import {useDispatch, useSelector} from 'react-redux';
 import TopHeader from '../../components/TopHeader';
 import {Checkbox} from 'react-native-paper';
-import Sizes from '../../constants/Sizes';
 import globalStyles from '../../styles/globalStyles';
 import images from '../../constants/images';
-import {setLoginState} from '../../services/reducer/AuthSlice';
-import {setProfileUpdated} from '../../services/reducer/CommonReducer';
 
 const LanguageSelection = ({navigation}) => {
   const {isProfileUpdated} = useSelector(store => store.commonStore);

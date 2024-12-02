@@ -1,7 +1,7 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import Colors from '../../../constants/Colors';
-
+import {Text} from 'react-native-paper';
 const BussinessSelect = ({bussinessType, setBussinessType}) => {
   return (
     <>
@@ -12,14 +12,12 @@ const BussinessSelect = ({bussinessType, setBussinessType}) => {
           style={[
             bussinessType === 'Bussiness'
               ? {backgroundColor: Colors.PRIMARY}
-              :  {backgroundColor: 'grey'},
+              : {backgroundColor: 'grey'},
             styles.buttonContainer,
           ]}>
           <Text
             style={[
-              bussinessType === 'Bussiness'
-                ? {color: '#fff'}
-                : null,
+              bussinessType === 'Bussiness' ? {color: '#fff'} : null,
               styles.buttonText,
             ]}>
             Bussiness
@@ -36,9 +34,7 @@ const BussinessSelect = ({bussinessType, setBussinessType}) => {
           ]}>
           <Text
             style={[
-              bussinessType === 'political'
-                ? {color: '#fff'}
-                : null,
+              bussinessType === 'political' ? {color: '#fff'} : null,
               styles.buttonText,
             ]}>
             Political

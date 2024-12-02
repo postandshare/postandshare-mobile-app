@@ -8,11 +8,11 @@ import {
   RefreshControl,
   ScrollView,
   StyleSheet,
-  Text,
   ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
+import {Text} from 'react-native-paper';
 import React, {useCallback, useRef, useState} from 'react';
 import TopHeader from '../../components/TopHeader';
 import {useMutation, useQuery} from '@tanstack/react-query';

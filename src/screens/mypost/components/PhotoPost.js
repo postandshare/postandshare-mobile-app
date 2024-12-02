@@ -6,11 +6,11 @@ import {
   RefreshControl,
   Share,
   StyleSheet,
-  Text,
   ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
+import {Text} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {

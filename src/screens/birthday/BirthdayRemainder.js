@@ -4,13 +4,12 @@ import {
   ImageBackground,
   RefreshControl,
   ScrollView,
-  Text,
   ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
-import TopHeader from '../../components/TopHeader';
+import {Text} from 'react-native-paper';
 import images from '../../constants/images';
 import styles from './style';
 import globalStyles from '../../styles/globalStyles';

@@ -1,9 +1,9 @@
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
 import Colors from '../constants/Colors';
 import Sizes from '../constants/Sizes';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-
+import {Text} from 'react-native-paper';
 const TutorailNavCard = ({item}) => {
   return (
     <TouchableOpacity style={styles.card_box_container}>

@@ -3,10 +3,10 @@ import {
   ImageBackground,
   RefreshControl,
   ScrollView,
-  Text,
   ToastAndroid,
   View,
 } from 'react-native';
+import {Text} from 'react-native-paper';
 import React, {useCallback, useState} from 'react';
 import MyBussinessCard from '../../components/MyBussinessCard';
 import images from '../../constants/images';

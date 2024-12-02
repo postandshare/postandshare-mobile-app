@@ -1,10 +1,10 @@
-import {ImageBackground, Text, TouchableOpacity, View} from 'react-native';
+import {ImageBackground, TouchableOpacity} from 'react-native';
 import React from 'react';
 import Sizes from '../../../constants/Sizes';
 import {ActivityIndicator} from 'react-native-paper';
 import Colors from '../../../constants/Colors';
 import moment from 'moment';
-
+import {Text} from 'react-native-paper';
 const PhotoPostCard = ({
   scrollViewRef,
   index,

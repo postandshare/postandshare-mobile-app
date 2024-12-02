@@ -1,14 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-
+import {StyleSheet, View} from 'react-native';
+import React from 'react';
+import {Text} from 'react-native-paper';
 const MyBussinessCardForSDK = () => {
   return (
     <View>
       <Text>MyBussinessCardForSDK</Text>
     </View>
-  )
-}
+  );
+};
 
-export default MyBussinessCardForSDK
+export default MyBussinessCardForSDK;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

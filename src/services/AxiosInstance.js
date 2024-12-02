@@ -11,6 +11,15 @@ const authAxiosInstance = axios.create({
     'Content-Type': 'application/json',
   },
 });
+const imageGeneratorInstance = axios.create({
+  baseURL: 'chatgpt-42.p.rapidapi.com',
+  timeout: 15000,
+  headers: {
+    'Content-Type': 'application/json',
+    'x-rapidapi-key': '4eb11934dbmsh336c17955cb9994p197298jsnb9fcbe87daf4',
+  },
+});
+
 authAxiosInstance.interceptors.request.use(async req => {
   const {
     auth: {login_Data},
@@ -45,4 +54,4 @@ authAxiosInstance.interceptors.request.use(async req => {
   return req;
 });
 
-export {authAxiosInstance};
+export {authAxiosInstance, imageGeneratorInstance};

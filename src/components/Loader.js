@@ -1,10 +1,10 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React from 'react';
 import {ActivityIndicator, Modal, Portal} from 'react-native-paper';
 import {scale} from 'react-native-size-matters';
 import Sizes from '../constants/Sizes';
 import Colors from '../constants/Colors';
-
+import {Text} from 'react-native-paper';
 const Loader = ({open = false, text = 'Loading'}) => {
   return (
     <Portal>

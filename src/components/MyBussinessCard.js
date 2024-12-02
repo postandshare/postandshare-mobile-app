@@ -1,11 +1,10 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import Sizes from '../constants/Sizes';
 import Colors from '../constants/Colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import moment from 'moment';
 import images from '../constants/images';
-
+import {Text} from 'react-native-paper';
 const MyBussinessCard = ({
   name,
   EstblishmentDate,

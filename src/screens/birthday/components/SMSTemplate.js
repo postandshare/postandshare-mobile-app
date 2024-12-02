@@ -1,11 +1,10 @@
 import {
-  Image,
   ImageBackground,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import {Text} from 'react-native-paper';
 import React from 'react';
 import Colors from '../../../constants/Colors';
 import Icon from 'react-native-vector-icons/FontAwesome';

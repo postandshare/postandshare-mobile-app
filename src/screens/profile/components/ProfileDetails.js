@@ -1,10 +1,5 @@
-import {
-  PermissionsAndroid,
-  StyleSheet,
-  Text,
-  ToastAndroid,
-  View,
-} from 'react-native';
+import {PermissionsAndroid, StyleSheet, ToastAndroid, View} from 'react-native';
+import {Text} from 'react-native-paper';
 import React, {useState} from 'react';
 import Colors from '../../../constants/Colors';
 import Sizes from '../../../constants/Sizes';
