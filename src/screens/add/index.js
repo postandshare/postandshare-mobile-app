@@ -1,19 +1,21 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import Add from './pages/Add';
-import Choose from './pages/Choose';
-
 const Stack = createStackNavigator();
+const AddNavigatior = ({navigation, route}) => {
+  const {pic} = route?.params;
 
-const AddNavigatior = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Choose"
       screenOptions={{
         headerShown: true,
       }}>
-      <Stack.Screen name="Choose" component={Choose} />
-      <Stack.Screen name="Add" component={Add} />
+      <Stack.Screen
+        name="Add"
+        component={Add}
+        options={{headerShown: false}}
+        initialParams={{pic}}
+      />
     </Stack.Navigator>
   );
 };

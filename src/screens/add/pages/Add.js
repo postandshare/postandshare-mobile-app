@@ -53,7 +53,8 @@ import globalStyles from '../../../styles/globalStyles';
 import TopHeader from '../../../components/TopHeader';
 
 const Add = ({navigation, route}) => {
-  const {picData, businessDetails} = route.params || {};
+  const {pic, businessDetails} = route.params || {};
+
   const [logoPosition, setLogoPosition] = useState({
     x: 0,
     y: 0,
@@ -89,25 +90,13 @@ const Add = ({navigation, route}) => {
     fontSize: 18,
     fontWeight: '500',
   });
-  const onPressMenu = () => {
-    navigation.getParent('leftDrawer').openDrawer();
-  };
-
-  const onPressNotification = () => {
-    // navigation.navigate('Notification');
-  };
-
-  const onPresProfile = () => {
-    navigation.getParent('rightDrawer').openDrawer();
-  };
 
   const [showBorderBox, setShowBorderBox] = useState(false);
-  const imgData = picData;
-  const BusinessData = businessDetails;
+
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [showSticker, setShowSticker] = useState(false);
   const [stickers, setStickers] = useState();
-  const [picUrl, setPicUrl] = React.useState('');
+
   const [textColor, setTextColor] = useState('#fff');
   const [sdkTextColor, setSDKTextColor] = useState('#fff');
   const [showModal, setShowModal] = useState(false);
@@ -123,7 +112,6 @@ const Add = ({navigation, route}) => {
   const [textAlignment, setTextAlignment] = useState('left');
   const [fontFamily, setFontFamily] = useState('Arial');
   const [showFontFamily, setShowFontFamily] = useState(false);
-  const [showCross, setShowCross] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
   const [state, setState] = useState({
@@ -168,65 +156,6 @@ const Add = ({navigation, route}) => {
     }
   };
 
-  const TakePhotofromGallery = async () => {
-    try {
-      await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-        {
-          title: 'Post and Share App',
-          message:
-            'We want to access the photo gallery' +
-            'To perform the desired function',
-        },
-      );
-      const image = await launchImageLibrary({
-        maxWidth: 300,
-        maxHeight: 400,
-        mediaType: 'photo',
-      });
-      console.log(image.assets[0].uri);
-      setState(prev => ({
-        ...prev,
-        location: true,
-        mobile: true,
-        email: true,
-        whatsApp: true,
-        logo: true,
-      }));
-      setShowFrame1(true);
-      setPicUrl(image.assets[0].uri);
-      // uploadePhoto(image.assets[0].uri, image.assets[0].type);
-    } catch (error) {
-      console.log(error);
-      ToastAndroid.show('Something went wrong', ToastAndroid.LONG);
-    }
-  };
-
-  const TakeStickerfromGallery = async () => {
-    try {
-      await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-        {
-          title: 'Post and Share App',
-          message:
-            'We want to access the photo gallery' +
-            'To perform the desired function',
-        },
-      );
-      const image = await launchImageLibrary({
-        maxWidth: 30,
-        maxHeight: 40,
-        mediaType: 'photo',
-      });
-      console.log(image.assets[0].uri);
-      setStickers(image.assets[0].uri);
-      // uploadePhoto(image.assets[0].uri, image.assets[0].type);
-    } catch (error) {
-      console.log(error);
-      ToastAndroid.show('Something went wrong', ToastAndroid.LONG);
-    }
-  };
-
   const drag = (x, y) => {
     // console.log('Dragging', x, y);
   };
@@ -238,35 +167,9 @@ const Add = ({navigation, route}) => {
     // console.log('Dropping', x, y);
   };
 
-  async function requestStoragePermission() {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        {
-          title: 'Storage Permission',
-          message: 'This app needs access to your storage to download Photos',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('Storage permission granted');
-      } else {
-        console.log('Storage permission denied');
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  }
-
-  const {
-    isLoading: getUserProfileLoading,
-    isFetching: getUserProfileFetching,
-    refetch: getUserProfileRefetch,
-    data: getUserProfile_Data,
-    isError: getUserProfile_isError,
-  } = useQuery({
+  const {refetch: getUserProfileRefetch, data: getUserProfile_Data} = useQuery({
     queryKey: ['getUserProfile'],
     queryFn: () => getUserProfile(),
-    onSuccess: success => {},
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
@@ -281,10 +184,8 @@ const Add = ({navigation, route}) => {
   );
 
   const onCapture = async () => {
-    setShowCross(false);
     const uri = await viewShotRef.current.capture();
     console.log('Image URI:', uri);
-    setPicUrl(uri);
     setState(prev => ({
       ...prev,
       location: false,
@@ -309,7 +210,6 @@ const Add = ({navigation, route}) => {
     isFetching: getOrgFrameFetching,
     refetch: getOrgFrameRefetch,
     data: getOrgFrame_Data,
-    isError: getOrgFrame_isError,
   } = useQuery({
     queryKey: ['getOrgFrame'],
     queryFn: () => getOrgFrame(),
@@ -325,7 +225,7 @@ const Add = ({navigation, route}) => {
   useFocusEffect(
     React.useCallback(() => {
       getOrgFrameRefetch();
-      setPicUrl('');
+
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigation]),
   );
@@ -335,7 +235,7 @@ const Add = ({navigation, route}) => {
       <TopHeader
         titile={'ADD'}
         onPress={() => {
-          if (picUrl) {
+          if (pic) {
             onCapture();
           } else {
             ToastAndroid.show('Please select the image', ToastAndroid.SHORT);
@@ -527,11 +427,11 @@ const Add = ({navigation, route}) => {
           contentContainerStyle={styles.root}
           showsVerticalScrollIndicator={false}>
           {/* choose image area */}
-          {picUrl ? (
+          {
             <ViewShot ref={viewShotRef} options={{format: 'jpg', quality: 0.9}}>
               <View style={styles.chooseImageContainer}>
                 <ImageBackground
-                  source={{uri: picUrl}}
+                  source={{uri: pic}}
                   resizeMode="contain"
                   style={{
                     zIndex: 1,
@@ -759,40 +659,10 @@ const Add = ({navigation, route}) => {
                       </>
                     ) : null}
                   </View>
-                  {showCross ? (
-                    <TouchableOpacity
-                      onPress={() => {
-                        setPicUrl('');
-                        setState(prev => ({
-                          ...prev,
-                          location: false,
-                          mobile: false,
-                          email: false,
-                          whatsApp: false,
-                          logo: false,
-                        }));
-                        setShowFrame1(false);
-                      }}
-                      style={{
-                        zIndex: 4,
-                        top: -10,
-                        right: -15,
-                        position: 'absolute',
-                      }}>
-                      <AntDesign name="closecircleo" size={30} color={'red'} />
-                    </TouchableOpacity>
-                  ) : null}
                 </ImageBackground>
               </View>
             </ViewShot>
-          ) : (
-            <TouchableOpacity
-              style={styles.chooseImageContainer}
-              onPress={TakePhotofromGallery}>
-              <AntDesign name="upload" size={30} color={Colors.PRIMARY} />
-              <Text style={{color: Colors.TEXT1}}>Choose Image</Text>
-            </TouchableOpacity>
-          )}
+          }
 
           {/* aditional details like logo, location etc */}
           <ScrollView

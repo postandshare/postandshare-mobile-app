@@ -4,7 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import NavigationScreenName from '../constants/NavigationScreenName';
 import Splash from '../screens/onBoarding/Splash';
-import DrawerStack, {MainDrawer} from './DrawerStack';
+import {MainDrawer} from './DrawerStack';
 import AuthStack from './AuthStack';
 import {useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -32,6 +32,7 @@ import Notification from '../screens/notification';
 import BirthdayRemainderNavigator from '../screens/birthday';
 import AddNavigatior from '../screens/add/index';
 import PhotoPost from '../screens/mypost/components/PhotoPost';
+import CreateAIImage from '../screens/aiImage/CreateAIImage';
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -169,6 +170,10 @@ const Routes = () => {
                 <Stack.Screen
                   name={NavigationScreenName.ADD_NAVIGATOR}
                   component={AddNavigatior}
+                />
+                <Stack.Screen
+                  name={NavigationScreenName.AI_IMAGE}
+                  component={CreateAIImage}
                 />
               </>
             )

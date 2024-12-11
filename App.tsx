@@ -5,6 +5,7 @@ import {
   Provider as PaperProvider,
   DefaultTheme,
   configureFonts,
+  MD3LightTheme,
 } from 'react-native-paper';
 import './src/language/i18n';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
@@ -45,25 +46,30 @@ function App(): React.JSX.Element {
   if (!isConnected) {
     return <NoInternet setIsConnected={setIsConnected} />;
   }
+  const fontConfig = {
+    fontFamily: 'OpenSans-Regular',
+  };
 
+  const theme = {
+    ...MD3LightTheme,
+    fonts: configureFonts({config: fontConfig}),
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#F95F32',
+      secondary: '#404040',
+      outline: '#F95F3240',
+      surface: ' #F95F3250',
+      surfaceVariant: '#F95F32',
+      background: '#fff',
+    },
+  };
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <QueryClientProvider client={queryClient}>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <SafeAreaProvider>
-              <PaperProvider
-                theme={{
-                  colors: {
-                    ...DefaultTheme.colors,
-                    primary: '#F95F32',
-                    secondary: '#404040',
-                    outline: '#F95F3240',
-                    surface: ' #F95F3250',
-                    surfaceVariant: '#F95F32',
-                    background: '#fff',
-                  },
-                }}>
+              <PaperProvider theme={theme}>
                 <Routes />
               </PaperProvider>
             </SafeAreaProvider>

@@ -16,6 +16,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import BirthdayRemainderNavigator from '../screens/birthday';
 import ProfileNavigator from '../screens/profile/index';
 import Choose from '../screens/add/pages/Choose';
+import Add from '../screens/Add';
+import AddNavigatior from '../screens/add';
 
 const CurvedBottomTab = ({navigation}) => {
   const tabRef = React.useRef(null);

@@ -20,6 +20,22 @@
     {
       "path": "src/assets/fonts/OpenSans-SemiBold.ttf",
       "sha1": "a142399161a7475e288d43c7e559d6034100cde7"
+    },
+    {
+      "path": "src/assets/fonts/PlaywriteHU-ExtraLight.ttf",
+      "sha1": "8700bddc73c6f1f4ddc17320600de90bf319f315"
+    },
+    {
+      "path": "src/assets/fonts/PlaywriteHU-Light.ttf",
+      "sha1": "06a78e75d35fa4b17b344bf451aebe503cd24b9a"
+    },
+    {
+      "path": "src/assets/fonts/PlaywriteHU-Regular.ttf",
+      "sha1": "e45581db53ec4fb4716b4146ece9ca7eecb43111"
+    },
+    {
+      "path": "src/assets/fonts/PlaywriteHU-Thin.ttf",
+      "sha1": "40b4f8602d4d6523ed7824e9ee769d3d0dea130d"
     }
   ]
 }

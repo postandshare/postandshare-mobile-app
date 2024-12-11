@@ -12,11 +12,10 @@ const authAxiosInstance = axios.create({
   },
 });
 const imageGeneratorInstance = axios.create({
-  baseURL: 'chatgpt-42.p.rapidapi.com',
-  timeout: 15000,
+  baseURL: 'https://chatgpt-42.p.rapidapi.com',
   headers: {
-    'Content-Type': 'application/json',
     'x-rapidapi-key': '4eb11934dbmsh336c17955cb9994p197298jsnb9fcbe87daf4',
+    'Content-Type': 'application/json',
   },
 });
 

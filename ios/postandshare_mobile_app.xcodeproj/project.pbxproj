@@ -19,6 +19,10 @@
 		FC5335A46F974AE8811462AC /* OpenSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CB73256CD656489DB3BEB9CB /* OpenSans-Medium.ttf */; };
 		B33D4A67162E46348CED1D32 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3FF24636D26E4F9A98AC77CC /* OpenSans-Regular.ttf */; };
 		1B510FCA459F4C608C1DEF21 /* OpenSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC5A6286B79C42659AC43A8D /* OpenSans-SemiBold.ttf */; };
+		4896A14FB252414B9C2D6568 /* PlaywriteHU-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8F73887537C648F4955C19CC /* PlaywriteHU-ExtraLight.ttf */; };
+		4941287768A042EE8727EBDD /* PlaywriteHU-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 58C5912882794AEBBB7675E8 /* PlaywriteHU-Light.ttf */; };
+		67C16B5075274FA0B182526C /* PlaywriteHU-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7DDA98806F14B008FF9A847 /* PlaywriteHU-Regular.ttf */; };
+		61120AB6DF3B41F8A0290F9F /* PlaywriteHU-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F210BB814C7743DCB24180DA /* PlaywriteHU-Thin.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +58,10 @@
 		CB73256CD656489DB3BEB9CB /* OpenSans-Medium.ttf */ = {isa = PBXFileReference; name = "OpenSans-Medium.ttf"; path = "../src/assets/fonts/OpenSans-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		3FF24636D26E4F9A98AC77CC /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; name = "OpenSans-Regular.ttf"; path = "../src/assets/fonts/OpenSans-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		FC5A6286B79C42659AC43A8D /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; name = "OpenSans-SemiBold.ttf"; path = "../src/assets/fonts/OpenSans-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8F73887537C648F4955C19CC /* PlaywriteHU-ExtraLight.ttf */ = {isa = PBXFileReference; name = "PlaywriteHU-ExtraLight.ttf"; path = "../src/assets/fonts/PlaywriteHU-ExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		58C5912882794AEBBB7675E8 /* PlaywriteHU-Light.ttf */ = {isa = PBXFileReference; name = "PlaywriteHU-Light.ttf"; path = "../src/assets/fonts/PlaywriteHU-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F7DDA98806F14B008FF9A847 /* PlaywriteHU-Regular.ttf */ = {isa = PBXFileReference; name = "PlaywriteHU-Regular.ttf"; path = "../src/assets/fonts/PlaywriteHU-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F210BB814C7743DCB24180DA /* PlaywriteHU-Thin.ttf */ = {isa = PBXFileReference; name = "PlaywriteHU-Thin.ttf"; path = "../src/assets/fonts/PlaywriteHU-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +175,10 @@
 				CB73256CD656489DB3BEB9CB /* OpenSans-Medium.ttf */,
 				3FF24636D26E4F9A98AC77CC /* OpenSans-Regular.ttf */,
 				FC5A6286B79C42659AC43A8D /* OpenSans-SemiBold.ttf */,
+				8F73887537C648F4955C19CC /* PlaywriteHU-ExtraLight.ttf */,
+				58C5912882794AEBBB7675E8 /* PlaywriteHU-Light.ttf */,
+				F7DDA98806F14B008FF9A847 /* PlaywriteHU-Regular.ttf */,
+				F210BB814C7743DCB24180DA /* PlaywriteHU-Thin.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -272,6 +284,10 @@
 				FC5335A46F974AE8811462AC /* OpenSans-Medium.ttf in Resources */,
 				B33D4A67162E46348CED1D32 /* OpenSans-Regular.ttf in Resources */,
 				1B510FCA459F4C608C1DEF21 /* OpenSans-SemiBold.ttf in Resources */,
+				4896A14FB252414B9C2D6568 /* PlaywriteHU-ExtraLight.ttf in Resources */,
+				4941287768A042EE8727EBDD /* PlaywriteHU-Light.ttf in Resources */,
+				67C16B5075274FA0B182526C /* PlaywriteHU-Regular.ttf in Resources */,
+				61120AB6DF3B41F8A0290F9F /* PlaywriteHU-Thin.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

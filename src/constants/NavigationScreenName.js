@@ -35,4 +35,5 @@ export default {
   FEEDBACK: 'FeedBack',
   HELPSUPPORT: 'HelpSupport',
   NOTIFICATION: 'Notification',
+  AI_IMAGE: 'Ai-image',
 };

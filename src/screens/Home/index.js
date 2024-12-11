@@ -35,8 +35,6 @@ import NavigationScreenName from '../../constants/NavigationScreenName';
 import SkeletonLoading from './components/SkeletonLoading';
 
 const Home = ({navigation}) => {
-  const [value, setValue] = React.useState('photo');
-  const [screenName, setScreenName] = useState('photo');
   const dispatch = useDispatch();
   const onPressMenu = () => {
     navigation.openDrawer();
