@@ -30,6 +30,7 @@ export default {
   MY_BUSSINESS: 'MyBussinessNavigator',
   LANGUAGE_SELECTION: 'LanguageSelection',
   MY_POST: 'MyPost',
+  CHOOSE: 'Choose',
   TUTORIALS: 'Tutorial',
   Privacy_Policy: 'Privacy',
   FEEDBACK: 'FeedBack',

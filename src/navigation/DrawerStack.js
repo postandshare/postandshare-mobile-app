@@ -1,15 +1,10 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import BottomTab from './BottomTab';
 import Colors from '../constants/Colors';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import BirthdayRemainderNavigator from '../screens/birthday';
-import PhotoSDK from '../screens/sdk';
 import CustomDrawerLeft from '../components/CustomDrawerLeft';
-import CurvedBottomTab from './CurvedBottomTab';
-
+import BottomTab from './BottomTab';
 const LeftDrawer = createDrawerNavigator();
-const RightDrawer = createDrawerNavigator();
 export const MainDrawer = () => {
   return (
     <LeftDrawer.Navigator
@@ -26,29 +21,11 @@ export const MainDrawer = () => {
       )}>
       <LeftDrawer.Screen
         name="DashBoard"
-        component={CurvedBottomTab}
-        options={{
-          title: 'Dashboard',
-          drawerActiveBackgroundColor: Colors.PRIMARY,
-          drawerInactiveBackgroundColor: 'transparent',
-          drawerIcon: ({focused}) => (
-            <AntDesign
-              name="home"
-              size={24}
-              color={focused ? Colors.white : Colors.text1}
-            />
-          ),
-        }}
-      />
-
-      {/* <LeftDrawer.Screen
-        name="DashBoard"
         component={BottomTab}
         options={{
           title: 'Dashboard',
           drawerActiveBackgroundColor: Colors.PRIMARY,
           drawerInactiveBackgroundColor: 'transparent',
-          // eslint-disable-next-line react/no-unstable-nested-components
           drawerIcon: ({focused}) => (
             <AntDesign
               name="home"
@@ -57,85 +34,7 @@ export const MainDrawer = () => {
             />
           ),
         }}
-      /> */}
+      />
     </LeftDrawer.Navigator>
   );
 };
-
-const DrawerStack = () => {
-  return (
-    <RightDrawer.Navigator
-      id="rightDrawer"
-      screenOptions={{
-        headerShown: false,
-        drawerPosition: 'right',
-        drawerContentStyle: {
-          backgroundColor: Colors.Background,
-        },
-      }}>
-      <RightDrawer.Screen
-        name="Profile Section"
-        component={MainDrawer}
-        options={{
-          title: 'Dashboard',
-          drawerActiveBackgroundColor: Colors.PRIMARY,
-          drawerInactiveBackgroundColor: 'transparent',
-        }}
-      />
-
-      <RightDrawer.Screen
-        name="Birthday Remainder"
-        component={BirthdayRemainderNavigator}
-        options={{
-          title: 'Birthday Remainder',
-          drawerActiveBackgroundColor: Colors.PRIMARY,
-          drawerInactiveBackgroundColor: 'transparent',
-          // eslint-disable-next-line react/no-unstable-nested-components
-          drawerIcon: ({focused}) => (
-            <AntDesign
-              name="filetext1"
-              size={24}
-              color={focused ? Colors.white : Colors.text1}
-            />
-          ),
-        }}
-      />
-      <RightDrawer.Screen
-        name="PhotoSDK"
-        component={PhotoSDK}
-        options={{
-          title: 'PhotoSDK Trails',
-          drawerActiveBackgroundColor: Colors.PRIMARY,
-          drawerInactiveBackgroundColor: 'transparent',
-          // eslint-disable-next-line react/no-unstable-nested-components
-          drawerIcon: ({focused}) => (
-            <AntDesign
-              name="filetext1"
-              size={24}
-              color={focused ? Colors.white : Colors.text1}
-            />
-          ),
-        }}
-      />
-      {/* <RightDrawer.Screen
-        name="CustomSDK"
-        component={CustomSDK}
-        options={{
-          title: 'CustomSDK',
-          drawerActiveBackgroundColor: Colors.PRIMARY,
-          drawerInactiveBackgroundColor: 'transparent',
-          // eslint-disable-next-line react/no-unstable-nested-components
-          drawerIcon: ({focused}) => (
-            <AntDesign
-              name="filetext1"
-              size={24}
-              color={focused ? Colors.white : Colors.text1}
-            />
-          ),
-        }}
-      /> */}
-    </RightDrawer.Navigator>
-  );
-};
-
-export default DrawerStack;

@@ -6,13 +6,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Text} from 'react-native-paper';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import TopHeader from '../../components/TopHeader';
 import styles from './style';
 import ImagePicker from 'react-native-image-crop-picker';
-// import uploadFile from '../../utils/uploadFile';
-import * as Yup from 'yup';
-import {useFormik} from 'formik';
 import uploadFile from '../../utils/uploadFile';
 import Loader from '../../components/Loader';
 import {useMutation} from '@tanstack/react-query';
@@ -27,60 +24,65 @@ import SocialMediaEdit from './components/EditProfile/SocialMediaEdit';
 import AddressEdit from './components/EditProfile/AddressEdit';
 import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
-
-const phoneRegExp =
-  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-
-const validationSchema = Yup.object().shape({
-  firstName: Yup.string().trim().required(),
-  middleName: Yup.string().trim(),
-  lastName: Yup.string().trim(),
-  DOB: Yup.date().required('Please enter your birthday'),
-  gender: Yup.string().trim().required('Please select gender'),
-  mobileNumber: Yup.string()
-    .matches(phoneRegExp, 'Phone number is not valid')
-    .required('Please enter your mobile number'),
-  whatsappNumber: Yup.string().matches(
-    phoneRegExp,
-    'Phone number is not valid',
-  ),
-  email: Yup.string().email('Must be a valid email').max(255),
-  caddress: Yup.string().trim().required(),
-  cdist: Yup.string().trim().required(),
-  cpinCode: Yup.number().required(),
-  cstate: Yup.string().trim().required(),
-});
-
-const genderList = [
-  {
-    label: 'Male',
-    value: 'Male',
-  },
-  {
-    label: 'Female',
-    value: 'Female',
-  },
-  {
-    label: 'Other',
-    value: 'Other',
-  },
-];
-
+import {useForm} from 'react-hook-form';
+import {DISTRICTS, STATES} from '../../constants';
 const EditProfile = ({route, navigation}) => {
   const {data} = route.params;
   const [profilePic, setprofilePic] = useState(data?.profilePic ?? '');
+  const [state, setState] = useState({districtList: []});
   const [imageUploading, setImageUploading] = useState(false);
   const dispatch = useDispatch();
-
-  const {mutate: updateSelfPhotoMutate, isLoading: updateSelfPhotoLoading} =
-    useMutation(updateSelfPhoto, {
-      onSuccess: ({data}) => {
-        ToastAndroid.show(data?.message, ToastAndroid.LONG);
+  const {control, handleSubmit, watch} = useForm({
+    defaultValues: {
+      firstName: data?.firstName ?? '',
+      middleName: data?.middleName ?? '',
+      lastName: data?.lastName ?? '',
+      DOB: data?.DOB ? new Date(data?.DOB) : '',
+      gender: data?.gender ?? '',
+      community: data?.community ?? '',
+      mobileNumber: data?.mobileNumber ?? '',
+      alternateNumber: data?.alternateNumber ?? '',
+      whatsappNumber: data?.whatsappNumber ?? '',
+      email: data?.email ?? '',
+      PAN: data?.PAN ?? '',
+      maritalStatus: data?.maritalStatus ?? '',
+      facebookLink: data?.facebookLink ?? '',
+      twitterLink: data?.twitterLink ?? '',
+      //current address
+      caddress: data?.currentAddress?.address ?? '',
+      cdist: data?.currentAddress?.dist ?? '',
+      cpinCode: data?.currentAddress?.pinCode ?? '',
+      cstate: data?.currentAddress?.state ?? '',
+    },
+  });
+  const stateWatch = watch('cstate');
+  const onSubmit = prevData => {
+    const body = {
+      firstName: prevData?.firstName,
+      middleName: prevData?.middleName,
+      lastName: prevData?.lastName,
+      gender: prevData?.gender,
+      email: prevData?.email,
+      DOB: new Date(prevData?.DOB),
+      currentAddress: {
+        address: prevData?.caddress,
+        dist: prevData?.cdist,
+        pinCode: String(prevData?.cpinCode),
+        state: prevData?.cstate,
       },
-      onError: err =>
-        ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG),
-      enabled: false,
-    });
+      isProfileUpdated: true,
+      profilePic,
+    };
+    updateUserProfileMutate(body);
+  };
+  const {mutate: updateSelfPhotoMutate} = useMutation(updateSelfPhoto, {
+    onSuccess: ({data}) => {
+      ToastAndroid.show(data?.message, ToastAndroid.LONG);
+    },
+    onError: err =>
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG),
+    enabled: false,
+  });
 
   const uploadePhoto = async (path, mime) => {
     try {
@@ -130,8 +132,8 @@ const EditProfile = ({route, navigation}) => {
 
   const {mutate: updateUserProfileMutate, isLoading: updateUserProfileLoading} =
     useMutation(updateUserProfile, {
-      onSuccess: ({data}) => {
-        ToastAndroid.show(data?.message, ToastAndroid.LONG);
+      onSuccess: success => {
+        ToastAndroid.show(success?.data?.message, ToastAndroid.LONG);
         dispatch(setProfileUpdated(true));
         navigation.goBack();
       },
@@ -139,60 +141,14 @@ const EditProfile = ({route, navigation}) => {
         ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG),
     });
 
-  const personalProfileFormik = useFormik({
-    initialValues: {
-      firstName: data?.firstName ?? '',
-      middleName: data?.middleName ?? '',
-      lastName: data?.lastName ?? '',
-      DOB: data?.DOB ? new Date(data?.DOB) : '',
-      gender: data?.gender ?? '',
-      community: data?.community ?? '',
-      mobileNumber: data?.mobileNumber ?? '',
-      alternateNumber: data?.alternateNumber ?? '',
-      whatsappNumber: data?.whatsappNumber ?? '',
-      email: data?.email ?? '',
-      PAN: data?.PAN ?? '',
-      maritalStatus: data?.maritalStatus ?? '',
-      facebookLink: data?.facebookLink ?? '',
-      twitterLink: data?.twitterLink ?? '',
-      //current address
-      caddress: data?.currentAddress?.address ?? '',
-      cdist: data?.currentAddress?.dist ?? '',
-      cpinCode: data?.currentAddress?.pinCode ?? '',
-      cstate: data?.currentAddress?.state ?? '',
-    },
-    validationSchema,
-    onSubmit(values) {
-      const castedVal = validationSchema.cast(values);
-      const body = {
-        ...castedVal,
-        DOB: new Date(castedVal?.DOB),
-        currentAddress: {
-          address: castedVal?.caddress,
-          dist: castedVal?.cdist,
-          pinCode: String(castedVal?.cpinCode),
-          state: castedVal?.cstate,
-        },
-        isProfileUpdated: true,
-        profilePic,
-      };
-      delete body.caddress;
-      delete body.cdist;
-      delete body.cpinCode;
-      delete body.cstate;
-      delete body.paddress;
-      delete body.pdist;
-      delete body.ppinCode;
-      delete body.pstate;
-      delete body?.mobileNumber;
-      delete body?.category;
-      delete body?.linkedinLink;
-      delete body?.instagramLink;
-
-      console.log(body, 'body');
-      updateUserProfileMutate(body);
-    },
-  });
+  useEffect(() => {
+    if (stateWatch) {
+      setState(prev => ({
+        ...prev,
+        districtList: DISTRICTS[STATES.indexOf(stateWatch) + 1],
+      }));
+    }
+  }, [stateWatch]);
 
   return (
     <>
@@ -205,18 +161,18 @@ const EditProfile = ({route, navigation}) => {
         <ScrollView
           keyboardDismissMode="on-drag"
           contentContainerStyle={styles.root}>
-          <Text style={styles.title}>Basic Edit</Text>
+          <Text style={styles.title}>Basic Information</Text>
           <BasicEdit
             profilePic={profilePic}
             TakePhotofromGallery={TakePhotofromGallery}
-            personalProfileFormik={personalProfileFormik}
+            control={control}
           />
           <Text style={styles.title}>Social Media</Text>
-          <SocialMediaEdit personalProfileFormik={personalProfileFormik} />
+          <SocialMediaEdit control={control} />
           <Text style={styles.title}>Address</Text>
-          <AddressEdit personalProfileFormik={personalProfileFormik} />
+          <AddressEdit districtList={state.districtList} control={control} />
           <TouchableOpacity
-            onPress={personalProfileFormik?.handleSubmit}
+            onPress={handleSubmit(onSubmit)}
             style={styles.button}>
             <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>
               Update

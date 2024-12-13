@@ -84,9 +84,10 @@ const styles = StyleSheet.create({
   },
   title: {
     color: Colors.TEXT1,
-    fontSize: 16,
-    marginTop: 10,
-    paddingHorizontal: 10,
+    fontSize: 20,
+    marginVertical: 10,
+    marginLeft: 15,
+    fontFamily: 'OpenSans-SemiBold',
   },
 
   margin: {

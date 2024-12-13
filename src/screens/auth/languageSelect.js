@@ -4,11 +4,12 @@ import {
   ImageBackground,
   Pressable,
   RefreshControl,
+  StyleSheet,
   ToastAndroid,
   View,
 } from 'react-native';
-import {Text} from 'react-native-paper';
-import React, {useCallback, useState} from 'react';
+import {Button, Text} from 'react-native-paper';
+import React, {useCallback, useEffect, useState} from 'react';
 import authStyle from './authStyle';
 import Colors from '../../constants/Colors';
 import {useMutation, useQuery} from '@tanstack/react-query';
@@ -20,29 +21,28 @@ import {
 import {useFocusEffect} from '@react-navigation/native';
 import {getRegionalLanguages} from '../../services/userServices/monitoring.services';
 import NavigationScreenName from '../../constants/NavigationScreenName';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import TopHeader from '../../components/TopHeader';
 import {Checkbox} from 'react-native-paper';
 import globalStyles from '../../styles/globalStyles';
 import images from '../../constants/images';
+import Sizes from '../../constants/Sizes';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const LanguageSelection = ({navigation}) => {
   const {isProfileUpdated} = useSelector(store => store.commonStore);
   const [selectReginalLan, setRiginalLan] = useState([]);
   const [loading, setLoading] = useState(false);
-
   const {
     isLoading: getSelectedRegionalLanguagesLoading,
     isFetching: getSelectedRegionalLanguagesFetching,
     refetch: getSelectedRegionalLanguagesRefetch,
-    data: getSelectedRegionalLanguages_Data,
-    isError: getSelectedRegionalLanguages_isError,
   } = useQuery({
     queryKey: ['getSelectedRegionalLanguages'],
     queryFn: () => getSelectedRegionalLanguages(),
-    onSuccess: async success => {
+    onSuccess: success => {
       const selectedLanguages = [];
-      await success?.data?.list?.map(item => {
+      success?.data?.list?.map(item => {
         selectedLanguages.push(item?.languageDocId);
       });
       setRiginalLan(selectedLanguages);
@@ -57,7 +57,6 @@ const LanguageSelection = ({navigation}) => {
     isFetching: getRegionalLanguagesFetching,
     refetch: getRegionalLanguagesRefetch,
     data: getRegionalLanguages_Data,
-    isError: getRegionalLanguages_isError,
   } = useQuery({
     queryKey: ['getRegionalLanguages'],
     queryFn: () => getRegionalLanguages(),
@@ -90,15 +89,10 @@ const LanguageSelection = ({navigation}) => {
       ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
     },
   });
-
-  useFocusEffect(
-    useCallback(() => {
-      getRegionalLanguagesRefetch();
-      getSelectedRegionalLanguagesRefetch();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []),
-  );
-  const dispatch = useDispatch();
+  useEffect(() => {
+    getRegionalLanguagesRefetch();
+    getSelectedRegionalLanguagesRefetch();
+  }, []);
 
   return (
     <>
@@ -107,64 +101,37 @@ const LanguageSelection = ({navigation}) => {
         source={images.background}
         style={globalStyles.backgroundImage}>
         <TopHeader titile={'Select Language'} logout={true} />
-        <View
-          style={{
-            marginHorizontal: 10,
-          }}>
-          <Text
-            style={[{fontSize: 15, fontWeight: '500', color: Colors.TEXT1}]}>
-            Post Languages:-
-          </Text>
-        </View>
-
-        <View
-          style={{
-            flexGrow: 1,
-            alignSelf: 'center',
-            borderWidth: 1,
-            borderRadius: 6,
-            backgroundColor: Colors.white,
-            borderColor: '#4141412F',
-            width: '90%',
-          }}>
-          {/* flatlist for rendering the regional language */}
-          <FlatList
-            contentContainerStyle={{
-              justifyContent: 'space-between',
-              padding: 10,
-            }}
-            refreshControl={
-              <RefreshControl
-                refreshing={
-                  getRegionalLanguagesFetching ||
-                  getSelectedRegionalLanguagesFetching ||
-                  upsertRegionalLanguageLoading ||
-                  deleteRegionalLanguageLoading ||
-                  getSelectedRegionalLanguagesLoading ||
-                  getRegionalLanguagesLoading ||
-                  loading
-                }
-                onRefresh={
-                  getSelectedRegionalLanguagesRefetch &&
-                  getRegionalLanguagesRefetch
-                }
-              />
-            }
-            data={getRegionalLanguages_Data?.data?.list}
-            keyExtractor={item => item?._id}
-            renderItem={({item}) => (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginVertical: 1,
-                }}>
-                <Checkbox
-                  status={
-                    selectReginalLan.includes(item?._id)
-                      ? 'checked'
-                      : 'unchecked'
+        <View style={styles.container}>
+          <View style={styles.upper_part}>
+            {/* flatlist for rendering the regional language */}
+            <FlatList
+              contentContainerStyle={{
+                justifyContent: 'space-between',
+                padding: 10,
+              }}
+              refreshControl={
+                <RefreshControl
+                  refreshing={
+                    getRegionalLanguagesFetching ||
+                    getSelectedRegionalLanguagesFetching ||
+                    upsertRegionalLanguageLoading ||
+                    deleteRegionalLanguageLoading ||
+                    getSelectedRegionalLanguagesLoading ||
+                    getRegionalLanguagesLoading ||
+                    loading
                   }
+                  onRefresh={
+                    getSelectedRegionalLanguagesRefetch &&
+                    getRegionalLanguagesRefetch
+                  }
+                />
+              }
+              data={getRegionalLanguages_Data?.data?.list}
+              keyExtractor={item => item?._id}
+              renderItem={({item}) => (
+                <TouchableOpacity
+                  style={styles.text_wrapper}
+                  activeOpacity={0.5}
                   onPress={async () => {
                     if (selectReginalLan.includes(item?._id)) {
                       setRiginalLan(
@@ -179,49 +146,50 @@ const LanguageSelection = ({navigation}) => {
                         languageDocId: item?._id,
                       });
                     }
-                  }}
-                />
-                <Text
-                  style={
-                    selectReginalLan.includes(item._id)
-                      ? authStyle.selectedLanguage
-                      : authStyle.unSelectedLanguage
-                  }>
-                  {item?.languageName}
-                </Text>
-              </View>
-            )}
-          />
-        </View>
-        <View style={authStyle.bottom_content_root_Language}>
-          <Pressable
-            style={({pressed}) => [
-              {
-                backgroundColor: Colors.PRIMARY,
-                padding: 10,
-                borderRadius: 5,
-                alignItems: 'center',
-              },
-            ]}
-            onPress={() => {
-              setLoading(true);
-              setTimeout(() => {
-                setLoading(false);
-                isProfileUpdated === false
-                  ? navigation.navigate(NavigationScreenName?.MAIN_NAVIGATOR, {
-                      screen: 'DashBoard',
-                      params: {screen: 'Profile'},
-                    })
-                  : navigation.navigate(NavigationScreenName?.MAIN_NAVIGATOR, {
-                      screen: 'DashBoard',
-                      params: {screen: 'Home'},
-                    });
-              }, 1000);
-            }}>
-            <Text style={authStyle.signin_text_Language}>
+                  }}>
+                  <Checkbox
+                    status={
+                      selectReginalLan.includes(item?._id)
+                        ? 'checked'
+                        : 'unchecked'
+                    }
+                  />
+                  <Text style={styles.check_box_text}>
+                    {item?.languageName}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+          <View style={authStyle.bottom_content_root_Language}>
+            <Button
+              disabled={selectReginalLan?.length === 0 ? true : false}
+              mode="contained"
+              onPress={() => {
+                setLoading(true);
+                setTimeout(() => {
+                  setLoading(false);
+                  isProfileUpdated === false
+                    ? navigation.navigate(
+                        NavigationScreenName?.MAIN_NAVIGATOR,
+                        {
+                          screen: 'DashBoard',
+                          params: {screen: 'Profile'},
+                        },
+                      )
+                    : navigation.navigate(
+                        NavigationScreenName?.MAIN_NAVIGATOR,
+                        {
+                          screen: 'DashBoard',
+                          params: {screen: 'Home'},
+                        },
+                      );
+                }, 1000);
+              }}>
+              {' '}
               {loading ? 'Please wait...' : 'Save'}
-            </Text>
-          </Pressable>
+            </Button>
+          </View>
         </View>
       </ImageBackground>
     </>
@@ -229,3 +197,31 @@ const LanguageSelection = ({navigation}) => {
 };
 
 export default LanguageSelection;
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+
+    marginVertical: 10,
+  },
+
+  upper_part: {
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderRadius: 6,
+    backgroundColor: Colors.white,
+    borderColor: '#4141412F',
+    width: '90%',
+    maxHeight: Sizes.hp('70%'),
+  },
+  text_wrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 1,
+  },
+  check_box_text: {
+    fontSize: 18,
+    fontWeight: '700',
+    textTransform: 'capitalize',
+  },
+});

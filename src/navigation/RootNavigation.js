@@ -39,7 +39,6 @@ const Routes = () => {
   const [state, setState] = useState(true);
   const {login_Data, onBoarding} = useSelector(store => store.auth);
   const {isProfileUpdated} = useSelector(store => store.commonStore);
-  console.log(isProfileUpdated, 'isProfileUpdated');
   const dispatch = useDispatch();
   const getOnboarding = async () => {
     try {
@@ -62,7 +61,6 @@ const Routes = () => {
     setTimeout(() => {
       setState(false);
       OneSignal.setAppId('81677935-54bb-44f5-ade2-2b4ea34c4eba');
-      console.log('OneSignal');
     }, 1000);
     getOnboarding();
     // eslint-disable-next-line react-hooks/exhaustive-deps

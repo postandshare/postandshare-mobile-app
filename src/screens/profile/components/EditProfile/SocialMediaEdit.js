@@ -2,34 +2,47 @@ import {StyleSheet, View} from 'react-native';
 import React from 'react';
 import Sizes from '../../../../constants/Sizes';
 import Colors from '../../../../constants/Colors';
-import CustomTextInputFormik from '../../../../components/CustomTextInputFormik';
+import ControllerInputOutlined from '../../../../components/ControllerInputOutlined';
 
-const SocialMediaEdit = ({personalProfileFormik}) => {
+const SocialMediaEdit = ({control}) => {
   return (
     <>
       <View style={styles.container}>
-        <CustomTextInputFormik
-          formik={personalProfileFormik}
+        <ControllerInputOutlined
+          control={control}
           name={'twitterLink'}
           label={'Twitter Link'}
           width="95%"
         />
-        <CustomTextInputFormik
-          formik={personalProfileFormik}
+        <ControllerInputOutlined
+          control={control}
           name={'facebookLink'}
           label={'Facebook Link'}
           width="95%"
         />
-        <CustomTextInputFormik
-          formik={personalProfileFormik}
+        <ControllerInputOutlined
+          rules={{
+            required: 'Mobile Number required',
+            minLength: {
+              value: 10,
+              message: 'Number should be 10 digit',
+            },
+          }}
+          control={control}
           name={'mobileNumber'}
           label={'Mobile Number'}
           width="95%"
           maxLength={10}
           keyboardType={'number-pad'}
         />
-        <CustomTextInputFormik
-          formik={personalProfileFormik}
+        <ControllerInputOutlined
+          rules={{
+            minLength: {
+              value: 10,
+              message: 'Number should be 10 digit',
+            },
+          }}
+          control={control}
           name={'whatsappNumber'}
           label={'WhatsApp Number'}
           width="95%"

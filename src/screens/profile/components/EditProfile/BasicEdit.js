@@ -2,7 +2,7 @@
 import {StyleSheet, TouchableNativeFeedback, View} from 'react-native';
 import React, {useState} from 'react';
 import ProfilePic from '../../../../components/ProfilePic';
-import CustomTextInputFormik from '../../../../components/CustomTextInputFormik';
+
 import Colors from '../../../../constants/Colors';
 import Sizes from '../../../../constants/Sizes';
 import moment from 'moment';
@@ -11,6 +11,8 @@ import DatePicker from 'react-native-date-picker';
 import Dropdown from '../../../../components/Dropdown';
 import globalStyles from '../../../../styles/globalStyles';
 import {Text} from 'react-native-paper';
+import ControllerInputOutlined from '../../../../components/ControllerInputOutlined';
+import {Controller} from 'react-hook-form';
 const genderList = [
   {
     label: 'Male',
@@ -29,7 +31,8 @@ const genderList = [
 const BasicEdit = ({
   profilePic,
   TakePhotofromGallery,
-  personalProfileFormik,
+
+  control = null,
 }) => {
   const [open, setOpen] = useState(false);
   return (
@@ -43,20 +46,23 @@ const BasicEdit = ({
           />
         </View>
 
-        <CustomTextInputFormik
-          formik={personalProfileFormik}
+        <ControllerInputOutlined
+          rules={{
+            required: 'First name required',
+          }}
+          control={control}
           name={'firstName'}
-          label={'First Name'}
+          label={'First Name *'}
           width="95%"
         />
-        <CustomTextInputFormik
-          formik={personalProfileFormik}
+        <ControllerInputOutlined
+          control={control}
           name={'middleName'}
           label={'Middle Name'}
           width="95%"
         />
-        <CustomTextInputFormik
-          formik={personalProfileFormik}
+        <ControllerInputOutlined
+          control={control}
           name={'lastName'}
           label={'Last Name'}
           width="95%"
@@ -69,24 +75,31 @@ const BasicEdit = ({
             justifyContent: 'center',
             alignSelf: 'center',
           }}>
-          <Text style={styles.title}>Select Gender</Text>
-          <Dropdown
-            data={genderList?.map(item => ({
-              label: item?.label,
-              value: item?.value,
-            }))}
-            value={personalProfileFormik?.values['gender']}
-            label="Select Gender"
-            onChangeValue={value => {
-              personalProfileFormik?.setFieldValue('gender', value);
+          <Controller
+            rules={{
+              required: 'Gender required',
             }}
+            control={control}
+            name="gender"
+            render={({field: {value, onChange}, fieldState: {error}}) => (
+              <>
+                <Dropdown
+                  data={genderList?.map(item => ({
+                    label: item?.label,
+                    value: item?.value,
+                  }))}
+                  value={value}
+                  label="Select Gender *"
+                  onChangeValue={res => onChange(res)}
+                />
+                {!!error && (
+                  <Text style={globalStyles?.error_text}>{error?.message}</Text>
+                )}
+              </>
+            )}
           />
         </View>
-        {personalProfileFormik?.errors.gender ? (
-          <Text style={globalStyles?.error_text}>
-            {personalProfileFormik?.errors.gender}
-          </Text>
-        ) : null}
+
         {/* Date of birth picker */}
         <View
           style={{
@@ -95,45 +108,51 @@ const BasicEdit = ({
             justifyContent: 'center',
             marginVertical: 10,
           }}>
-          <Text style={styles.title}>Select DOB</Text>
-          <TouchableNativeFeedback onPress={() => setOpen(true)}>
-            <View style={styles.customInput}>
-              <Text style={{color: Colors.TEXT1, fontWeight: '500'}}>
-                {personalProfileFormik?.values['DOB']
-                  ? moment(personalProfileFormik?.values['DOB']).format(
-                      'DD MMM YYYY',
-                    )
-                  : 'Enter your birthday'}
-              </Text>
-              <Entypo name="calendar" size={22} color="grey" />
-            </View>
-          </TouchableNativeFeedback>
+          <Controller
+            rules={{
+              required: 'D.O.B required',
+            }}
+            control={control}
+            name="DOB"
+            render={({field: {value, onChange}, fieldState: {error}}) => (
+              <>
+                <TouchableNativeFeedback onPress={() => setOpen(true)}>
+                  <View style={styles.customInput}>
+                    <Text style={{color: Colors.TEXT1, fontWeight: '500'}}>
+                      {value
+                        ? moment(value).format('DD MMM YYYY')
+                        : 'Enter your birthday *'}
+                    </Text>
+                    <Entypo name="calendar" size={22} color="grey" />
+                  </View>
+                </TouchableNativeFeedback>
+                {!!error && (
+                  <Text style={[globalStyles?.error_text, {marginLeft: 10}]}>
+                    {error?.message}
+                  </Text>
+                )}
+                <DatePicker
+                  textColor="black"
+                  modal
+                  open={open}
+                  date={value || new Date()}
+                  onConfirm={date => {
+                    setOpen(false);
+                    onChange(date);
+                  }}
+                  onCancel={() => {
+                    setOpen(false);
+                  }}
+                  maximumDate={new Date()}
+                  mode="date"
+                />
+              </>
+            )}
+          />
         </View>
 
-        <DatePicker
-          textColor="black"
-          modal
-          open={open}
-          date={personalProfileFormik?.values['DOB'] || new Date()}
-          onConfirm={date => {
-            setOpen(false);
-            personalProfileFormik?.setFieldValue('DOB', date);
-          }}
-          onCancel={() => {
-            setOpen(false);
-          }}
-          maximumDate={new Date()}
-          mode="date"
-        />
-
-        {personalProfileFormik?.errors?.DOB ? (
-          <Text style={globalStyles?.error_text}>
-            {personalProfileFormik?.errors?.DOB}
-          </Text>
-        ) : null}
-
-        <CustomTextInputFormik
-          formik={personalProfileFormik}
+        <ControllerInputOutlined
+          control={control}
           name={'email'}
           label={'Email'}
           width="95%"

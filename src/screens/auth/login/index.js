@@ -3,11 +3,10 @@ import {
   ImageBackground,
   TouchableOpacity,
   ToastAndroid,
+  KeyboardAvoidingView,
 } from 'react-native';
 import React from 'react';
-import {useState} from 'react';
 import Images from '../../../constants/images';
-import CustomInputField from '../../../components/CustomInputField';
 import CustomButton from '../../../components/CustomButton';
 import NavigationScreenName from '../../../constants/NavigationScreenName';
 import authStyle from '../authStyle';
@@ -15,26 +14,22 @@ import {SendOTPonMobile} from '../../../services/authServices/auth.services';
 import {useMutation} from '@tanstack/react-query';
 import Loader from '../../../components/Loader';
 import {Checkbox, Text} from 'react-native-paper';
-
+import {Controller, useForm} from 'react-hook-form';
+import ControllerInput from '../../../components/ControllerInput';
 const Login = ({navigation}) => {
-  const [state, setState] = useState({
-    name: '',
-    phone: '',
-    err: {},
-    check: false,
+  const {control, handleSubmit, getValues} = useForm({
+    defaultValues: {
+      mobileNumber: '',
+      checkbox: false,
+    },
   });
-  const onChangePhone = text => {
-    setState({...state, phone: text, err: {...state.err, phone: ''}});
-  };
 
   const {mutate: SendOTPonMobileMuatate, isLoading: SendOTPonMobileLoading} =
     useMutation(SendOTPonMobile, {
       onSuccess: success => {
         ToastAndroid.show(success?.data?.message, ToastAndroid.SHORT);
-
-        console.log(success?.data, 'in success');
         navigation.navigate(NavigationScreenName.VERIFY_OTP, {
-          mobileNumber: state?.phone,
+          mobileNumber: getValues()?.mobileNumber,
           requesId: success?.data?.request_id,
         });
       },
@@ -42,75 +37,64 @@ const Login = ({navigation}) => {
         ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
       },
     });
-
-  const handleVerification = () => {
-    let err = {};
-    if (state.phone === '') {
-      err.phone = 'Mobile Number is required';
-      ToastAndroid.show('Please Enter Valid Mobile Number', ToastAndroid.SHORT);
-    } else {
-      SendOTPonMobileMuatate({
-        mobileNumber: state.phone,
-      });
-    }
-    setState({...state, err});
+  const onSubmit = data => {
+    SendOTPonMobileMuatate({
+      mobileNumber: data?.mobileNumber,
+    });
   };
 
-  const onPressTrouble = () => {
-    //navigation.navigate(NavigationScreenName.FORGET_PASSWORD);
-  };
-  const handleOnPressSignup = () => {
-    //navigation.navigate(NavigationScreenName.SIGNUP);
-  };
   return (
     <>
       <Loader open={SendOTPonMobileLoading} text="Sending OTP..." />
       <ImageBackground source={Images.loginTop} style={authStyle.upperImage}>
-        {/* <View style={authStyle.topImgSec} /> */}
         <Text style={authStyle.welcomeText}>Enter your phone number</Text>
         <Text style={authStyle.signin_text}>
           Input your mobile number for account verification
         </Text>
       </ImageBackground>
-      <View style={authStyle.bottom_content_root}>
-        <CustomInputField
+      <KeyboardAvoidingView
+        behavior="padding"
+        style={authStyle.bottom_content_root}>
+        <ControllerInput
+          rules={{
+            required: 'Mobile Number required',
+            minLength: {
+              value: 10,
+              message: 'Number should be 10 digits',
+            },
+          }}
+          name="mobileNumber"
+          control={control}
           label="Mobile Number"
           keyboardType={'number-pad'}
           placeholder="Enter your mobile number"
-          value={state.phone}
-          err={state.err?.phone}
           maxLength={10}
-          onChange={onChangePhone}
+        />
+        <Controller
+          control={control}
+          name="checkbox"
+          render={({field: {value, onChange}, fieldState: {error}}) => (
+            <>
+              <View style={authStyle.termsandcondition}>
+                <Checkbox
+                  status={value ? 'checked' : 'unchecked'}
+                  onPress={() => onChange(!value)}
+                />
+                <Text style={authStyle.termsandcondition_text}>
+                  By continuing, you agree to our{' '}
+                </Text>
+                <TouchableOpacity>
+                  <Text style={authStyle.termsandcondition_link}>
+                    Terms & Conditions
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
         />
 
-        <View style={authStyle.termsandcondition}>
-          <Checkbox
-            status={state?.check ? 'checked' : 'unchecked'}
-            onPress={() => {
-              setState({...state, check: !state.check});
-            }}
-          />
-          <Text style={authStyle.termsandcondition_text}>
-            By continuing, you agree to our{' '}
-          </Text>
-          <TouchableOpacity>
-            <Text style={authStyle.termsandcondition_link}>
-              Terms & Conditions
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* <TouchableOpacity onPress={onPressTrouble}>
-          <Text style={authStyle.touble_text}>Trouble to Sign in ?</Text>
-        </TouchableOpacity> */}
-        <CustomButton title={'Send Code'} onPress={handleVerification} />
-        {/* <View style={authStyle.signup_textWrapper}>
-          <Text style={authStyle.singup_text}>Dont't Have an Account Yet? </Text>
-          <TouchableOpacity onPress={handleOnPressSignup}>
-            <Text style={authStyle.singup_link}>Signup</Text>
-          </TouchableOpacity>
-        </View> */}
-      </View>
+        <CustomButton title={'Send Code'} onPress={handleSubmit(onSubmit)} />
+      </KeyboardAvoidingView>
     </>
   );
 };

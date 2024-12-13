@@ -1,17 +1,22 @@
 /* eslint-disable react-native/no-inline-styles */
 import {StyleSheet, View} from 'react-native';
 import React from 'react';
-import CustomTextInputFormik from '../../../../components/CustomTextInputFormik';
 import Sizes from '../../../../constants/Sizes';
 import Colors from '../../../../constants/Colors';
 import Dropdown from '../../../../components/Dropdown';
-import {DISTRICTS, STATES} from '../../../../constants';
+import {STATES} from '../../../../constants';
 import {Text} from 'react-native-paper';
-const AddressEdit = ({personalProfileFormik}) => {
+import ControllerInputOutlined from '../../../../components/ControllerInputOutlined';
+import {Controller} from 'react-hook-form';
+import globalStyles from '../../../../styles/globalStyles';
+const AddressEdit = ({control, districtList}) => {
   return (
     <View style={styles.container}>
-      <CustomTextInputFormik
-        formik={personalProfileFormik}
+      <ControllerInputOutlined
+        rules={{
+          required: 'Address required',
+        }}
+        control={control}
         name={'caddress'}
         label={'Address'}
         width="95%"
@@ -24,32 +29,24 @@ const AddressEdit = ({personalProfileFormik}) => {
           width: '95%',
           alignSelf: 'center',
         }}>
-        <Dropdown
-          value={personalProfileFormik?.values['cstate']}
-          label="Select State"
-          data={STATES?.map(item => ({label: item, value: item}))}
-          onChangeValue={res => {
-            personalProfileFormik?.setFieldValue('cdist', '');
-            personalProfileFormik?.setFieldValue('cstate', res);
-          }}
+        <Controller
+          control={control}
+          name="cstate"
+          render={({field: {value, onChange}, fieldState: {error}}) => (
+            <>
+              <Dropdown
+                data={STATES?.map(item => ({label: item, value: item}))}
+                value={value}
+                label="State *"
+                onChangeValue={res => onChange(res)}
+              />
+              {!!error && (
+                <Text style={globalStyles?.error_text}>{error?.message}</Text>
+              )}
+            </>
+          )}
         />
-        {/* label */}
-        <View
-          style={{
-            position: 'absolute',
-            left: 15,
-            top: -10,
-            backgroundColor: '#fff',
-            marginHorizontal: 3,
-          }}>
-          <Text style={{color: 'grey', fontSize: 13}}>State</Text>
-        </View>
       </View>
-      {personalProfileFormik?.errors['cstate'] && (
-        <Text style={styles.errorText}>
-          {personalProfileFormik?.errors['cstate']}
-        </Text>
-      )}
 
       {/* Drop Down For Selecting the District once the state is selected in Current Address*/}
       <View
@@ -59,38 +56,47 @@ const AddressEdit = ({personalProfileFormik}) => {
           width: '95%',
           alignSelf: 'center',
         }}>
-        <Dropdown
-          value={personalProfileFormik?.values['cdist']}
-          label="Select District"
-          data={DISTRICTS[
-            STATES.indexOf(personalProfileFormik?.values['cstate']) + 1
-          ]?.map(item => ({label: item, value: item}))}
-          onChangeValue={res => {
-            personalProfileFormik?.setFieldValue('cdist', res);
+        <Controller
+          rules={{
+            required: 'District required',
+          }}
+          control={control}
+          name="cdist"
+          render={({field: {value, onChange}, fieldState: {error}}) => {
+            return (
+              <>
+                <Dropdown
+                  data={districtList?.map(item => ({
+                    label: item,
+                    value: item,
+                  }))}
+                  value={value}
+                  label="District *"
+                  onChangeValue={res => onChange(res)}
+                />
+                {!!error && (
+                  <Text style={globalStyles?.error_text}>{error?.message}</Text>
+                )}
+              </>
+            );
           }}
         />
-
-        <View
-          style={{
-            position: 'absolute',
-            left: 15,
-            top: -10,
-            backgroundColor: '#fff',
-            marginHorizontal: 3,
-          }}>
-          <Text style={{color: 'grey', fontSize: 13}}>District</Text>
-        </View>
       </View>
-      {personalProfileFormik?.errors['cdist'] && (
-        <Text style={styles.errorText}>
-          {personalProfileFormik?.errors['cdist']}
-        </Text>
-      )}
-      <CustomTextInputFormik
-        formik={personalProfileFormik}
+
+      <ControllerInputOutlined
+        rules={{
+          required: 'Pin code required',
+          minLength: {
+            value: 6,
+            message: 'Pin code should be 6 digit',
+          },
+        }}
+        control={control}
         name={'cpinCode'}
         label={'Pin Code'}
         width="95%"
+        maxLength={6}
+        keyboardType="number-pad"
       />
     </View>
   );
