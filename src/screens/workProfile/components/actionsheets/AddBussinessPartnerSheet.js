@@ -9,24 +9,36 @@ import {
 import React, {useState} from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import globalStyles from '../../../../styles/globalStyles';
-import CustomTextInputFormik from '../../../../components/CustomTextInputFormik';
 import Colors from '../../../../constants/Colors';
 import CustomButton from '../../../../components/CustomButton';
 import uploadFile from '../../../../utils/uploadFile';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import {Text} from 'react-native-paper';
+import ControllerInputOutlined from '../../../../components/ControllerInputOutlined';
+import {Controller, useForm} from 'react-hook-form';
 const AddBussinessPartnerSheet = ({
+  onPressAddPartner,
   onPressCross,
-  addBusinessPartner,
-  bussinessTypeFormik,
   edit = false,
 }) => {
-  const [profilePic, setprofilePic] = useState(
-    bussinessTypeFormik?.values?.bussinessPartnerPhoto ?? '',
-  );
-
   const [imageUploading, setImageUploading] = useState(false);
-
+  const {control, handleSubmit, reset, setValue} = useForm({
+    defaultValues: {
+      photo: '',
+      bussinessPartnerName: '',
+      bussinessPartnerDessignation: '',
+      profilePic: '',
+    },
+  });
+  const onSubmit = data => {
+    onPressAddPartner(data);
+    reset({
+      photo: '',
+      bussinessPartnerName: '',
+      bussinessPartnerDessignation: '',
+      profilePic: '',
+    });
+  };
   const uploadePhoto = async (path, mime) => {
     try {
       console.log(path, 'in uploade photo');
@@ -37,15 +49,8 @@ const AddBussinessPartnerSheet = ({
         contentType: mime,
       });
       setImageUploading(false);
-      console.log(uplode?.fileURL, 'uplode file url');
-      //   updateSelfPhotoMutate({
-      //     profilePic: uplode?.fileURL,
-      //   });
-      bussinessTypeFormik.setValues(prev => ({
-        ...prev,
-        bussinessPartnerPhoto: uplode?.fileURL,
-      }));
-      setprofilePic(uplode?.fileURL);
+
+      setValue('profilePic', uplode?.fileURL);
     } catch (error) {
       setImageUploading(false);
     }
@@ -103,38 +108,47 @@ const AddBussinessPartnerSheet = ({
 
       {/* body */}
       <View style={styles.container}>
-        <View style={styles.textInputField}>
-          <Text style={{color: Colors.TEXT1}}>Partner Name</Text>
-          <CustomTextInputFormik
-            formik={bussinessTypeFormik}
-            name={'bussinessPartnerName'}
-            label={'Partner Name'}
-          />
-        </View>
+        <ControllerInputOutlined
+          rules={{
+            required: 'Partner name required',
+          }}
+          control={control}
+          name={'bussinessPartnerName'}
+          label={'Partner Name'}
+        />
+
         {/* desingnation */}
-        <View style={styles.textInputField}>
-          <Text style={{color: Colors.TEXT1}}>Desingnation</Text>
-          <CustomTextInputFormik
-            formik={bussinessTypeFormik}
-            name={'bussinessPartnerDessignation'}
-            label={'Desingnation'}
-          />
-        </View>
+        <ControllerInputOutlined
+          rules={{
+            required: 'Designation required',
+          }}
+          control={control}
+          name={'bussinessPartnerDessignation'}
+          label={'Desingnation'}
+        />
         {/* photo */}
-        <TouchableOpacity
-          style={styles.photoInput}
-          onPress={() => {
-            TakePhotofromGallery();
-          }}>
-          {profilePic ? (
-            <Image
-              source={{uri: profilePic}}
-              style={{width: '100%', height: '100%', borderRadius: 10}}
-            />
-          ) : (
-            <Text style={{color: Colors.TEXT1}}>Add Photo</Text>
+        <Controller
+          control={control}
+          name="profilePic"
+          render={({field: {value}}) => (
+            <>
+              <TouchableOpacity
+                style={styles.photoInput}
+                onPress={() => {
+                  TakePhotofromGallery();
+                }}>
+                {value ? (
+                  <Image
+                    source={{uri: value}}
+                    style={{width: '100%', height: '100%', borderRadius: 10}}
+                  />
+                ) : (
+                  <Text style={{color: Colors.TEXT1}}>Add Photo</Text>
+                )}
+              </TouchableOpacity>
+            </>
           )}
-        </TouchableOpacity>
+        />
 
         <CustomButton
           title={
@@ -144,7 +158,7 @@ const AddBussinessPartnerSheet = ({
               ? 'Update Partner'
               : 'Add Partner'
           }
-          onPress={() => addBusinessPartner()}
+          onPress={handleSubmit(onSubmit)}
         />
       </View>
     </>

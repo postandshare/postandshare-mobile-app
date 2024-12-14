@@ -21,7 +21,6 @@ export const deepLinkConfig = {
       screens: {
         MyBussiness: 'myBussiness',
         AddBussiness: 'addBussiness',
-        EditBussiness: 'editBussiness',
       },
     },
     PhotoNavigator: {

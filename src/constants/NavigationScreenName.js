@@ -37,4 +37,12 @@ export default {
   HELPSUPPORT: 'HelpSupport',
   NOTIFICATION: 'Notification',
   AI_IMAGE: 'Ai-image',
+
+  // work profile
+  WORK_PROFILE_NAVIGATOR: 'WorkProfileNavigator',
+  WORK_PROFILE_LIST: 'WorkProfileList',
+  SELECT_WORK_PROFILE: 'SelectWork Profile',
+  ADD_EDIT_BUSINESS_STEP1: 'AddEditBusinessStep1',
+  ADD_EDIT_BUSINESS_STEP2: 'AddEditBusinessStep2',
+  ADD_EDIT_POLITICAL: 'AddEditPolitical',
 };

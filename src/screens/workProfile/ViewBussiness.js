@@ -89,7 +89,6 @@ const ViewBussiness = ({route, navigation}) => {
     isFetching: getAllBusinessListFetching,
     refetch: getAllBusinessListRefetch,
     data: getAllBusinessList_Data,
-    isError: getAllBusinessList_isError,
   } = useQuery({
     queryKey: ['getAllBusinessList'],
     queryFn: () =>

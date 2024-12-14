@@ -13,6 +13,8 @@ const ControllerInputOutlined = ({
   control = null,
   rules = {},
   width = '100%',
+  multiline = false,
+  numberOfLines = 1,
 }) => {
   return (
     <View>
@@ -23,6 +25,8 @@ const ControllerInputOutlined = ({
         render={({field: {value, onChange, onBlur}, fieldState: {error}}) => (
           <>
             <TextInput
+              multiline={multiline}
+              numberOfLines={numberOfLines}
               error={!!error}
               label={label}
               mode="outlined"

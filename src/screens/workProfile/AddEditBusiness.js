@@ -1,24 +1,26 @@
 /* eslint-disable react-native/no-inline-styles */
 import {Alert, ScrollView, StyleSheet, ToastAndroid, View} from 'react-native';
 import React, {useEffect} from 'react';
-import Colors from '../../../constants/Colors';
 import {Text} from 'react-native-paper';
-import CustomButton from '../../../components/CustomButton';
-import BussinessTypeForm from './bussinessFormComponents/BussinessTypeForm';
 import {useFormik} from 'formik';
 import * as yup from 'yup';
-import BussinessProfileForm from './bussinessFormComponents/BussinessProfileForm';
-import BussinessPartnerForm from './bussinessFormComponents/BussinessPartnerForm';
+import {useMutation} from '@tanstack/react-query';
+import {useNavigation} from '@react-navigation/native';
+import BussinessProfileForm from './components/bussinessFormComponents/BussinessProfileForm';
+import BussinessPartnerForm from './AddEditBusinessStep2';
 import {
   addBusiness,
   updateBusiness,
-} from '../../../services/userServices/bussiness.servies';
-import {useMutation} from '@tanstack/react-query';
-import NavigationScreenName from '../../../constants/NavigationScreenName';
-import {useNavigation} from '@react-navigation/native';
-import Loader from '../../../components/Loader';
+} from '../../services/userServices/bussiness.servies';
+import NavigationScreenName from '../../constants/NavigationScreenName';
+import Loader from '../../components/Loader';
+import CustomButton from '../../components/CustomButton';
 
-const BussinessType = ({bussinessDetails}) => {
+import TopHeader from '../../components/TopHeader';
+import Sizes from '../../constants/Sizes';
+import {AddEditBusinessStep1Screen} from './Index';
+
+const AddEditBusiness = ({bussinessDetails}) => {
   const [formStep, setFormStep] = React.useState(1);
   const navigation = useNavigation();
 
@@ -129,29 +131,19 @@ const BussinessType = ({bussinessDetails}) => {
         ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
       },
     });
-  const {mutate: updateBusinessMutate, isLoading: updateBusinessLoading} =
-    useMutation(updateBusiness, {
-      onSuccess: ({data}) => {
-        ToastAndroid.show(data?.message, ToastAndroid.LONG);
-        bussinessTypeFormik?.resetForm();
-        bussinessProfileFormik?.resetForm();
-        bussinessPartnerFormik?.resetForm();
-        navigation.replace(NavigationScreenName?.MY_BUSSINESS);
-      },
-      onError: err => {
-        console.log(err?.response?.data?.message, 'err');
-        ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
-      },
-    });
-
-  console.log(
-    bussinessTypeFormik?.values?.bussinessSubCategory,
-    'bussinessTypeFormik?.values?.bussinessCategory',
-  );
-  console.log(
-    bussinessTypeFormik?.values?.bussinessSubCategoryDocId,
-    'bussinessTypeFormik?.values?.bussinessCategoryDocId',
-  );
+  const {mutate: updateBusinessMutate} = useMutation(updateBusiness, {
+    onSuccess: ({data}) => {
+      ToastAndroid.show(data?.message, ToastAndroid.LONG);
+      bussinessTypeFormik?.resetForm();
+      bussinessProfileFormik?.resetForm();
+      bussinessPartnerFormik?.resetForm();
+      navigation.replace(NavigationScreenName?.MY_BUSSINESS);
+    },
+    onError: err => {
+      console.log(err?.response?.data?.message, 'err');
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+  });
 
   const handleSubmition = () => {
     if (bussinessDetails?.fetchBusiness?._id) {
@@ -227,173 +219,81 @@ const BussinessType = ({bussinessDetails}) => {
 
   return (
     <>
-      <Loader open={addBusinesslLoading} text="Adding Bussiness" />
-      {formStep == 1 && (
-        <ScrollView>
-          <View>
-            <Text
-              style={{
-                fontSize: 16,
-                margin: 5,
-                fontWeight: 'bold',
-                color: Colors.TEXT1,
-              }}>
-              Bussiness Type
-            </Text>
+      <View style={styles.wrap}>
+        {formStep === 1 && <AddEditBusinessStep1Screen />}
+        {/* bussiness partner form */}
+        {formStep === 2 && (
+          <ScrollView>
+            <BussinessPartnerForm
+              bussinessTypeFormik={bussinessPartnerFormik}
+              bussinessDetails={bussinessDetails}
+            />
             <View
               style={{
-                backgroundColor: Colors.white,
-                borderWidth: 1,
-                borderRadius: 10,
-                width: '90%',
-                alignSelf: 'center',
-                padding: 10,
-                borderColor: Colors.borderColor,
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                bottom: 10,
               }}>
-              <BussinessTypeForm bussinessTypeFormik={bussinessTypeFormik} />
+              <CustomButton
+                title={'Back'}
+                onPress={() => setFormStep(1)}
+                width="40%"
+              />
+              <CustomButton
+                title={'Next'}
+                onPress={async () => {
+                  bussinessPartnerFormik?.setTouched({
+                    bussinessOwnerName: true,
+                    bussinessOwnerPhone: true,
+                    bussinessOwnerDessignation: true,
+                    bussinessOwnerWhatsapp: true,
+                    bussinessPartnerName: true,
+                    bussinessPartnerDesignation: true,
+                    bussinessPartnerPhoto: true,
+                  });
+                  const errors = await bussinessPartnerFormik?.validateForm();
+                  if (Object.keys(errors).length > 0) {
+                    //addressInfoFormik.handleSubmit();
+                    ToastAndroid.show(
+                      `Please correct ${Object.keys(
+                        errors,
+                      )} errors before proceeding.`,
+                      ToastAndroid.LONG,
+                    );
+                    return;
+                  } else {
+                    bussinessPartnerFormik.handleSubmit();
+                    Alert.alert(
+                      'Are you sure you want to submit?',
+                      'Please verify the details before submitting',
+                      [
+                        {
+                          text: 'Cancel',
+                          onPress: () => console.log('Cancel Pressed'),
+                          style: 'cancel',
+                        },
+                        {text: 'OK', onPress: () => handleSubmition()},
+                      ],
+                    );
+                  }
+                }}
+                width="40%"
+              />
             </View>
-          </View>
-
-          <Text
-            style={{
-              fontSize: 16,
-              margin: 5,
-              fontWeight: 'bold',
-              color: Colors.TEXT1,
-            }}>
-            Bussiness Profile
-          </Text>
-          <View
-            style={{
-              backgroundColor: Colors.white,
-              borderWidth: 1,
-              borderRadius: 10,
-              width: '90%',
-              alignSelf: 'center',
-              padding: 10,
-              borderColor: Colors.borderColor,
-            }}>
-            <BussinessProfileForm
-              bussinessTypeFormik={bussinessProfileFormik}
-            />
-          </View>
-          <CustomButton
-            title={'Next'}
-            onPress={async () => {
-              bussinessTypeFormik?.setTouched({
-                bussinessCategory: true,
-                bussinessSubCategory: true,
-                logo: true,
-              });
-              bussinessProfileFormik?.setTouched({
-                bussinessName: true,
-                bussinessDetail: true,
-                bussinessEmail: true,
-                businessWebsite: true,
-                bussinessAddress: true,
-                bussinessPinCode: true,
-                bussinessTehsil: true,
-                bussinessDistrict: true,
-                bussinessState: true,
-              });
-
-              const errorsProfile =
-                await bussinessProfileFormik?.validateForm();
-              const errorsType = await bussinessTypeFormik?.validateForm();
-
-              if (
-                Object.keys(errorsProfile).length > 0 ||
-                Object.keys(errorsType).length > 0
-              ) {
-                ToastAndroid.show(
-                  `Please correct errors before proceeding.`,
-                  ToastAndroid.LONG,
-                );
-                return;
-              } else {
-                bussinessTypeFormik.handleSubmit();
-                bussinessProfileFormik.handleSubmit();
-                setFormStep(2);
-              }
-            }}
-          />
-        </ScrollView>
-      )}
-      {/* bussiness partner form */}
-      {formStep == 2 && (
-        <ScrollView>
-          <BussinessPartnerForm
-            bussinessTypeFormik={bussinessPartnerFormik}
-            bussinessDetails={bussinessDetails}
-          />
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              bottom: 10,
-            }}>
-            <CustomButton
-              title={'Back'}
-              onPress={() => setFormStep(1)}
-              width="40%"
-            />
-            <CustomButton
-              title={'Next'}
-              onPress={async () => {
-                bussinessPartnerFormik?.setTouched({
-                  bussinessOwnerName: true,
-                  bussinessOwnerPhone: true,
-                  bussinessOwnerDessignation: true,
-                  bussinessOwnerWhatsapp: true,
-                  bussinessPartnerName: true,
-                  bussinessPartnerDesignation: true,
-                  bussinessPartnerPhoto: true,
-                });
-                const errors = await bussinessPartnerFormik?.validateForm();
-                if (Object.keys(errors).length > 0) {
-                  //addressInfoFormik.handleSubmit();
-                  ToastAndroid.show(
-                    `Please correct ${Object.keys(
-                      errors,
-                    )} errors before proceeding.`,
-                    ToastAndroid.LONG,
-                  );
-                  return;
-                } else {
-                  bussinessPartnerFormik.handleSubmit();
-                  Alert.alert(
-                    'Are you sure you want to submit?',
-                    'Please verify the details before submitting',
-                    [
-                      {
-                        text: 'Cancel',
-                        onPress: () => console.log('Cancel Pressed'),
-                        style: 'cancel',
-                      },
-                      {text: 'OK', onPress: () => handleSubmition()},
-                    ],
-                  );
-                }
-              }}
-              width="40%"
-            />
-          </View>
-        </ScrollView>
-      )}
+          </ScrollView>
+        )}
+      </View>
     </>
   );
 };
 
-export default BussinessType;
-
+export default AddEditBusiness;
 const styles = StyleSheet.create({
   container: {
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: Colors.TEXT1,
-    height: 40,
-    width: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  wrap: {
+    paddingHorizontal: Sizes.wp('5%'),
   },
 });

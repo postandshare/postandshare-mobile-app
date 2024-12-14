@@ -106,10 +106,12 @@ const CustomDrawerLeft = ({navigation, route}) => {
       <View style={styles.root}>
         <UserProfileCard profileData={userDetails} />
         <Item
-          icon={<AntDesign name={'home'} style={styles.icon} />}
-          text={'My Bussiness'}
-          path={NavigationScreenName.MY_BUSSINESS}
-          onPress={() => navigation.navigate(NavigationScreenName.MY_BUSSINESS)}
+          icon={<AntDesign name={'profile'} style={styles.icon} />}
+          text={'Work Profile'}
+          path={NavigationScreenName.WORK_PROFILE_NAVIGATOR}
+          onPress={() =>
+            navigation.navigate(NavigationScreenName.WORK_PROFILE_NAVIGATOR)
+          }
         />
         {/* <Divider
           style={{
@@ -299,6 +301,7 @@ const styles = StyleSheet.create({
     color: 'rgba(12, 47, 73, 1)',
     fontSize: 17,
     fontWeight: '500',
+    fontFamily: 'OpenSans-SemiBold',
   },
   active_item: {
     backgroundColor: Colors.PRIMARY,

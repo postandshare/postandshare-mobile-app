@@ -13,7 +13,7 @@ import {setOnBoarding} from '../services/reducer/AuthSlice';
 import OnBoarding from '../screens/onBoarding';
 import ProfileNavigator from '../screens/profile/index';
 import TermAndCondtion from '../screens/term&condition';
-import MyBussinessNavigator from '../screens/mybussiness';
+import WorkProfileNavigator from '../screens/workProfile/WorkProfileNavigator';
 import MyPost from '../screens/mypost';
 import Tutorial from '../screens/tutorials';
 import Privacy from '../screens/privacy';
@@ -122,8 +122,8 @@ const Routes = () => {
                   component={TermAndCondtion}
                 />
                 <Stack.Screen
-                  name={NavigationScreenName.MY_BUSSINESS}
-                  component={MyBussinessNavigator}
+                  name={NavigationScreenName.WORK_PROFILE_NAVIGATOR}
+                  component={WorkProfileNavigator}
                 />
                 <Stack.Screen
                   name={NavigationScreenName.MY_POST}

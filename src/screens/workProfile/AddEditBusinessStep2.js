@@ -9,60 +9,39 @@ import {
 } from 'react-native';
 import {Text} from 'react-native-paper';
 import React, {useRef, useState} from 'react';
-import ProfilePic from '../../../../components/ProfilePic';
-import uploadFile from '../../../../utils/uploadFile';
+import ProfilePic from '../../components/ProfilePic';
+import uploadFile from '../../utils/uploadFile';
 import ImageCropPicker from 'react-native-image-crop-picker';
-import CustomTextInputFormik from '../../../../components/CustomTextInputFormik';
+import CustomTextInputFormik from '../../components/CustomTextInputFormik';
 import ActionSheet from 'react-native-actions-sheet';
-import AddBussinessPartnerSheet from '../actionsheets/AddBussinessPartnerSheet';
+import AddBussinessPartnerSheet from './components/actionsheets/AddBussinessPartnerSheet';
 import {useFormik} from 'formik';
 import * as yup from 'yup';
-import Colors from '../../../../constants/Colors';
-import images from '../../../../constants/images';
+import Colors from '../../constants/Colors';
+import images from '../../constants/images';
 import {useMutation} from '@tanstack/react-query';
-import {addBusinessPartner} from '../../../../services/userServices/bussiness.servies';
-import Loader from '../../../../components/Loader';
+import {addBusinessPartner} from '../../services/userServices/bussiness.servies';
+import Loader from '../../components/Loader';
+import {useFieldArray, useForm} from 'react-hook-form';
+import ControllerInputOutlined from '../../components/ControllerInputOutlined';
 
-const BussinessPartnerForm = ({bussinessTypeFormik, bussinessDetails}) => {
-  const [profilePic, setprofilePic] = useState(
-    bussinessTypeFormik?.values?.bussinessOwnerPhoto,
-  );
+const AddEditBusinessStep2 = ({navigation, route}) => {
+  const [profilePic, setprofilePic] = useState('');
   const [edit, setEdit] = useState(false);
   const [bussinessPartnerDetails, setBussinessPartnerDetails] = useState();
-  // console.log(bussinessTypeFormik?.values?.bussinessPartner, 'bussiness partner')
-  const [bussinessPartner, setBussinessPartner] = useState(
-    bussinessTypeFormik?.values?.bussinessPartner ?? [],
-  );
 
-  const bussinessPartnerDetailsFormik = useFormik({
-    initialValues: {
-      bussinessPartnerName: '',
-      bussinessPartnerDessignation: '',
-      bussinessPartnerPhoto: '',
-    },
-    validationSchema: yup.object({
-      //bussinessPartner
-      bussinessPartnerName: yup.string().required('Required'),
-      bussinessPartnerDessignation: yup.string().optional(),
-      bussinessPartnerPhoto: yup.string().optional(),
-    }),
-    onSubmit: formValues => {
-      actionSheetRef?.current?.hide();
-      console.log(formValues, 'in bussiness formik');
-      let temp = {
-        name: formValues?.bussinessPartnerName,
-        designation: formValues?.bussinessPartnerDessignation,
-        photo: formValues?.bussinessPartnerPhoto,
-      };
-      setBussinessPartner(prev => [...prev, {...formValues}]);
-
-      // addBusinessPartnerlMutate(formValues);
-      bussinessTypeFormik.setValues(prev => ({
-        ...prev,
-        bussinessPartner: [...prev?.bussinessPartner, temp],
-      }));
+  const [bussinessPartner, setBussinessPartner] = useState([]);
+  const {control} = useForm({
+    defaultValues: {
+      bussinessOwnerName: '',
+      bussinessOwnerPhone: '',
+      bussinessOwnerWhatsapp: '',
+      bussinessOwnerDessignation: '',
+      bussinessOwnerPhoto: '',
     },
   });
+
+  const onSubmit = data => {};
 
   const {
     mutate: addBusinessPartnerlMutate,
@@ -70,7 +49,6 @@ const BussinessPartnerForm = ({bussinessTypeFormik, bussinessDetails}) => {
   } = useMutation(addBusinessPartner, {
     onSuccess: ({data}) => {
       ToastAndroid.show(data?.message, ToastAndroid.LONG);
-      bussinessPartnerDetailsFormik?.resetForm();
     },
     onError: err => {
       console.log(err?.response?.data?.message, 'err');
@@ -90,14 +68,6 @@ const BussinessPartnerForm = ({bussinessTypeFormik, bussinessDetails}) => {
         contentType: mime,
       });
       setImageUploading(false);
-      console.log(uplode?.fileURL, 'uplode file url');
-      //   updateSelfPhotoMutate({
-      //     profilePic: uplode?.fileURL,
-      //   });
-      bussinessTypeFormik.setValues(prev => ({
-        ...prev,
-        bussinessOwnerPhoto: uplode?.fileURL,
-      }));
       setprofilePic(uplode?.fileURL);
     } catch (error) {
       setImageUploading(false);
@@ -133,21 +103,14 @@ const BussinessPartnerForm = ({bussinessTypeFormik, bussinessDetails}) => {
   };
 
   const actionSheetRef = useRef(null);
+  const onPressAddPartner = () => {};
   const onPressCross = () => {
     actionSheetRef?.current?.hide();
-  };
-  const AddBussinessPartner = async () => {
-    bussinessPartnerDetailsFormik?.setTouched({
-      bussinessPartnerName: true,
-      bussinessPartnerDessignation: true,
-      bussinessPartnerPhoto: true,
-    });
-    bussinessPartnerDetailsFormik.handleSubmit();
   };
   return (
     <>
       <Loader visible={imageUploading} text="loading..." />
-      <ActionSheet
+      {/* <ActionSheet
         ref={actionSheetRef}
         closeOnTouchBackdrop={false}
         gestureEnabled={false}
@@ -156,80 +119,68 @@ const BussinessPartnerForm = ({bussinessTypeFormik, bussinessDetails}) => {
           marginBottom: 0,
           backgroundColor: '#f5f5f5',
         }}>
-        <AddBussinessPartnerSheet
-          bussinessPartnerDetails={bussinessPartnerDetails}
-          onPressCross={onPressCross}
-          edit={edit}
-          bussinessTypeFormik={bussinessPartnerDetailsFormik}
-          addBusinessPartner={AddBussinessPartner}
-        />
-      </ActionSheet>
+        <AddBussinessPartnerSheet onPressCross={onPressCross} edit={edit} />
+      </ActionSheet> */}
 
-      <ScrollView
-        keyboardDismissMode="on-drag"
-        contentContainerStyle={styles.root}>
-        <Text
-          style={{
-            fontSize: 20,
-            fontWeight: 'bold',
-            marginTop: 2,
-            paddingHorizontal: 10,
-            color: Colors.TEXT1,
-          }}>
-          Your Detail
-        </Text>
-        <View
-          style={{
-            backgroundColor: Colors.white,
-            borderWidth: 1,
-            borderRadius: 10,
-            width: '90%',
-            alignSelf: 'center',
-            padding: 10,
-            borderColor: Colors.borderColor,
-          }}>
+      <ScrollView contentContainerStyle={styles.root}>
+        <Text style={styles.title}>Your Detail</Text>
+        <View style={styles.white_box}>
           <View style={styles.image_wrap}>
             <ProfilePic
               imageUrl={profilePic}
               TakePhotofromGallery={TakePhotofromGallery}
             />
-            <Text style={styles.tittle}>Upload Your Bussiness Pic</Text>
+            <Text style={styles.title}>Upload Your Bussiness Pic</Text>
           </View>
 
-          {/* your name */}
-          <View style={styles.textInputField}>
-            {/* <Text color={Colors.TEXT1}>Your Name</Text> */}
-            <CustomTextInputFormik
-              formik={bussinessTypeFormik}
-              name={'bussinessOwnerName'}
-              label={'Your Name'}
-            />
-          </View>
+          <ControllerInputOutlined
+            rules={{
+              required: 'Name required',
+            }}
+            control={control}
+            name={'bussinessOwnerName'}
+            label={'Your Name'}
+          />
+
           {/* desingnation */}
-          <View style={styles.textInputField}>
-            {/* <Text style={{color: Colors.TEXT1}}>Desingnation</Text> */}
-            <CustomTextInputFormik
-              formik={bussinessTypeFormik}
-              name={'bussinessOwnerDessignation'}
-              label={'Desingnation'}
-            />
-          </View>
+
+          <ControllerInputOutlined
+            rules={{
+              required: 'Name required',
+            }}
+            control={control}
+            name={'bussinessOwnerDessignation'}
+            label={'Desingnation'}
+          />
+
           {/* mobile */}
-          <View style={styles.textInputField}>
-            {/* <Text style={{color: Colors.TEXT1}}>Mobile</Text> */}
-            <CustomTextInputFormik
-              formik={bussinessTypeFormik}
-              name={'bussinessOwnerPhone'}
-              label={'Mobile'}
-              keyboardType={'number-pad'}
-              maxLength={10}
-            />
-          </View>
+
+          <ControllerInputOutlined
+            rules={{
+              required: 'Mobile number required',
+              minLength: {
+                value: 10,
+                message: 'Number should be 10 digit',
+              },
+            }}
+            control={control}
+            name={'bussinessOwnerPhone'}
+            label={'Mobile'}
+            keyboardType={'number-pad'}
+            maxLength={10}
+          />
+
           {/* whatsapp */}
           <View style={styles.textInputField}>
             {/* <Text style={{color: Colors.TEXT1}}>Whatsapp</Text> */}
-            <CustomTextInputFormik
-              formik={bussinessTypeFormik}
+            <ControllerInputOutlined
+              rules={{
+                minLength: {
+                  value: 10,
+                  message: 'Number should be 10 digit',
+                },
+              }}
+              control={control}
               name={'bussinessOwnerWhatsapp'}
               label={'Whatsapp'}
               keyboardType={'number-pad'}
@@ -239,7 +190,7 @@ const BussinessPartnerForm = ({bussinessTypeFormik, bussinessDetails}) => {
         </View>
 
         {/* BUSSINESS PARTNER   */}
-        {bussinessDetails ? null : (
+        {/* {bussinessDetails ? null : (
           <View style={{flex: 1, marginHorizontal: 10}}>
             <View
               style={{
@@ -266,7 +217,7 @@ const BussinessPartnerForm = ({bussinessTypeFormik, bussinessDetails}) => {
               </TouchableOpacity>
             </View>
 
-            {bussinessPartner?.map((item, index) => (
+            {fields?.map((item, index) => (
               <View key={index} style={styles.partnerCard}>
                 <View style={{flex: 0.2}}>
                   <Image
@@ -296,71 +247,57 @@ const BussinessPartnerForm = ({bussinessTypeFormik, bussinessDetails}) => {
                   <TouchableOpacity
                     onPress={() => {
                       let temp = bussinessPartner;
-                      temp.splice(index, 1);
                       setBussinessPartner(temp);
-                      bussinessTypeFormik.setValues(prev => ({
-                        ...prev,
-                        bussinessPartner: temp,
-                      }));
                     }}>
-                    <Text style={{color: 'red'}}>Remove</Text>
+                    <Text style={styles.revove_text}>Remove</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => {
-                      console.log(item, 'item');
                       setEdit(true);
                       actionSheetRef?.current?.show();
-                      setBussinessPartnerDetails(item);
-                      bussinessPartnerDetailsFormik.setValues(prev => ({
-                        ...prev,
-                        bussinessPartnerName: item?.bussinessPartnerName,
-                        bussinessPartnerDessignation:
-                          item?.bussinessPartnerDessignation,
-                        bussinessPartnerPhoto: item?.bussinessPartnerPhoto,
-                      }));
                     }}>
-                    <Text style={{color: 'blue', fontStyle: 'italic'}}>
-                      Edit
-                    </Text>
+                    <Text style={styles.edit_text}>Edit</Text>
                   </TouchableOpacity>
                 </View>
               </View>
             ))}
 
             {bussinessPartner?.length > 0 ? null : (
-              <Text
-                style={{
-                  color: 'red',
-                  height: 100,
-                  alignSelf: 'center',
-                  fontSize: 16,
-                }}>
+              <Text style={styles.no_business_text}>
                 No Bussiness Partner Added
               </Text>
             )}
           </View>
-        )}
+        )} */}
       </ScrollView>
     </>
   );
 };
 
-export default BussinessPartnerForm;
+export default AddEditBusinessStep2;
 
 const styles = StyleSheet.create({
   root: {
     justifyContent: 'center',
     backgroundColor: Colors.transparent,
   },
+  title: {
+    fontSize: 17,
+    marginVertical: 7,
+    fontWeight: 'bold',
+    color: Colors.TEXT1,
+  },
+  white_box: {
+    backgroundColor: Colors.white,
+    borderRadius: 10,
+    padding: 10,
+    flex: 1,
+  },
   image_wrap: {
     marginVertical: 10,
     alignItems: 'center',
   },
-  tittle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: Colors.TEXT1,
-  },
+
   textInputField: {
     width: '95%',
     marginTop: 1,
@@ -376,5 +313,19 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     borderColor: Colors.borderColor,
+  },
+  revove_text: {
+    color: 'red',
+    fontStyle: 'italic',
+  },
+  edit_text: {
+    color: 'blue',
+    fontStyle: 'italic',
+  },
+  no_business_text: {
+    color: 'red',
+    height: 100,
+    alignSelf: 'center',
+    fontSize: 16,
   },
 });

@@ -22,8 +22,9 @@ import Colors from '../../constants/Colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import ViewBussinessModal from './components/modal/ViewBussinessModal';
 import {getPoliticalPartyDetails} from '../../services/userServices/political.services';
+import NavigationScreenName from '../../constants/NavigationScreenName';
 
-const MyBussiness = ({navigation, route}) => {
+const WorkProfileList = ({navigation, route}) => {
   const {picData} = route.params || {};
   const [searchQuery, setSearchQuery] = useState('');
   const PhotoData = picData;
@@ -41,7 +42,6 @@ const MyBussiness = ({navigation, route}) => {
     isFetching: getAllBusinessListFetching,
     refetch: getAllBusinessListRefetch,
     data: getAllBusinessList_Data,
-    isError: getAllBusinessList_isError,
   } = useQuery({
     queryKey: ['getAllBusinessList'],
     queryFn: () => {
@@ -69,11 +69,8 @@ const MyBussiness = ({navigation, route}) => {
   });
 
   const {
-    isLoading: getPoliticalPartyDetailsLoading,
-    isFetching: getPoliticalPartyDetailsFetching,
     refetch: getPoliticalPartyDetailsRefetch,
     data: getPoliticalPartyDetails_Data,
-    isError: getPoliticalPartyDetails_isError,
   } = useQuery({
     queryKey: ['getPoliticalPartyDetails'],
     queryFn: () =>
@@ -174,9 +171,11 @@ const MyBussiness = ({navigation, route}) => {
         source={images.background}
         style={globalStyles.backgroundImage}>
         <TopHeader
-          titile={'MyBussiness'}
+          titile={'Work Profile List'}
           add
-          onPress={() => navigation.navigate('Add Bussiness')}
+          onPress={() =>
+            navigation.navigate(NavigationScreenName.SELECT_WORK_PROFILE)
+          }
         />
         <ScrollView
           refreshControl={
@@ -336,4 +335,4 @@ const MyBussiness = ({navigation, route}) => {
   );
 };
 
-export default MyBussiness;
+export default WorkProfileList;
