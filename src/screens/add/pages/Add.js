@@ -1,7 +1,6 @@
 import {
   View,
   ToastAndroid,
-  PermissionsAndroid,
   Dimensions,
   Keyboard,
   TouchableOpacity,
@@ -16,7 +15,6 @@ import React, {useRef, useState} from 'react';
 import {addUserPost} from '../../../services/userServices/userpost.services';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import uploadFile from '../../../utils/uploadFile';
-import {launchImageLibrary} from 'react-native-image-picker';
 import {getOrgFrame} from '../../../services/userServices/frame.services';
 import {useFocusEffect} from '@react-navigation/native';
 import Loader from '../../../components/Loader';
@@ -148,6 +146,7 @@ const Add = ({navigation, route}) => {
         postLink: uplode.fileURL,
         businessDocId: businessDetails?._id,
         businessType: businessDetails?.businessType,
+        postName: uplode.path ? uplode.path : 'Post',
       });
       setImageUploading(false);
       navigation.navigate('ShareSave', {picUrl: path});

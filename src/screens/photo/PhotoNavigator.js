@@ -6,7 +6,6 @@ import SelectBussiness from './SelectBussiness';
 const Stack = createStackNavigator();
 const PhotoNavigator = ({navigation, route}) => {
   const {initialRouteName} = route.params;
-  console.log(initialRouteName, 'photonavigator');
 
   return (
     <Stack.Navigator

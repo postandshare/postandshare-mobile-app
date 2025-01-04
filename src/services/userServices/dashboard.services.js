@@ -3,7 +3,7 @@ import {authAxiosInstance} from '../AxiosInstance';
 import Config from 'react-native-config';
 
 const baseURL = Config.AUTH_URL;
-const dashboard_route = `${baseURL}/dashboard`;
+const dashboard_route = `${baseURL}/mobileDashboard`;
 
 export const getTemplatesForQuotes = params => {
   return authAxiosInstance.get(`${dashboard_route}/getTemplatesForQuotes`, {
@@ -35,9 +35,6 @@ export const getTemplatesByBusiness = params => {
 };
 export const getRelatedTemplet = params => {
   return authAxiosInstance.get(
-    `${dashboard_route}/getRelatedTemplet/${params?._id}`,
-    {
-      params,
-    },
+    `${dashboard_route}/getRelatedTemplet/${params?.photoEntityId}`,
   );
 };

@@ -71,7 +71,9 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
                 )}
                 <Image
                   onLoadEnd={() => setIsLoading(false)}
-                  source={item?.photo ? {uri: item?.photo} : item?.pic}
+                  source={
+                    item?.contentUrl ? {uri: item?.contentUrl} : item?.pic
+                  }
                   style={styles.uploadpic_container_image}
                 />
               </TouchableOpacity>

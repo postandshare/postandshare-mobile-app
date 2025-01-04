@@ -8,7 +8,7 @@ import {
   ToastAndroid,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import styles from './style';
 import DashboardTopHeader from '../../components/DashboardTopHeader';
 import CustomCarousel from '../../components/CustomCarousel';
@@ -158,7 +158,6 @@ const Home = ({navigation}) => {
     if (!isSubscribed) {
       OneSignal.promptForPushNotificationsWithUserResponse();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     getTemplatesByDateRefetch();
@@ -195,6 +194,8 @@ const Home = ({navigation}) => {
                 getTemplatesByDateRefetch();
                 getTemplatesForQuotesRefetch();
                 getTemplatesOfGreatLeadersRefetch();
+                getTrendingTemlpatesRefetch();
+                getUserProfileRefetch();
               }}
             />
           }

@@ -3,7 +3,7 @@ import {authAxiosInstance} from '../AxiosInstance';
 import Config from 'react-native-config';
 
 const baseURL = Config.AUTH_URL;
-const user_route = `${baseURL}/frame`;
+const user_route = `${baseURL}/admin/frame`;
 
 export const getOrgFrame = params => {
   return authAxiosInstance.get(`${user_route}/getOrgFrame`, {

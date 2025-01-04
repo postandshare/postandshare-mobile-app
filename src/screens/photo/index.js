@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   Image,
   ImageBackground,
@@ -21,32 +22,24 @@ const PhotoStatus = ({navigation, route}) => {
   const {picData, picDeatils, businessDetails} = route?.params ?? {};
   console.log(picData, 'photoStatus');
   const [photoData, setPhotoData] = useState(picData ?? '');
-  const {
-    isLoading: getRelatedTempletLoading,
-    isFetching: getRelatedTempletFetching,
-    refetch: getRelatedTempletRefetch,
-    data: getRelatedTemplet_Data,
-    isError: getRelatedTemplet_isError,
-  } = useQuery({
-    queryKey: ['getRelatedTemplet'],
-    queryFn: () =>
-      getRelatedTemplet({
-        _id: picDeatils?._id,
-      }),
-    onSuccess: success => {
-      // console.log(success?.data , "success in my bussiness")
-    },
-    onError: err => {
-      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
-    },
-    enabled: false,
-  });
+  const {refetch: getRelatedTempletRefetch, data: getRelatedTemplet_Data} =
+    useQuery({
+      queryKey: ['getRelatedTemplet'],
+      queryFn: () =>
+        getRelatedTemplet({
+          photoEntityId: picDeatils?._id,
+        }),
+      onSuccess: success => {},
+      onError: err => {
+        ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+      },
+      enabled: false,
+    });
 
   useFocusEffect(
     React.useCallback(() => {
       getRelatedTempletRefetch();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [navigation, getRelatedTempletRefetch]),
+    }, [getRelatedTempletRefetch]),
   );
 
   return (
@@ -79,11 +72,11 @@ const PhotoStatus = ({navigation, route}) => {
           <View style={styles.imageGrid}>
             {getRelatedTemplet_Data?.data?.list?.map((item, index) => (
               <TouchableOpacity
-                onPress={() => setPhotoData(item?.photo)}
+                onPress={() => setPhotoData(item?.contentUrl)}
                 key={index}
                 style={styles.uploadpic_container_image_view}>
                 <Image
-                  source={{uri: item?.photo}}
+                  source={{uri: item?.contentUrl}}
                   style={styles.uploadpic_container_image}
                 />
               </TouchableOpacity>

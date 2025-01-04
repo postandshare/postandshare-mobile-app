@@ -42,15 +42,30 @@ authAxiosInstance.interceptors.request.use(async req => {
       req.headers['Authorization'] = `Bearer ${data?.accessToken}`;
       return req;
     }
-    // console.log("working");
   } catch (error) {
     const {dispatch} = store;
     dispatch(setLogout());
   }
 
   req.headers['Authorization'] = `Bearer ${login_Data?.token}`;
-  // console.log(login_Data?.accessToken, 'in auth')
   return req;
 });
+
+authAxiosInstance.interceptors.response.use(
+  response => response,
+  error => {
+    let errorResponse = error?.response?.data?.message
+      ? error
+      : {
+          response: {
+            data: {
+              message: 'Something went wrong',
+            },
+          },
+        };
+
+    return Promise.reject(errorResponse);
+  },
+);
 
 export {authAxiosInstance, imageGeneratorInstance};

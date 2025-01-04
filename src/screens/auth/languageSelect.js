@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import {Button, Text} from 'react-native-paper';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import authStyle from './authStyle';
 import Colors from '../../constants/Colors';
 import {useMutation, useQuery} from '@tanstack/react-query';
@@ -18,8 +18,7 @@ import {
   getSelectedRegionalLanguages,
   upsertRegionalLanguage,
 } from '../../services/userServices/profile.services';
-import {useFocusEffect} from '@react-navigation/native';
-import {getRegionalLanguages} from '../../services/userServices/monitoring.services';
+import {getRegionalLanguages} from '../../services/userServices/misc.services';
 import NavigationScreenName from '../../constants/NavigationScreenName';
 import {useSelector} from 'react-redux';
 import TopHeader from '../../components/TopHeader';
@@ -72,7 +71,7 @@ const LanguageSelection = ({navigation}) => {
     isLoading: upsertRegionalLanguageLoading,
   } = useMutation(upsertRegionalLanguage, {
     onSuccess: success => {
-      console.log(success?.data, 'success');
+      ToastAndroid.show(success?.data?.message, ToastAndroid.SHORT);
     },
     onError: error => {
       ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
@@ -83,7 +82,7 @@ const LanguageSelection = ({navigation}) => {
     isLoading: deleteRegionalLanguageLoading,
   } = useMutation(deleteRegionalLanguage, {
     onSuccess: success => {
-      console.log(success?.data, 'success');
+      ToastAndroid.show(success?.data?.message, ToastAndroid.SHORT);
     },
     onError: error => {
       ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
@@ -92,7 +91,7 @@ const LanguageSelection = ({navigation}) => {
   useEffect(() => {
     getRegionalLanguagesRefetch();
     getSelectedRegionalLanguagesRefetch();
-  }, []);
+  }, [getRegionalLanguagesRefetch, getSelectedRegionalLanguagesRefetch]);
 
   return (
     <>

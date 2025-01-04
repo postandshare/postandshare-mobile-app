@@ -1,3 +1,5 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react/no-unstable-nested-components */
 import {
   FlatList,
   ImageBackground,
@@ -15,7 +17,7 @@ import {
   deleteNotification,
   getNotifications,
   updateReadStatus,
-} from '../../services/userServices/notification.services';
+} from '../../services/userServices/profile.services';
 import {ActivityIndicator} from 'react-native-paper';
 import Colors from '../../constants/Colors';
 import images from '../../constants/images';
@@ -30,7 +32,6 @@ const Notification = ({navigation}) => {
   });
 
   const {
-    data: getNotifications_data,
     isLoading: getNotificationsLoading,
     isFetching: getNotificationsFetching,
     refetch: getNotifications_refetch,
@@ -65,17 +66,13 @@ const Notification = ({navigation}) => {
           pages: 1,
         }));
         getNotifications_refetch();
-        // ToastAndroid.show(data?.message, ToastAndroid.LONG);
       },
       onError: err =>
         ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG),
       enabled: false,
     });
 
-  const {
-    mutate: deleteNotificationMutate,
-    isLoading: deleteNotificationLoading,
-  } = useMutation(deleteNotification, {
+  const {mutate: deleteNotificationMutate} = useMutation(deleteNotification, {
     onSuccess: success => {
       setNotificationData(prev => ({
         ...prev,
@@ -108,6 +105,7 @@ const Notification = ({navigation}) => {
     };
   }, [navigation]);
 
+  // eslint-disable-next-line react/no-unstable-nested-components
   const ListEndLoader = () => {
     return (
       <View
