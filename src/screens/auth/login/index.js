@@ -52,9 +52,7 @@ const Login = ({navigation}) => {
           Input your mobile number for account verification
         </Text>
       </ImageBackground>
-      <KeyboardAvoidingView
-        behavior="padding"
-        style={authStyle.bottom_content_root}>
+      <View style={authStyle.bottom_content_root}>
         <ControllerInput
           rules={{
             required: 'Mobile Number required',
@@ -94,7 +92,7 @@ const Login = ({navigation}) => {
         />
 
         <CustomButton title={'Send Code'} onPress={handleSubmit(onSubmit)} />
-      </KeyboardAvoidingView>
+      </View>
     </>
   );
 };

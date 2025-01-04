@@ -21,7 +21,6 @@ import {
   getTemplatesOfGreatLeaders,
   getTrendingTemlpates,
 } from '../../services/userServices/dashboard.services';
-import {useFocusEffect} from '@react-navigation/native';
 import OneSignal from 'react-native-onesignal';
 import {
   getUserProfile,
