@@ -197,11 +197,6 @@ const Home = ({navigation}) => {
               }}
             />
           }
-          contentContainerStyle={
-            {
-              // marginBottom: Sizes.hp('10%'),
-            }
-          }
           nestedScrollEnabled>
           {getTemplatesByDateLoading ||
           getTemplatesForQuotesLoading ||

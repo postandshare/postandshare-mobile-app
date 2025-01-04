@@ -62,7 +62,6 @@ const AddRemainder = ({navigation}) => {
       ),
     }),
     onSubmit: values => {
-      console.log(values, 'values');
       let body = {
         eventDate: moment(values.eventDate).format('YYYY-MM-DD'),
         eventType: values?.eventName,

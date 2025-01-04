@@ -12,7 +12,6 @@ import {Text} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 import Images from '../../../constants/images';
 import authStyle from '../authStyle';
-// import {TextInput} from 'react-native-paper';
 import NavigationScreenName from '../../../constants/NavigationScreenName';
 import {
   SendOTPonMobile,

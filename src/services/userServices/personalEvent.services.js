@@ -11,13 +11,6 @@ export const getEvents = params => {
   });
 };
 
-//getAllEvents
-export const getAllEvents = params => {
-  return authAxiosInstance.get(`${personalEvent_route}/getAllEvents`, {
-    params,
-  });
-};
-
 //getEvent
 export const getEvent = params => {
   return authAxiosInstance.get(
@@ -73,4 +66,10 @@ export const deleteEvent = body => {
   return authAxiosInstance.delete(
     `${personalEvent_route}/deleteEvent/${body?.eventDocId}`,
   );
+};
+
+export const getTemplets = params => {
+  return authAxiosInstance.get(`${personalEvent_route}/getTemplets`, {
+    params,
+  });
 };

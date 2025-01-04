@@ -24,7 +24,6 @@ const AddBussinessPartnerSheet = ({
   const [imageUploading, setImageUploading] = useState(false);
   const {control, handleSubmit, reset, setValue} = useForm({
     defaultValues: {
-      photo: '',
       bussinessPartnerName: '',
       bussinessPartnerDessignation: '',
       profilePic: '',
@@ -33,7 +32,6 @@ const AddBussinessPartnerSheet = ({
   const onSubmit = data => {
     onPressAddPartner(data);
     reset({
-      photo: '',
       bussinessPartnerName: '',
       bussinessPartnerDessignation: '',
       profilePic: '',

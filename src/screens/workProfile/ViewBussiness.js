@@ -63,19 +63,16 @@ const ViewBussiness = ({route, navigation}) => {
     }),
     onSubmit: formValues => {
       actionSheetRef?.current?.hide();
-      console.log(formValues, 'in bussiness PartnerDetailsFormik');
       let temp = {
         name: formValues?.bussinessPartnerName,
         designation: formValues?.bussinessPartnerDessignation,
         photo: formValues?.bussinessPartnerPhoto,
         businessDocId: businessId,
       };
-      // setBussinessPartner(prev => [...prev, formValues]);
       if (
         bussinessPartnerDetails &&
         Object?.keys(bussinessPartnerDetails).length > 0
       ) {
-        console.log('first');
         temp.businessPartnerDocId = bussinessPartnerDetails?._id;
         updateBusinessPartnerMutate(temp);
       } else {
@@ -98,7 +95,6 @@ const ViewBussiness = ({route, navigation}) => {
       }),
     onSuccess: success => {
       setprofilePic(success?.data?.obj?.ownerPhoto);
-      //console.log(success?.data , "success in my bussiness")
     },
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);

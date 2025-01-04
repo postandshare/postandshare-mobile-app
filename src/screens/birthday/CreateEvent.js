@@ -20,10 +20,6 @@ import {Tray} from './BirthdayRemainder';
 import Remainder from './components/Remainder';
 import CustomButton from '../../components/CustomButton';
 import {useMutation, useQuery} from '@tanstack/react-query';
-import {
-  getTemplets,
-  update,
-} from '../../services/userServices/eventTemplate.services';
 import {useFocusEffect} from '@react-navigation/native';
 import SMSTemplate from './components/SMSTemplate';
 import Feather from 'react-native-vector-icons/Feather';
@@ -34,6 +30,7 @@ import {
   addTemplet,
   getEvent,
   getReminder,
+  getTemplets,
   updateEvent,
 } from '../../services/userServices/personalEvent.services';
 import moment from 'moment';

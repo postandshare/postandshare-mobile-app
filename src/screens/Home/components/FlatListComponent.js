@@ -51,12 +51,6 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
                   })
                 }
                 style={styles.uploadpic_container_image_view}>
-                {/* <View style={styles.uploadpic_container_dateview}>
-                  <Text style={styles.uploadpic_container_date}>
-                    {moment(item?.date).format('MMM Do')}
-                  </Text>
-                </View> */}
-
                 {loading && (
                   <ActivityIndicator
                     style={{
@@ -78,10 +72,7 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
                 />
               </TouchableOpacity>
               <View style={styles.uploadpic_container_eventview}>
-                <Text
-                  // numberOfLines={1}
-                  // ellipsizeMode="tail"
-                  style={styles.uploadpic_container_eventname}>
+                <Text style={styles.uploadpic_container_eventname}>
                   {item?.name ?? null}
                 </Text>
                 <Text
@@ -90,22 +81,8 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
                     color: Colors.TEXT1,
                     fontWeight: '400',
                   }}>
-                  {/* {moment().diff(moment(item?.createdOn), 'days') < 1
-                    ? `${moment().diff(
-                        moment(item?.createdOn),
-                        'hours',
-                      )} hours ago`
-                    : `${moment().diff(
-                        moment(item?.createdOn),
-                        'days',
-                      )} days ago`} */}
                   {moment(item?.createdOn).format('MMM Do')}
                 </Text>
-                {/* <ScrollingText
-                  style={styles.uploadpic_container_eventname}
-                  cardWidth={50}>
-                  {item?.name ?? null}
-                </ScrollingText> */}
               </View>
             </View>
           )}

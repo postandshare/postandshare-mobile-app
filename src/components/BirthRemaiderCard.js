@@ -6,7 +6,7 @@ import Colors from '../constants/Colors';
 import Sizes from '../constants/Sizes';
 import moment from 'moment';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Text} from 'react-native-paper';
+import {IconButton, Text} from 'react-native-paper';
 
 const Colors_Card = [
   '#FFC0CB',
@@ -23,21 +23,6 @@ const Colors_Card = [
   '#800000',
 ];
 
-const LightColors_Card = [
-  '#FFC0CB20',
-  '#FFA07A20',
-  '#FFD70020',
-  '#00FF0020',
-  '#00FFFF20',
-  '#0000FF20',
-  '#8A2BE220',
-  '#FF149320',
-  '#FF634720',
-  '#FF450020',
-  '#FF000020',
-  '#80000020',
-];
-
 const BirthRemaiderCard = ({
   item,
   onPress,
@@ -49,10 +34,7 @@ const BirthRemaiderCard = ({
     Colors_Card[Math.floor(Math.random() * Colors_Card.length)];
 
   return (
-    <TouchableOpacity
-      style={styles.item_container}
-      onPress={onPress}
-      onLongPress={handleDeleteEvent}>
+    <TouchableOpacity style={styles.item_container} onPress={onPress}>
       <View style={styles.item_image_container}>
         <Image
           source={{uri: item?.personDetails[0]?.profilePic}}
@@ -124,6 +106,13 @@ const BirthRemaiderCard = ({
             )}
           </View>
         </View>
+
+        <IconButton
+          icon="delete"
+          iconColor="#FF0000"
+          size={20}
+          onPress={handleDeleteEvent}
+        />
       </View>
     </TouchableOpacity>
   );

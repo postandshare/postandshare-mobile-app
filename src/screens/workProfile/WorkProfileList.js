@@ -56,7 +56,6 @@ const WorkProfileList = ({navigation, route}) => {
     },
     onSuccess: success => {
       if (showBussiness?.show) {
-        console.log(success?.data, 'success');
         setDetailedBussiness(success?.data?.obj);
       } else {
         setBussinessList(success?.data?.list);
@@ -78,7 +77,6 @@ const WorkProfileList = ({navigation, route}) => {
         politicalBusinessDocId: showBussiness?.businessId,
       }),
     onSuccess: success => {
-      console.log(success?.data, 'success');
       setDetailedBussiness(success?.data?.obj);
     },
     onError: err => {

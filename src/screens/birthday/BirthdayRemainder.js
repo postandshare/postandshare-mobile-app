@@ -69,8 +69,6 @@ const BirthdayRemainder = ({navigation}) => {
     isLoading: getEventsLoading,
     isFetching: getEventsFetching,
     refetch: getEventsRefetch,
-    data: getEvents_Data,
-    isError: getEvents_isError,
   } = useQuery({
     queryKey: ['getEvents'],
     queryFn: () =>
@@ -78,7 +76,6 @@ const BirthdayRemainder = ({navigation}) => {
         ...(selectedFilter === 'All' ? {} : {eventType: selectedFilter}),
       }),
     onSuccess: success => {
-      // console.log(success?.data, 'success');
       setEvents(prev => ({
         ...prev,
         list: success?.data?.data,
@@ -273,7 +270,7 @@ const BirthdayRemainder = ({navigation}) => {
                     handleDeleteEvent={() => {
                       Alert.alert(
                         'Post and Share App',
-                        'Are you sure want to Send WhatsApp Message?',
+                        'Are you sure want to delete?',
                         [
                           {
                             text: 'Cancel',

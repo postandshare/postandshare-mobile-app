@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   Image,
   ImageBackground,
@@ -37,7 +38,7 @@ const MonthPhotos = ({navigation, route}) => {
               </View>
             )}
 
-            {data.map((item, index) => (
+            {data?.map((item, index) => (
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate(NavigationScreenName.PHOTO_NAVIGATOR, {
@@ -58,7 +59,7 @@ const MonthPhotos = ({navigation, route}) => {
                 )}
                 <Image
                   onLoadEnd={() => setLoading(false)}
-                  source={{uri: item.photo}}
+                  source={{uri: item.contentUrl}}
                   style={styles.image}
                   key={index}
                 />

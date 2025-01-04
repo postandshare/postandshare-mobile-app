@@ -35,13 +35,10 @@ const SelectBussiness = ({route, navigation}) => {
     isFetching: getAllBusinessListFetching,
     refetch: getAllBusinessListRefetch,
     data: getAllBusinessList_Data,
-    isError: getAllBusinessList_isError,
   } = useQuery({
     queryKey: ['getAllBusinessList'],
     queryFn: () => getAllBusinessList(),
-    onSuccess: success => {
-      // console.log(success?.data , "success in my bussiness")
-    },
+    onSuccess: success => {},
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
@@ -53,7 +50,6 @@ const SelectBussiness = ({route, navigation}) => {
     isFetching: getUserProfileFetching,
     refetch: getUserProfileRefetch,
     data: getUserProfile_Data,
-    isError: getUserProfile_isError,
   } = useQuery({
     queryKey: ['getUserProfile'],
     queryFn: () => getUserProfile(),
