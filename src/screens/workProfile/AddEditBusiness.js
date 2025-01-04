@@ -1,22 +1,17 @@
 /* eslint-disable react-native/no-inline-styles */
 import {Alert, ScrollView, StyleSheet, ToastAndroid, View} from 'react-native';
 import React, {useEffect} from 'react';
-import {Text} from 'react-native-paper';
 import {useFormik} from 'formik';
 import * as yup from 'yup';
 import {useMutation} from '@tanstack/react-query';
 import {useNavigation} from '@react-navigation/native';
-import BussinessProfileForm from './components/bussinessFormComponents/BussinessProfileForm';
 import BussinessPartnerForm from './AddEditBusinessStep2';
 import {
   addBusiness,
   updateBusiness,
 } from '../../services/userServices/bussiness.servies';
 import NavigationScreenName from '../../constants/NavigationScreenName';
-import Loader from '../../components/Loader';
 import CustomButton from '../../components/CustomButton';
-
-import TopHeader from '../../components/TopHeader';
 import Sizes from '../../constants/Sizes';
 import {AddEditBusinessStep1Screen} from './Index';
 

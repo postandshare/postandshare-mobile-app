@@ -15,7 +15,7 @@ import Colors from '../../constants/Colors';
 import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
 import {useQuery} from '@tanstack/react-query';
-import {getRelatedTemplet} from '../../services/userServices/dashboard.services';
+import {getRelatedTemplet} from '../../services/userServices/mobileDashboard.services';
 import {useFocusEffect} from '@react-navigation/native';
 
 const PhotoStatus = ({navigation, route}) => {

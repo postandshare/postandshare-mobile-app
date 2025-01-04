@@ -20,13 +20,11 @@ import {
   getTemplatesForQuotes,
   getTemplatesOfGreatLeaders,
   getTrendingTemlpates,
-} from '../../services/userServices/dashboard.services';
+} from '../../services/userServices/mobileDashboard.services';
 import OneSignal from 'react-native-onesignal';
-import {
-  getUserProfile,
-  saveAppNotificationToken,
-} from '../../services/userServices/profile.services';
+import {saveAppNotificationToken} from '../../services/userServices/profile.services';
 import {useDispatch} from 'react-redux';
+import {getUserProfile} from '../../services/authServices/auth.services';
 import {setUserDetails} from '../../services/reducer/CommonReducer';
 import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';

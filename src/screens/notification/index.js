@@ -140,7 +140,6 @@ const Notification = ({navigation}) => {
             renderItem={({item}) => (
               <NotificationCard
                 item={item}
-                scrollViewRef={scrollViewRef}
                 updateReadStatusMutate={updateReadStatusMutate}
                 deleteNotificationMutate={deleteNotificationMutate}
               />

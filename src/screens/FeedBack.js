@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   Alert,
   ImageBackground,
@@ -196,6 +197,7 @@ const FeedBack = ({navigation}) => {
             <Button
               mode="contained"
               onPress={handleRatingSubmitted}
+              loading={upsertRatingBySelfLoading}
               style={{
                 backgroundColor: Colors.PRIMARY,
                 width: '90%',

@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import Animated, {
-  useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -16,7 +15,6 @@ import styles from '../style';
 const NotificationCard = ({
   item,
   updateReadStatusMutate,
-  scrollViewRef,
   deleteNotificationMutate,
 }) => {
   const [visible, setVisible] = useState(false);
@@ -43,19 +41,7 @@ const NotificationCard = ({
     };
   });
   const ITEM_HEIGHT = 100;
-  const panGesture = useAnimatedGestureHandler({
-    onActive: event => {
-      if (Math.abs(event.translationX) < 100 && event.translationX < 4) {
-        translateX.value = event.translationX;
-      }
-    },
-    onEnd: event => {
-      if (Math.abs(event.translationX) < 90) {
-        translateX.value = withTiming(0);
-        opacity.value = withTiming(0);
-      }
-    },
-  });
+
   const navigation = useNavigation();
 
   const handlePress = () => {
@@ -67,7 +53,6 @@ const NotificationCard = ({
         read: true,
       });
     }
-    console.log('press');
   };
   return (
     <>
@@ -81,7 +66,9 @@ const NotificationCard = ({
           <Dialog.Actions>
             <Button
               onPress={() => {
-                deleteNotificationMutate(item?._id);
+                deleteNotificationMutate({
+                  notificationDocId: item?._id,
+                });
                 hideDialog();
               }}>
               Delete

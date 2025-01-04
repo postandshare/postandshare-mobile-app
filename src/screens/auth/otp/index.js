@@ -22,10 +22,9 @@ import {useMutation, useQuery} from '@tanstack/react-query';
 import {useDispatch, useSelector} from 'react-redux';
 import {setLoginState} from '../../../services/reducer/AuthSlice';
 import Loader from '../../../components/Loader';
-import {getUserProfile} from '../../../services/userServices/profile.services';
+import {getUserProfile} from '../../../services/authServices/auth.services';
 import {setProfileUpdated} from '../../../services/reducer/CommonReducer';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Colors from '../../../constants/Colors';
 
 export let newOtp = 0;
 

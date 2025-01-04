@@ -9,7 +9,8 @@ import {
 import {Text} from 'react-native-paper';
 import React, {useCallback} from 'react';
 import styles from './style';
-import {getUserProfile} from '../../services/userServices/profile.services';
+import {getUserProfile} from '../../services/authServices/auth.services';
+
 import {useQuery} from '@tanstack/react-query';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import Colors from '../../constants/Colors';

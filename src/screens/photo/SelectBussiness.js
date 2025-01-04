@@ -16,7 +16,8 @@ import {useQuery} from '@tanstack/react-query';
 import {getAllBusinessList} from '../../services/userServices/bussiness.servies';
 import {useFocusEffect} from '@react-navigation/native';
 import NavigationScreenName from '../../constants/NavigationScreenName';
-import {getUserProfile} from '../../services/userServices/profile.services';
+import {getUserProfile} from '../../services/authServices/auth.services';
+
 import globalStyles from '../../styles/globalStyles';
 import CustomButton from '../../components/CustomButton';
 import SearchSortFilter from '../../components/SearchSortFilter';

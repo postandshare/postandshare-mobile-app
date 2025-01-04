@@ -45,7 +45,7 @@ import FrameSelection from '../components/FrameSelection';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DragDrop from '../../../components/DragDrop';
 import CustomColorChange from '../components/CustomColorChange';
-import {getUserProfile} from '../../../services/userServices/profile.services';
+import {getUserProfile} from '../../../services/authServices/auth.services';
 import images from '../../../constants/images';
 import globalStyles from '../../../styles/globalStyles';
 import TopHeader from '../../../components/TopHeader';
