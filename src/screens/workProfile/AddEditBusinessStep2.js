@@ -12,24 +12,27 @@ import React, {useRef, useState} from 'react';
 import ProfilePic from '../../components/ProfilePic';
 import uploadFile from '../../utils/uploadFile';
 import ImageCropPicker from 'react-native-image-crop-picker';
-
 import ActionSheet from 'react-native-actions-sheet';
 import AddBussinessPartnerSheet from './components/actionsheets/AddBussinessPartnerSheet';
 import Colors from '../../constants/Colors';
 import images from '../../constants/images';
 import {useMutation} from '@tanstack/react-query';
-import {addBusinessPartner} from '../../services/userServices/bussiness.servies';
+import {
+  addBusiness,
+  addBusinessPartner,
+} from '../../services/userServices/bussiness.servies';
 import Loader from '../../components/Loader';
 import {useForm} from 'react-hook-form';
 import ControllerInputOutlined from '../../components/ControllerInputOutlined';
 import Sizes from '../../constants/Sizes';
 import CustomButton from '../../components/CustomButton';
+import NavigationScreenName from '../../constants/NavigationScreenName';
 
 const AddEditBusinessStep2 = ({navigation, route}) => {
-  const params = route?.params;
+  const params = route?.params?.data || {};
   console.log(params, 'in params');
   const [profilePic, setprofilePic] = useState('');
-  const [bussinessPartner, setBussinessPartner] = useState([]);
+  const [bussinessPartner, setBussinessPartner] = useState(null);
   const {control, handleSubmit} = useForm({
     defaultValues: {
       bussinessOwnerName: '',
@@ -40,7 +43,38 @@ const AddEditBusinessStep2 = ({navigation, route}) => {
     },
   });
 
-  const onSubmit = data => {};
+  const onSubmit = data => {
+    let body = {
+      businessName: params?.bussinessName || '',
+      ownerName: data?.bussinessOwnerName || '',
+      ownerPhoto: data?.bussinessOwnerPhoto || '',
+      designation: data?.bussinessOwnerDessignation || '',
+      mobileNumber: data?.bussinessOwnerPhone || '',
+      whatsappNumber: data?.bussinessOwnerWhatsapp || '',
+      logo: params?.logo || '',
+      category: params?.bussinessCategory || '',
+      subCategory: params?.bussinessSubCategory || '',
+      categoryDocId: params?.categoryDocId || '',
+      subCategoryDocId: params?.subCategoryDocId || '',
+      description: params?.bussinessDetail || '',
+      email: params?.bussinessEmail || '',
+      website: params?.businessWebsite || '',
+      address: params?.bussinessAddress
+        ? {
+            address: params?.bussinessAddress || '',
+            pinCode: params?.bussinessPinCode || '',
+            tehsil: params?.bussinessTehsil || '',
+            dist: params?.bussinessDistrict || '',
+            state: params?.bussinessState || '',
+          }
+        : null,
+      ...(bussinessPartner && {
+        businessPartner: bussinessPartner || [],
+      }),
+    };
+    console.log(body, 'in submit');
+    addBusinesslMutate(body);
+  };
 
   const {
     mutate: addBusinessPartnerlMutate,
@@ -53,6 +87,31 @@ const AddEditBusinessStep2 = ({navigation, route}) => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
   });
+
+  const {mutate: addBusinesslMutate, isLoading: addBusinesslLoading} =
+    useMutation(addBusiness, {
+      onSuccess: ({data}) => {
+        ToastAndroid.show(data?.message, ToastAndroid.LONG);
+        navigation.replace(NavigationScreenName?.WORK_PROFILE_LIST);
+      },
+      onError: err => {
+        console.log(err?.response?.data?.message, 'err');
+        ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+      },
+    });
+  // const {mutate: updateBusinessMutate} = useMutation(updateBusiness, {
+  //   onSuccess: ({data}) => {
+  //     ToastAndroid.show(data?.message, ToastAndroid.LONG);
+  //     bussinessTypeFormik?.resetForm();
+  //     bussinessProfileFormik?.resetForm();
+  //     bussinessPartnerFormik?.resetForm();
+  //     navigation.replace(NavigationScreenName?.MY_BUSSINESS);
+  //   },
+  //   onError: err => {
+  //     console.log(err?.response?.data?.message, 'err');
+  //     ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+  //   },
+  // });
 
   const [imageUploading, setImageUploading] = useState(false);
 
@@ -205,8 +264,8 @@ const AddEditBusinessStep2 = ({navigation, route}) => {
               <View style={{flex: 0.2}}>
                 <Image
                   source={
-                    item.bussinessPartnerPhoto
-                      ? {uri: item.bussinessPartnerPhoto}
+                    item.profilePic
+                      ? {uri: item.profilePic}
                       : images.profilePlaceholder
                   }
                   style={{width: 50, height: 50, borderRadius: 50}}
@@ -242,7 +301,11 @@ const AddEditBusinessStep2 = ({navigation, route}) => {
         {/* submit button */}
       </View>
       <View style={styles.submit_button_wrap}>
-        <CustomButton title={'Submit'} onPress={handleSubmit(onSubmit)} />
+        <CustomButton
+          title={'Submit'}
+          onPress={handleSubmit(onSubmit)}
+          loading={addBusinesslLoading}
+        />
       </View>
     </>
   );

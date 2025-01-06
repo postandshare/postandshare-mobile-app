@@ -5,7 +5,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {scale} from 'react-native-size-matters';
 import Sizes from '../constants/Sizes';
 import Colors from '../constants/Colors';
-import {Text} from 'react-native-paper';
+import {ActivityIndicator, Text} from 'react-native-paper';
 
 const CustomButton = ({
   secondary = false,
@@ -17,6 +17,7 @@ const CustomButton = ({
   customStyle,
   disabled = false,
   titleColor = '#fff',
+  loading = false,
 }) => {
   return (
     <TouchableOpacity
@@ -37,9 +38,11 @@ const CustomButton = ({
         justifyContent: 'center',
         borderRadius: Sizes.hp('2%'),
         marginTop: marginTop,
-
+        flexDirection: 'row',
+        gap: 5,
         ...customStyle,
       }}>
+      {loading && <ActivityIndicator size={'small'} color={titleColor} />}
       <Text
         style={{
           color: titleColor ?? '#fff',

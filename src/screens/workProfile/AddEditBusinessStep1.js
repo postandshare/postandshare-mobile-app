@@ -13,22 +13,21 @@ import Loader from '../../components/Loader';
 import uploadFile from '../../utils/uploadFile';
 import globalStyles from '../../styles/globalStyles';
 import Colors from '../../constants/Colors';
-import {useMutation, useQuery} from '@tanstack/react-query';
-import {
-  getBusinessCategory,
-  getBusinessSubCategory,
-} from '../../services/userServices/common.services';
+import {useQuery} from '@tanstack/react-query';
 import {Controller, useForm} from 'react-hook-form';
 import CustomButton from '../../components/CustomButton';
 import ControllerInputOutlined from '../../components/ControllerInputOutlined';
 import Sizes from '../../constants/Sizes';
 import NavigationScreenName from '../../constants/NavigationScreenName';
 import {TakePhotofromGalleryWithCrop} from '../../utils/heplers';
+import {getCategory} from '../../services/userServices/category.service';
+
 const AddEditBusinessStep1 = ({navigation}) => {
-  console.log('in render');
   const {control, handleSubmit, setValue} = useForm({
     defaultValues: {
       logo: '',
+      bussinessCategory: '',
+      bussinessSubCategory: '',
       bussinessCategoryDocId: '',
       bussinessSubCategoryDocId: '',
       bussinessName: '',
@@ -44,6 +43,7 @@ const AddEditBusinessStep1 = ({navigation}) => {
   });
   const [profilePic, setprofilePic] = useState('');
   const [imageUploading, setImageUploading] = useState(false);
+  const [bussinessSubCategoryList, setBussinessSubCategoryList] = useState([]);
   const uploadePhoto = async (path, mime) => {
     try {
       setImageUploading(true);
@@ -69,32 +69,24 @@ const AddEditBusinessStep1 = ({navigation}) => {
     navigation.navigate(NavigationScreenName.ADD_EDIT_BUSINESS_STEP2, {data});
   };
   const {
-    isFetching: getBusinessCategoryFetching,
-    refetch: getBusinessCategoryRefetch,
-    data: getBusinessCategory_Data,
+    isFetching: getCategoryFetching,
+    refetch: getCategoryRefetch,
+    data: getCategory_Data,
   } = useQuery({
-    queryKey: ['getBusinessCategory'],
-    queryFn: getBusinessCategory,
+    queryKey: ['getCategory'],
+    queryFn: () =>
+      getCategory({
+        categoryGroupName: 'Business',
+      }),
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
     enabled: false,
   });
 
-  const {
-    data: getBusinessSubCategory_Data,
-    mutate: getBusinessSubCategoryMutate,
-  } = useMutation({
-    mutationKey: ['getBusinessSubCategory'],
-    mutationFn: getBusinessSubCategory,
-    onSuccess: async success => {},
-    onError: err => {
-      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
-    },
-  });
   useEffect(() => {
-    getBusinessCategoryRefetch();
-  }, [getBusinessCategoryRefetch]);
+    getCategoryRefetch();
+  }, [getCategoryRefetch]);
 
   return (
     <>
@@ -103,9 +95,7 @@ const AddEditBusinessStep1 = ({navigation}) => {
         <ScrollView
           contentContainerStyle={styles.contentContainerStyle}
           showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl refreshing={getBusinessCategoryFetching} />
-          }>
+          refreshControl={<RefreshControl refreshing={getCategoryFetching} />}>
           <Text style={styles.title}>Bussiness Type</Text>
           <View style={styles.white_box}>
             {/* logo of the add bussiness */}
@@ -129,18 +119,22 @@ const AddEditBusinessStep1 = ({navigation}) => {
                   <>
                     <Dropdown
                       width="100%"
-                      data={getBusinessCategory_Data?.data?.list?.map(item => ({
-                        label: item?.categoryName,
+                      data={getCategory_Data?.data?.list?.map(item => ({
+                        label: item?.category,
                         value: item?._id,
                       }))}
                       value={value}
                       label="Select Bussiness Category *"
                       onChangeValue={res => {
                         onChange(res);
-                        setValue('bussinessSubCategoryDocId', '');
-                        getBusinessSubCategoryMutate({
-                          categoryDocId: res,
-                        });
+                        setValue('bussinessSubCategoryDocId', res);
+                        setValue('bussinessCategory', res);
+                        setValue('bussinessSubCategory', '');
+                        setBussinessSubCategoryList([
+                          getCategory_Data?.data?.list?.find(
+                            item => item?._id === res,
+                          )?.subCategory,
+                        ]);
                       }}
                     />
                     {!!error && (
@@ -156,20 +150,14 @@ const AddEditBusinessStep1 = ({navigation}) => {
             <View style={styles.box}>
               <Controller
                 control={control}
-                name="bussinessSubCategoryDocId"
-                rules={{
-                  required: 'Business sub-category required',
-                }}
+                name="bussinessSubCategory"
                 render={({field: {value, onChange}, fieldState: {error}}) => (
                   <>
                     <Dropdown
-                      data={getBusinessSubCategory_Data?.data?.list?.map(
-                        item => ({
-                          label: item?.subCategoryName,
-                          value: item?.subCategoryName,
-                          item: item,
-                        }),
-                      )}
+                      data={(bussinessSubCategoryList || []).map(item => ({
+                        label: item,
+                        value: item,
+                      }))}
                       value={value}
                       label="Select Bussiness Sub-Category *"
                       onChangeValue={res => onChange(res)}
@@ -243,6 +231,14 @@ const AddEditBusinessStep1 = ({navigation}) => {
               />
               <ControllerInputOutlined
                 rules={{
+                  required: 'District required',
+                }}
+                control={control}
+                name={'bussinessDistrict'}
+                label={'Bussiness District *'}
+              />
+              <ControllerInputOutlined
+                rules={{
                   required: 'Pin code required',
                   minLength: {
                     value: 6,
@@ -254,6 +250,14 @@ const AddEditBusinessStep1 = ({navigation}) => {
                 label={'Bussiness PinCode *'}
                 maxLength={6}
                 keyboardType="number-pad"
+              />
+              <ControllerInputOutlined
+                rules={{
+                  required: 'State required',
+                }}
+                control={control}
+                name={'bussinessState'}
+                label={'Bussiness State *'}
               />
             </View>
             <CustomButton title={'Next'} onPress={handleSubmit(onSubmit)} />
