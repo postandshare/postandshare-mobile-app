@@ -16,15 +16,11 @@ import ImageCropPicker from 'react-native-image-crop-picker';
 import {Text} from 'react-native-paper';
 import ControllerInputOutlined from '../../../../components/ControllerInputOutlined';
 import {Controller, useForm} from 'react-hook-form';
-const AddBussinessPartnerSheet = ({
-  onPressAddPartner,
-  onPressCross,
-  edit = false,
-}) => {
+import Sizes from '../../../../constants/Sizes';
+const AddBussinessPartnerSheet = ({onPressAddPartner, onPressCross}) => {
   const [imageUploading, setImageUploading] = useState(false);
   const {control, handleSubmit, reset, setValue} = useForm({
     defaultValues: {
-      photo: '',
       bussinessPartnerName: '',
       bussinessPartnerDessignation: '',
       profilePic: '',
@@ -38,10 +34,10 @@ const AddBussinessPartnerSheet = ({
       bussinessPartnerDessignation: '',
       profilePic: '',
     });
+    onPressCross();
   };
   const uploadePhoto = async (path, mime) => {
     try {
-      console.log(path, 'in uploade photo');
       setImageUploading(true);
       const uplode = await uploadFile({
         filePath: {path: path},
@@ -130,7 +126,7 @@ const AddBussinessPartnerSheet = ({
         <Controller
           control={control}
           name="profilePic"
-          render={({field: {value}}) => (
+          render={({field: {value}, fieldState: {error}}) => (
             <>
               <TouchableOpacity
                 style={styles.photoInput}
@@ -146,18 +142,15 @@ const AddBussinessPartnerSheet = ({
                   <Text style={{color: Colors.TEXT1}}>Add Photo</Text>
                 )}
               </TouchableOpacity>
+              {!!error && (
+                <Text style={globalStyles.error_text}>{error.message}</Text>
+              )}
             </>
           )}
         />
 
         <CustomButton
-          title={
-            imageUploading
-              ? 'Uploading...'
-              : edit
-              ? 'Update Partner'
-              : 'Add Partner'
-          }
+          title={imageUploading ? 'Uploading...' : 'Add Partner'}
           onPress={handleSubmit(onSubmit)}
         />
       </View>
@@ -169,8 +162,7 @@ export default AddBussinessPartnerSheet;
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
-    marginBottom: 10,
+    paddingHorizontal: Sizes.wp('5%'),
   },
 
   tittle: {

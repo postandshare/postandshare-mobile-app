@@ -209,7 +209,6 @@ const AddEditBusinessStep1 = ({navigation}) => {
               />
               <ControllerInputOutlined
                 rules={{
-                  required: 'Business detail required',
                   pattern: {
                     value: RegExp(
                       /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
