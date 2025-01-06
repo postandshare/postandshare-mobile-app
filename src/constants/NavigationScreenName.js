@@ -18,8 +18,6 @@ export default {
   CHANGE_PASSWORD: 'Change-Password',
   VERIFY_OTP: 'VerifyOTP',
   HOME: 'Home',
-  VIDEO: 'Video',
-  CUSTOM: 'Custom',
   PROFILE: 'Profile',
   ADD: 'Add',
   PHOTOS_STATUS: 'PhotoStatus',
