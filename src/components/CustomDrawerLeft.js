@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   Alert,
   Image,
@@ -23,7 +24,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setLoginState} from '../services/reducer/AuthSlice';
 import {setProfileUpdated} from '../services/reducer/CommonReducer';
 import images from '../constants/images';
-import {useNavigation} from '@react-navigation/native';
 
 const Item = ({icon, text, path, onPress = () => {}, isActive}) => (
   <TouchableOpacity
@@ -38,14 +38,9 @@ const Item = ({icon, text, path, onPress = () => {}, isActive}) => (
 );
 
 const UserProfileCard = ({profileData}) => {
-  const navigation = useNavigation();
   return (
     <>
-      <View
-        // onPress={() => {
-        //   navigation.navigate('ProfileNavigator');
-        // }}
-        style={styles.userProfileCard}>
+      <View style={styles.userProfileCard}>
         <View style={styles.image_wrap}>
           <Image
             source={

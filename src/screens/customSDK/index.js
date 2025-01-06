@@ -738,7 +738,6 @@ const CustomSDK = ({route, navigation}) => {
                           style={{
                             height: 50,
                             width: 50,
-                            // left: 50,
                           }}
                         />
                       </DragDrop>
@@ -1121,18 +1120,7 @@ const CustomSDK = ({route, navigation}) => {
                           res
                         />
                       </>
-                    ) : // : showFrame ? (
-                    //   <Image
-                    //     source={images.Insta_Freame}
-                    //     style={{
-                    //       height: 315,
-                    //       width: '100%',
-                    //       alignSelf: 'center',
-                    //       zIndex: -1
-                    //     }}
-                    //   />
-                    // )
-                    null}
+                    ) : null}
                   </View>
                   {showCross ? (
                     <TouchableOpacity

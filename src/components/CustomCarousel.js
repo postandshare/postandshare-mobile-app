@@ -8,7 +8,6 @@ import {
 import React from 'react';
 import Carousel from 'react-native-reanimated-carousel';
 import Sizes from '../constants/Sizes';
-import {uploadedImages} from '../constants/images';
 import NavigationScreenName from '../constants/NavigationScreenName';
 
 const width = Dimensions.get('window').width;
@@ -21,7 +20,7 @@ const CustomCarousel = ({data, navigation}) => {
         width={Sizes.wp('98%')}
         height={width / 2}
         autoPlay={true}
-        data={data ?? uploadedImages}
+        data={data ?? []}
         scrollAnimationDuration={1000}
         panGestureHandlerProps={{
           activeOffsetX: [-10, 10],

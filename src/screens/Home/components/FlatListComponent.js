@@ -3,7 +3,6 @@ import {Image, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import styles from '../style';
 import {FlatList} from 'react-native-actions-sheet';
-import {uploadedImages} from '../../../constants/images';
 import NavigationScreenName from '../../../constants/NavigationScreenName';
 import moment from 'moment';
 import Colors from '../../../constants/Colors';
@@ -38,7 +37,7 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
-          data={data}
+          data={data ?? []}
           renderItem={({item}) => (
             <View
               style={{
@@ -87,7 +86,6 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
             </View>
           )}
           keyExtractor={index => index._id}
-          extraData={uploadedImages}
         />
       </View>
     </>

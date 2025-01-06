@@ -1,15 +1,11 @@
 import {StyleSheet} from 'react-native';
 import Colors from '../../constants/Colors';
-import Sizes from '../../constants/Sizes';
 
 const styles = StyleSheet.create({
   root: {
-    // flexGrow: 1,
     backgroundColor: Colors.transparent,
   },
   chooseImageContainer: {
-    // height: Sizes.height * 0.4,
-    // width: Sizes.width * 0.9,
     height: 375,
     width: 375,
     backgroundColor: Colors.white,
@@ -48,14 +44,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    // borderWidth: 1,
-    // borderColor: Colors.TEXT1,
     margin: 10,
   },
   frame1: {
     height: 50,
     width: 50,
-    // padding: 10,
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
