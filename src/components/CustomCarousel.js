@@ -35,8 +35,8 @@ const CustomCarousel = ({data, navigation}) => {
             }
             style={styles.carousel_Container}>
             <ImageBackground
-              source={item?.contentUrl ? {uri: item?.contentUrl} : item?.pic}
-              resizeMode="contain"
+              source={item?.bannerUrl ? {uri: item?.bannerUrl} : item?.pic}
+              resizeMode="cover"
               style={[styles.image, {overflow: 'hidden'}]}>
               {/* <Text style={styles.text}>Inside</Text> */}
             </ImageBackground>

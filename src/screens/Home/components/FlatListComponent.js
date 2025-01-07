@@ -10,7 +10,7 @@ import {ActivityIndicator} from 'react-native-paper';
 import {Text} from 'react-native-paper';
 
 const FlatListComponent = ({navigation, data, byLabel}) => {
-  const [loading, setIsLoading] = React.useState(false);
+  const [loading, setIsLoading] = React.useState(true);
   return (
     <>
       {/* container for showing the uploaded photo */}
@@ -36,6 +36,7 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
         {/* flatlist for rendering the photos */}
         <FlatList
           horizontal
+          scrollEnabled={data?.length > 3}
           showsHorizontalScrollIndicator={false}
           data={data ?? []}
           renderItem={({item}) => (
@@ -46,6 +47,7 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate(NavigationScreenName.PHOTO_NAVIGATOR, {
+                    screen: 'PhotoStatus',
                     initialRouteName: item,
                   })
                 }

@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
   imageGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    justifyContent: 'center',
   },
   uploadpic_container_image_view: {
     height: 100,

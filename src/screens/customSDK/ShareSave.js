@@ -24,19 +24,18 @@ const ShareSave = ({route, navigation}) => {
   const [loading, setLoading] = useState(false);
 
   async function hasAndroidPermission() {
-    const getCheckPermissionPromise = () => {
+    const getCheckPermissionPromise = async () => {
       if (Platform.Version >= 33) {
-        return Promise.all([
-          PermissionsAndroid.check(
-            PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
-          ),
-          PermissionsAndroid.check(
-            PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO,
-          ),
-        ]).then(
-          ([hasReadMediaImagesPermission, hasReadMediaVideoPermission]) =>
-            hasReadMediaImagesPermission && hasReadMediaVideoPermission,
-        );
+        const [hasReadMediaImagesPermission, hasReadMediaVideoPermission] =
+          await Promise.all([
+            PermissionsAndroid.check(
+              PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+            ),
+            PermissionsAndroid.check(
+              PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO,
+            ),
+          ]);
+        return hasReadMediaImagesPermission && hasReadMediaVideoPermission;
       } else {
         return PermissionsAndroid.check(
           PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
@@ -49,7 +48,7 @@ const ShareSave = ({route, navigation}) => {
       return true;
     }
 
-    const getRequestPermissionPromise = () => {
+    const getRequestPermissionPromise = async () => {
       if (Platform.Version >= 33) {
         return PermissionsAndroid.requestMultiple([
           PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
@@ -70,8 +69,6 @@ const ShareSave = ({route, navigation}) => {
 
     return await getRequestPermissionPromise();
   }
-
-  console.log(picUrl, 'uri , picUrl');
 
   async function requestStoragePermission() {
     try {
@@ -103,7 +100,6 @@ const ShareSave = ({route, navigation}) => {
     })
       .then(() => {
         setLoading(false);
-        console.log('Image saved to camera roll');
         ToastAndroid.show('Image saved to camera roll', ToastAndroid.SHORT);
       })
       .catch(err => {

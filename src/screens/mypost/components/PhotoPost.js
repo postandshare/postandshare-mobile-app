@@ -4,14 +4,13 @@ import {
   FlatList,
   ImageBackground,
   RefreshControl,
-  Share,
   StyleSheet,
   ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
 import {Text} from 'react-native-paper';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useMemo, useRef, useState} from 'react';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {
   deleteUserPost,
@@ -33,10 +32,10 @@ import globalStyles from '../../../styles/globalStyles';
 import Images from '../../../constants/images';
 import DeleteAlert from '../../../components/DeleteAlert';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import RNFS from 'react-native-fs';
 import ModalPhotoPostCard from '../cards/ModalPhotoPostCard';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {useFocusEffect} from '@react-navigation/native';
+
+const MemoizedModalPhotoPostCard = React.memo(ModalPhotoPostCard);
 
 const SearchSortFilter = ({
   searchQuery,
@@ -154,10 +153,8 @@ const PhotoPost = ({navigation}) => {
     isLoading: getUserPostLoading,
     isFetching: getUserPostFetching,
     refetch: getUserPostRefetch,
-    data: getUserPost_Data,
-    isError: getUserPost_isError,
   } = useQuery({
-    queryKey: ['getUserPost'],
+    queryKey: ['getUserPost' + postData?.page],
     queryFn: () =>
       getUserPost({
         page: postData?.page,
@@ -188,14 +185,11 @@ const PhotoPost = ({navigation}) => {
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
-    enabled: false, //please recheck it
   });
 
   const {mutate: updateUserPostMuatate, isLoading: updateUserPostLoading} =
     useMutation(updateUserPost, {
-      onSuccess: async success => {
-        getUserPostRefetch();
-      },
+      onSuccess: async success => {},
       onError: error => {
         ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
       },
@@ -218,22 +212,17 @@ const PhotoPost = ({navigation}) => {
       },
     });
 
-  const fetchMore = async () => {
-    if (postData.page < postData.pages) {
+  const fetchMore = () => {
+    if (
+      postData.page < postData.pages &&
+      !getUserPostLoading &&
+      !getUserPostFetching &&
+      postData?.list?.length > 0
+    ) {
       const nextPage = postData.page + 1;
-      await setPostData(prev => ({...prev, page: nextPage}));
-      await getUserPostRefetch();
+      setPostData(prev => ({...prev, page: nextPage}));
     }
   };
-
-  useEffect(() => {
-    const unsubscribeBlur = navigation.addListener('blur', () => {
-      setPostData(prev => ({...prev, list: [], page: 1, count: 0}));
-    });
-    return () => {
-      unsubscribeBlur();
-    };
-  }, [navigation]);
 
   const ListEndLoader = () => {
     return (
@@ -261,38 +250,27 @@ const PhotoPost = ({navigation}) => {
     }));
   };
 
-  useEffect(() => {
-    if (postData.page === 1 && postData.list.length === 0) {
-      getUserPostRefetch();
-    }
-  }, [getUserPostRefetch, postData?.page]);
-
   // use this when the post name from the server would come
   const filteredPostData = postData?.list?.filter(post =>
     post?.postName?.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const sortedBusinesses = [...(postData?.list || [])].sort((a, b) => {
-    switch (sortOption) {
-      case 'AtoZ':
-        return a?.postName?.localeCompare(b?.postName);
-      case 'ZtoA':
-        return b?.postName?.localeCompare(a?.postName);
-      case 'Newest':
-        return new Date(b?.createdOn) - new Date(a?.createdOn);
-      case 'Oldest':
-        return new Date(a?.createdOn) - new Date(b?.createdOn);
-      default:
-        return 0;
-    }
-  });
-
-  useFocusEffect(
-    React.useCallback(() => {
-      getUserPostRefetch();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [favorite]),
-  );
+  const sortedBusinesses = useMemo(() => {
+    return [...(postData?.list || [])].sort((a, b) => {
+      switch (sortOption) {
+        case 'AtoZ':
+          return a?.postName?.localeCompare(b?.postName);
+        case 'ZtoA':
+          return b?.postName?.localeCompare(a?.postName);
+        case 'Newest':
+          return new Date(b?.createdOn) - new Date(a?.createdOn);
+        case 'Oldest':
+          return new Date(a?.createdOn) - new Date(b?.createdOn);
+        default:
+          return 0;
+      }
+    });
+  }, [postData?.list, sortOption]);
 
   // Map all post images to required format
   const allImages =
@@ -306,22 +284,6 @@ const PhotoPost = ({navigation}) => {
   const selectedIndex = postData?.list?.findIndex(
     post => post?._id === imageIndexId,
   );
-
-  const shareImage = async imageUrl => {
-    try {
-      const localImageUrl = await RNFS.downloadFile({
-        fromUrl: imageUrl,
-        toFile: `${RNFS.DocumentDirectoryPath}/temp.jpg`,
-      }).promise;
-
-      await Share.share({
-        url: `file://${localImageUrl}`,
-        title: 'Share image',
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <>
@@ -363,7 +325,6 @@ const PhotoPost = ({navigation}) => {
       <ImageBackground
         source={Images?.background}
         style={globalStyles.backgroundImage}>
-        {/* <Text>Count: {postData?.count}</Text> */}
         <SearchSortFilter
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -386,40 +347,30 @@ const PhotoPost = ({navigation}) => {
             paddingBottom: 200,
           }}
           renderItem={({item, index}) => (
-            <ModalPhotoPostCard
+            <MemoizedModalPhotoPostCard
               item={item}
               scrollViewRef={scrollViewRef}
               index={index}
+              ket={item?._id}
               setDeleteAlertVisible={setDeleteAlertVisible}
               setDeletePostDocId={setDeletePostDocId}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
-              handlePostLike={async () => {
-                await setPostData(prev => ({
+              handlePostLike={() => {
+                setPostData(prev => ({
                   ...prev,
-                  list: [],
-                  page: 1,
-                  count: 0,
-                  pages: 1,
+                  list: sortedBusinesses?.map(post =>
+                    post?._id === item?._id
+                      ? {...post, favorite: !post?.favorite}
+                      : post,
+                  ),
                 }));
-                await updateUserPostMuatate({
+                updateUserPostMuatate({
                   userPostDocId: item?._id,
                   favorite: !item?.favorite,
                 });
               }}
             />
-            // for gallery view
-            // <PhotoPostCard
-            //   scrollViewRef={scrollViewRef}
-            //   index={index}
-            //   setDeleteAlertVisible={setDeleteAlertVisible}
-            //   setDeletePostDocId={setDeletePostDocId}
-            //   item={item}
-            //   setImageIndexId={setImageIndexId}
-            //   setModalVisible={setModalVisible}
-            //   isLoading={isLoading}
-            //   setIsLoading={setIsLoading}
-            // />
           )}
           ListEmptyComponent={() => (
             <Text
@@ -427,14 +378,15 @@ const PhotoPost = ({navigation}) => {
               There is no post.....
             </Text>
           )}
-          keyExtractor={(item, index) => index?.toString()}
+          keyExtractor={item => item?._id?.toString()}
           onEndReached={postData.page < postData.pages ? fetchMore : null}
           onEndReachedThreshold={0.2}
           refreshControl={
             <RefreshControl
               refreshing={getUserPostLoading || getUserPostFetching}
-              onRefresh={async () => {
+              onRefresh={() => {
                 HandleRefresh();
+                getUserPostRefetch();
               }}
             />
           }
@@ -463,7 +415,6 @@ const styles = StyleSheet.create({
   },
   sortButtonContainer: {
     backgroundColor: Colors.PRIMARY,
-    // padding: 7,
     height: Sizes.height * 0.04,
     width: Sizes.width * 0.2,
     margin: 5,
@@ -479,5 +430,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     alignSelf: 'center',
+  },
+  listEndLoader: {
+    height: 40,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

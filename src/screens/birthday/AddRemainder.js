@@ -89,8 +89,6 @@ const AddRemainder = ({navigation}) => {
   const {mutate: addNewEventlMutate, isLoading: addNewEventlLoading} =
     useMutation(addNewEvent, {
       onSuccess: ({data}) => {
-        // ToastAndroid.show(data?.message, ToastAndroid.LONG);
-        console.log(data, 'data');
         eventsAddFormik?.resetForm();
         navigation.navigate('CreateEvent', {
           eventsAddFormik: eventsAddFormik?.values,
@@ -98,7 +96,6 @@ const AddRemainder = ({navigation}) => {
         });
       },
       onError: err => {
-        console.log(err?.response?.data?.message, 'err');
         ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
       },
     });

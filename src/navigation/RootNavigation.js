@@ -2,13 +2,14 @@ import {StatusBar, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import NavigationScreenName from '../constants/NavigationScreenName';
+import LocalStorageKey from '../constants/LocalStorageKey';
+
 import Splash from '../screens/onBoarding/Splash';
 import {MainDrawer} from './DrawerStack';
 import AuthStack from './AuthStack';
 import {useDispatch, useSelector} from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import LocalStorageKey from '../constants/LocalStorageKey';
 import {setOnBoarding} from '../services/reducer/AuthSlice';
 import OnBoarding from '../screens/onBoarding';
 import ProfileNavigator from '../screens/profile/index';

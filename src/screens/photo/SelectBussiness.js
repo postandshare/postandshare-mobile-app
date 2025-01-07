@@ -23,7 +23,7 @@ import CustomButton from '../../components/CustomButton';
 import SearchSortFilter from '../../components/SearchSortFilter';
 
 const SelectBussiness = ({route, navigation}) => {
-  const {picData} = route?.params;
+  const {picData} = route?.params ?? {};
   /******************************************************************************* */
   /*****************************SearchSortFilterWork****************************** */
   /******************************************************************************* */
@@ -151,9 +151,8 @@ const SelectBussiness = ({route, navigation}) => {
             // lastUpdated={item?.lastUpdated ?? item?.createdOn}
             onPress={() =>
               picData
-                ? navigation.navigate('PhotoStatus', {
-                    picData: picData?.photo,
-                    picDeatils: picData,
+                ? navigation.navigate('CustomSDK', {
+                    picData: picData,
                     businessDetails: getUserProfile_Data?.data?.obj,
                   })
                 : null
@@ -206,10 +205,9 @@ const SelectBussiness = ({route, navigation}) => {
                 data={item}
                 onPress={() =>
                   picData
-                    ? navigation.navigate('PhotoStatus', {
-                        picData: picData?.photo,
-                        picDeatils: picData,
-                        businessDetails: getUserProfile_Data?.data?.obj,
+                    ? navigation.navigate('CustomSDK', {
+                        picData: picData,
+                        businessDetails: item,
                       })
                     : navigation.navigate('View Bussiness', {
                         businessId: item?._id,
