@@ -10,3 +10,11 @@ export const getRegionalLanguages = params => {
     params,
   });
 };
+export const getStateList = () => {
+  return authAxiosInstance.get(`${misc_route}/getStateList`);
+};
+export const getDistrictListByStateName = params => {
+  return authAxiosInstance.get(`${misc_route}/getDistrictListByStateName`, {
+    params,
+  });
+};

@@ -6,9 +6,10 @@ import PoliticalVolunteer from './components/PoliticalComponents/PoliticalVolunt
 import ChangeLeader from './components/PoliticalComponents/ChangeLeader';
 import ViewPoliticalBussiness from './ViewPoliticalBussiness';
 import {
-  AddEditBusinessScreen,
   AddEditBusinessStep1Screen,
   AddEditBusinessStep2Screen,
+  AddPoliticalProfileScreen,
+  AddLeaderInProfileScreen,
   SelectWorkProfileScreen,
   WorkProfileListScreen,
 } from './Index';
@@ -44,6 +45,22 @@ const WorkProfileNavigator = () => {
         }}
         name={NavigationScreenName.ADD_EDIT_BUSINESS_STEP2}
         component={AddEditBusinessStep2Screen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          title: 'Add Political Profile',
+        }}
+        name={NavigationScreenName.ADD_POLITICAL_PROFILE}
+        component={AddPoliticalProfileScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          title: 'Add Leader In Profile',
+        }}
+        name={NavigationScreenName.ADD_LEADER_IN_POLITICAL_PROFILE}
+        component={AddLeaderInProfileScreen}
       />
       <Stack.Screen name="View Bussiness" component={ViewBussiness} />
       <Stack.Screen name="View Political" component={ViewPoliticalBussiness} />

@@ -29,3 +29,6 @@ export const TakePhotofromGalleryWithCrop = async () => {
     }
   });
 };
+export const onError = error => {
+  ToastAndroid.show(error?.response?.data?.message, ToastAndroid.LONG);
+};

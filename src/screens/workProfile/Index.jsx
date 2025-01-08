@@ -3,9 +3,19 @@ import Fallback from '../../components/fallback/Fallback';
 
 const SelectWorkProfile = React.lazy(() => import('./SelectWorkProfile'));
 const WorkProfileList = React.lazy(() => import('./WorkProfileList'));
-const AddEditBusiness = React.lazy(() => import('./AddEditBusiness'));
-const AddEditBusinessStep1 = React.lazy(() => import('./AddEditBusinessStep1'));
-const AddEditBusinessStep2 = React.lazy(() => import('./AddEditBusinessStep2'));
+const AddEditBusiness = React.lazy(() => import('./business/AddEditBusiness'));
+const AddEditBusinessStep1 = React.lazy(() =>
+  import('./business/AddEditBusinessStep1'),
+);
+const AddEditBusinessStep2 = React.lazy(() =>
+  import('./business/AddEditBusinessStep2'),
+);
+const AddPoliticalProfile = React.lazy(() =>
+  import('./political/AddPoliticalProfile'),
+);
+const AddLeaderInProfile = React.lazy(() =>
+  import('./political/AddLeaderInProfile'),
+);
 
 export const SelectWorkProfileScreen = props => (
   <React.Suspense fallback={<Fallback />}>
@@ -30,5 +40,15 @@ export const AddEditBusinessStep1Screen = props => (
 export const AddEditBusinessStep2Screen = props => (
   <React.Suspense fallback={<Fallback />}>
     <AddEditBusinessStep2 {...props} />
+  </React.Suspense>
+);
+export const AddPoliticalProfileScreen = props => (
+  <React.Suspense fallback={<Fallback />}>
+    <AddPoliticalProfile {...props} />
+  </React.Suspense>
+);
+export const AddLeaderInProfileScreen = props => (
+  <React.Suspense fallback={<Fallback />}>
+    <AddLeaderInProfile {...props} />
   </React.Suspense>
 );

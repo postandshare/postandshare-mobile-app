@@ -43,4 +43,6 @@ export default {
   ADD_EDIT_BUSINESS_STEP1: 'AddEditBusinessStep1',
   ADD_EDIT_BUSINESS_STEP2: 'AddEditBusinessStep2',
   ADD_EDIT_POLITICAL: 'AddEditPolitical',
+  ADD_POLITICAL_PROFILE: 'AddEditPoliticalStep1',
+  ADD_LEADER_IN_POLITICAL_PROFILE: 'AddLeaderInPoliticalProfile',
 };

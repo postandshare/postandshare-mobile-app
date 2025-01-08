@@ -17,7 +17,7 @@ const SelectWorkProfile = ({navigation}) => {
     navigation.navigate(NavigationScreenName.ADD_EDIT_BUSINESS_STEP1);
   };
   const handleNavigateToPoliticalProfile = () => {
-    navigation.navigate(NavigationScreenName.ADD_EDIT_POLITICAL);
+    navigation.navigate(NavigationScreenName.ADD_EDIT_POLITICAL_STEP1);
   };
   return (
     <>
