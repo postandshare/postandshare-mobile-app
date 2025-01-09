@@ -19,7 +19,6 @@ const SMSTemplate = ({
   showEdit = true,
   msgImage,
 }) => {
-  console.log(item);
   return (
     <View style={[styles.template, {width: width}]}>
       {item?.templetType === 'WhatsApp' && (

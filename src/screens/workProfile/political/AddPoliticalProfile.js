@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -61,10 +62,12 @@ const AddPoliticalProfile = ({navigation}) => {
     onSuccess: success => {
       navigation.navigate(
         NavigationScreenName.ADD_LEADER_IN_POLITICAL_PROFILE,
-        {prevScreenData: success?.data},
+        {data: success?.data?.obj},
       );
     },
-    onError: onError,
+    onError: error => {
+      ToastAndroid.show(error?.response?.data?.message, ToastAndroid.LONG);
+    },
   });
   useQuery({
     queryKey: ['getAllPartyDetails'],
@@ -72,7 +75,9 @@ const AddPoliticalProfile = ({navigation}) => {
     onSuccess: success => {
       setState(prev => ({...prev, partyList: success?.data?.list}));
     },
-    onError: onError,
+    onError: error => {
+      ToastAndroid.show(error?.response?.data?.message, ToastAndroid.LONG);
+    },
   });
   useQuery({
     queryKey: ['getStateList'],
@@ -100,7 +105,9 @@ const AddPoliticalProfile = ({navigation}) => {
         })),
       }));
     },
-    onError: onError,
+    onError: error => {
+      ToastAndroid.show(error?.response?.data?.message, ToastAndroid.LONG);
+    },
     enabled: watchState ? true : false,
   });
   return (

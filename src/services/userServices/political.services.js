@@ -11,10 +11,21 @@ export const getAllPartyDetails = params =>
   authAxiosInstance.get(`${political_route}/getAllPartyDetails`, {
     params,
   });
+
+export const getLeaderListByProfile = params =>
+  authAxiosInstance.get(`${political_route}/getLeaderListByProfile`, {
+    params,
+  });
+export const getGroupedLeaderDetail = params =>
+  authAxiosInstance.get(`${political_route}/getGroupedLeaderDetail`, {
+    params,
+  });
 export const getPoliticalProfile = params =>
   authAxiosInstance.get(`${political_route}/getPoliticalProfile`, {
     params,
   });
+export const updateLeaderInProfile = body =>
+  authAxiosInstance.put(`${political_route}/updateLeaderInProfile`, body);
 
 //getLeaderDetail
 export const getLeaderDetail = params =>

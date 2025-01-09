@@ -13,7 +13,13 @@ const PhotoNavigator = ({navigation, route}) => {
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name="PhotoStatus" component={PhotoStatus} />
+      <Stack.Screen
+        name="PhotoStatus"
+        component={PhotoStatus}
+        initialParams={{
+          picData: initialRouteName,
+        }}
+      />
       <Stack.Screen
         name="SelectBussiness"
         component={SelectBussiness}

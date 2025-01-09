@@ -4,15 +4,13 @@ import {
   RefreshControl,
   ScrollView,
   ToastAndroid,
-  View,
 } from 'react-native';
 import {Text} from 'react-native-paper';
-import React, {useCallback} from 'react';
+import React, {useState} from 'react';
 import styles from './style';
 import {getUserProfile} from '../../services/authServices/auth.services';
-
 import {useQuery} from '@tanstack/react-query';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import Colors from '../../constants/Colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Skeleton} from 'moti/skeleton';
@@ -27,21 +25,28 @@ import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
 import DashboardTopHeader from '../../components/DashboardTopHeader';
 import NavigationScreenName from '../../constants/NavigationScreenName';
+import {Spacer} from '../../utils/SkeltonHelpers';
 
 const ProfileView = ({}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const [state, setState] = useState({
+    profileData: {},
+  });
   const {
     isLoading: getUserProfileLoading,
     isFetching: getUserProfileFetching,
     refetch: getUserProfileRefetch,
     data: getUserProfile_Data,
-    isError: getUserProfile_isError,
   } = useQuery({
     queryKey: ['getUserProfile'],
     queryFn: () => getUserProfile(),
     onSuccess: success => {
-      if (success?.data?.obj?.isProfileUpdated == false) {
+      setState(prev => ({
+        ...prev,
+        profileData: success?.data?.obj,
+      }));
+      if (success?.data?.obj?.isProfileUpdated === false) {
         Alert.alert(
           'Post And Share App',
           'Please update your profile to continue',
@@ -63,24 +68,14 @@ const ProfileView = ({}) => {
           {cancelable: false},
         );
       }
-      if (success?.data?.obj?.isProfileUpdated == true) {
+      if (success?.data?.obj?.isProfileUpdated === true) {
         dispatch(setProfileUpdated(true));
       }
     },
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
-    enabled: false,
   });
-
-  useFocusEffect(
-    useCallback(() => {
-      getUserProfileRefetch();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [navigation]),
-  );
-
-  const Spacer = ({height = 16}) => <View style={{height}} />;
 
   const skeletonLoading = (
     <MotiView
@@ -155,14 +150,14 @@ const ProfileView = ({}) => {
           ) : (
             <>
               {/* profile details component */}
-              <ProfileDetails data={getUserProfile_Data?.data?.obj} />
+              <ProfileDetails data={state?.profileData ?? {}} />
 
               <Text style={styles.title}>Social Media</Text>
               {/* social media details */}
-              <SocialMediaDetails data={getUserProfile_Data?.data?.obj} />
+              <SocialMediaDetails data={state?.profileData ?? {}} />
 
               <Text style={styles.title}>Address</Text>
-              <AddressDetails data={getUserProfile_Data?.data?.obj} />
+              <AddressDetails data={state?.profileData ?? {}} />
             </>
           )}
         </ScrollView>

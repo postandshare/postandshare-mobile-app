@@ -2,6 +2,7 @@
 import {
   Image,
   ImageBackground,
+  RefreshControl,
   ScrollView,
   ToastAndroid,
   TouchableOpacity,
@@ -17,24 +18,29 @@ import globalStyles from '../../styles/globalStyles';
 import {useQuery} from '@tanstack/react-query';
 import {getRelatedTemplet} from '../../services/userServices/mobileDashboard.services';
 import {useFocusEffect} from '@react-navigation/native';
+import NavigationScreenName from '../../constants/NavigationScreenName';
 
 const PhotoStatus = ({navigation, route}) => {
-  const {picData, picDeatils, businessDetails} = route?.params ?? {};
-  console.log(picData, 'photoStatus');
-  const [photoData, setPhotoData] = useState(picData ?? '');
-  const {refetch: getRelatedTempletRefetch, data: getRelatedTemplet_Data} =
-    useQuery({
-      queryKey: ['getRelatedTemplet'],
-      queryFn: () =>
-        getRelatedTemplet({
-          photoEntityId: picDeatils?._id,
-        }),
-      onSuccess: success => {},
-      onError: err => {
-        ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
-      },
-      enabled: false,
-    });
+  const {picData} = route?.params;
+
+  const [photoData, setPhotoData] = useState(picData?.contentUrl ?? '');
+  const {
+    isLoading: getRelatedTempleLoading,
+    isFetching: getRelatedTempleFetching,
+    refetch: getRelatedTempletRefetch,
+    data: getRelatedTemplet_Data,
+  } = useQuery({
+    queryKey: ['getRelatedTemplet'],
+    queryFn: () =>
+      getRelatedTemplet({
+        categoryDocIds: JSON.stringify(picData?.categoryDocIds ?? []),
+      }),
+    onSuccess: success => {},
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
 
   useFocusEffect(
     React.useCallback(() => {
@@ -51,24 +57,36 @@ const PhotoStatus = ({navigation, route}) => {
           titile={'Photo Status'}
           next={'Next'}
           onPress={() =>
-            navigation.navigate('CustomSDK', {
-              picData: photoData,
-              picDeatils: picDeatils,
-              businessDetails: businessDetails,
+            navigation.navigate(NavigationScreenName.PHOTO_NAVIGATOR, {
+              screen: 'SelectBussiness',
+              params: {
+                picData: {
+                  ...picData,
+                  contentUrl: photoData ?? picData?.contentUrl,
+                },
+              },
             })
           }
         />
-        <View style={styles.container}>
-          <Image
-            source={{
-              uri: photoData,
-            }}
-            style={styles.Image}
-            resizeMode="contain"
-          />
-        </View>
-        <Text style={styles.text}>Select Photo</Text>
-        <ScrollView style={{flexGrow: 1, backgroundColor: Colors.transparent}}>
+        <ScrollView
+          style={{flexGrow: 1, backgroundColor: Colors.transparent}}
+          refreshControl={
+            <RefreshControl
+              refreshing={getRelatedTempleLoading || getRelatedTempleFetching}
+              onRefresh={getRelatedTempletRefetch}
+            />
+          }>
+          <View style={styles.container}>
+            <Image
+              source={{
+                uri: photoData ?? picData?.contentUrl,
+              }}
+              style={styles.Image}
+              resizeMode="contain"
+            />
+          </View>
+          <Text style={styles.text}>Select Photo</Text>
+
           <View style={styles.imageGrid}>
             {getRelatedTemplet_Data?.data?.list?.map((item, index) => (
               <TouchableOpacity

@@ -52,11 +52,6 @@ const BirthdayRemainderDetail = ({data, navigation, route}) => {
     }, [navigation, getEventRefetch, selectedFilter]),
   );
 
-  console.log(
-    getEvent_Data?.data?.data?.msgImage,
-    'getEvent_Data?.data?.data?.msgImage',
-  );
-
   return (
     <>
       <ImageBackground

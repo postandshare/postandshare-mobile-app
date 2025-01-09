@@ -14,7 +14,6 @@ const ProfileNavigator = () => {
       }}>
       <Stack.Screen name="ProfileView" component={ProfileView} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
-      {/* <Stack.Screen name="ViewDetailedProfile" component={ViewDetailedProfile} /> */}
     </Stack.Navigator>
   );
 };

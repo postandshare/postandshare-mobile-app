@@ -5,8 +5,7 @@ import Sizes from '../../constants/Sizes';
 const styles = StyleSheet.create({
   root: {
     backgroundColor: 'transparent',
-    minHeight: Sizes.hp('86%'),
-    paddingBottom: Sizes.hp('25%'),
+    flexGrow: 1,
   },
   box_card_wrapper: {
     flexDirection: 'row',
@@ -134,9 +133,6 @@ const styles = StyleSheet.create({
   },
   uploadpic_container_eventview: {
     zIndex: 1,
-    // position: 'absolute',
-    // bottom: 0,
-    // marginVertical: -2,
   },
   uploadpic_container_date: {
     fontSize: 12,
@@ -159,7 +155,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
     backgroundColor: Colors.transparent,
-    // flexDirection: 'row',
   },
   skeletonText: {
     marginTop: 10,

@@ -50,12 +50,7 @@ import {addUserPost} from '../../services/userServices/userpost.services';
 import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
 
-const CustomColorChange = ({
-  data,
-  setShowBorderBox,
-  showBorderBox,
-  colorProps,
-}) => {
+const CustomColorChange = ({data, colorProps}) => {
   const [color, setColor] = useState(colorProps?.color ?? '#fff');
   const [showModal, setShowModal] = useState(false);
   const [fontWeight, setFontWeight] = useState('normal');
@@ -64,7 +59,6 @@ const CustomColorChange = ({
   const [showTools, setShowTools] = useState(false);
 
   const onSelectColor = ({hex}) => {
-    console.log(hex);
     setColor(hex);
   };
   return (
@@ -181,7 +175,6 @@ const FrameSelection = ({
   setSelectedIndex,
   selectedIndex,
   showFrameImg,
-  getOrgFrame_Data,
   index,
   setLogoPosition,
   setMobileNumPosition,
@@ -250,7 +243,7 @@ const FrameSelection = ({
 
   return (
     <ImageBackground
-      source={{uri: imgData}}
+      source={{uri: imgData?.contentUrl}}
       style={[
         styles.frame,
         {overflow: 'hidden'},
@@ -278,7 +271,7 @@ const FrameSelection = ({
 };
 
 const CustomSDK = ({route, navigation}) => {
-  const {picData, businessDetails, picDeatils} = route.params || {};
+  const {picData, businessDetails} = route.params || {};
 
   const [logoPosition, setLogoPosition] = useState({
     x: 0,
@@ -330,7 +323,6 @@ const CustomSDK = ({route, navigation}) => {
   const [showFrame, setFrame] = useState(false);
   const [showFrame1, setShowFrame1] = useState(true);
   const [showFrame2, setShowFrame2] = useState(false);
-  const [showFrame3, setShowFrame3] = useState(false);
   // from backend image it should be shown
   const [framImg, setFrameImg] = useState('');
   const [showFrameImg, setShowFrameImg] = useState(false);
@@ -417,60 +409,13 @@ const CustomSDK = ({route, navigation}) => {
     }
   };
 
-  const TakeStickerfromGallery = async () => {
-    try {
-      await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-        {
-          title: 'Post and Share App',
-          message:
-            'We want to access the photo gallery' +
-            'To perform the desired function',
-        },
-      );
-      const image = await launchImageLibrary({
-        maxWidth: 30,
-        maxHeight: 40,
-        mediaType: 'photo',
-      });
-      console.log(image.assets[0].uri);
-      setStickers(image.assets[0].uri);
-      // uploadePhoto(image.assets[0].uri, image.assets[0].type);
-    } catch (error) {
-      console.log(error);
-      ToastAndroid.show('Something went wrong', ToastAndroid.LONG);
-    }
-  };
-
-  const drag = (x, y) => {
-    // console.log('Dragging', x, y);
-  };
+  const drag = (x, y) => {};
 
   const drop = (x, y) => {
     if (y > Dimensions.get('screen').height - 150) {
       console.log('Drop in the pit');
     }
-    // console.log('Dropping', x, y);
   };
-
-  async function requestStoragePermission() {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        {
-          title: 'Storage Permission',
-          message: 'This app needs access to your storage to download Photos',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('Storage permission granted');
-      } else {
-        console.log('Storage permission denied');
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  }
 
   const onCapture = async () => {
     setShowCross(false);
@@ -501,13 +446,10 @@ const CustomSDK = ({route, navigation}) => {
     isFetching: getOrgFrameFetching,
     refetch: getOrgFrameRefetch,
     data: getOrgFrame_Data,
-    isError: getOrgFrame_isError,
   } = useQuery({
     queryKey: ['getOrgFrame'],
     queryFn: () => getOrgFrame(),
-    onSuccess: async success => {
-      // console.log(success?.data, 'in success');
-    },
+    onSuccess: async success => {},
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
@@ -702,7 +644,7 @@ const CustomSDK = ({route, navigation}) => {
         source={images.background}
         style={globalStyles.backgroundImage}>
         <TopHeader
-          titile={picDeatils?.name ?? 'Custom SDK'}
+          titile={picData?.name ?? 'Custom SDK'}
           next={'Next'}
           onPress={onCapture}
         />
@@ -886,7 +828,7 @@ const CustomSDK = ({route, navigation}) => {
             <ViewShot ref={viewShotRef} options={{format: 'jpg', quality: 0.9}}>
               <View style={styles.chooseImageContainer}>
                 <ImageBackground
-                  source={imgData ? {uri: imgData} : null}
+                  source={imgData ? {uri: imgData?.contentUrl} : null}
                   resizeMode="contain"
                   style={{
                     zIndex: 1,
