@@ -212,10 +212,10 @@ const FrameSelection = ({
       fontSize: item?.contentLocation?.address?.fontSize ?? 18,
     });
     await setWhatsAppPosition({
-      x: item?.contentLocation?.whatsappNumber?.x_axis ?? 120,
-      y: item?.contentLocation?.whatsappNumber?.y_axis ?? 100,
-      color: item?.contentLocation?.whatsappNumber?.fontColor ?? '#fff',
-      fontSize: item?.contentLocation?.whatsappNumber?.fontSize ?? 18,
+      x: item?.contentLocation?.whatsAppNumber?.x_axis ?? 120,
+      y: item?.contentLocation?.whatsAppNumber?.y_axis ?? 100,
+      color: item?.contentLocation?.whatsAppNumber?.fontColor ?? '#fff',
+      fontSize: item?.contentLocation?.whatsAppNumber?.fontSize ?? 18,
     });
 
     setState(prev => ({
@@ -919,8 +919,8 @@ const CustomSDK = ({route, navigation}) => {
                             showBorderBox={showBorderBox}
                             colorProps={whatsAppPosition}
                             data={
-                              BusinessData?.whatsappNumber ??
-                              businessDetails?.whatsappNumber ??
+                              BusinessData?.whatsAppNumber ??
+                              businessDetails?.whatsAppNumber ??
                               ToastAndroid.show(
                                 'Whatsapp Number is not available',
                                 ToastAndroid.LONG,

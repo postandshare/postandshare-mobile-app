@@ -66,8 +66,8 @@ const PoliticalVolunteer = ({route, navigation}) => {
           success?.data?.obj?.fetchExistingPoliticalBusiness?.mobileNumber,
         desingation:
           success?.data?.obj?.fetchExistingPoliticalBusiness?.designation,
-        whatsappNumber:
-          success?.data?.obj?.fetchExistingPoliticalBusiness?.whatsappNumber,
+        whatsAppNumber:
+          success?.data?.obj?.fetchExistingPoliticalBusiness?.whatsAppNumber,
         aboutYourself:
           success?.data?.obj?.fetchExistingPoliticalBusiness?.volunteerDetail,
         profilePic:
@@ -87,7 +87,7 @@ const PoliticalVolunteer = ({route, navigation}) => {
       name: '',
       mobile: '',
       desingation: '',
-      whatsappNumber: '',
+      whatsAppNumber: '',
       aboutYourself: '',
       profilePic: '',
     },
@@ -95,7 +95,7 @@ const PoliticalVolunteer = ({route, navigation}) => {
       name: Yup.string().required('Required'),
       mobile: Yup.string().required('Required'),
       desingation: Yup.string().required('Required'),
-      whatsappNumber: Yup.string().required('Required'),
+      whatsAppNumber: Yup.string().required('Required'),
       profilePic: Yup.string().required('Required'),
     }),
     onSubmit: values => {
@@ -120,7 +120,7 @@ const PoliticalVolunteer = ({route, navigation}) => {
             volunteerPhoto: profilePic,
             designation: values?.desingation,
             mobileNumber: values?.mobile,
-            whatsappNumber: values?.whatsappNumber,
+            whatsAppNumber: values?.whatsAppNumber,
             volunteerDetail: values?.aboutYourself,
           })
         : addPoliticalBusinessMuatate({
@@ -134,7 +134,7 @@ const PoliticalVolunteer = ({route, navigation}) => {
             volunteerPhoto: profilePic,
             designation: values?.desingation,
             mobileNumber: values?.mobile,
-            whatsappNumber: values?.whatsappNumber,
+            whatsAppNumber: values?.whatsAppNumber,
             volunteerDetail: values?.aboutYourself,
           });
     },
@@ -295,7 +295,7 @@ const PoliticalVolunteer = ({route, navigation}) => {
               {/* <Text style={{color: Colors.TEXT1}}>Whatsapp Number</Text> */}
               <CustomTextInputFormik
                 formik={profileVolunteerFormik}
-                name={'whatsappNumber'}
+                name={'whatsAppNumber'}
                 label={'Whatsapp Number'}
                 keyboardType={'number-pad'}
                 maxLength={10}

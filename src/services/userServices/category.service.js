@@ -11,3 +11,17 @@ export const getCategory = params => {
     params,
   });
 };
+
+//getDistinctCategoryGroup
+export const getDistinctCategoryGroup = params => {
+  return authAxiosInstance.get(`${category_route}/getDistinctCategoryGroup`, {
+    params,
+  });
+};
+
+// getDistinctCategory
+export const getDistinctCategory = params => {
+  return authAxiosInstance.get(`${category_route}/getDistinctCategory`, {
+    params,
+  });
+};

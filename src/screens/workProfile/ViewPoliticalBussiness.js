@@ -248,7 +248,7 @@ const ViewPoliticalBussiness = ({route, navigation}) => {
             <FontAwesome name={'whatsapp'} size={25} color={Colors.PRIMARY} />
             <Text style={styles.card_text}>
               {getPoliticalPartyDetails_Data?.data?.obj
-                ?.fetchExistingPoliticalBusiness?.whatsappNumber ?? '--'}
+                ?.fetchExistingPoliticalBusiness?.whatsAppNumber ?? '--'}
             </Text>
           </View>
           {/* mail */}

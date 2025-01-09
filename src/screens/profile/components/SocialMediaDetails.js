@@ -30,7 +30,7 @@ const SocialMediaDetails = ({data}) => {
       />
       <IconText
         icon={'whatsapp'}
-        text={data?.whatsappNumber === '' ? '--' : data?.whatsappNumber}
+        text={data?.whatsAppNumber === '' ? '--' : data?.whatsAppNumber}
       />
     </View>
   );

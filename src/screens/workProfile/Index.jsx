@@ -3,7 +3,7 @@ import Fallback from '../../components/fallback/Fallback';
 
 const SelectWorkProfile = React.lazy(() => import('./SelectWorkProfile'));
 const WorkProfileList = React.lazy(() => import('./WorkProfileList'));
-const AddEditBusiness = React.lazy(() => import('./business/AddEditBusiness'));
+
 const AddEditBusinessStep1 = React.lazy(() =>
   import('./business/AddEditBusinessStep1'),
 );
@@ -27,11 +27,7 @@ export const WorkProfileListScreen = props => (
     <WorkProfileList {...props} />
   </React.Suspense>
 );
-export const AddEditBusinessScreen = props => (
-  <React.Suspense fallback={<Fallback />}>
-    <AddEditBusiness {...props} />
-  </React.Suspense>
-);
+
 export const AddEditBusinessStep1Screen = props => (
   <React.Suspense fallback={<Fallback />}>
     <AddEditBusinessStep1 {...props} />

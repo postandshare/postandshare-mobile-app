@@ -89,7 +89,7 @@ const BussinessType = ({bussinessDetails}) => {
       bussinessOwnerName: bussinessDetails?.fetchBusiness?.ownerName ?? '',
       bussinessOwnerPhone: bussinessDetails?.fetchBusiness?.mobileNumber ?? '',
       bussinessOwnerWhatsapp:
-        bussinessDetails?.fetchBusiness?.whatsappNumber ?? '',
+        bussinessDetails?.fetchBusiness?.whatsAppNumber ?? '',
       bussinessOwnerDessignation:
         bussinessDetails?.fetchBusiness?.designation ?? '',
       bussinessOwnerPhoto: bussinessDetails?.fetchBusiness?.ownerPhoto ?? '',
@@ -177,7 +177,7 @@ const BussinessType = ({bussinessDetails}) => {
         },
         ownerName: bussinessPartnerFormik?.values?.bussinessOwnerName,
         mobileNumber: bussinessPartnerFormik?.values?.bussinessOwnerPhone,
-        whatsappNumber: bussinessPartnerFormik?.values?.bussinessOwnerWhatsapp,
+        whatsAppNumber: bussinessPartnerFormik?.values?.bussinessOwnerWhatsapp,
         designation: bussinessPartnerFormik?.values?.bussinessOwnerDessignation,
         ownerPhoto: bussinessPartnerFormik?.values?.bussinessOwnerPhoto,
       });
@@ -203,7 +203,7 @@ const BussinessType = ({bussinessDetails}) => {
         },
         ownerName: bussinessPartnerFormik?.values?.bussinessOwnerName,
         mobileNumber: bussinessPartnerFormik?.values?.bussinessOwnerPhone,
-        whatsappNumber: bussinessPartnerFormik?.values?.bussinessOwnerWhatsapp,
+        whatsAppNumber: bussinessPartnerFormik?.values?.bussinessOwnerWhatsapp,
         designation: bussinessPartnerFormik?.values?.bussinessOwnerDessignation,
         ownerPhoto: bussinessPartnerFormik?.values?.bussinessOwnerPhoto,
       });

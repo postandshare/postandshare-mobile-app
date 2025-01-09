@@ -43,7 +43,7 @@ const SocialMediaEdit = ({control}) => {
             },
           }}
           control={control}
-          name={'whatsappNumber'}
+          name={'whatsAppNumber'}
           label={'WhatsApp Number'}
           width="95%"
           maxLength={10}

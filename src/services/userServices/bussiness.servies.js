@@ -5,9 +5,9 @@ import Config from 'react-native-config';
 const baseURL = Config.AUTH_URL;
 const bussiness_route = `${baseURL}/business`;
 
-//getAllBusinessList
-export const getAllBusinessList = params => {
-  return authAxiosInstance.get(`${bussiness_route}/getAllBusinessList`, {
+//getBusinessProfile
+export const getBusinessProfile = params => {
+  return authAxiosInstance.get(`${bussiness_route}/getBusinessProfile`, {
     params,
   });
 };
@@ -68,4 +68,12 @@ export const getBusinessPartner = params => {
 //updateBusiness
 export const updateBusiness = body => {
   return authAxiosInstance.put(`${bussiness_route}/updateBusiness`, body);
+};
+
+//updateBusinessOwnerDetail
+export const updateBusinessOwnerDetail = body => {
+  return authAxiosInstance.put(
+    `${bussiness_route}/updateBusinessOwnerDetail`,
+    body,
+  );
 };

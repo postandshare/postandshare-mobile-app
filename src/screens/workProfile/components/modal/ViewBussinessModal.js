@@ -17,12 +17,6 @@ const ViewBussinessModal = ({
   handleEdit = () => {},
   handleDelailedView = () => {},
 }) => {
-  const showModal = () => {
-    setShowBussiness({
-      ...showBussiness,
-      show: true,
-    });
-  };
   const hideModal = () => {
     setShowBussiness({
       ...showBussiness,
@@ -53,7 +47,7 @@ const ViewBussinessModal = ({
             <Image
               source={{
                 uri:
-                  detailedBussiness?.fetchBusiness?.logo ??
+                  detailedBussiness?.logo ??
                   detailedBussiness?.fetchExistingPoliticalBusiness?.partyLogo,
               }}
               style={styles.image}
@@ -134,7 +128,7 @@ const ViewBussinessModal = ({
                 gap: 5,
                 padding: 10,
               }}>
-              {detailedBussiness?.businessPartnerList
+              {detailedBussiness?.businessPartner
                 ?.slice(0, maxDisplay)
                 .map(item => {
                   return (
@@ -163,7 +157,7 @@ const ViewBussinessModal = ({
                     </View>
                   );
                 })}
-              {detailedBussiness?.businessPartnerList?.length > maxDisplay && (
+              {detailedBussiness?.businessPartner?.length > maxDisplay && (
                 <View
                   style={{
                     height: 40,
@@ -181,9 +175,7 @@ const ViewBussinessModal = ({
                       fontWeight: 'bold',
                       color: Colors.TEXT1,
                     }}>
-                    +
-                    {detailedBussiness?.businessPartnerList?.length -
-                      maxDisplay}
+                    +{detailedBussiness?.businessPartner?.length - maxDisplay}
                   </Text>
                 </View>
               )}
@@ -198,21 +190,17 @@ const ViewBussinessModal = ({
           {/* bussiness name */}
           <Text
             style={{fontSize: 20, fontWeight: 'bold', color: Colors.PRIMARY}}>
-            {detailedBussiness?.fetchBusiness?.businessName ??
+            {detailedBussiness?.businessName ??
               detailedBussiness?.fetchExistingPoliticalBusiness?.partyDocId
                 ?.partyName}
+            {detailedBussiness?.subCategory === '' ||
+            detailedBussiness?.subCategory === 'null'
+              ? ''
+              : `${detailedBussiness?.subCategory ?? ''}`}
           </Text>
           {/* bussiness details */}
           <Text style={{fontSize: 15, color: Colors.TEXT1}}>
-            {detailedBussiness?.fetchBusiness?.category ??
-              detailedBussiness?.fetchExistingPoliticalBusiness
-                ?.volunteerName}{' '}
-            ||{' '}
-            {detailedBussiness?.fetchBusiness?.subCategory ??
-              detailedBussiness?.fetchExistingPoliticalBusiness
-                ?.designation}{' '}
-            || {'\n'}
-            {detailedBussiness?.fetchBusiness?.description ??
+            {detailedBussiness?.description ??
               detailedBussiness?.fetchExistingPoliticalBusiness
                 ?.volunteerDetail ??
               '--'}
@@ -227,7 +215,7 @@ const ViewBussinessModal = ({
           <View style={styles.detailedCard}>
             <AntDesign name="phone" size={24} color={Colors.PRIMARY} />
             <Text style={{fontSize: 15, color: Colors.TEXT1}}>
-              {detailedBussiness?.fetchBusiness?.mobileNumber ??
+              {detailedBussiness?.mobileNumber ??
                 detailedBussiness?.fetchExistingPoliticalBusiness
                   ?.mobileNumber ??
                 '--'}
@@ -236,7 +224,7 @@ const ViewBussinessModal = ({
           <View style={styles.detailedCard}>
             <AntDesign name="mail" size={24} color={Colors.PRIMARY} />
             <Text style={{fontSize: 15, color: Colors.TEXT1}}>
-              {detailedBussiness?.fetchBusiness?.email ??
+              {detailedBussiness?.email ??
                 detailedBussiness?.fetchExistingPoliticalBusiness?.email ??
                 '--'}
             </Text>
@@ -244,57 +232,36 @@ const ViewBussinessModal = ({
           <View style={styles.detailedCard}>
             <Foundation name="web" size={24} color={Colors.PRIMARY} left={2} />
             <Text style={{fontSize: 15, color: Colors.TEXT1}}>
-              {detailedBussiness?.fetchBusiness?.web ??
+              {detailedBussiness?.website ??
                 detailedBussiness?.fetchExistingPoliticalBusiness?.web ??
                 '--'}
             </Text>
           </View>
           <View style={styles.detailedCard}>
             <Entypo name="location-pin" size={24} color={Colors.PRIMARY} />
-            <Text style={{fontSize: 15, color: Colors.TEXT1}}>
-              {detailedBussiness?.fetchBusiness?.address?.address ??
+            <Text
+              style={{
+                fontSize: 15,
+                color: Colors.TEXT1,
+                width: Sizes.wp('60%'),
+              }}>
+              {detailedBussiness?.address?.address ??
                 detailedBussiness?.fetchExistingPoliticalBusiness
                   ?.legislativeAssembly ??
                 '--'}{' '}
-              {detailedBussiness?.fetchBusiness?.address?.dist ??
+              {detailedBussiness?.address?.dist ??
                 detailedBussiness?.fetchExistingPoliticalBusiness?.district ??
                 '--'}{' '}
-              {detailedBussiness?.fetchBusiness?.address?.state ??
+              {detailedBussiness?.address?.state ??
                 detailedBussiness?.fetchExistingPoliticalBusiness?.state ??
                 '--'}{' '}
-              {detailedBussiness?.fetchBusiness?.address?.pinCode ??
+              {detailedBussiness?.address?.pinCode ??
                 detailedBussiness?.fetchExistingPoliticalBusiness?.pinCode ??
                 ' '}
             </Text>
           </View>
         </View>
         <Divider style={{borderColor: Colors.TEXT1, height: 1}} />
-        {/* delete the bussiness */}
-        {/* <TouchableOpacity
-          style={{
-            padding: 10,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-          onPress={() => {
-            Alert.alert(
-              'Delete Bussiness',
-              'Are you sure you want to delete this item?',
-              [
-                {
-                  text: 'Cancel',
-                  onPress: () => console.log('Cancel Pressed'),
-                  style: 'cancel',
-                },
-                {text: 'OK', onPress: () => console.log('OK Pressed')},
-              ],
-            );
-          }}>
-          <Text style={{fontSize: 15, color: Colors.TEXT1}}>
-            Delete Bussiness
-          </Text>
-          <AntDesign name="delete" size={24} color={Colors.PRIMARY} />
-        </TouchableOpacity> */}
 
         <View
           style={{
@@ -343,11 +310,11 @@ export default ViewBussinessModal;
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    height: Sizes.hp('60%'),
-    width: Sizes.wp('90%'),
+    maxHeight: Sizes.hp('60%'),
+    minWidth: Sizes.wp('90%'),
     alignSelf: 'center',
     backgroundColor: Colors.white,
+    borderRadius: 10,
   },
   image: {
     height: 100,
