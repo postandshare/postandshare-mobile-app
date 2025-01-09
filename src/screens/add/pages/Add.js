@@ -519,7 +519,7 @@ const Add = ({navigation, route}) => {
                             showBorderBox={showBorderBox}
                             colorProps={whatsAppPosition}
                             data={
-                              getUserProfile_Data?.data?.obj?.whatsappNumber ??
+                              getUserProfile_Data?.data?.obj?.whatsAppNumber ??
                               ToastAndroid.show(
                                 'Whatsapp Number is not available',
                                 ToastAndroid.LONG,

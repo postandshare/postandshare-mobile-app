@@ -12,7 +12,7 @@ import styles from './style';
 import MyBussinessCard from '../../components/MyBussinessCard';
 import CustomButton from '../../components/CustomButton';
 import {useQuery} from '@tanstack/react-query';
-import {getAllBusinessList} from '../../services/userServices/bussiness.servies';
+import {getBusinessProfile} from '../../services/userServices/bussiness.servies';
 import {useFocusEffect} from '@react-navigation/native';
 import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
@@ -38,20 +38,18 @@ const WorkProfileList = ({navigation, route}) => {
   const [bussinessList, setBussinessList] = useState([]);
   const [detailedBussiness, setDetailedBussiness] = useState();
   const {
-    isLoading: getAllBusinessListLoading,
-    isFetching: getAllBusinessListFetching,
-    refetch: getAllBusinessListRefetch,
-    data: getAllBusinessList_Data,
+    isLoading: getBusinessProfileLoading,
+    isFetching: getBusinessProfileFetching,
+    refetch: getBusinessProfileRefetch,
   } = useQuery({
-    queryKey: ['getAllBusinessList'],
+    queryKey: ['getBusinessProfile'],
     queryFn: () => {
       if (showBussiness?.show) {
-        return getAllBusinessList({
+        return getBusinessProfile({
           businessDocId: showBussiness?.businessId,
-          businessType: showBussiness?.businessType,
         });
       } else {
-        return getAllBusinessList();
+        return getBusinessProfile();
       }
     },
     onSuccess: success => {
@@ -87,8 +85,8 @@ const WorkProfileList = ({navigation, route}) => {
 
   useFocusEffect(
     useCallback(() => {
-      getAllBusinessListRefetch();
-    }, [getAllBusinessListRefetch, navigation]),
+      getBusinessProfileRefetch();
+    }, [getBusinessProfileRefetch, navigation]),
   );
 
   useFocusEffect(
@@ -96,9 +94,9 @@ const WorkProfileList = ({navigation, route}) => {
       if (showBussiness?.show) {
         if (showBussiness?.businessType === 'political') {
           getPoliticalPartyDetailsRefetch();
-        } else getAllBusinessListRefetch();
+        } else getBusinessProfileRefetch();
       }
-    }, [showBussiness, getAllBusinessListRefetch]),
+    }, [showBussiness, getBusinessProfileRefetch]),
   );
 
   const filteredBusinesses = bussinessList?.filter(
@@ -144,10 +142,12 @@ const WorkProfileList = ({navigation, route}) => {
                 bussinessDetails: getPoliticalPartyDetails_Data?.data?.obj,
               });
             } else {
-              navigation.navigate('Add Bussiness', {
-                businessId: showBussiness?.businessId,
-                bussinessDetails: getAllBusinessList_Data?.data?.obj,
-              });
+              navigation.navigate(
+                NavigationScreenName.ADD_EDIT_BUSINESS_STEP1,
+                {
+                  businessDocId: showBussiness?.businessId,
+                },
+              );
             }
           }}
           handleDelailedView={() => {
@@ -165,6 +165,7 @@ const WorkProfileList = ({navigation, route}) => {
           }}
         />
       </Portal>
+
       <ImageBackground
         source={images.background}
         style={globalStyles.backgroundImage}>
@@ -179,9 +180,9 @@ const WorkProfileList = ({navigation, route}) => {
           refreshControl={
             <RefreshControl
               refreshing={
-                getAllBusinessListFetching || getAllBusinessListLoading
+                getBusinessProfileFetching || getBusinessProfileLoading
               }
-              onRefresh={() => getAllBusinessListRefetch()}
+              onRefresh={() => getBusinessProfileRefetch()}
             />
           }
           contentContainerStyle={styles.root}>

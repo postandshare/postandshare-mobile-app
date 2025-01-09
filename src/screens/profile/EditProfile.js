@@ -42,7 +42,7 @@ const EditProfile = ({route, navigation}) => {
       community: data?.community ?? '',
       mobileNumber: data?.mobileNumber ?? '',
       alternateNumber: data?.alternateNumber ?? '',
-      whatsappNumber: data?.whatsappNumber ?? '',
+      whatsAppNumber: data?.whatsAppNumber ?? '',
       email: data?.email ?? '',
       PAN: data?.PAN ?? '',
       maritalStatus: data?.maritalStatus ?? '',

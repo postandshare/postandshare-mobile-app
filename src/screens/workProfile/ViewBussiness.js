@@ -1,5 +1,5 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/self-closing-comp */
 import {
   Alert,
   Image,
@@ -12,17 +12,15 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Text} from 'react-native-paper';
+import {Button, Text} from 'react-native-paper';
 import React, {useCallback, useRef, useState} from 'react';
 import TopHeader from '../../components/TopHeader';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {
-  addBusinessPartner,
   changeBusinessLogo,
   deleteBusiness,
   deleteBusinessPartner,
-  getAllBusinessList,
-  updateBusinessPartner,
+  getBusinessProfile,
 } from '../../services/userServices/bussiness.servies';
 import {useFocusEffect} from '@react-navigation/native';
 import images from '../../constants/images';
@@ -34,64 +32,30 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import uploadFile from '../../utils/uploadFile';
-import {useFormik} from 'formik';
-import * as yup from 'yup';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import ActionSheet from 'react-native-actions-sheet';
 import AddBussinessPartnerSheet from './components/actionsheets/AddBussinessPartnerSheet';
 import Loader from '../../components/Loader';
 import CustomButton from '../../components/CustomButton';
-import {getPoliticalPartyDetails} from '../../services/userServices/political.services';
 import globalStyles from '../../styles/globalStyles';
+import NavigationScreenName from '../../constants/NavigationScreenName';
 
 const ViewBussiness = ({route, navigation}) => {
   const {businessId, businessType} = route?.params;
   const [profilePic, setprofilePic] = useState('');
   const [imageUploading, setImageUploading] = useState(false);
   const [bussinessPartnerDetails, setBussinessPartnerDetails] = useState();
-  const bussinessPartnerDetailsFormik = useFormik({
-    initialValues: {
-      bussinessPartnerName: '',
-      bussinessPartnerDessignation: '',
-      bussinessPartnerPhoto: '',
-    },
-    validationSchema: yup.object({
-      //bussinessPartner
-      bussinessPartnerName: yup.string().required('Required'),
-      bussinessPartnerDessignation: yup.string().optional(),
-      bussinessPartnerPhoto: yup.string().optional(),
-    }),
-    onSubmit: formValues => {
-      actionSheetRef?.current?.hide();
-      let temp = {
-        name: formValues?.bussinessPartnerName,
-        designation: formValues?.bussinessPartnerDessignation,
-        photo: formValues?.bussinessPartnerPhoto,
-        businessDocId: businessId,
-      };
-      if (
-        bussinessPartnerDetails &&
-        Object?.keys(bussinessPartnerDetails).length > 0
-      ) {
-        temp.businessPartnerDocId = bussinessPartnerDetails?._id;
-        updateBusinessPartnerMutate(temp);
-      } else {
-        addBusinessPartnerlMutate(temp);
-      }
-    },
-  });
 
   const {
-    isLoading: getAllBusinessListLoading,
-    isFetching: getAllBusinessListFetching,
-    refetch: getAllBusinessListRefetch,
-    data: getAllBusinessList_Data,
+    isLoading: getBusinessProfileLoading,
+    isFetching: getBusinessProfileFetching,
+    refetch: getBusinessProfileRefetch,
+    data: getBusinessProfile_Data,
   } = useQuery({
-    queryKey: ['getAllBusinessList'],
+    queryKey: ['getBusinessProfile'],
     queryFn: () =>
-      getAllBusinessList({
+      getBusinessProfile({
         businessDocId: businessId,
-        businessType: businessType,
       }),
     onSuccess: success => {
       setprofilePic(success?.data?.obj?.ownerPhoto);
@@ -103,42 +67,12 @@ const ViewBussiness = ({route, navigation}) => {
   });
 
   const {
-    mutate: addBusinessPartnerlMutate,
-    isLoading: addBusinessPartnerlLoading,
-  } = useMutation(addBusinessPartner, {
-    onSuccess: ({data}) => {
-      ToastAndroid.show(data?.message, ToastAndroid.LONG);
-      bussinessPartnerDetailsFormik?.resetForm();
-      getAllBusinessListRefetch();
-    },
-    onError: err => {
-      console.log(err?.response?.data?.message, 'err');
-      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
-    },
-  });
-
-  const {
-    mutate: updateBusinessPartnerMutate,
-    isLoading: updateBusinessPartnerLoading,
-  } = useMutation(updateBusinessPartner, {
-    onSuccess: ({data}) => {
-      ToastAndroid.show(data?.message, ToastAndroid.LONG);
-      bussinessPartnerDetailsFormik?.resetForm();
-      getAllBusinessListRefetch();
-    },
-    onError: err => {
-      console.log(err?.response?.data?.message, 'err');
-      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
-    },
-  });
-
-  const {
     mutate: changeBusinessLogoMutate,
     isLoading: changeBusinessLogoLoading,
   } = useMutation(changeBusinessLogo, {
     onSuccess: ({data}) => {
       ToastAndroid.show(data?.message, ToastAndroid.LONG);
-      getAllBusinessListRefetch();
+      getBusinessProfileRefetch();
     },
     onError: err => {
       console.log(err?.response?.data?.message, 'err');
@@ -157,13 +91,14 @@ const ViewBussiness = ({route, navigation}) => {
         ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
       },
     });
+
   const {
     mutate: deleteBusinessPartnerMutate,
     isLoading: deleteBusinessPartnerLoading,
   } = useMutation(deleteBusinessPartner, {
     onSuccess: ({data}) => {
       ToastAndroid.show(data?.message, ToastAndroid.LONG);
-      getAllBusinessListRefetch();
+      getBusinessProfileRefetch();
     },
     onError: err => {
       console.log(err?.response?.data?.message, 'err');
@@ -173,7 +108,6 @@ const ViewBussiness = ({route, navigation}) => {
 
   const uploadePhoto = async (path, mime) => {
     try {
-      console.log(path, 'in uploade photo');
       setImageUploading(true);
       const uplode = await uploadFile({
         filePath: {path: path},
@@ -181,12 +115,10 @@ const ViewBussiness = ({route, navigation}) => {
         contentType: mime,
       });
       setImageUploading(false);
-      console.log(uplode?.fileURL, 'uplode file url');
-      changeBusinessLogo({
+      changeBusinessLogoMutate({
         businessDocId: businessId,
         logo: uplode?.fileURL,
       });
-
       setprofilePic(uplode?.fileURL);
     } catch (error) {
       setImageUploading(false);
@@ -223,24 +155,17 @@ const ViewBussiness = ({route, navigation}) => {
 
   useFocusEffect(
     useCallback(() => {
-      getAllBusinessListRefetch();
-    }, [getAllBusinessListRefetch, navigation]),
+      getBusinessProfileRefetch();
+    }, [getBusinessProfileRefetch, navigation]),
   );
 
   const actionSheetRef = useRef(null);
   const onPressCross = () => {
     actionSheetRef?.current?.hide();
-  };
-  const AddBussinessPartner = async () => {
-    bussinessPartnerDetailsFormik?.setTouched({
-      bussinessPartnerName: true,
-      bussinessPartnerDessignation: true,
-      bussinessPartnerPhoto: true,
-    });
-    bussinessPartnerDetailsFormik.handleSubmit();
+    setBussinessPartnerDetails({});
   };
 
-  const BussinessData = getAllBusinessList_Data?.data?.obj;
+  const BussinessData = getBusinessProfile_Data?.data?.obj;
 
   return (
     <>
@@ -248,16 +173,11 @@ const ViewBussiness = ({route, navigation}) => {
         text="Uploading Image"
         open={changeBusinessLogoLoading || imageUploading}
       />
-      <Loader
-        text="Adding Bussiness Partner"
-        open={addBusinessPartnerlLoading}
-      />
       <Loader text="Deleting Bussiness..." open={deleteBusinessLoading} />
       <Loader
         text="Deleting Bussiness Partner"
         open={deleteBusinessPartnerLoading}
       />
-      <Loader text="Updating..." open={updateBusinessPartnerLoading} />
       <ActionSheet
         ref={actionSheetRef}
         closeOnTouchBackdrop={false}
@@ -268,50 +188,48 @@ const ViewBussiness = ({route, navigation}) => {
           backgroundColor: '#f5f5f5',
         }}>
         <AddBussinessPartnerSheet
-          bussinessPartnerDetails={bussinessPartnerDetails}
+          selectedBussinessPartner={bussinessPartnerDetails}
+          bussinessDocId={businessId}
+          edit={!!bussinessPartnerDetails?._id}
           onPressCross={onPressCross}
-          addBusinessPartner={AddBussinessPartner}
-          bussinessTypeFormik={bussinessPartnerDetailsFormik}
+          refetch={getBusinessProfileRefetch}
         />
       </ActionSheet>
 
-      <TopHeader
-        titile={BussinessData?.fetchBusiness?.businessName ?? 'My Bussiness'}
-      />
+      <TopHeader titile={BussinessData?.businessName ?? 'My Bussiness'} />
 
       <ImageBackground
         source={images.background}
         style={globalStyles.backgroundImage}>
         <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+            paddingBottom: 150,
+          }}
           refreshControl={
             <RefreshControl
               refreshing={
-                getAllBusinessListFetching || getAllBusinessListLoading
+                getBusinessProfileFetching || getBusinessProfileLoading
               }
-              onRefresh={() => getAllBusinessListRefetch()}
+              onRefresh={() => getBusinessProfileRefetch()}
             />
-          }
-          style={{
-            flex: 1,
-          }}>
+          }>
           {/* logo view */}
           <View style={styles.logo_view}>
             <View style={styles.logo_container}>
               <Image
-                // source={images.profilePlaceholder}
-                source={{uri: BussinessData?.fetchBusiness?.logo ?? ''}}
+                source={{uri: BussinessData?.logo ?? ''}}
                 style={styles.logo}
               />
             </View>
             <View style={{flex: 0.6}}>
               <Text style={styles.logo_text}>
-                {BussinessData?.fetchBusiness?.businessName ?? '--'}
+                {BussinessData?.businessName ?? '--'}
               </Text>
               <Text style={styles.logo_text_subtitle}>
-                {BussinessData?.fetchBusiness?.category ?? '--'} ||{' '}
-                {BussinessData?.fetchBusiness?.subCategory ?? '--'} ||{' '}
+                {BussinessData?.subCategory ?? '--'} ||{' '}
                 <Text style={{color: 'green', fontStyle: 'italic'}}>
-                  {BussinessData?.fetchBusiness?.businessStatus ?? '--'}
+                  {BussinessData?.businessStatus ?? '--'}
                 </Text>
               </Text>
             </View>
@@ -326,42 +244,40 @@ const ViewBussiness = ({route, navigation}) => {
           <View style={styles.card_container}>
             <AntDesign name={'user'} size={25} color={Colors.PRIMARY} />
             <Text style={styles.card_text}>
-              {BussinessData?.fetchBusiness?.ownerName ?? '--'} (
-              {BussinessData?.fetchBusiness?.designation ?? '--'})
+              {BussinessData?.ownerDetail?.ownerName ?? '--'} (
+              {BussinessData?.ownerDetail?.designation ?? '--'})
             </Text>
           </View>
           {/* mobile number */}
           <View style={styles.card_container}>
             <AntDesign name={'mobile1'} size={25} color={Colors.PRIMARY} />
             <Text style={styles.card_text}>
-              {BussinessData?.fetchBusiness?.mobileNumber ?? '--'}
+              {BussinessData?.mobileNumber ?? '--'}
             </Text>
           </View>
           {/* whatsapp number */}
           <View style={styles.card_container}>
             <FontAwesome name={'whatsapp'} size={25} color={Colors.PRIMARY} />
             <Text style={styles.card_text}>
-              {BussinessData?.fetchBusiness?.whatsappNumber ?? '--'}
+              {BussinessData?.whatsAppNumber ?? '--'}
             </Text>
           </View>
           {/* mail */}
           <View style={styles.card_container}>
             <AntDesign name={'mail'} size={25} color={Colors.PRIMARY} />
-            <Text style={styles.card_text}>
-              {BussinessData?.fetchBusiness?.email ?? '--'}
-            </Text>
+            <Text style={styles.card_text}>{BussinessData?.email ?? '--'}</Text>
           </View>
           {/* address */}
           <View style={styles.card_container}>
             <Entypo name={'location'} size={25} color={Colors.PRIMARY} />
             <Text style={styles.card_text}>
-              {BussinessData?.fetchBusiness?.address?.address ?? '--'}
+              {BussinessData?.address?.address ?? '--'}
               {'\n'}
-              {BussinessData?.fetchBusiness?.address?.dist ?? '--'}
+              {BussinessData?.address?.dist ?? '--'}
               {'\n'}
-              {BussinessData?.fetchBusiness?.address?.state ?? '--'}
+              {BussinessData?.address?.state ?? '--'}
               {'\n'}
-              {BussinessData?.fetchBusiness?.address?.pinCode ?? '--'}
+              {BussinessData?.address?.pinCode ?? '--'}
             </Text>
           </View>
           {/* website */}
@@ -372,7 +288,7 @@ const ViewBussiness = ({route, navigation}) => {
               color={Colors.PRIMARY}
             />
             <Text style={styles.card_text}>
-              {BussinessData?.fetchBusiness?.website ?? '--'}
+              {BussinessData?.website ?? '--'}
             </Text>
           </View>
           {/* description */}
@@ -383,14 +299,14 @@ const ViewBussiness = ({route, navigation}) => {
               color={Colors.PRIMARY}
             />
             <Text style={styles.card_text}>
-              {BussinessData?.fetchBusiness?.description ?? '--'}
+              {BussinessData?.description ?? '--'}
             </Text>
           </View>
 
           <Text style={styles.bussinessPartnerText}>Bussiness Partner</Text>
-          {getAllBusinessList_Data?.data?.obj?.businessPartnerList?.map(
+          {getBusinessProfile_Data?.data?.obj?.businessPartner?.map(
             (item, index) => (
-              <View style={styles.bussinessPartnerView}>
+              <View style={styles.bussinessPartnerView} key={index}>
                 <Image
                   source={{uri: item?.photo ?? ''}}
                   style={{height: 60, width: 60, borderRadius: 50}}
@@ -418,12 +334,6 @@ const ViewBussiness = ({route, navigation}) => {
                     onPress={() => {
                       actionSheetRef?.current?.show();
                       setBussinessPartnerDetails(item);
-                      bussinessPartnerDetailsFormik.setValues(prev => ({
-                        ...prev,
-                        bussinessPartnerName: item?.name,
-                        bussinessPartnerDessignation: item?.designation,
-                        bussinessPartnerPhoto: item?.photo,
-                      }));
                     }}>
                     <FontAwesome name={'edit'} size={25} color={'#26A9E1'} />
                   </TouchableOpacity>
@@ -459,27 +369,32 @@ const ViewBussiness = ({route, navigation}) => {
           )}
 
           {/* add bussiness partner more */}
-          <TouchableOpacity
-            style={{
-              marginBottom: 10,
-            }}
+          <Button
+            mode="text"
             onPress={() => {
               setBussinessPartnerDetails({});
-              bussinessPartnerDetailsFormik?.resetForm();
               actionSheetRef?.current?.show();
+            }}
+            style={{
+              marginVertical: 10,
+              alignSelf: 'flex-start',
+              margin: 5,
             }}>
             <Text
               style={{
-                color: 'blue',
-                fontStyle: 'italic',
-                marginHorizontal: 10,
+                fontSize: 16,
+                fontWeight: '600',
+                color: '#26A9E1',
                 textDecorationLine: 'underline',
               }}>
-              Add more bussiness partner
+              + Add Bussiness Partner
             </Text>
-          </TouchableOpacity>
-
-          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+          </Button>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+            }}>
             <CustomButton
               title={'Delete'}
               onPress={() => {
@@ -508,10 +423,12 @@ const ViewBussiness = ({route, navigation}) => {
             <CustomButton
               title={'Edit'}
               onPress={() => {
-                navigation.navigate('Add Bussiness', {
-                  businessId: businessId,
-                  bussinessDetails: getAllBusinessList_Data?.data?.obj,
-                });
+                navigation.navigate(
+                  NavigationScreenName.ADD_EDIT_BUSINESS_STEP1,
+                  {
+                    businessDocId: businessId,
+                  },
+                );
               }}
               width="40%"
               customStyle={{marginBottom: 30}}
@@ -588,6 +505,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: Colors.TEXT1,
+    margin: 10,
   },
   bussinessPartnerView: {
     flexDirection: 'row',

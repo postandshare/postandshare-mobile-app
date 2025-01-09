@@ -7,15 +7,11 @@ import images from '../constants/images';
 import {Text} from 'react-native-paper';
 const MyBussinessCard = ({
   name,
-  EstblishmentDate,
   image,
-  userDocId,
-  lastUpdated,
   onPress,
   edit,
   onPressEdit,
   onPressForPhotoEdit,
-  data = {},
   details,
 }) => {
   return (

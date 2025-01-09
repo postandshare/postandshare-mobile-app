@@ -13,7 +13,7 @@ import images from '../../constants/images';
 import styles from './style';
 import TopHeader from '../../components/TopHeader';
 import {useQuery} from '@tanstack/react-query';
-import {getAllBusinessList} from '../../services/userServices/bussiness.servies';
+import {getBusinessProfile} from '../../services/userServices/bussiness.servies';
 import {useFocusEffect} from '@react-navigation/native';
 import NavigationScreenName from '../../constants/NavigationScreenName';
 import {getUserProfile} from '../../services/authServices/auth.services';
@@ -31,13 +31,13 @@ const SelectBussiness = ({route, navigation}) => {
   const [sortOption, setSortOption] = useState('Newest');
 
   const {
-    isLoading: getAllBusinessListLoading,
-    isFetching: getAllBusinessListFetching,
-    refetch: getAllBusinessListRefetch,
-    data: getAllBusinessList_Data,
+    isLoading: getBusinessProfileLoading,
+    isFetching: getBusinessProfileFetching,
+    refetch: getBusinessProfileRefetch,
+    data: getBusinessProfile_Data,
   } = useQuery({
-    queryKey: ['getAllBusinessList'],
-    queryFn: () => getAllBusinessList(),
+    queryKey: ['getBusinessProfile'],
+    queryFn: () => getBusinessProfile(),
     onSuccess: success => {},
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
@@ -69,11 +69,11 @@ const SelectBussiness = ({route, navigation}) => {
 
   useFocusEffect(
     useCallback(() => {
-      getAllBusinessListRefetch();
-    }, [getAllBusinessListRefetch, navigation]),
+      getBusinessProfileRefetch();
+    }, [getBusinessProfileRefetch, navigation]),
   );
 
-  const filteredBusinesses = getAllBusinessList_Data?.data?.list?.filter(
+  const filteredBusinesses = getBusinessProfile_Data?.data?.list?.filter(
     business =>
       business?.businessName
         ?.toLowerCase()
@@ -120,9 +120,9 @@ const SelectBussiness = ({route, navigation}) => {
           refreshControl={
             <RefreshControl
               refreshing={
-                getAllBusinessListFetching || getAllBusinessListLoading
+                getBusinessProfileFetching || getBusinessProfileLoading
               }
-              onRefresh={getAllBusinessListRefetch}
+              onRefresh={getBusinessProfileRefetch}
             />
           }
           contentContainerStyle={styles.root}>
@@ -139,7 +139,7 @@ const SelectBussiness = ({route, navigation}) => {
             name={
               getUserProfile_Data?.data?.obj?.firstName
                 ? getUserProfile_Data?.data?.obj?.firstName
-                : '-' + getAllBusinessList_Data?.data?.obj?.middleName
+                : '-' + getBusinessProfile_Data?.data?.obj?.middleName
                 ? getUserProfile_Data?.data?.obj?.middleName
                 : '-' + getUserProfile_Data?.data?.obj?.lastName
                 ? getUserProfile_Data?.data?.obj?.lastName
@@ -159,7 +159,7 @@ const SelectBussiness = ({route, navigation}) => {
             }
           />
           <Text style={styles.text}>Your Business</Text>
-          {getAllBusinessList_Data?.data?.list?.length === 0 && (
+          {getBusinessProfile_Data?.data?.list?.length === 0 && (
             <View style={styles.noData}>
               <Text style={styles.noDataText}>
                 You have not added any bussiness yet {'\n'}
@@ -179,7 +179,7 @@ const SelectBussiness = ({route, navigation}) => {
           )}
 
           <View style={styles.container}>
-            {!getAllBusinessList_Data?.data?.list?.length === 0 && (
+            {!getBusinessProfile_Data?.data?.list?.length === 0 && (
               <SearchSortFilter
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}

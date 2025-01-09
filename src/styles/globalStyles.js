@@ -13,7 +13,6 @@ const globalStyles = StyleSheet.create({
     resizeMode: 'cover',
     width: '100%',
     height: '100%',
-    // position: 'absolute',
   },
   input_label: {
     color: '#0C2F49',

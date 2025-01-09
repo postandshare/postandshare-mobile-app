@@ -17,7 +17,6 @@ export const TakePhotofromGalleryWithCrop = async () => {
         cropping: true,
       })
         .then(image => {
-          console.log(image, 'imgae in the edit profile');
           resolve({path: image.path, mime: image.mime});
         })
         .catch(err => {

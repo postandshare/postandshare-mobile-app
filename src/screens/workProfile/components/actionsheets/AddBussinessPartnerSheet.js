@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import globalStyles from '../../../../styles/globalStyles';
 import Colors from '../../../../constants/Colors';
@@ -17,7 +17,19 @@ import {Text} from 'react-native-paper';
 import ControllerInputOutlined from '../../../../components/ControllerInputOutlined';
 import {Controller, useForm} from 'react-hook-form';
 import Sizes from '../../../../constants/Sizes';
-const AddBussinessPartnerSheet = ({onPressAddPartner, onPressCross}) => {
+import {useMutation} from '@tanstack/react-query';
+import {
+  addBusinessPartner,
+  updateBusinessPartner,
+} from '../../../../services/userServices/bussiness.servies';
+
+const AddBussinessPartnerSheet = ({
+  onPressCross,
+  edit = false,
+  selectedBussinessPartner,
+  bussinessDocId,
+  refetch = () => {},
+}) => {
   const [imageUploading, setImageUploading] = useState(false);
   const {control, handleSubmit, reset, setValue} = useForm({
     defaultValues: {
@@ -26,15 +38,74 @@ const AddBussinessPartnerSheet = ({onPressAddPartner, onPressCross}) => {
       profilePic: '',
     },
   });
-  const onSubmit = data => {
-    onPressAddPartner(data);
+
+  useEffect(() => {
+    if (edit) {
+      setValue('bussinessPartnerName', selectedBussinessPartner?.name);
+      setValue(
+        'bussinessPartnerDessignation',
+        selectedBussinessPartner?.designation,
+      );
+      setValue('profilePic', selectedBussinessPartner?.photo);
+    }
+  }, [edit, selectedBussinessPartner, setValue]);
+
+  const handleClose = () => {
+    onPressCross();
     reset({
       bussinessPartnerName: '',
       bussinessPartnerDessignation: '',
       profilePic: '',
     });
-    onPressCross();
   };
+
+  const onSubmit = data => {
+    let body = {
+      businessDocId: bussinessDocId,
+      name: data?.bussinessPartnerName ?? '',
+      photo: data?.profilePic ?? '',
+      designation: data?.bussinessPartnerDessignation ?? '',
+    };
+    if (edit) {
+      body = {
+        ...body,
+        businessPartnerDocId: selectedBussinessPartner?._id,
+      };
+      return updateBusinessPartnerMutate(body);
+    }
+    addBusinessPartnerlMutate(body);
+  };
+
+  const {
+    mutate: addBusinessPartnerlMutate,
+    isLoading: addBusinessPartnerlLoading,
+  } = useMutation(addBusinessPartner, {
+    onSuccess: ({data}) => {
+      ToastAndroid.show(data?.message, ToastAndroid.LONG);
+      refetch();
+      handleClose();
+    },
+    onError: err => {
+      console.log(err?.response?.data?.message, 'err');
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+  });
+
+  const {
+    mutate: updateBusinessPartnerMutate,
+    isLoading: updateBusinessPartnerLoading,
+  } = useMutation(updateBusinessPartner, {
+    onSuccess: ({data}) => {
+      ToastAndroid.show(data?.message, ToastAndroid.LONG);
+      handleClose();
+      refetch();
+    },
+    onError: err => {
+      console.log(err?.response?.data?.message, 'err');
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+  });
+
   const uploadePhoto = async (path, mime) => {
     try {
       setImageUploading(true);
@@ -67,7 +138,6 @@ const AddBussinessPartnerSheet = ({onPressAddPartner, onPressCross}) => {
         cropping: true,
       })
         .then(image => {
-          console.log(image, 'imgae in the edit profile');
           uploadePhoto(image.path, image.mime);
         })
         .catch(err => {
@@ -79,17 +149,19 @@ const AddBussinessPartnerSheet = ({onPressAddPartner, onPressCross}) => {
     }
   };
 
+  const Loading = addBusinessPartnerlLoading || updateBusinessPartnerLoading;
+
   return (
     <>
       {/* header */}
       <View style={globalStyles.actionSheet_header}>
         <Text style={globalStyles.actionSheet_header_left_text}>
-          Add Bussiness Partner
+          {edit ? 'Edit Business Partner' : 'Add Business Partner'}
         </Text>
         <View>
           <TouchableOpacity
             style={globalStyles.actionSheet_header_right}
-            onPress={onPressCross}>
+            onPress={handleClose}>
             <Entypo
               style={globalStyles.actionSheet_header_right_text}
               name="cross"
@@ -149,7 +221,8 @@ const AddBussinessPartnerSheet = ({onPressAddPartner, onPressCross}) => {
         />
 
         <CustomButton
-          title={imageUploading ? 'Uploading...' : 'Add Partner'}
+          loading={Loading}
+          title={edit ? 'Update' : 'Add'}
           onPress={handleSubmit(onSubmit)}
         />
       </View>
