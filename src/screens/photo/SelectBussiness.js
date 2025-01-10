@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {Text} from 'react-native-paper';
 import React, {useCallback, useState} from 'react';
-import MyBussinessCard from '../../components/MyBussinessCard';
+import MyBussinessCard from '../../components/ShowProfileCard';
 import images from '../../constants/images';
 import styles from './style';
 import TopHeader from '../../components/TopHeader';

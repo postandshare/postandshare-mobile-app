@@ -5,24 +5,25 @@ import Colors from '../constants/Colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import images from '../constants/images';
 import {Text} from 'react-native-paper';
-const MyBussinessCard = ({
-  name,
-  image,
-  onPress,
-  edit,
-  onPressEdit,
-  onPressForPhotoEdit,
-  details,
-}) => {
+const ShowProfileCard = ({item, onPress}) => {
   return (
-    <TouchableOpacity
-      style={styles.root_container}
-      onPress={onPressForPhotoEdit ?? onPress}>
+    <TouchableOpacity style={styles.root_container} onPress={onPress}>
+      <View style={styles.top_card_wrap}>
+        <View style={styles.top_card}>
+          <Text style={styles.top_card_text}>
+            {item?.categoryGroup === 'business'
+              ? 'Business Profile'
+              : item?.categoryGroup === 'politics'
+              ? 'Political Profile'
+              : 'Personal Profile'}
+          </Text>
+        </View>
+      </View>
       {/* profile image */}
       <View style={styles.profile_container}>
-        {image ? (
+        {item?.logo ? (
           <Image
-            source={image ? {uri: image} : images?.profilePlaceholder}
+            source={item?.logo ? {uri: item?.logo} : images?.profilePlaceholder}
             style={{
               height: Sizes.hp('8%'),
               width: Sizes.hp('8%'),
@@ -31,37 +32,25 @@ const MyBussinessCard = ({
           />
         ) : (
           <FontAwesome
-            style={{color: '#26A9E1'}}
+            style={{color: Colors.PRIMARY}}
             name={'user-circle'}
             size={Sizes.hp('8%')}
           />
         )}
       </View>
 
-      {/* bussiness name and est date */}
       <View style={styles.name_container}>
-        <Text style={styles.bussinessName}>{name}</Text>
-        <Text style={styles.est_date}>{details ?? '--'}</Text>
-        {/* <Text style={styles.est_date}>
-          {moment(EstblishmentDate).format('LL')}
-        </Text> */}
+        <Text style={styles.bussinessName}>{item?.name}</Text>
       </View>
-
-      {/* edit button */}
-      {edit ? (
-        <TouchableOpacity style={styles.edit_button} onPress={onPressEdit}>
-          <FontAwesome style={{color: '#26A9E1'}} name={'edit'} size={25} />
-        </TouchableOpacity>
-      ) : null}
     </TouchableOpacity>
   );
 };
 
-export default MyBussinessCard;
+export default ShowProfileCard;
 
 const styles = StyleSheet.create({
   root_container: {
-    // flex: 1,
+    position: 'relative',
     width: Sizes.wp('95%'),
     minHeight: Sizes.hp('10%'),
     borderWidth: 1,
@@ -73,6 +62,29 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: 17,
+  },
+  top_card_wrap: {
+    position: 'absolute',
+    top: -17,
+    right: 0,
+    left: 0,
+    alignItems: 'flex-end',
+    marginRight: 10,
+  },
+  top_card: {
+    paddingHorizontal: 3,
+    minWidth: 140,
+    paddingVertical: 5,
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    elevation: 2,
+  },
+  top_card_text: {
+    fontSize: 16,
+    fontWeight: '700',
+    textTransform: 'capitalize',
+    textAlign: 'center',
   },
   name_container: {
     flex: 1,

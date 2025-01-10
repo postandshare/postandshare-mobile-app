@@ -45,4 +45,5 @@ export default {
   ADD_EDIT_POLITICAL: 'AddEditPolitical',
   ADD_POLITICAL_PROFILE: 'AddPoliticalProfile',
   ADD_LEADER_IN_POLITICAL_PROFILE: 'AddLeaderInPoliticalProfile',
+  EDIT_POLITICAL_PROFILE: 'EditPoliticalProfile',
 };

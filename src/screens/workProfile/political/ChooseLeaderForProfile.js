@@ -15,7 +15,6 @@ import Colors from '../../../constants/Colors';
 import Sizes from '../../../constants/Sizes';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 const ChooseLeaderForProfile = ({partyDocId, prevState, setPrevState}) => {
-  console.log(partyDocId);
   const {} = useQuery({
     queryKey: ['getGroupedLeaderDetail'],
     queryFn: () => getGroupedLeaderDetail({partyDocId}),

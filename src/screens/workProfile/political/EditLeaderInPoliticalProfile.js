@@ -11,16 +11,16 @@ import Colors from '../../../constants/Colors';
 import Sizes from '../../../constants/Sizes';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {
-  getPoliticalProfile,
+  getLeaderListByProfile,
   updateLeaderInProfile,
 } from '../../../services/userServices/political.services';
 import CustomButton from '../../../components/CustomButton';
 import ChooseLeaderForProfile from './ChooseLeaderForProfile';
 import Loader from '../../../components/Loader';
-import NavigationScreenName from '../../../constants/NavigationScreenName';
 import ShowSelectedLeaders from '../../../components/political/ShowSelectedLeaders';
+import NavigationScreenName from '../../../constants/NavigationScreenName';
 
-const AddLeaderInProfile = ({navigation, route}) => {
+const EditLeaderInPoliticalProfile = ({navigation, route}) => {
   const params = route.params;
   const [state, setState] = useState({
     profileData: {},
@@ -35,17 +35,7 @@ const AddLeaderInProfile = ({navigation, route}) => {
       leaderDocIds: state.selectedLeaderList?.map(item => item?._id),
     });
   };
-  useQuery({
-    queryKey: ['getPoliticalProfile'],
-    queryFn: () => getPoliticalProfile({profileDocId: params?.data?._id}),
-    onSuccess: success => {
-      setState(prev => ({...prev, profileData: success?.data?.obj}));
-    },
-    onError: error => {
-      ToastAndroid.show(error?.response?.data?.message, ToastAndroid.LONG);
-    },
-    enabled: params?.data?._id ? true : false,
-  });
+
   const {
     mutate: updateLeaderInProfileMutate,
     isLoading: updateLeaderInProfileLoading,
@@ -53,29 +43,43 @@ const AddLeaderInProfile = ({navigation, route}) => {
     mutationKey: ['updateLeaderInProfile'],
     mutationFn: updateLeaderInProfile,
     onSuccess: success => {
-      navigation.navigate(NavigationScreenName.WORK_PROFILE_LIST);
       ToastAndroid.show(success?.data?.message, ToastAndroid.LONG);
+      navigation.replace(NavigationScreenName.WORK_PROFILE_LIST);
     },
     onError: error => {
       ToastAndroid.show(error?.response?.data?.message, ToastAndroid.LONG);
     },
   });
+  useQuery({
+    queryKey: ['getLeaderListByProfile'],
+    queryFn: () => getLeaderListByProfile({profileDocId: params?.data?._id}),
+    onSuccess: success => {
+      setState(prev => ({...prev, selectedLeaderList: success?.data?.list}));
+    },
+    onError: error => {
+      ToastAndroid.show(error?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: params?.data?._id ? true : false,
+  });
   useEffect(() => {
+    const selectedLeadersId = state.selectedLeaderList?.map(res => res?._id);
     if (state.leadersList?.length > 0) {
       const selected = [];
       for (let res of state.leadersList) {
         for (let ld of res?.leaders) {
           if (ld?.checked) {
-            selected.push(ld);
+            if (!selectedLeadersId.includes(ld?._id)) {
+              selected.push(ld);
+            }
           }
         }
       }
       setState(prev => ({
         ...prev,
-        selectedLeaderList: selected,
+        selectedLeaderList: [...selected, ...prev.selectedLeaderList],
       }));
     }
-  }, [state.leaderChange, state.leadersList]);
+  }, [state.leaderChange]);
 
   return (
     <>
@@ -84,32 +88,10 @@ const AddLeaderInProfile = ({navigation, route}) => {
         <ChooseLeaderForProfile
           prevState={state}
           setPrevState={setState}
-          partyDocId={state?.profileData?.partyDocId?._id}
+          partyDocId={route.params?.data?.partyDocId?._id}
         />
       ) : (
         <View style={styles.root}>
-          {state.profileData?.partyDocId && (
-            <View style={styles.white_box}>
-              <View style={styles.party_card_wrapper}>
-                {state?.profileData?.partyDocId?.electionSymbol ? (
-                  <Image
-                    source={{
-                      uri: state?.profileData?.partyDocId?.electionSymbol,
-                    }}
-                    style={styles.logo}
-                  />
-                ) : (
-                  <View style={styles.logo} />
-                )}
-                <View>
-                  <Text style={styles.party_label}>Party Name</Text>
-                  <Text style={styles.party_text}>
-                    {state?.profileData?.partyDocId?.partyFullName}
-                  </Text>
-                </View>
-              </View>
-            </View>
-          )}
           <Text style={styles.title}>Selected Leader</Text>
           <View style={[styles.scrollview_wrap]}>
             <ScrollView
@@ -138,7 +120,7 @@ const AddLeaderInProfile = ({navigation, route}) => {
   );
 };
 
-export default AddLeaderInProfile;
+export default EditLeaderInPoliticalProfile;
 
 const styles = StyleSheet.create({
   root: {
@@ -195,7 +177,29 @@ const styles = StyleSheet.create({
   scrollview_wrap: {
     flex: 1,
   },
-
+  leader_img_wrap: {
+    position: 'relative',
+  },
+  show_count: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    backgroundColor: Colors.PRIMARY,
+    minHeight: 20,
+    minWidth: 20,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  leader_img: {
+    height: 100,
+    width: 100,
+    borderRadius: 5,
+    resizeMode: 'cover',
+  },
+  count_text: {
+    color: '#fff',
+  },
   contentContainerStyle: {
     paddingBottom: 20,
   },

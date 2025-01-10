@@ -11,25 +11,25 @@ import {
 } from 'react-native';
 import {IconButton, Text} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
-import ProfilePic from '../../components/ProfilePic';
-import uploadFile from '../../utils/uploadFile';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import ActionSheet from 'react-native-actions-sheet';
-import AddBussinessPartnerSheet from './components/actionsheets/AddBussinessPartnerSheet';
-import Colors from '../../constants/Colors';
-import images from '../../constants/images';
 import {useMutation, useQuery} from '@tanstack/react-query';
+import {useForm} from 'react-hook-form';
 import {
   deleteBusinessPartner,
   getBusinessProfile,
   updateBusinessOwnerDetail,
-} from '../../services/userServices/bussiness.servies';
-import Loader from '../../components/Loader';
-import {useForm} from 'react-hook-form';
-import ControllerInputOutlined from '../../components/ControllerInputOutlined';
-import Sizes from '../../constants/Sizes';
-import CustomButton from '../../components/CustomButton';
-import NavigationScreenName from '../../constants/NavigationScreenName';
+} from '../../../services/userServices/bussiness.servies';
+import NavigationScreenName from '../../../constants/NavigationScreenName';
+import uploadFile from '../../../utils/uploadFile';
+import Loader from '../../../components/Loader';
+import AddBussinessPartnerSheet from '../components/actionsheets/AddBussinessPartnerSheet';
+import ProfilePic from '../../../components/ProfilePic';
+import ControllerInputOutlined from '../../../components/ControllerInputOutlined';
+import images from '../../../constants/images';
+import Colors from '../../../constants/Colors';
+import CustomButton from '../../../components/CustomButton';
+import Sizes from '../../../constants/Sizes';
 
 const AddEditBusinessStep2 = ({navigation, route}) => {
   const {businessDocId} = route?.params ?? '';

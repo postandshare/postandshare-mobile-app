@@ -9,10 +9,9 @@ import {
 import React, {useCallback, useState} from 'react';
 import TopHeader from '../../components/TopHeader';
 import styles from './style';
-import MyBussinessCard from '../../components/MyBussinessCard';
+import MyBussinessCard from '../../components/ShowProfileCard';
 import CustomButton from '../../components/CustomButton';
 import {useQuery} from '@tanstack/react-query';
-import {getBusinessProfile} from '../../services/userServices/bussiness.servies';
 import {useFocusEffect} from '@react-navigation/native';
 import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
@@ -21,104 +20,53 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import Colors from '../../constants/Colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import ViewBussinessModal from './components/modal/ViewBussinessModal';
-import {getPoliticalPartyDetails} from '../../services/userServices/political.services';
 import NavigationScreenName from '../../constants/NavigationScreenName';
+import {getProfileListForContent} from '../../services/userServices/profile.services';
+
+import ShowProfileCard from '../../components/ShowProfileCard';
 
 const WorkProfileList = ({navigation, route}) => {
   const {picData} = route.params || {};
+  const [state, setState] = useState({viewModal: false, selectedItem: {}});
   const [searchQuery, setSearchQuery] = useState('');
   const PhotoData = picData;
   const [visible, setVisible] = useState(false);
   const [sortOption, setSortOption] = useState('Newest');
-  const [showBussiness, setShowBussiness] = useState({
-    show: false,
-    businessId: '',
-    businessType: '',
-  });
   const [bussinessList, setBussinessList] = useState([]);
-  const [detailedBussiness, setDetailedBussiness] = useState();
+  const handleOnPressCard = item => {
+    if (picData) {
+      navigation.navigate('CustomSDK', {
+        picData: PhotoData,
+      });
+      return;
+    }
+    setState(prev => ({...prev, selectedItem: item, viewModal: true}));
+  };
   const {
-    isLoading: getBusinessProfileLoading,
-    isFetching: getBusinessProfileFetching,
-    refetch: getBusinessProfileRefetch,
+    isLoading: getProfileListForContentLoading,
+    isFetching: getProfileListForContentFetching,
+    refetch: getProfileListForContentRefetch,
   } = useQuery({
-    queryKey: ['getBusinessProfile'],
-    queryFn: () => {
-      if (showBussiness?.show) {
-        return getBusinessProfile({
-          businessDocId: showBussiness?.businessId,
-        });
-      } else {
-        return getBusinessProfile();
-      }
-    },
+    queryKey: ['getProfileListForContent'],
+    queryFn: () => getProfileListForContent(),
     onSuccess: success => {
-      if (showBussiness?.show) {
-        setDetailedBussiness(success?.data?.obj);
-      } else {
-        setBussinessList(success?.data?.list);
-      }
+      setBussinessList(success?.data?.list);
     },
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
-    enabled: false,
   });
 
-  const {
-    refetch: getPoliticalPartyDetailsRefetch,
-    data: getPoliticalPartyDetails_Data,
-  } = useQuery({
-    queryKey: ['getPoliticalPartyDetails'],
-    queryFn: () =>
-      getPoliticalPartyDetails({
-        politicalBusinessDocId: showBussiness?.businessId,
-      }),
-    onSuccess: success => {
-      setDetailedBussiness(success?.data?.obj);
-    },
-    onError: err => {
-      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
-    },
-    enabled: false,
-  });
-
-  useFocusEffect(
-    useCallback(() => {
-      getBusinessProfileRefetch();
-    }, [getBusinessProfileRefetch, navigation]),
-  );
-
-  useFocusEffect(
-    useCallback(() => {
-      if (showBussiness?.show) {
-        if (showBussiness?.businessType === 'political') {
-          getPoliticalPartyDetailsRefetch();
-        } else getBusinessProfileRefetch();
-      }
-    }, [showBussiness, getBusinessProfileRefetch]),
-  );
-
-  const filteredBusinesses = bussinessList?.filter(
-    business =>
-      business?.businessName
-        ?.toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      business?.volunteerName
-        ?.toLowerCase()
-        .includes(searchQuery.toLowerCase()),
+  const filteredBusinesses = bussinessList?.filter(business =>
+    business?.name?.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const sortedBusinesses = [...(filteredBusinesses || [])].sort((a, b) => {
     switch (sortOption) {
       case 'AtoZ':
-        return (a?.businessName ?? a?.volunteerName)?.localeCompare(
-          b?.businessName ?? b?.volunteerName,
-        );
+        return a?.name?.localeCompare(b?.name);
       case 'ZtoA':
-        return (b?.businessName ?? b?.volunteerName)?.localeCompare(
-          a?.businessName ?? a?.volunteerName,
-        );
+        return b?.name?.localeCompare(a?.name);
       case 'Newest':
         return new Date(b?.createdOn) - new Date(a?.createdOn);
       case 'Oldest':
@@ -132,35 +80,25 @@ const WorkProfileList = ({navigation, route}) => {
     <>
       <Portal>
         <ViewBussinessModal
-          detailedBussiness={detailedBussiness}
-          showBussiness={showBussiness?.show}
-          setShowBussiness={setShowBussiness}
+          item={state.selectedItem}
+          open={state.viewModal}
+          onClose={() =>
+            setState(prev => ({...prev, selectedItem: {}, viewModal: false}))
+          }
           handleEdit={() => {
-            if (showBussiness?.businessType === 'political') {
-              navigation.navigate('Add Bussiness', {
-                businessId: showBussiness?.businessId,
-                bussinessDetails: getPoliticalPartyDetails_Data?.data?.obj,
+            if (state.selectedItem?.categoryGroup === 'politics') {
+              navigation.navigate(NavigationScreenName.EDIT_POLITICAL_PROFILE, {
+                data: state.selectedItem,
               });
-            } else {
+            } else if (state.selectedItem?.categoryGroup === 'business') {
               navigation.navigate(
                 NavigationScreenName.ADD_EDIT_BUSINESS_STEP1,
                 {
-                  businessDocId: showBussiness?.businessId,
+                  businessDocId: state.selectedItem?.profileDocId,
                 },
               );
-            }
-          }}
-          handleDelailedView={() => {
-            if (showBussiness?.businessType === 'political') {
-              navigation.navigate('View Political', {
-                businessId: showBussiness?.businessId,
-                businessType: showBussiness?.businessType,
-              });
             } else {
-              navigation.navigate('View Bussiness', {
-                businessId: showBussiness?.businessId,
-                businessType: showBussiness?.businessType,
-              });
+              navigation.navigate(NavigationScreenName.PROFILE);
             }
           }}
         />
@@ -180,9 +118,10 @@ const WorkProfileList = ({navigation, route}) => {
           refreshControl={
             <RefreshControl
               refreshing={
-                getBusinessProfileFetching || getBusinessProfileLoading
+                getProfileListForContentFetching ||
+                getProfileListForContentLoading
               }
-              onRefresh={() => getBusinessProfileRefetch()}
+              onRefresh={() => getProfileListForContentRefetch()}
             />
           }
           contentContainerStyle={styles.root}>
@@ -247,6 +186,7 @@ const WorkProfileList = ({navigation, route}) => {
                 />
               </Menu>
             </View>
+
             {searchQuery.length > 0 && sortedBusinesses.length === 0 && (
               <View style={styles.padded}>
                 <CustomButton
@@ -258,36 +198,10 @@ const WorkProfileList = ({navigation, route}) => {
             )}
 
             {sortedBusinesses?.map((item, index) => (
-              <MyBussinessCard
+              <ShowProfileCard
                 key={index}
-                name={item?.businessName ?? item?.volunteerName}
-                EstblishmentDate={item?.createdOn}
-                image={item?.logo ?? item?.partyLogo}
-                userDocId={item?._id}
-                lastUpdated={item?.lastUpdated ?? item?.createdOn}
-                details={
-                  item?.description ??
-                  (item?.volunteerDetail === ''
-                    ? 'No Description'
-                    : item?.volunteerDetail)
-                }
-                onPress={() =>
-                  picData
-                    ? navigation.navigate('CustomSDK', {
-                        picData: PhotoData,
-                      })
-                    : item?.businessType === 'political'
-                    ? setShowBussiness({
-                        show: true,
-                        businessId: item?._id,
-                        businessType: item?.businessType,
-                      })
-                    : setShowBussiness({
-                        show: true,
-                        businessId: item?._id,
-                        businessType: item?.businessType,
-                      })
-                }
+                item={item}
+                onPress={() => handleOnPressCard(item)}
               />
             ))}
 
@@ -295,36 +209,10 @@ const WorkProfileList = ({navigation, route}) => {
             {!searchQuery &&
               !sortedBusinesses?.length &&
               bussinessList?.map((item, index) => (
-                <MyBussinessCard
+                <ShowProfileCard
                   key={index}
-                  name={item?.businessName ?? item?.volunteerName}
-                  EstblishmentDate={item?.createdOn}
-                  image={item?.logo ?? item?.partyLogo}
-                  userDocId={item?._id}
-                  lastUpdated={item?.lastUpdated ?? item?.createdOn}
-                  // edit={true}
-                  // onPressEdit={() =>
-                  //   navigation.navigate('Edit Bussiness', {
-                  //     businessId: item?._id,
-                  //     businessType:item?.businessType,
-                  //   })
-                  // }
-                  onPress={() =>
-                    picData
-                      ? navigation.navigate('CustomSDK', {
-                          picData: PhotoData,
-                        })
-                      : item?.businessType === 'political'
-                      ? navigation.navigate('View Political', {
-                          businessId: item?._id,
-                          businessType: item?.businessType,
-                        })
-                      : setShowBussiness({
-                          show: true,
-                          businessId: item?._id,
-                          businessType: item?.businessType,
-                        })
-                  }
+                  item={item}
+                  onPress={() => handleOnPressCard(item)}
                 />
               ))}
           </View>

@@ -1,28 +1,13 @@
-import {
-  Image,
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  Text,
-  ToastAndroid,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet, Text, ToastAndroid, View} from 'react-native';
 import React, {useState} from 'react';
 import Sizes from '../../../constants/Sizes';
 import Colors from '../../../constants/Colors';
-import {RadioButton} from 'react-native-paper';
-import {Controller, useForm} from 'react-hook-form';
+import {useForm} from 'react-hook-form';
 import ControllerSingleInput from '../../../components/common/ControllerSingleInput';
 import ControllerDropdown from '../../../components/common/ControllerDropdown';
 import {useMutation, useQuery} from '@tanstack/react-query';
-import {
-  addPoliticalProfile,
-  getAllPartyDetails,
-} from '../../../services/userServices/political.services';
-import {onError} from '../../../utils/heplers';
+import {updatePoliticalProfileAddress} from '../../../services/userServices/political.services';
 import CustomButton from '../../../components/CustomButton';
-import globalStyles from '../../../styles/globalStyles';
 import {
   getDistrictListByStateName,
   getStateList,
@@ -30,7 +15,7 @@ import {
 import Loader from '../../../components/Loader';
 import NavigationScreenName from '../../../constants/NavigationScreenName';
 
-const AddPoliticalProfile = ({navigation}) => {
+const EditAddressPoliticalProfile = ({navigation, route}) => {
   const [state, setState] = useState({
     fetch: false,
     partyList: [],
@@ -39,41 +24,30 @@ const AddPoliticalProfile = ({navigation}) => {
   });
   const {control, handleSubmit, watch} = useForm({
     defaultValues: {
-      partyDocId: '',
+      profileDocId: route.params?.data?._id,
       address: {
-        address: '',
-        dist: '',
-        state: '',
-        tehsil: '',
-        pinCode: '',
+        address: route.params?.data?.address?.address,
+        dist: route.params?.data?.address?.dist,
+        state: route.params?.data?.address?.state,
+        tehsil: route.params?.data?.address?.tehsil,
+        pinCode: route.params?.data?.address?.pinCode,
       },
     },
   });
   const watchState = watch('address.state');
   const onSubmit = data => {
-    addPoliticalProfileMutate(data);
+    console.log(data, 'in params');
+    updatePoliticalProfileAddressMutate(data);
   };
   const {
-    mutate: addPoliticalProfileMutate,
-    isLoading: addPoliticalProfileLoading,
+    mutate: updatePoliticalProfileAddressMutate,
+    isLoading: updatePoliticalProfileAddressLoading,
   } = useMutation({
-    mutationKey: ['addPoliticalProfile'],
-    mutationFn: addPoliticalProfile,
+    mutationKey: ['updatePoliticalProfileAddress'],
+    mutationFn: updatePoliticalProfileAddress,
     onSuccess: success => {
-      navigation.navigate(
-        NavigationScreenName.ADD_LEADER_IN_POLITICAL_PROFILE,
-        {data: success?.data?.obj},
-      );
-    },
-    onError: error => {
-      ToastAndroid.show(error?.response?.data?.message, ToastAndroid.LONG);
-    },
-  });
-  useQuery({
-    queryKey: ['getAllPartyDetails'],
-    queryFn: getAllPartyDetails,
-    onSuccess: success => {
-      setState(prev => ({...prev, partyList: success?.data?.list}));
+      ToastAndroid.show(success?.data?.message, ToastAndroid.LONG);
+      navigation.replace(NavigationScreenName.WORK_PROFILE_LIST);
     },
     onError: error => {
       ToastAndroid.show(error?.response?.data?.message, ToastAndroid.LONG);
@@ -91,8 +65,11 @@ const AddPoliticalProfile = ({navigation}) => {
       }));
     },
     queryFn: getStateList,
-    onError: onError,
+    onError: error => {
+      ToastAndroid.show(error?.response?.data?.message, ToastAndroid.LONG);
+    },
   });
+
   useQuery({
     queryKey: ['getDistrictList', watchState],
     queryFn: () => getDistrictListByStateName({stateName: watchState}),
@@ -112,58 +89,15 @@ const AddPoliticalProfile = ({navigation}) => {
   });
   return (
     <>
-      <Loader open={addPoliticalProfileLoading} text="Submitting Form" />
+      <Loader
+        open={updatePoliticalProfileAddressLoading}
+        text="Submitting Form"
+      />
       <View style={styles.root}>
         <ScrollView
           nestedScrollEnabled
           contentContainerStyle={styles.contentContainerStyle}
           showsVerticalScrollIndicator={false}>
-          <Text style={styles.title}>Select Party</Text>
-
-          <View style={[styles.white_box, styles.second_sroll_box]}>
-            <Controller
-              rules={{
-                required: 'Please Select Party',
-              }}
-              control={control}
-              name="partyDocId"
-              render={({field: {value, onChange}, fieldState: {error}}) => (
-                <>
-                  <ScrollView
-                    persistentScrollbar
-                    nestedScrollEnabled
-                    contentContainerStyle={styles.second_sroll_container}>
-                    {state.partyList?.map((item, i) => (
-                      <TouchableOpacity
-                        key={i}
-                        style={styles.party_select_wrap}
-                        onPress={() => {
-                          onChange(item._id);
-                        }}>
-                        <RadioButton
-                          status={value === item._id ? 'checked' : 'unchecked'}
-                        />
-                        <View style={styles.part_img_wrap}>
-                          <Image
-                            style={styles.party_icon}
-                            source={{uri: item?.electionSymbol}}
-                          />
-                          <View>
-                            <Text style={styles.party_select_text}>
-                              {item.partyFullName}
-                            </Text>
-                          </View>
-                        </View>
-                      </TouchableOpacity>
-                    ))}
-                  </ScrollView>
-                  {error?.message && (
-                    <Text style={globalStyles.error_text}>{error.message}</Text>
-                  )}
-                </>
-              )}
-            />
-          </View>
           <Text style={styles.title}>Political Address </Text>
           <View style={styles.white_box}>
             <View>
@@ -229,14 +163,14 @@ const AddPoliticalProfile = ({navigation}) => {
           </View>
         </ScrollView>
         <View style={styles.submit_button}>
-          <CustomButton title={'Submit'} onPress={handleSubmit(onSubmit)} />
+          <CustomButton title={'Update'} onPress={handleSubmit(onSubmit)} />
         </View>
       </View>
     </>
   );
 };
 
-export default AddPoliticalProfile;
+export default EditAddressPoliticalProfile;
 
 const styles = StyleSheet.create({
   root: {

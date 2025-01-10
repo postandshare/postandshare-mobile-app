@@ -5,6 +5,13 @@ const baseURL = Config.AUTH_URL;
 const user_route = `${baseURL}/userSelf`;
 
 //getNotifications
+export const getProfileListForContent = params => {
+  return authAxiosInstance.get(`${user_route}/getProfileListForContent`, {
+    params,
+  });
+};
+
+//getNotifications
 export const getNotifications = params => {
   return authAxiosInstance.get(`${user_route}/getNotifications`, {
     params,

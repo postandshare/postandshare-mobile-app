@@ -30,13 +30,13 @@ const SelectWorkProfile = ({navigation}) => {
             style={styles.button}
             activeOpacity={0.5}
             onPress={handleNavigateToBussinessProfile}>
-            <Text style={styles.button_text}>Business Profile</Text>
+            <Text style={styles.button_text}>Create Business Profile</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
             activeOpacity={0.5}
             onPress={handleNavigateToPoliticalProfile}>
-            <Text style={styles.button_text}>Political Profile</Text>
+            <Text style={styles.button_text}>Create Political Profile</Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>

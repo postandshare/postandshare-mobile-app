@@ -16,6 +16,16 @@ const AddPoliticalProfile = React.lazy(() =>
 const AddLeaderInProfile = React.lazy(() =>
   import('./political/AddLeaderInProfile'),
 );
+const EditPoliticalProfile = React.lazy(() =>
+  import('./political/EditPoliticalProfile'),
+);
+const EditAddressPoliticalProfile = React.lazy(() =>
+  import('./political/EditAddressPoliticalProfile'),
+);
+const EditLeaderInPoliticalProfile = React.lazy(() =>
+  import('./political/EditLeaderInPoliticalProfile'),
+);
+const EditVolunteer = React.lazy(() => import('./political/EditVolunteer'));
 
 export const SelectWorkProfileScreen = props => (
   <React.Suspense fallback={<Fallback />}>
@@ -46,5 +56,25 @@ export const AddPoliticalProfileScreen = props => (
 export const AddLeaderInProfileScreen = props => (
   <React.Suspense fallback={<Fallback />}>
     <AddLeaderInProfile {...props} />
+  </React.Suspense>
+);
+export const EditPoliticalProfileScreen = props => (
+  <React.Suspense fallback={<Fallback />}>
+    <EditPoliticalProfile {...props} />
+  </React.Suspense>
+);
+export const EditAddressPoliticalProfileScreen = props => (
+  <React.Suspense fallback={<Fallback />}>
+    <EditAddressPoliticalProfile {...props} />
+  </React.Suspense>
+);
+export const EditLeaderInPoliticalProfileScreen = props => (
+  <React.Suspense fallback={<Fallback />}>
+    <EditLeaderInPoliticalProfile {...props} />
+  </React.Suspense>
+);
+export const EditVolunteerScreen = props => (
+  <React.Suspense fallback={<Fallback />}>
+    <EditVolunteer {...props} />
   </React.Suspense>
 );

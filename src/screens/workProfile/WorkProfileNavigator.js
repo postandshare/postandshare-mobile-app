@@ -12,6 +12,7 @@ import {
   AddLeaderInProfileScreen,
   SelectWorkProfileScreen,
   WorkProfileListScreen,
+  EditPoliticalProfileScreen,
 } from './Index';
 import NavigationScreenName from '../../constants/NavigationScreenName';
 
@@ -61,6 +62,14 @@ const WorkProfileNavigator = () => {
         }}
         name={NavigationScreenName.ADD_LEADER_IN_POLITICAL_PROFILE}
         component={AddLeaderInProfileScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          title: 'Edit Political Profile',
+        }}
+        name={NavigationScreenName.EDIT_POLITICAL_PROFILE}
+        component={EditPoliticalProfileScreen}
       />
       <Stack.Screen name="View Bussiness" component={ViewBussiness} />
       <Stack.Screen name="View Political" component={ViewPoliticalBussiness} />

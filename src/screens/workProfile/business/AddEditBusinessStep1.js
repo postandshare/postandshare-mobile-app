@@ -6,32 +6,33 @@ import {
   ToastAndroid,
   View,
 } from 'react-native';
-import {ProgressBar, Text} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import React, {useState} from 'react';
-import ProfilePic from '../../components/ProfilePic';
-import Dropdown from '../../components/Dropdown';
-import Loader from '../../components/Loader';
-import uploadFile from '../../utils/uploadFile';
-import globalStyles from '../../styles/globalStyles';
-import Colors from '../../constants/Colors';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {Controller, useForm} from 'react-hook-form';
-import CustomButton from '../../components/CustomButton';
-import ControllerInputOutlined from '../../components/ControllerInputOutlined';
-import Sizes from '../../constants/Sizes';
-import NavigationScreenName from '../../constants/NavigationScreenName';
-import {TakePhotofromGalleryWithCrop} from '../../utils/heplers';
-import {
-  getCategory,
-  getDistinctCategory,
-  getDistinctCategoryGroup,
-} from '../../services/userServices/category.service';
+import {DISTRICTS, STATES} from '../../../constants';
+import ProfilePic from '../../../components/ProfilePic';
+import uploadFile from '../../../utils/uploadFile';
+import {TakePhotofromGalleryWithCrop} from '../../../utils/heplers';
 import {
   addBusiness,
   getBusinessProfile,
   updateBusiness,
-} from '../../services/userServices/bussiness.servies';
-import {DISTRICTS, STATES} from '../../constants';
+} from '../../../services/userServices/bussiness.servies';
+import {
+  getCategory,
+  getDistinctCategory,
+  getDistinctCategoryGroup,
+} from '../../../services/userServices/category.service';
+import NavigationScreenName from '../../../constants/NavigationScreenName';
+import Loader from '../../../components/Loader';
+import {Dropdown} from 'react-native-element-dropdown';
+import globalStyles from '../../../styles/globalStyles';
+import ControllerInputOutlined from '../../../components/ControllerInputOutlined';
+import Sizes from '../../../constants/Sizes';
+import Colors from '../../../constants/Colors';
+import CustomButton from '../../../components/CustomButton';
+import ControllerDropdown from '../../../components/common/ControllerDropdown';
 
 const AddEditBusinessStep1 = ({navigation, route}) => {
   const {businessDocId} = route?.params || '';
@@ -131,9 +132,7 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
     refetch: getBusinessProfileRefetch,
   } = useQuery({
     queryKey: ['getBusinessProfile', businessDocId],
-    queryFn: () => {
-      return getBusinessProfile({businessDocId});
-    },
+    queryFn: () => getBusinessProfile({businessDocId}),
     onSuccess: success => {
       const data = success?.data?.obj;
       if (data) {
@@ -221,9 +220,9 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
           'Do you want to update more detail?',
           [
             {
-              text: 'Prooceed',
+              text: 'Yes',
               onPress: () => {
-                navigation.navigate(
+                navigation.replace(
                   NavigationScreenName.ADD_EDIT_BUSINESS_STEP2,
                   {
                     businessDocId: businessDocId,
@@ -232,9 +231,9 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
               },
             },
             {
-              text: 'Go Back',
+              text: 'No',
               onPress: () => {
-                navigation.navigate(NavigationScreenName.WORK_PROFILE_LIST);
+                navigation.replace(NavigationScreenName.WORK_PROFILE_LIST);
               },
             },
           ],
@@ -257,9 +256,9 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
           'But your business is not fully completed, Do you want to proceed?',
           [
             {
-              text: 'Prooceed',
+              text: 'Yes',
               onPress: () => {
-                navigation.navigate(
+                navigation.replace(
                   NavigationScreenName.ADD_EDIT_BUSINESS_STEP2,
                   {
                     businessDocId: success?.data?.obj?._id,
@@ -268,9 +267,9 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
               },
             },
             {
-              text: 'Cancel',
+              text: 'No',
               onPress: () => {
-                navigation.navigate(NavigationScreenName.WORK_PROFILE_LIST);
+                navigation.replace(NavigationScreenName.WORK_PROFILE_LIST);
               },
             },
           ],
@@ -319,108 +318,55 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
             </View>
 
             {/* bussiness category group dropdown */}
-            <View style={styles.box}>
-              <Controller
-                control={control}
-                name="bussinessCategoryGroup"
-                render={({field: {value, onChange}, fieldState: {error}}) => (
-                  <>
-                    <Dropdown
-                      width="100%"
-                      data={categoryGroupList?.map(item => ({
-                        label: item,
-                        value: item,
-                      }))}
-                      disabled={getDistinctCategoryGroupFetching}
-                      value={value}
-                      label="Select Bussiness Category Group "
-                      headerTitle="Select Bussiness Category Group "
-                      onChangeValue={res => {
-                        onChange(res);
-                        setValue('bussinessCategory', '');
-                        setValue('bussinessSubCategory', '');
-                        setValue('bussinessCategoryDocId', '');
-                      }}
-                    />
-                    {!!error && (
-                      <Text style={globalStyles.error_text}>
-                        {error?.message}
-                      </Text>
-                    )}
-                  </>
-                )}
-              />
-            </View>
+
+            <ControllerDropdown
+              control={control}
+              rules={{
+                required: 'Category group reauired',
+              }}
+              name="bussinessCategoryGroup"
+              data={categoryGroupList?.map(item => ({
+                label: item,
+                value: item,
+              }))}
+              disabled={getDistinctCategoryGroupFetching}
+              placeholder="Select Business Category Group"
+            />
+
             {/* bussiness catergory dropdown */}
-            <View style={styles.box}>
-              <Controller
-                control={control}
-                name="bussinessCategory"
-                rules={{
-                  required: 'Business category required',
-                }}
-                render={({field: {value, onChange}, fieldState: {error}}) => (
-                  <>
-                    <Dropdown
-                      width="100%"
-                      data={bussinessCategoryData?.map(item => ({
-                        label: item,
-                        value: item,
-                      }))}
-                      disabled={
-                        getDistinctCategoryFetching ||
-                        !watch('bussinessCategoryGroup')
-                      }
-                      value={value}
-                      label="Select Bussiness Category *"
-                      headerTitle="Select Bussiness Category *"
-                      onChangeValue={res => {
-                        onChange(res);
-                        setValue('bussinessCategoryDocId', '');
-                        setValue('bussinessSubCategory', '');
-                      }}
-                    />
-                    {!!error && (
-                      <Text style={globalStyles.error_text}>
-                        {error?.message}
-                      </Text>
-                    )}
-                  </>
-                )}
-              />
-            </View>
+
+            <ControllerDropdown
+              control={control}
+              name="bussinessCategory"
+              rules={{
+                required: 'Business category required',
+              }}
+              placeholder="Select Busines Category"
+              data={bussinessCategoryData?.map(item => ({
+                label: item,
+                value: item,
+              }))}
+              disabled={
+                getDistinctCategoryFetching || !watch('bussinessCategoryGroup')
+              }
+            />
+
             {/* bussiness subcategory dropdown */}
-            <View style={styles.box}>
-              <Controller
-                control={control}
-                name="bussinessCategoryDocId"
-                render={({field: {value, onChange}, fieldState: {error}}) => (
-                  <>
-                    <Dropdown
-                      data={(bussinessSubCategoryList || []).map(item => ({
-                        label: item?.subCategory,
-                        value: item?._id,
-                      }))}
-                      disabled={
-                        getCategoryFetching ||
-                        !watch('bussinessCategoryGroup') ||
-                        !watch('bussinessCategory')
-                      }
-                      value={value}
-                      label="Select Bussiness Sub-Category *"
-                      onChangeValue={res => {
-                        onChange(res);
-                      }}
-                    />
-                    {!!error && (
-                      <Text style={globalStyles.error_text}>
-                        {error?.message}
-                      </Text>
-                    )}
-                  </>
-                )}
-              />
-            </View>
+
+            <ControllerDropdown
+              control={control}
+              name="bussinessCategoryDocId"
+              data={(bussinessSubCategoryList || []).map(item => ({
+                label: item?.subCategory,
+                value: item?._id,
+              }))}
+              disabled={
+                getCategoryFetching ||
+                !watch('bussinessCategoryGroup') ||
+                !watch('bussinessCategory')
+              }
+              placeholder="Select  Sub Category"
+            />
           </View>
           <View>
             <Text style={styles.title}>Bussiness Profile</Text>
@@ -509,68 +455,32 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
                 name={'bussinessTehsil'}
                 label={'Bussiness Tehsil *'}
               />
-
-              <Controller
+              <ControllerDropdown
                 control={control}
                 name="bussinessState"
                 rules={{
                   required: 'State required',
                 }}
-                render={({field: {value, onChange}, fieldState: {error}}) => (
-                  <>
-                    <Dropdown
-                      width="100%"
-                      data={STATES.map(item => ({
-                        label: item,
-                        value: item,
-                      }))}
-                      value={value}
-                      label="Select State *"
-                      headerTitle="Select State *"
-                      onChangeValue={res => {
-                        onChange(res);
-                        setValue('bussinessDistrict', '');
-                      }}
-                    />
-                    {!!error && (
-                      <Text style={globalStyles.error_text}>
-                        {error?.message}
-                      </Text>
-                    )}
-                  </>
-                )}
+                data={STATES.map(item => ({
+                  label: item,
+                  value: item,
+                }))}
+                placeholder="Select State *"
               />
 
-              <Controller
+              <ControllerDropdown
                 control={control}
                 name="bussinessDistrict"
                 rules={{
                   required: 'District required',
                 }}
-                render={({field: {value, onChange}, fieldState: {error}}) => (
-                  <>
-                    <Dropdown
-                      width="100%"
-                      data={DISTRICTS[
-                        STATES.indexOf(watch('bussinessState')) + 1
-                      ]?.map(item => ({
-                        label: item,
-                        value: item,
-                      }))}
-                      value={value}
-                      label="Select District *"
-                      headerTitle="Select District *"
-                      onChangeValue={res => {
-                        onChange(res);
-                      }}
-                    />
-                    {!!error && (
-                      <Text style={globalStyles.error_text}>
-                        {error?.message}
-                      </Text>
-                    )}
-                  </>
-                )}
+                data={DISTRICTS[
+                  STATES.indexOf(watch('bussinessState')) + 1
+                ]?.map(item => ({
+                  label: item,
+                  value: item,
+                }))}
+                placeholder="Select District *"
               />
 
               <ControllerInputOutlined
