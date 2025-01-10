@@ -1,26 +1,36 @@
 {
   "project_info": {
-    "project_number": "318984367049",
-    "project_id": "postandshareapp",
-    "storage_bucket": "postandshareapp.appspot.com"
+    "project_number": "111666979918",
+    "project_id": "post-and-share",
+    "storage_bucket": "post-and-share.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:318984367049:android:243ac50da208895d951618",
+        "mobilesdk_app_id": "1:111666979918:android:e23b046df049370e9c4f1f",
         "android_client_info": {
-          "package_name": "com.postandshare_mobile_app"
+          "package_name": "com.postandshare.mobileapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "111666979918-8ftih4t5joqlk0tisdre3q3amnqbd9m9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyA120UjAeWxArBH_rw7mFyaphixPASNPHA"
+          "current_key": "AIzaSyCx4M1fGB3-bpBPH20XRhTFeJkqRWJXoRM"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "111666979918-8ftih4t5joqlk0tisdre3q3amnqbd9m9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

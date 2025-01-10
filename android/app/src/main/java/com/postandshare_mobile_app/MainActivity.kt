@@ -1,4 +1,4 @@
-package com.postandshare_mobile_app
+package com.postandshare.mobileapp
 
 import android.os.Bundle
 import com.facebook.react.ReactActivity
