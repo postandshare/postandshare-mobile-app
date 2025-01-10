@@ -14,8 +14,9 @@ import CustomButton from '../../../../components/CustomButton';
 import {Text} from 'react-native-paper';
 import {useMutation} from '@tanstack/react-query';
 import {deleteBusiness} from '../../../../services/userServices/bussiness.servies';
-import {deletePoliticalBusiness} from '../../../../services/userServices/political.services';
+
 import Loader from '../../../../components/Loader';
+import {deletePoliticalProfile} from '../../../../services/userServices/political.services';
 
 const ViewBussinessModal = ({
   onClose,
@@ -28,10 +29,11 @@ const ViewBussinessModal = ({
     onClose();
   };
   const handleDelete = () => {
+    console.log(item);
     if (item?.categoryGroup === 'business') {
-      deleteBusinessMutate(item?._id);
+      deleteBusinessMutate(item?.profileDocId);
     } else if (item?.categoryGroup === 'politics') {
-      deletePoliticalBusinessMutate(item?._id);
+      deletePoliticalProfileMutate(item?.profileDocId);
     }
   };
   const {isLoading: deleteBusinessLoading, mutate: deleteBusinessMutate} =
@@ -48,11 +50,11 @@ const ViewBussinessModal = ({
       },
     });
   const {
-    isLoading: deletePoliticalBusinessLoading,
-    mutate: deletePoliticalBusinessMutate,
+    isLoading: deletePoliticalProfileLoading,
+    mutate: deletePoliticalProfileMutate,
   } = useMutation({
-    mutationFn: deletePoliticalBusiness,
-    mutationKey: ['deletePoliticalBusiness'],
+    mutationFn: deletePoliticalProfile,
+    mutationKey: ['deletePoliticalProfile'],
     onSuccess: success => {
       ToastAndroid.show(success?.data?.message, ToastAndroid.SHORT);
       hideModal();
@@ -66,7 +68,7 @@ const ViewBussinessModal = ({
     <>
       <Loader
         text="Deleting..."
-        open={deletePoliticalBusinessLoading || deleteBusinessLoading}
+        open={deletePoliticalProfileLoading || deleteBusinessLoading}
       />
       <Modal
         visible={open}

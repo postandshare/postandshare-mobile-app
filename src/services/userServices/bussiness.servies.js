@@ -42,9 +42,9 @@ export const updateBusinessActiveness = body => {
 };
 
 //deleteBusiness
-export const deleteBusiness = body => {
+export const deleteBusiness = profileDocId => {
   return authAxiosInstance.delete(
-    `${bussiness_route}/deleteBusiness/${body?.bussinessDocId}`,
+    `${bussiness_route}/deleteBusiness/${profileDocId}`,
   );
 };
 

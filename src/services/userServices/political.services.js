@@ -46,10 +46,10 @@ export const getLeaderDetail = params =>
 export const addPoliticalLeader = body =>
   authAxiosInstance.post(`${political_route}/addPoliticalLeader`, body);
 
-//deletePoliticalBusiness
-export const deletePoliticalBusiness = body =>
+//deletePoliticalProfile
+export const deletePoliticalProfile = profileDocId =>
   authAxiosInstance.delete(
-    `${political_route}/deletePoliticalBusiness/${body?.businessDocId}`,
+    `${political_route}/deletePoliticalProfile/${profileDocId}`,
   );
 
 //getPoliticalPartyDetails
