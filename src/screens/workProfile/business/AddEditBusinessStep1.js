@@ -9,7 +9,7 @@ import {
 import {Text} from 'react-native-paper';
 import React, {useState} from 'react';
 import {useMutation, useQuery} from '@tanstack/react-query';
-import {Controller, useForm} from 'react-hook-form';
+import {useForm} from 'react-hook-form';
 import {DISTRICTS, STATES} from '../../../constants';
 import ProfilePic from '../../../components/ProfilePic';
 import uploadFile from '../../../utils/uploadFile';
@@ -26,8 +26,6 @@ import {
 } from '../../../services/userServices/category.service';
 import NavigationScreenName from '../../../constants/NavigationScreenName';
 import Loader from '../../../components/Loader';
-import {Dropdown} from 'react-native-element-dropdown';
-import globalStyles from '../../../styles/globalStyles';
 import ControllerInputOutlined from '../../../components/ControllerInputOutlined';
 import Sizes from '../../../constants/Sizes';
 import Colors from '../../../constants/Colors';
