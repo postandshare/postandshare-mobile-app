@@ -6,13 +6,13 @@ import {
   ToastAndroid,
   View,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useState} from 'react';
 import TopHeader from '../../components/TopHeader';
 import styles from './style';
-import MyBussinessCard from '../../components/ShowProfileCard';
+
 import CustomButton from '../../components/CustomButton';
 import {useQuery} from '@tanstack/react-query';
-import {useFocusEffect} from '@react-navigation/native';
+
 import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
 import {Menu, Portal, TextInput, Text} from 'react-native-paper';
@@ -80,6 +80,7 @@ const WorkProfileList = ({navigation, route}) => {
     <>
       <Portal>
         <ViewBussinessModal
+          refetch={getProfileListForContentRefetch}
           item={state.selectedItem}
           open={state.viewModal}
           onClose={() =>

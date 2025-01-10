@@ -7,92 +7,47 @@ import {
   View,
 } from 'react-native';
 import {Text} from 'react-native-paper';
-import React, {useCallback, useState} from 'react';
-import MyBussinessCard from '../../components/ShowProfileCard';
+import React, {useState} from 'react';
 import images from '../../constants/images';
 import styles from './style';
 import TopHeader from '../../components/TopHeader';
 import {useQuery} from '@tanstack/react-query';
-import {getBusinessProfile} from '../../services/userServices/bussiness.servies';
-import {useFocusEffect} from '@react-navigation/native';
 import NavigationScreenName from '../../constants/NavigationScreenName';
-import {getUserProfile} from '../../services/authServices/auth.services';
-
 import globalStyles from '../../styles/globalStyles';
 import CustomButton from '../../components/CustomButton';
 import SearchSortFilter from '../../components/SearchSortFilter';
+import {getProfileListForContent} from '../../services/userServices/profile.services';
+import ShowProfileCard from '../../components/ShowProfileCard';
 
 const SelectBussiness = ({route, navigation}) => {
   const {picData} = route?.params ?? {};
-  /******************************************************************************* */
-  /*****************************SearchSortFilterWork****************************** */
-  /******************************************************************************* */
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption, setSortOption] = useState('Newest');
 
   const {
-    isLoading: getBusinessProfileLoading,
-    isFetching: getBusinessProfileFetching,
-    refetch: getBusinessProfileRefetch,
-    data: getBusinessProfile_Data,
+    isLoading: getProfileListForContentLoading,
+    isFetching: getProfileListForContentFetching,
+    refetch: getProfileListForContentRefetch,
+    data: getProfileListForContent_Data,
   } = useQuery({
-    queryKey: ['getBusinessProfile'],
-    queryFn: () => getBusinessProfile(),
+    queryKey: ['getProfileListForContent'],
+    queryFn: () => getProfileListForContent(),
     onSuccess: success => {},
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
     enabled: false,
   });
-
-  const {
-    isLoading: getUserProfileLoading,
-    isFetching: getUserProfileFetching,
-    refetch: getUserProfileRefetch,
-    data: getUserProfile_Data,
-  } = useQuery({
-    queryKey: ['getUserProfile'],
-    queryFn: () => getUserProfile(),
-    onSuccess: success => {},
-    onError: err => {
-      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
-    },
-    enabled: false,
-  });
-
-  useFocusEffect(
-    React.useCallback(() => {
-      getUserProfileRefetch();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [getUserProfileRefetch, navigation]),
-  );
-
-  useFocusEffect(
-    useCallback(() => {
-      getBusinessProfileRefetch();
-    }, [getBusinessProfileRefetch, navigation]),
-  );
-
-  const filteredBusinesses = getBusinessProfile_Data?.data?.list?.filter(
+  const filteredBusinesses = getProfileListForContent_Data?.data?.list?.filter(
     business =>
-      business?.businessName
-        ?.toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      business?.volunteerName
-        ?.toLowerCase()
-        .includes(searchQuery.toLowerCase()),
+      business?.name?.toLowerCase().includes(searchQuery.toLowerCase()),
   );
-
   const sortedBusinesses = [...(filteredBusinesses || [])].sort((a, b) => {
     switch (sortOption) {
       case 'AtoZ':
-        return (a?.businessName ?? a?.volunteerName)?.localeCompare(
-          b?.businessName ?? b?.volunteerName,
-        );
+        return a?.name?.localeCompare(b?.name);
       case 'ZtoA':
-        return (b?.businessName ?? b?.volunteerName)?.localeCompare(
-          a?.businessName ?? a?.volunteerName,
-        );
+        return b?.name?.localeCompare(a?.name);
       case 'Newest':
         return new Date(b?.createdOn) - new Date(a?.createdOn);
       case 'Oldest':
@@ -101,7 +56,6 @@ const SelectBussiness = ({route, navigation}) => {
         return 0;
     }
   });
-
   return (
     <>
       <ImageBackground
@@ -120,9 +74,10 @@ const SelectBussiness = ({route, navigation}) => {
           refreshControl={
             <RefreshControl
               refreshing={
-                getBusinessProfileFetching || getBusinessProfileLoading
+                getProfileListForContentFetching ||
+                getProfileListForContentLoading
               }
-              onRefresh={getBusinessProfileRefetch}
+              onRefresh={getProfileListForContentRefetch}
             />
           }
           contentContainerStyle={styles.root}>
@@ -133,22 +88,10 @@ const SelectBussiness = ({route, navigation}) => {
             sortOption={sortOption}
             setSortOption={setSortOption}
           />
-          <Text style={styles.text}>Your Profile</Text>
-          {/* <MyBussinessCard */}
-          <MyBussinessCard
-            name={
-              getUserProfile_Data?.data?.obj?.firstName
-                ? getUserProfile_Data?.data?.obj?.firstName
-                : '-' + getBusinessProfile_Data?.data?.obj?.middleName
-                ? getUserProfile_Data?.data?.obj?.middleName
-                : '-' + getUserProfile_Data?.data?.obj?.lastName
-                ? getUserProfile_Data?.data?.obj?.lastName
-                : '-'
-            }
-            EstblishmentDate={getUserProfile_Data?.data?.obj?.DOB}
-            image={getUserProfile_Data?.data?.obj?.profilePic}
-            userDocId={getUserProfile_Data?.data?.obj?._id}
-            // lastUpdated={item?.lastUpdated ?? item?.createdOn}
+          {/* <Text style={styles.text}>Your Profile</Text> */}
+
+          {/* <ShowProfileCard
+            item={getUserProfile_Data?.data?.obj}
             onPress={() =>
               picData
                 ? navigation.navigate('CustomSDK', {
@@ -158,11 +101,11 @@ const SelectBussiness = ({route, navigation}) => {
                 : null
             }
           />
-          <Text style={styles.text}>Your Business</Text>
-          {getBusinessProfile_Data?.data?.list?.length === 0 && (
+          <Text style={styles.text}>Your Business</Text> */}
+          {getProfileListForContent_Data?.data?.list?.length === 0 && (
             <View style={styles.noData}>
               <Text style={styles.noDataText}>
-                You have not added any bussiness yet {'\n'}
+                You have not added any Work Profile yet {'\n'}
                 Please add a bussiness to continue
               </Text>
             </View>
@@ -179,7 +122,7 @@ const SelectBussiness = ({route, navigation}) => {
           )}
 
           <View style={styles.container}>
-            {!getBusinessProfile_Data?.data?.list?.length === 0 && (
+            {!getProfileListForContent_Data?.data?.list?.length === 0 && (
               <SearchSortFilter
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
@@ -189,30 +132,14 @@ const SelectBussiness = ({route, navigation}) => {
             )}
 
             {sortedBusinesses?.map((item, index) => (
-              <MyBussinessCard
+              <ShowProfileCard
+                item={item}
                 key={index}
-                details={
-                  item?.description ??
-                  (item?.volunteerDetail === ''
-                    ? 'No Description'
-                    : item?.volunteerDetail)
-                }
-                name={item?.businessName ?? item?.volunteerName}
-                EstblishmentDate={item?.createdOn}
-                image={item?.logo ?? item?.partyLogo}
-                userDocId={item?._id}
-                lastUpdated={item?.lastUpdated ?? item?.createdOn}
-                data={item}
                 onPress={() =>
-                  picData
-                    ? navigation.navigate('CustomSDK', {
-                        picData: picData,
-                        businessDetails: item,
-                      })
-                    : navigation.navigate('View Bussiness', {
-                        businessId: item?._id,
-                        businessType: item?.businessType,
-                      })
+                  navigation.navigate('CustomSDK', {
+                    picData: picData,
+                    businessDetails: item,
+                  })
                 }
               />
             ))}

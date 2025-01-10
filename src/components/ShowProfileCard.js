@@ -9,8 +9,19 @@ const ShowProfileCard = ({item, onPress}) => {
   return (
     <TouchableOpacity style={styles.root_container} onPress={onPress}>
       <View style={styles.top_card_wrap}>
-        <View style={styles.top_card}>
-          <Text style={styles.top_card_text}>
+        <View
+          style={[
+            styles.top_card,
+            {
+              backgroundColor:
+                item?.categoryGroup === 'business'
+                  ? Colors.PRIMARY
+                  : item?.categoryGroup === 'politics'
+                  ? '#9AA6B2'
+                  : '#72BF78',
+            },
+          ]}>
+          <Text style={[styles.top_card_text]}>
             {item?.categoryGroup === 'business'
               ? 'Business Profile'
               : item?.categoryGroup === 'politics'
@@ -66,7 +77,7 @@ const styles = StyleSheet.create({
   },
   top_card_wrap: {
     position: 'absolute',
-    top: -17,
+    top: -15,
     right: 0,
     left: 0,
     alignItems: 'flex-end',
@@ -85,6 +96,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textTransform: 'capitalize',
     textAlign: 'center',
+    color: '#fff',
   },
   name_container: {
     flex: 1,

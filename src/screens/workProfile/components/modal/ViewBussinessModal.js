@@ -1,28 +1,73 @@
 /* eslint-disable react-native/no-inline-styles */
-import {Image, StyleSheet, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import {Divider, Modal} from 'react-native-paper';
 import Colors from '../../../../constants/Colors';
 import Sizes from '../../../../constants/Sizes';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Foundation from 'react-native-vector-icons/Foundation';
-import Entypo from 'react-native-vector-icons/Entypo';
 import CustomButton from '../../../../components/CustomButton';
 import {Text} from 'react-native-paper';
+import {useMutation} from '@tanstack/react-query';
+import {deleteBusiness} from '../../../../services/userServices/bussiness.servies';
+import {deletePoliticalBusiness} from '../../../../services/userServices/political.services';
+import Loader from '../../../../components/Loader';
 
 const ViewBussinessModal = ({
   onClose,
   open,
   item,
   handleEdit = () => {},
-  handleDelailedView = () => {},
+  refetch,
 }) => {
   const hideModal = () => {
     onClose();
   };
-
+  const handleDelete = () => {
+    if (item?.categoryGroup === 'business') {
+      deleteBusinessMutate(item?._id);
+    } else if (item?.categoryGroup === 'politics') {
+      deletePoliticalBusinessMutate(item?._id);
+    }
+  };
+  const {isLoading: deleteBusinessLoading, mutate: deleteBusinessMutate} =
+    useMutation({
+      mutationFn: deleteBusiness,
+      mutationKey: ['deleteBusiness'],
+      onSuccess: success => {
+        ToastAndroid.show(success?.data?.message, ToastAndroid.SHORT);
+        hideModal();
+        refetch();
+      },
+      onError: error => {
+        ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
+      },
+    });
+  const {
+    isLoading: deletePoliticalBusinessLoading,
+    mutate: deletePoliticalBusinessMutate,
+  } = useMutation({
+    mutationFn: deletePoliticalBusiness,
+    mutationKey: ['deletePoliticalBusiness'],
+    onSuccess: success => {
+      ToastAndroid.show(success?.data?.message, ToastAndroid.SHORT);
+      hideModal();
+      refetch();
+    },
+    onError: error => {
+      ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
+    },
+  });
   return (
     <>
+      <Loader
+        text="Deleting..."
+        open={deletePoliticalBusinessLoading || deleteBusinessLoading}
+      />
       <Modal
         visible={open}
         contentContainerStyle={{
@@ -129,6 +174,13 @@ const ViewBussinessModal = ({
           </>
         )}
         <Divider style={styles.divider} />
+        {item?.categoryGroup !== 'selfProfile' && (
+          <TouchableOpacity onPress={handleDelete}>
+            <Text style={styles.delete_text}>
+              Want to Delete This Profile ?
+            </Text>
+          </TouchableOpacity>
+        )}
         <View
           style={{
             flexDirection: 'row',
@@ -218,5 +270,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#000',
     fontWeight: '700',
+  },
+  delete_text: {
+    color: 'red',
+    fontSize: 16,
+    textDecorationLine: 'underline',
+    textDecorationColor: 'red',
+
+    textAlign: 'center',
   },
 });
