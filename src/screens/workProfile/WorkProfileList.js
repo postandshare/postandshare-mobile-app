@@ -9,10 +9,8 @@ import {
 import React, {useState} from 'react';
 import TopHeader from '../../components/TopHeader';
 import styles from './style';
-
 import CustomButton from '../../components/CustomButton';
 import {useQuery} from '@tanstack/react-query';
-
 import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
 import {Menu, Portal, TextInput, Text} from 'react-native-paper';
@@ -22,11 +20,12 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import ViewBussinessModal from './components/modal/ViewBussinessModal';
 import NavigationScreenName from '../../constants/NavigationScreenName';
 import {getProfileListForContent} from '../../services/userServices/profile.services';
-
 import ShowProfileCard from '../../components/ShowProfileCard';
+import {useIsFocused} from '@react-navigation/native';
 
 const WorkProfileList = ({navigation, route}) => {
   const {picData} = route.params || {};
+  const isFocused = useIsFocused();
   const [state, setState] = useState({viewModal: false, selectedItem: {}});
   const [searchQuery, setSearchQuery] = useState('');
   const PhotoData = picData;
@@ -47,7 +46,7 @@ const WorkProfileList = ({navigation, route}) => {
     isFetching: getProfileListForContentFetching,
     refetch: getProfileListForContentRefetch,
   } = useQuery({
-    queryKey: ['getProfileListForContent'],
+    queryKey: ['getProfileListForContent', isFocused],
     queryFn: () => getProfileListForContent(),
     onSuccess: success => {
       setBussinessList(success?.data?.list);

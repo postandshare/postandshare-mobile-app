@@ -6,9 +6,12 @@ import Sizes from '../../../constants/Sizes';
 import moment from 'moment';
 import ImagePicker from 'react-native-image-crop-picker';
 import ProfilePic from '../../../components/ProfilePic';
-import {useMutation} from '@tanstack/react-query';
+import {useMutation, useQuery} from '@tanstack/react-query';
 import {updateSelfPhoto} from '../../../services/userServices/profile.services';
 import uploadFile from '../../../utils/uploadFile';
+import {getUserProfile} from '../../../services/authServices/auth.services';
+import {useDispatch} from 'react-redux';
+import {setUserDetails} from '../../../services/reducer/CommonReducer';
 
 const LabelText = ({label, value}) => {
   return (
@@ -26,29 +29,21 @@ const LabelText = ({label, value}) => {
 const ProfileDetails = ({data}) => {
   const [profilePic, setprofilePic] = useState(data?.profilePic ?? '');
   const [imageUploading, setImageUploading] = useState(false);
-  const {mutate: updateSelfPhotoMutate, isLoading: updateSelfPhotoLoading} =
-    useMutation(updateSelfPhoto, {
-      onSuccess: ({data}) => {
-        ToastAndroid.show(data?.message, ToastAndroid.LONG);
-      },
-      onError: err =>
-        ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG),
-      enabled: false,
-    });
+  const dispatch = useDispatch();
 
   const uploadePhoto = async (path, mime) => {
     try {
       setImageUploading(true);
       const uplode = await uploadFile({
         filePath: {path: path},
-        fileLocation: `profile/${Date.now()}`,
+        fileLocation: `postAndShare/profile/${Date.now()}`,
         contentType: mime,
       });
       setImageUploading(false);
+      setprofilePic(uplode?.fileURL);
       updateSelfPhotoMutate({
         profilePic: uplode?.fileURL,
       });
-      setprofilePic(uplode?.fileURL);
     } catch (error) {
       setImageUploading(false);
     }
@@ -70,7 +65,6 @@ const ProfileDetails = ({data}) => {
         cropping: true,
       })
         .then(image => {
-          console.log(image, 'imgae in the edit profile');
           uploadePhoto(image.path, image.mime);
         })
         .catch(err => {
@@ -81,7 +75,25 @@ const ProfileDetails = ({data}) => {
       ToastAndroid.show('Permission Denied', ToastAndroid.LONG);
     }
   };
-
+  const {refetch: getUserProfileRefetch} = useQuery({
+    queryKey: ['getUserProfileInEdit'],
+    queryFn: () => getUserProfile(),
+    onSuccess: success => {
+      dispatch(setUserDetails(success?.data?.obj));
+    },
+    onError: err => {
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
+    },
+    enabled: false,
+  });
+  const {mutate: updateSelfPhotoMutate} = useMutation(updateSelfPhoto, {
+    onSuccess: success => {
+      getUserProfileRefetch();
+      ToastAndroid.show(success?.data?.message, ToastAndroid.LONG);
+    },
+    onError: err =>
+      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG),
+  });
   return (
     <View style={styles.container}>
       {/* profile image */}

@@ -65,7 +65,7 @@ const TopHeader = ({
         </View>
       ) : add ? (
         <TouchableOpacity onPress={onPress}>
-          <AntDesign name={'plussquareo'} size={26} color={Colors.TEXT1} />
+          <AntDesign name={'plussquareo'} size={26} color={Colors.PRIMARY} />
         </TouchableOpacity>
       ) : icon ? (
         <TouchableOpacity onPress={onPress}>

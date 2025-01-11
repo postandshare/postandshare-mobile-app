@@ -1,4 +1,11 @@
 export default {
+  // auth
+  FORGET_PASSWORD: 'Forget-Password',
+  CHANGE_PASSWORD: 'Change-Password',
+  VERIFY_OTP: 'VerifyOTP',
+  LOGIN: 'Login',
+  SIGNUP: 'Signup',
+
   //Navigator Screen Name
   ATUH_NAVIGATOR: 'AuthNavigator',
   BOTOOM_TAB_NAVIGATOR: 'BottomTabNavigator',
@@ -6,28 +13,24 @@ export default {
   DRWAER_NAVIGATOR: 'DrawerStack',
   ADD_NAVIGATOR: 'AddNavigator',
   MAIN_NAVIGATOR: 'leftDrawer',
-
-  //Navigator in the Screen Name
   PHOTO_NAVIGATOR: 'PhotoNavigator',
-  //Screen Name
-  SPLASH: 'Splash',
-  ONBOARDING: 'OnBoarding',
-  LOGIN: 'Login',
-  SIGNUP: 'Signup',
-  FORGET_PASSWORD: 'Forget-Password',
-  CHANGE_PASSWORD: 'Change-Password',
-  VERIFY_OTP: 'VerifyOTP',
-  HOME: 'Home',
+
+  //tabs screens
   PROFILE: 'Profile',
   ADD: 'Add',
-  PHOTOS_STATUS: 'PhotoStatus',
+  HOME: 'Home',
   EVENTS: 'Events',
+  MY_POST: 'MyPost',
+
+  SPLASH: 'Splash',
+  ONBOARDING: 'OnBoarding',
+  EDIT_PROFILE: 'EditProfile',
+  PHOTOS_STATUS: 'PhotoStatus',
   WALLPAPER: 'Wallpaper',
   TERM_AND_CONDITION: 'TermAndCondtion',
   BIRTHDAY_REMAINDER_NAVIGATOR: 'BirthdayRemainderNavigator',
   MY_BUSSINESS: 'MyBussinessNavigator',
   LANGUAGE_SELECTION: 'LanguageSelection',
-  MY_POST: 'MyPost',
   CHOOSE: 'Choose',
   TUTORIALS: 'Tutorial',
   Privacy_Policy: 'Privacy',

@@ -26,6 +26,7 @@ const ChooseLeaderForProfile = ({partyDocId, prevState, setPrevState}) => {
     },
     enabled: partyDocId ? true : false,
   });
+
   return (
     <>
       <View style={styles.root}>
@@ -52,6 +53,12 @@ const ChooseLeaderForProfile = ({partyDocId, prevState, setPrevState}) => {
                         res?.checked ? styles.checked_img : null,
                       ]}
                     />
+                    <Text
+                      numberOfLines={2}
+                      ellipsizeMode="tail"
+                      style={styles.leader_name_text}>
+                      {res?.leaderName}
+                    </Text>
                     {res?.checked && (
                       <View style={styles.ok_circle}>
                         <AntDesign
@@ -138,5 +145,11 @@ const styles = StyleSheet.create({
   },
   checked_img: {
     opacity: 0.5,
+  },
+  leader_name_text: {
+    width: Sizes.wp('26%'),
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#000',
   },
 });

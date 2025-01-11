@@ -36,7 +36,6 @@ const SelectBussiness = ({route, navigation}) => {
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
-    enabled: false,
   });
   const filteredBusinesses = getProfileListForContent_Data?.data?.list?.filter(
     business =>

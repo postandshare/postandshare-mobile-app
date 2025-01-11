@@ -11,9 +11,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Colors from '../constants/Colors';
 import Choose from '../screens/add/pages/Choose';
 import BirthdayRemainderNavigator from '../screens/birthday';
-import ProfileNavigator from '../screens/profile';
 import MyPost from '../screens/mypost';
 import {Text} from 'react-native-paper';
+import {ProfileViewScreen} from '../screens/profile';
 const CustomTabBarButton = ({children, onPress}) => (
   <TouchableOpacity
     style={{
@@ -139,7 +139,7 @@ const BottomTab = () => {
       />
       <Tab.Screen
         name={NavigationScreenName.PROFILE}
-        component={ProfileNavigator}
+        component={ProfileViewScreen}
         options={{
           title: 'Profile',
           tabBarIcon: ({focused}) =>

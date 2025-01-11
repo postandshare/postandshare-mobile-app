@@ -29,7 +29,7 @@ import {
 } from '../../../services/userServices/misc.services';
 import Loader from '../../../components/Loader';
 import NavigationScreenName from '../../../constants/NavigationScreenName';
-
+import AntDesign from 'react-native-vector-icons/AntDesign';
 const AddPoliticalProfile = ({navigation}) => {
   const [state, setState] = useState({
     fetch: false,
@@ -136,20 +136,44 @@ const AddPoliticalProfile = ({navigation}) => {
                     {state.partyList?.map((item, i) => (
                       <TouchableOpacity
                         key={i}
-                        style={styles.party_select_wrap}
+                        style={[
+                          styles.party_select_wrap,
+                          {
+                            backgroundColor:
+                              value === item._id ? Colors.PRIMARY : null,
+                          },
+                        ]}
                         onPress={() => {
                           onChange(item._id);
                         }}>
-                        <RadioButton
-                          status={value === item._id ? 'checked' : 'unchecked'}
-                        />
+                        {value === item._id && (
+                          <>
+                            <AntDesign
+                              name="checkcircle"
+                              style={{
+                                color: '#fff',
+                                marginLeft: 10,
+                                fontSize: 30,
+                              }}
+                            />
+                          </>
+                        )}
                         <View style={styles.part_img_wrap}>
                           <Image
                             style={styles.party_icon}
                             source={{uri: item?.electionSymbol}}
                           />
                           <View>
-                            <Text style={styles.party_select_text}>
+                            <Text
+                              style={[
+                                styles.party_select_text,
+                                {
+                                  color:
+                                    value === item._id
+                                      ? '#fff'
+                                      : Colors.PRIMARY,
+                                },
+                              ]}>
                               {item.partyFullName}
                             </Text>
                           </View>

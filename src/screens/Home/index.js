@@ -62,7 +62,7 @@ const Home = ({navigation}) => {
     navigation.navigate(NavigationScreenName.NOTIFICATION);
   };
   const onPresProfile = () => {
-    navigation.navigate('ProfileNavigator');
+    navigation.navigate(NavigationScreenName.PROFILE);
   };
 
   const {refetch: getUserProfileRefetch, data: getUserProfile_Data} = useQuery({

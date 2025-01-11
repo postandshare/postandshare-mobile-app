@@ -17,7 +17,10 @@ import {Skeleton} from 'moti/skeleton';
 import {MotiView} from 'moti';
 import Sizes from '../../constants/Sizes';
 import {useDispatch} from 'react-redux';
-import {setProfileUpdated} from '../../services/reducer/CommonReducer';
+import {
+  setProfileUpdated,
+  setUserDetails,
+} from '../../services/reducer/CommonReducer';
 import ProfileDetails from './components/ProfileDetails';
 import SocialMediaDetails from './components/SocialMediaDetails';
 import AddressDetails from './components/AddressDetails';
@@ -60,7 +63,7 @@ const ProfileView = ({}) => {
             {
               text: 'Update',
               onPress: () =>
-                navigation.navigate('EditProfile', {
+                navigation.navigate(NavigationScreenName.EDIT_PROFILE, {
                   data: getUserProfile_Data?.data?.obj,
                 }),
             },
@@ -70,6 +73,7 @@ const ProfileView = ({}) => {
       }
       if (success?.data?.obj?.isProfileUpdated === true) {
         dispatch(setProfileUpdated(true));
+        dispatch(setUserDetails(success?.data?.obj));
       }
     },
     onError: err => {
@@ -132,7 +136,7 @@ const ProfileView = ({}) => {
             <FontAwesome name={'edit'} size={25} color={Colors.TEXT1} />
           }
           onPressIcon={() =>
-            navigation.navigate('EditProfile', {
+            navigation.navigate(NavigationScreenName.EDIT_PROFILE, {
               data: getUserProfile_Data?.data?.obj,
             })
           }

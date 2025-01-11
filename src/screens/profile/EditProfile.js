@@ -26,6 +26,7 @@ import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
 import {useForm} from 'react-hook-form';
 import {DISTRICTS, STATES} from '../../constants';
+import {queryClient} from '../../../App';
 const EditProfile = ({route, navigation}) => {
   const {data} = route.params;
   const [profilePic, setprofilePic] = useState(data?.profilePic ?? '');
@@ -76,12 +77,12 @@ const EditProfile = ({route, navigation}) => {
     updateUserProfileMutate(body);
   };
   const {mutate: updateSelfPhotoMutate} = useMutation(updateSelfPhoto, {
-    onSuccess: ({data}) => {
-      ToastAndroid.show(data?.message, ToastAndroid.LONG);
+    onSuccess: success => {
+      ToastAndroid.show(success?.data?.message, ToastAndroid.LONG);
+      queryClient.invalidateQueries({queryKey: 'getUserProfile'});
     },
     onError: err =>
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG),
-    enabled: false,
   });
 
   const uploadePhoto = async (path, mime) => {
@@ -89,7 +90,7 @@ const EditProfile = ({route, navigation}) => {
       setImageUploading(true);
       const uplode = await uploadFile({
         filePath: {path: path},
-        fileLocation: `profile/${Date.now()}`,
+        fileLocation: `postAndShare/profile/${Date.now()}`,
         contentType: mime,
       });
       setImageUploading(false);

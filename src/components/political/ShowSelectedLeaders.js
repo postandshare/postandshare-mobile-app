@@ -9,6 +9,12 @@ const ShowSelectedLeaders = ({list = []}) => {
       {list?.map((res, i) => (
         <View style={styles.leader_img_wrap} key={i}>
           <Image style={styles.leader_img} source={{uri: res?.leaderPhoto}} />
+          <Text
+            numberOfLines={2}
+            ellipsizeMode="tail"
+            style={styles.leader_name_text}>
+            {res?.leaderName}
+          </Text>
           <View style={styles.show_count}>
             <Text style={styles.count_text}>{i + 1}</Text>
           </View>
@@ -43,5 +49,11 @@ const styles = StyleSheet.create({
   },
   count_text: {
     color: '#fff',
+  },
+  leader_name_text: {
+    width: 100,
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#000',
   },
 });

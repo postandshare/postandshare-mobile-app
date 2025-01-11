@@ -1,4 +1,4 @@
-import {StatusBar, StyleSheet} from 'react-native';
+import {StatusBar} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
@@ -12,7 +12,7 @@ import AuthStack from './AuthStack';
 import {useDispatch, useSelector} from 'react-redux';
 import {setOnBoarding} from '../services/reducer/AuthSlice';
 import OnBoarding from '../screens/onBoarding';
-import ProfileNavigator from '../screens/profile/index';
+import {EditProfileScreen, ProfileViewScreen} from '../screens/profile/index';
 import TermAndCondtion from '../screens/term&condition';
 import WorkProfileNavigator from '../screens/workProfile/WorkProfileNavigator';
 import MyPost from '../screens/mypost';
@@ -27,8 +27,6 @@ import HelpSupport from '../screens/helpSupport';
 import MonthPhotos from '../screens/thismonth';
 import OneSignal from 'react-native-onesignal';
 import Deeplinking from '../utils/linking';
-import Sizes from '../constants/Sizes';
-import Colors from '../constants/Colors';
 import Notification from '../screens/notification';
 import BirthdayRemainderNavigator from '../screens/birthday';
 import AddNavigatior from '../screens/add/index';
@@ -100,9 +98,14 @@ const Routes = () => {
                   component={LanguageSelection}
                 />
                 <Stack.Screen
-                  name="ProfileNavigator"
-                  component={ProfileNavigator}
+                  name={NavigationScreenName.PROFILE}
+                  component={ProfileViewScreen}
                 />
+                <Stack.Screen
+                  name={NavigationScreenName.EDIT_PROFILE}
+                  component={EditProfileScreen}
+                />
+
                 <Stack.Screen
                   name={NavigationScreenName.MAIN_NAVIGATOR}
                   component={MainDrawer}
@@ -115,8 +118,12 @@ const Routes = () => {
                   component={MainDrawer}
                 />
                 <Stack.Screen
-                  name="ProfileNavigator"
-                  component={ProfileNavigator}
+                  name={NavigationScreenName.PROFILE}
+                  component={ProfileViewScreen}
+                />
+                <Stack.Screen
+                  name={NavigationScreenName.EDIT_PROFILE}
+                  component={EditProfileScreen}
                 />
                 <Stack.Screen
                   name={NavigationScreenName.TERM_AND_CONDITION}

@@ -3,8 +3,8 @@ import {
   Alert,
   Image,
   Share,
+  StatusBar,
   StyleSheet,
-  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -23,7 +23,6 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {setLoginState} from '../services/reducer/AuthSlice';
 import {setProfileUpdated} from '../services/reducer/CommonReducer';
-import images from '../constants/images';
 
 const Item = ({icon, text, path, onPress = () => {}, isActive}) => (
   <TouchableOpacity
@@ -42,15 +41,13 @@ const UserProfileCard = ({profileData}) => {
     <>
       <View style={styles.userProfileCard}>
         <View style={styles.image_wrap}>
-          <Image
-            source={
-              profileData?.profilePic
-                ? {uri: profileData?.profilePic}
-                : images.akSchoolIcon
-            }
-            style={styles.profile_pic}
-            resizeMode="cover"
-          />
+          {profileData?.profilePic && (
+            <Image
+              source={{uri: profileData?.profilePic}}
+              style={styles.profile_pic}
+              resizeMode="cover"
+            />
+          )}
         </View>
         <View>
           <Text style={styles.name_text}>
@@ -97,105 +94,97 @@ const CustomDrawerLeft = ({navigation, route}) => {
   };
 
   return (
-    <DrawerContentScrollView>
-      <View style={styles.root}>
-        <UserProfileCard profileData={userDetails} />
-        <Item
-          icon={<AntDesign name={'profile'} style={styles.icon} />}
-          text={'Work Profile'}
-          path={NavigationScreenName.WORK_PROFILE_NAVIGATOR}
-          onPress={() =>
-            navigation.navigate(NavigationScreenName.WORK_PROFILE_NAVIGATOR)
-          }
-        />
-        {/* <Divider
-          style={{
-            height: 1,
-            backgroundColor: Colors?.PRIMARY_LIGHT,
-          }}
-        /> */}
-        <Item
-          icon={<AntDesign name={'filetext1'} style={styles.icon} />}
-          text="Terms & Conditions"
-          path={NavigationScreenName.TERM_AND_CONDITION}
-          onPress={() =>
-            navigation.navigate(NavigationScreenName.TERM_AND_CONDITION)
-          }
-        />
-        {/* <Item
-          icon={<Entypo name={'images'} style={styles.icon} />}
-          text="My Post"
-          path={NavigationScreenName.MY_POST}
-          onPress={() => navigation.navigate(NavigationScreenName.MY_POST)}
-          isActive={route?.name === NavigationScreenName.MY_POST}
-        /> */}
-        <Item
-          icon={<Entypo name={'video'} style={styles.icon} />}
-          text="Tutorials"
-          path={NavigationScreenName.TUTORIALS}
-          onPress={() => navigation.navigate(NavigationScreenName.TUTORIALS)}
-        />
-        <Item
-          icon={<Entypo name={'share'} style={styles.icon} />}
-          text="Share Us"
-          onPress={async () => {
-            await navigation.goBack(NavigationScreenName.HOME);
-            ShareUs();
-          }}
-        />
-        <Item
+    <>
+      <StatusBar backgroundColor={'#fff'} />
+      <DrawerContentScrollView style={{marginTop: 0}}>
+        <View style={styles.root}>
+          <UserProfileCard profileData={userDetails} />
+          <Item
+            icon={<AntDesign name={'profile'} style={styles.icon} />}
+            text={'Work Profile'}
+            path={NavigationScreenName.WORK_PROFILE_NAVIGATOR}
+            onPress={() =>
+              navigation.navigate(NavigationScreenName.WORK_PROFILE_NAVIGATOR)
+            }
+          />
+
+          <Item
+            icon={<AntDesign name={'filetext1'} style={styles.icon} />}
+            text="Terms & Conditions"
+            path={NavigationScreenName.TERM_AND_CONDITION}
+            onPress={() =>
+              navigation.navigate(NavigationScreenName.TERM_AND_CONDITION)
+            }
+          />
+
+          <Item
+            icon={<Entypo name={'video'} style={styles.icon} />}
+            text="Tutorials"
+            path={NavigationScreenName.TUTORIALS}
+            onPress={() => navigation.navigate(NavigationScreenName.TUTORIALS)}
+          />
+          <Item
+            icon={<Entypo name={'share'} style={styles.icon} />}
+            text="Share Us"
+            onPress={async () => {
+              await navigation.goBack(NavigationScreenName.HOME);
+              ShareUs();
+            }}
+          />
+          {/* <Item
           icon={<Entypo name={'star-outlined'} style={styles.icon} />}
           text="Rate Us"
           path={NavigationScreenName.FEEDBACK}
           onPress={() => navigation.navigate(NavigationScreenName.FEEDBACK)}
-        />
-        <Item
+        /> */}
+          {/* <Item
           icon={<Entypo name={'info'} style={styles.icon} />}
           text="Help & Support"
           onPress={async () => {
             ToastAndroid.show('Coming Soon', ToastAndroid.SHORT);
-            // await navigation.goBack(NavigationScreenName.HOME);
-            // navigation.navigate(NavigationScreenName.HELPSUPPORT);
-          }}
-        />
-        <Item
-          icon={<MaterialIcons name={'privacy-tip'} style={styles.icon} />}
-          text="Privacy Policy"
-          path={NavigationScreenName.Privacy_Policy}
-          onPress={() =>
-            navigation.navigate(NavigationScreenName.Privacy_Policy)
-          }
-        />
-        <Item
-          icon={<FontAwesome name={'language'} style={styles.icon} />}
-          text="Language Setting"
-          path={NavigationScreenName.LANGUAGE_SELECTION}
-          onPress={() =>
-            navigation.navigate(NavigationScreenName.LANGUAGE_SELECTION)
-          }
-        />
-        <Item
-          icon={<AntDesign name={'logout'} style={styles.icon} />}
-          text="Logout"
-          onPress={async () => {
             await navigation.goBack(NavigationScreenName.HOME);
-            handlePressLogout();
+            navigation.navigate(NavigationScreenName.HELPSUPPORT);
           }}
-        />
+        /> */}
+          <Item
+            icon={<MaterialIcons name={'privacy-tip'} style={styles.icon} />}
+            text="Privacy Policy"
+            path={NavigationScreenName.Privacy_Policy}
+            onPress={() =>
+              navigation.navigate(NavigationScreenName.Privacy_Policy)
+            }
+          />
+          <Item
+            icon={<FontAwesome name={'language'} style={styles.icon} />}
+            text="Language Setting"
+            path={NavigationScreenName.LANGUAGE_SELECTION}
+            onPress={() =>
+              navigation.navigate(NavigationScreenName.LANGUAGE_SELECTION)
+            }
+          />
+          <Item
+            icon={<AntDesign name={'logout'} style={styles.icon} />}
+            text="Logout"
+            onPress={async () => {
+              await navigation.goBack(NavigationScreenName.HOME);
+              handlePressLogout();
+            }}
+          />
 
-        <Text
-          style={{
-            bottom: -18,
-            textAlign: 'center',
-            color: Colors.TEXT1,
-            marginTop: 10,
-            fontWeight: '100',
-          }}>
-          Post and Share App {'\n'}
-          Version 1.0.0
-        </Text>
-      </View>
-    </DrawerContentScrollView>
+          <Text
+            style={{
+              bottom: -18,
+              textAlign: 'center',
+              color: Colors.TEXT1,
+              marginTop: 10,
+              fontWeight: '100',
+            }}>
+            Post and Share App {'\n'}
+            Version 1.0.0
+          </Text>
+        </View>
+      </DrawerContentScrollView>
+    </>
   );
 };
 
@@ -204,7 +193,7 @@ export default CustomDrawerLeft;
 const styles = StyleSheet.create({
   root: {
     backgroundColor: '#fff',
-    minHeight: Sizes.hp('110%'),
+    minHeight: Sizes.hp('100%'),
     paddingHorizontal: Sizes.wp('3%'),
     paddingVertical: Sizes.wp('5%'),
   },
@@ -214,8 +203,6 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     elevation: 3,
     alignSelf: 'center',
-    // borderColor: 'rgba(27, 27, 63, 0.5)',
-    // borderWidth: 1.5,
   },
   name_text: {
     color: Colors.PRIMARY,
@@ -308,7 +295,7 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    gap: 15,
     borderWidth: 2,
     borderColor: Colors.borderColor,
     borderRadius: 5,

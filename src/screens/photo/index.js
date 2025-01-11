@@ -22,7 +22,6 @@ import NavigationScreenName from '../../constants/NavigationScreenName';
 
 const PhotoStatus = ({navigation, route}) => {
   const {picData} = route?.params;
-
   const [photoData, setPhotoData] = useState(picData?.contentUrl ?? '');
   const {
     isLoading: getRelatedTempleLoading,
