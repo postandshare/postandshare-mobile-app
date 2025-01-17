@@ -645,7 +645,7 @@ const CustomSDK = ({route, navigation}) => {
                           <CustomColorChange
                             setShowBorderBox={setShowBorderBox}
                             showBorderBox={showBorderBox}
-                            colorProps={state.business_content}
+                            content={state.business_content}
                             data={BusinessData?.name}
                             width={state.business_content.width}
                             numberOfLines={2}
@@ -676,7 +676,7 @@ const CustomSDK = ({route, navigation}) => {
                             position: 'absolute',
                           }}>
                           <CustomColorChange
-                            colorProps={state.mobile_content}
+                            content={state.mobile_content}
                             setShowBorderBox={setShowBorderBox}
                             showBorderBox={showBorderBox}
                             data={BusinessData?.mobileNumber}
@@ -690,20 +690,17 @@ const CustomSDK = ({route, navigation}) => {
                         onDrop={drop}
                         intialX={state.whatsApp_content?.x_axis}
                         intialY={state.whatsApp_content?.y_axis}>
-                        <Text
+                        <View
                           style={{
-                            // color: textColor,
-                            fontSize: 18,
-                            fontWeight: '700',
                             position: 'absolute',
                           }}>
                           <CustomColorChange
                             setShowBorderBox={setShowBorderBox}
                             showBorderBox={showBorderBox}
-                            colorProps={state.whatsApp_content}
+                            content={state.whatsApp_content}
                             data={BusinessData?.whatsAppNumber}
                           />
-                        </Text>
+                        </View>
                       </DragDrop>
                     ) : null}
                     {state?.email ? (
@@ -712,19 +709,17 @@ const CustomSDK = ({route, navigation}) => {
                         onDrop={drop}
                         intialX={state.email_content?.x_axis}
                         intialY={state.email_content?.y_axis}>
-                        <Text
+                        <View
                           style={{
-                            fontSize: 18,
-                            fontWeight: '700',
                             position: 'absolute',
                           }}>
                           <CustomColorChange
                             setShowBorderBox={setShowBorderBox}
                             showBorderBox={showBorderBox}
-                            colorProps={state.email_content}
+                            content={state.email_content}
                             data={BusinessData?.email}
                           />
-                        </Text>
+                        </View>
                       </DragDrop>
                     ) : null}
                     {state?.website ? (
@@ -733,19 +728,17 @@ const CustomSDK = ({route, navigation}) => {
                         onDrop={drop}
                         intialX={state.website_content?.x_axis}
                         intialY={state.website_content?.y_axis}>
-                        <Text
+                        <View
                           style={{
-                            fontSize: 18,
-                            fontWeight: '700',
                             position: 'absolute',
                           }}>
                           <CustomColorChange
                             setShowBorderBox={setShowBorderBox}
                             showBorderBox={showBorderBox}
-                            colorProps={state.website_content}
+                            content={state.website_content}
                             data={BusinessData?.website}
                           />
-                        </Text>
+                        </View>
                       </DragDrop>
                     ) : null}
                     {state?.address ? (
@@ -754,18 +747,14 @@ const CustomSDK = ({route, navigation}) => {
                         intialY={state.address_content?.y_axis}
                         onDrag={drag}
                         onDrop={drop}>
-                        <Text
+                        <View
                           style={{
-                            // color: textColor,
-                            fontSize: 18,
-                            fontWeight: '700',
                             position: 'absolute',
-                            textAlign: 'center',
                           }}>
                           <CustomColorChange
                             setShowBorderBox={setShowBorderBox}
                             showBorderBox={showBorderBox}
-                            colorProps={state.address_content}
+                            content={state.address_content}
                             data={
                               BusinessData?.address
                                 ? BusinessData?.address?.address +
@@ -788,7 +777,7 @@ const CustomSDK = ({route, navigation}) => {
                                 : null
                             }
                           />
-                        </Text>
+                        </View>
                       </DragDrop>
                     ) : null}
                     {state?.text && state?.showText ? (

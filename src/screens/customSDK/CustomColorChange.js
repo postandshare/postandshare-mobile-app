@@ -8,12 +8,12 @@ import ColorPicker, {
 } from 'reanimated-color-picker';
 import Colors from '../../constants/Colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-const CustomColorChange = ({data, colorProps, width, numberOfLines}) => {
-  const [color, setColor] = useState(colorProps?.fontColor);
+const CustomColorChange = ({data, content, numberOfLines}) => {
+  const [color, setColor] = useState(content?.fontColor);
   const [showModal, setShowModal] = useState(false);
-  const [fontWeight, setFontWeight] = useState('normal');
-  const [fontSize, setFontSize] = useState(14);
-  const [textAlign, setTextAlign] = useState('left');
+  const [fontWeight, setFontWeight] = useState(content?.fontWeight);
+  const [fontSize, setFontSize] = useState(content?.fontSize);
+  const [textAlign, setTextAlign] = useState(content?.textAlign ?? 'left');
   const [showTools, setShowTools] = useState(false);
 
   const onSelectColor = ({hex}) => {
@@ -112,7 +112,7 @@ const CustomColorChange = ({data, colorProps, width, numberOfLines}) => {
           </Text>
         </View>
       ) : (
-        <View style={width ? {width} : null}>
+        <View style={content?.width ? {width: content.width} : null}>
           <Text
             onLongPress={() => setShowModal(true)}
             numberOfLines={numberOfLines ?? 1}
@@ -121,7 +121,7 @@ const CustomColorChange = ({data, colorProps, width, numberOfLines}) => {
               color: color,
               fontSize: fontSize,
               fontWeight: fontWeight,
-              textAlign: 'center',
+              textAlign: textAlign,
             }}>
             {data}
           </Text>

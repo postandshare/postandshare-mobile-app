@@ -43,9 +43,11 @@ const FrameSelection = ({
         x_axis: 60,
         y_axis: 3,
         fontColor: '#fff',
-        fontSize: 14,
-        fontWeight: '700',
+        fontSize: 20,
+        fontWeight: '800',
         numberOfLines: 2,
+        width: 300,
+        textAlign: 'right',
       },
     }));
   };
