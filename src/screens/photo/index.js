@@ -81,7 +81,7 @@ const PhotoStatus = ({navigation, route}) => {
                 uri: photoData ?? picData?.contentUrl,
               }}
               style={styles.Image}
-              resizeMode="contain"
+              resizeMode="cover"
             />
           </View>
           <Text style={styles.text}>Select Photo</Text>

@@ -230,7 +230,7 @@ export default ViewBussinessModal;
 const styles = StyleSheet.create({
   container: {
     maxHeight: Sizes.hp('60%'),
-    minWidth: Sizes.wp('90%'),
+    width: Sizes.wp('95%'),
     alignSelf: 'center',
     backgroundColor: Colors.white,
     borderRadius: 10,

@@ -19,7 +19,10 @@ import ChooseLeaderForProfile from './ChooseLeaderForProfile';
 import Loader from '../../../components/Loader';
 import ShowSelectedLeaders from '../../../components/political/ShowSelectedLeaders';
 import NavigationScreenName from '../../../constants/NavigationScreenName';
-
+import DraggableFlatList, {
+  NestableDraggableFlatList,
+} from 'react-native-draggable-flatlist';
+import SelectedLeaderSingle from '../../../components/political/SelectedLeaderSingle';
 const EditLeaderInPoliticalProfile = ({navigation, route}) => {
   const params = route.params;
   const [state, setState] = useState({
@@ -99,7 +102,20 @@ const EditLeaderInPoliticalProfile = ({navigation, route}) => {
               contentContainerStyle={styles.contentContainerStyle}
               showsVerticalScrollIndicator={false}>
               <View style={[styles.white_box, styles.image_wrap]}>
-                <ShowSelectedLeaders list={state.selectedLeaderList} />
+                <DraggableFlatList
+                  data={state.selectedLeaderList}
+                  onDragEnd={({data}) =>
+                    setState(prev => ({...prev, selectedLeaderList: data}))
+                  }
+                  keyExtractor={item => item?._id}
+                  renderItem={SelectedLeaderSingle}
+                  // contentContainerStyle={{
+                  //   flexDirection: 'row',
+                  //   justifyContent: 'space-between',
+                  //   flexWrap: 'wrap',
+                  // }}
+                  numColumns={3}
+                />
               </View>
               <CustomButton
                 title={'Choose Leader'}

@@ -247,12 +247,12 @@ const Home = ({navigation}) => {
           }
           keyExtractor={(_, index) => index.toString()}
           renderItem={({item, index}) => {
-            if (item?.contnts?.length > 0) {
+            if (item?.contents?.length > 0) {
               return (
                 <FlatListComponent
                   key={index}
                   navigation={navigation}
-                  data={item?.contnts}
+                  data={item?.contents}
                   byLabel={item?.subCategory}
                 />
               );

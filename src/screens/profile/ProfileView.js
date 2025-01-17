@@ -16,7 +16,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Skeleton} from 'moti/skeleton';
 import {MotiView} from 'moti';
 import Sizes from '../../constants/Sizes';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   setProfileUpdated,
   setUserDetails,
@@ -31,6 +31,7 @@ import NavigationScreenName from '../../constants/NavigationScreenName';
 import {Spacer} from '../../utils/SkeltonHelpers';
 
 const ProfileView = ({}) => {
+  const {isProfileUpdated} = useSelector(store => store.commonStore);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [state, setState] = useState({
@@ -42,7 +43,7 @@ const ProfileView = ({}) => {
     refetch: getUserProfileRefetch,
     data: getUserProfile_Data,
   } = useQuery({
-    queryKey: ['getUserProfile'],
+    queryKey: ['getUserProfile', isProfileUpdated],
     queryFn: () => getUserProfile(),
     onSuccess: success => {
       setState(prev => ({

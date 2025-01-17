@@ -65,6 +65,9 @@ const EditProfile = ({route, navigation}) => {
       gender: prevData?.gender,
       email: prevData?.email,
       DOB: new Date(prevData?.DOB),
+      whatsAppNumber: prevData?.whatsAppNumber,
+      facebookLink: prevData?.facebookLink ?? '',
+      twitterLink: prevData?.twitterLink ?? '',
       currentAddress: {
         address: prevData?.caddress,
         dist: prevData?.cdist,

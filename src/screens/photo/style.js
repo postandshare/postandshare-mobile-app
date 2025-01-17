@@ -13,8 +13,8 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   Image: {
-    height: Sizes.hp('40%'),
-    width: '90%',
+    height: 375,
+    width: 375,
     alignSelf: 'center',
   },
   text: {

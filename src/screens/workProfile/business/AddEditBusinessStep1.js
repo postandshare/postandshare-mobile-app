@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import {Text} from 'react-native-paper';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {useForm} from 'react-hook-form';
 import {DISTRICTS, STATES} from '../../../constants';
@@ -22,7 +22,6 @@ import {
 import {
   getCategory,
   getDistinctCategory,
-  getDistinctCategoryGroup,
 } from '../../../services/userServices/category.service';
 import NavigationScreenName from '../../../constants/NavigationScreenName';
 import Loader from '../../../components/Loader';
@@ -38,7 +37,6 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
   const defaultValues = {
     logo: '',
 
-    bussinessCategoryGroup: '',
     bussinessCategory: '',
     bussinessCategoryDocId: '',
 
@@ -60,10 +58,10 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
   const {control, handleSubmit, setValue, watch, reset} = useForm({
     defaultValues: defaultValues,
   });
-
+  const watchBusinessCategory = watch('bussinessCategory');
+  const watchState = watch('bussinessState');
   const [profilePic, setprofilePic] = useState('');
   const [imageUploading, setImageUploading] = useState(false);
-  const [categoryGroupList, setCategoryGroupList] = useState([]);
   const [bussinessCategoryData, setBussinessCategoryData] = useState([]);
   const [bussinessSubCategoryList, setBussinessSubCategoryList] = useState([]);
 
@@ -94,12 +92,10 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
     let body = {
       logo: data?.logo || '',
       categoryDocId: data?.bussinessCategoryDocId || '',
-
       businessName: data?.bussinessName || '',
       description: data?.bussinessDetail || '',
       email: data?.bussinessEmail || '',
       website: data?.businessWebsite || '',
-
       mobileNumber: data?.mobileNumber || '',
       whatsAppNumber: data?.whatsAppNumber || '',
 
@@ -124,7 +120,6 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
 
     addBusinesslMutate(body);
   };
-
   const {
     isFetching: getBusinessProfileFetching,
     refetch: getBusinessProfileRefetch,
@@ -133,13 +128,12 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
     queryFn: () => getBusinessProfile({businessDocId}),
     onSuccess: success => {
       const data = success?.data?.obj;
+
       if (data) {
         reset({
           logo: data?.logo || '',
-
-          bussinessCategoryGroup: data?.category?.categoryGroupName || '',
-          bussinessCategory: data?.category?.category || '',
-          bussinessCategoryDocId: data?.category?._id || '',
+          bussinessCategory: data?.categoryDocId?.category || '',
+          bussinessCategoryDocId: data?.categoryDocId?._id || '',
 
           bussinessName: data?.businessName || '',
           bussinessDetail: data?.description || '',
@@ -166,14 +160,11 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
 
   const {isFetching: getCategoryFetching, refetch: getCategoryRefetch} =
     useQuery({
-      queryKey: [
-        'getCategory' +
-          (watch('bussinessCategory') && watch('bussinessCategoryGroup')),
-      ],
+      queryKey: ['getCategory', watchBusinessCategory],
       queryFn: () =>
         getCategory({
-          categoryGroupName: watch('bussinessCategoryGroup'),
-          category: watch('bussinessCategory'),
+          categoryGroupName: 'Business',
+          category: watchBusinessCategory,
         }),
       onSuccess: success => {
         setBussinessSubCategoryList(success?.data?.list);
@@ -181,28 +172,16 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
       onError: err => {
         ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
       },
-      enabled:
-        !!watch('bussinessCategoryGroup') && !!watch('bussinessCategory'),
+      enabled: !!watchBusinessCategory,
     });
   const {isFetching: getDistinctCategoryFetching} = useQuery({
-    queryKey: ['getDistinctCategory' + watch('bussinessCategoryGroup')],
+    queryKey: ['getDistinctCategory', watchBusinessCategory],
     queryFn: () =>
       getDistinctCategory({
-        categoryGroupName: watch('bussinessCategoryGroup'),
+        categoryGroupName: 'Business',
       }),
     onSuccess: success => {
       setBussinessCategoryData(success?.data?.list);
-    },
-    onError: err => {
-      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
-    },
-    enabled: !!watch('bussinessCategoryGroup'),
-  });
-  const {isFetching: getDistinctCategoryGroupFetching} = useQuery({
-    queryKey: ['getDistinctCategoryGroup'],
-    queryFn: () => getDistinctCategoryGroup(),
-    onSuccess: success => {
-      setCategoryGroupList(success?.data?.list || []);
     },
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
@@ -240,7 +219,6 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
         setprofilePic('');
       },
       onError: err => {
-        console.log(err?.response?.data?.message, 'err');
         ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
       },
     });
@@ -276,10 +254,15 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
         setprofilePic('');
       },
       onError: err => {
-        console.log(err?.response?.data?.message, 'err');
         ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
       },
     });
+  useEffect(() => {
+    if (watchBusinessCategory && !businessDocId) {
+      setValue('bussinessCategoryDocId', '');
+      setBussinessSubCategoryList([]);
+    }
+  }, [setValue, watchBusinessCategory, businessDocId]);
 
   return (
     <>
@@ -293,7 +276,6 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
               refreshing={
                 getCategoryFetching ||
                 getDistinctCategoryFetching ||
-                getDistinctCategoryGroupFetching ||
                 getBusinessProfileFetching
               }
               onRefresh={() => {
@@ -315,22 +297,6 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
               <Text style={styles.title}>Upload Your Bussiness Logo</Text>
             </View>
 
-            {/* bussiness category group dropdown */}
-
-            <ControllerDropdown
-              control={control}
-              rules={{
-                required: 'Category group reauired',
-              }}
-              name="bussinessCategoryGroup"
-              data={categoryGroupList?.map(item => ({
-                label: item,
-                value: item,
-              }))}
-              disabled={getDistinctCategoryGroupFetching}
-              placeholder="Select Business Category Group"
-            />
-
             {/* bussiness catergory dropdown */}
 
             <ControllerDropdown
@@ -344,9 +310,6 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
                 label: item,
                 value: item,
               }))}
-              disabled={
-                getDistinctCategoryFetching || !watch('bussinessCategoryGroup')
-              }
             />
 
             {/* bussiness subcategory dropdown */}
@@ -358,11 +321,7 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
                 label: item?.subCategory,
                 value: item?._id,
               }))}
-              disabled={
-                getCategoryFetching ||
-                !watch('bussinessCategoryGroup') ||
-                !watch('bussinessCategory')
-              }
+              disabled={getCategoryFetching || !watchBusinessCategory}
               placeholder="Select  Sub Category"
             />
           </View>

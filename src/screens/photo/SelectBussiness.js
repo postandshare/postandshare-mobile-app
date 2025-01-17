@@ -138,6 +138,7 @@ const SelectBussiness = ({route, navigation}) => {
                   navigation.navigate('CustomSDK', {
                     picData: picData,
                     businessDetails: item,
+                    profileType: item?.categoryGroup,
                   })
                 }
               />
