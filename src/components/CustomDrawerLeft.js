@@ -102,9 +102,9 @@ const CustomDrawerLeft = ({navigation, route}) => {
           <Item
             icon={<AntDesign name={'profile'} style={styles.icon} />}
             text={'Work Profile'}
-            path={NavigationScreenName.WORK_PROFILE_NAVIGATOR}
+            path={NavigationScreenName.WORK_PROFILE_LIST}
             onPress={() =>
-              navigation.navigate(NavigationScreenName.WORK_PROFILE_NAVIGATOR)
+              navigation.navigate(NavigationScreenName.WORK_PROFILE_LIST)
             }
           />
 

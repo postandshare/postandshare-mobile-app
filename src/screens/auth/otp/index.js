@@ -52,47 +52,11 @@ const VerifyOTP = ({navigation, route}) => {
     useMutation(SignInWithOTP, {
       onSuccess: async success => {
         dispatch(setLoginState(success?.data));
-        await getUserProfileRefetch();
       },
       onError: error => {
         ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
       },
     });
-
-  // useEffect(() => {
-  //   if (loginStateData) {
-  //     getUserProfileRefetch();
-  //   }
-  // });
-
-  const {
-    isLoading: getUserProfileLoading,
-    isFetching: getUserProfileFetching,
-    refetch: getUserProfileRefetch,
-    data: getUserProfile_Data,
-    isError: getUserProfile_isError,
-  } = useQuery({
-    queryKey: ['getUserProfile'],
-    queryFn: () => getUserProfile(),
-    onSuccess: async success => {
-      console.log(success?.data, 'isProfileUpdated');
-      if (success?.data?.obj?.isProfileUpdated === false) {
-        dispatch(setProfileUpdated(false));
-        navigation.navigate(NavigationScreenName.LANGUAGE_SELECTION, {
-          loginStateData: loginStateData,
-        });
-        console.log('success?.data?.isProfileUpdated == false');
-      } else {
-        dispatch(setProfileUpdated(true));
-        await navigation.navigate(NavigationScreenName.MAIN_NAVIGATOR);
-        console.log('else part of success?.data?.isProfileUpdated == false');
-      }
-    },
-    onError: err => {
-      ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
-    },
-    enabled: false,
-  });
 
   if (otp !== '') {
     newOtp = otp;

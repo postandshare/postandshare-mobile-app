@@ -11,7 +11,6 @@ import {
 import React, {useState} from 'react';
 import TopHeader from '../../components/TopHeader';
 import {Text} from 'react-native-paper';
-import styles from './style';
 import Colors from '../../constants/Colors';
 import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
@@ -19,10 +18,10 @@ import {useQuery} from '@tanstack/react-query';
 import {getRelatedTemplate} from '../../services/userServices/mobileDashboard.services';
 import {useIsFocused} from '@react-navigation/native';
 import NavigationScreenName from '../../constants/NavigationScreenName';
-const PhotoStatus = ({navigation, route}) => {
+import styles from './style';
+const ViewCategoryImages = ({navigation, route}) => {
   const {picData} = route?.params;
   const isFocused = useIsFocused();
-
   const [photoData, setPhotoData] = useState(picData?.contentUrl ?? '');
   const [templateData, setTemplateData] = useState([]);
   const {
@@ -52,14 +51,8 @@ const PhotoStatus = ({navigation, route}) => {
           titile={'Photo Status'}
           next={'Next'}
           onPress={() =>
-            navigation.navigate(NavigationScreenName.PHOTO_NAVIGATOR, {
-              screen: 'SelectBussiness',
-              params: {
-                picData: {
-                  ...picData,
-                  contentUrl: photoData ?? picData?.contentUrl,
-                },
-              },
+            navigation.navigate(NavigationScreenName.WORK_PROFILE_LIST, {
+              picData,
             })
           }
         />
@@ -103,4 +96,4 @@ const PhotoStatus = ({navigation, route}) => {
   );
 };
 
-export default PhotoStatus;
+export default ViewCategoryImages;

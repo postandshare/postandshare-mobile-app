@@ -49,7 +49,6 @@ const LanguageSelection = ({navigation}) => {
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
-    enabled: false,
   });
   const {
     isLoading: getRegionalLanguagesLoading,
@@ -63,7 +62,6 @@ const LanguageSelection = ({navigation}) => {
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
-    enabled: false,
   });
 
   const {
@@ -88,10 +86,6 @@ const LanguageSelection = ({navigation}) => {
       ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
     },
   });
-  useEffect(() => {
-    getRegionalLanguagesRefetch();
-    getSelectedRegionalLanguagesRefetch();
-  }, [getRegionalLanguagesRefetch, getSelectedRegionalLanguagesRefetch]);
 
   return (
     <>
@@ -168,24 +162,9 @@ const LanguageSelection = ({navigation}) => {
                 setLoading(true);
                 setTimeout(() => {
                   setLoading(false);
-                  isProfileUpdated === false
-                    ? navigation.navigate(
-                        NavigationScreenName?.MAIN_NAVIGATOR,
-                        {
-                          screen: 'DashBoard',
-                          params: {screen: 'Profile'},
-                        },
-                      )
-                    : navigation.navigate(
-                        NavigationScreenName?.MAIN_NAVIGATOR,
-                        {
-                          screen: 'DashBoard',
-                          params: {screen: 'Home'},
-                        },
-                      );
+                  navigation.navigate(NavigationScreenName?.MAIN_NAVIGATOR);
                 }, 1000);
               }}>
-              {' '}
               {loading ? 'Please wait...' : 'Save'}
             </Button>
           </View>

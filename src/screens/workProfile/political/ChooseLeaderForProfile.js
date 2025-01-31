@@ -80,6 +80,7 @@ const ChooseLeaderForProfile = ({partyDocId, prevState, setPrevState}) => {
           onPress={() =>
             setPrevState(prev => ({...prev, showChooseLeader: false}))
           }
+          disabled={prevState.leadersList?.length === 0 ? true : false}
         />
       </View>
     </>

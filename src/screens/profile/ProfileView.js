@@ -50,28 +50,6 @@ const ProfileView = ({}) => {
         ...prev,
         profileData: success?.data?.obj,
       }));
-      if (success?.data?.obj?.isProfileUpdated === false) {
-        Alert.alert(
-          'Post And Share App',
-          'Please update your profile to continue',
-          [
-            {
-              text: 'Cancel',
-              onPress: () =>
-                navigation.navigate(NavigationScreenName?.LANGUAGE_SELECTION),
-              style: 'cancel',
-            },
-            {
-              text: 'Update',
-              onPress: () =>
-                navigation.navigate(NavigationScreenName.EDIT_PROFILE, {
-                  data: getUserProfile_Data?.data?.obj,
-                }),
-            },
-          ],
-          {cancelable: false},
-        );
-      }
       if (success?.data?.obj?.isProfileUpdated === true) {
         dispatch(setProfileUpdated(true));
         dispatch(setUserDetails(success?.data?.obj));

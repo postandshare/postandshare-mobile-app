@@ -1,4 +1,5 @@
 import {
+  Image,
   ImageBackground,
   PermissionsAndroid,
   Platform,
@@ -160,17 +161,10 @@ const ShareSave = ({route, navigation}) => {
       <ImageBackground
         source={images.background}
         style={globalStyles.backgroundImage}>
-        <View style={styles.chooseImageContainer}>
-          <ImageBackground
-            source={{uri: picUrl}}
-            resizeMode="cover"
-            style={{
-              zIndex: 1,
-              height: '100%',
-              width: '100%',
-              justifyContent: 'center',
-            }}></ImageBackground>
-        </View>
+        <Image
+          style={{height: 375, width: 375, alignSelf: 'center'}}
+          source={{uri: picUrl}}
+        />
 
         {/* buttons for sae and share */}
         <View style={styles.buttonContainer}>

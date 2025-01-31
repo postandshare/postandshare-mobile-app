@@ -24,7 +24,7 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
           <Text style={styles.uploadpic_container_headerText}>{byLabel}</Text>
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('MonthPhoto', {
+              navigation.navigate(NavigationScreenName.SEE_MORE, {
                 data,
                 byLabel,
               })
@@ -46,10 +46,12 @@ const FlatListComponent = ({navigation, data, byLabel}) => {
               }}>
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate(NavigationScreenName.PHOTO_NAVIGATOR, {
-                    screen: 'PhotoStatus',
-                    initialRouteName: item,
-                  })
+                  navigation.navigate(
+                    NavigationScreenName.VIEW_CATEGORY_IMAGES,
+                    {
+                      picData: item,
+                    },
+                  )
                 }
                 style={styles.uploadpic_container_image_view}>
                 {loading && (

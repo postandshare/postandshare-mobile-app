@@ -13,8 +13,8 @@ export const getTrendingContent = params => {
 };
 
 //getRelatedTemplet
-export const getRelatedTemplet = params => {
-  return authAxiosInstance.get(`${dashboard_route}/getRelatedTemplet`, {
+export const getRelatedTemplate = params => {
+  return authAxiosInstance.get(`${dashboard_route}/getRelatedTemplate`, {
     params,
   });
 };

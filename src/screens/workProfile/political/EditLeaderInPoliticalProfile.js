@@ -17,11 +17,8 @@ import {
 import CustomButton from '../../../components/CustomButton';
 import ChooseLeaderForProfile from './ChooseLeaderForProfile';
 import Loader from '../../../components/Loader';
-import ShowSelectedLeaders from '../../../components/political/ShowSelectedLeaders';
 import NavigationScreenName from '../../../constants/NavigationScreenName';
-import DraggableFlatList, {
-  NestableDraggableFlatList,
-} from 'react-native-draggable-flatlist';
+import DraggableFlatList from 'react-native-draggable-flatlist';
 import SelectedLeaderSingle from '../../../components/political/SelectedLeaderSingle';
 const EditLeaderInPoliticalProfile = ({navigation, route}) => {
   const params = route.params;
@@ -128,7 +125,11 @@ const EditLeaderInPoliticalProfile = ({navigation, route}) => {
             </ScrollView>
           </View>
           <View style={styles.submit_button}>
-            <CustomButton title={'Submit'} onPress={onSubmit} />
+            <CustomButton
+              title={'Submit'}
+              onPress={onSubmit}
+              disabled={state.leadersList?.length === 0 ? true : false}
+            />
           </View>
         </View>
       )}

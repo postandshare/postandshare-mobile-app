@@ -59,7 +59,6 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
     defaultValues: defaultValues,
   });
   const watchBusinessCategory = watch('bussinessCategory');
-  const watchState = watch('bussinessState');
   const [profilePic, setprofilePic] = useState('');
   const [imageUploading, setImageUploading] = useState(false);
   const [bussinessCategoryData, setBussinessCategoryData] = useState([]);
@@ -305,7 +304,7 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
               rules={{
                 required: 'Business category required',
               }}
-              placeholder="Select Busines Category"
+              placeholder="Select Busines Category *"
               data={bussinessCategoryData?.map(item => ({
                 label: item,
                 value: item,
@@ -322,7 +321,7 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
                 value: item?._id,
               }))}
               disabled={getCategoryFetching || !watchBusinessCategory}
-              placeholder="Select  Sub Category"
+              placeholder="Select  Sub Category *"
             />
           </View>
           <View>
@@ -330,7 +329,7 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
             <View style={styles.white_box}>
               <ControllerInputOutlined
                 rules={{
-                  required: 'Business name required',
+                  require: 'Business name required',
                 }}
                 control={control}
                 name={'bussinessName'}
@@ -338,12 +337,9 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
               />
 
               <ControllerInputOutlined
-                rules={{
-                  required: 'Business detail required',
-                }}
                 control={control}
                 name={'bussinessDetail'}
-                label={'Bussiness Detail *'}
+                label={'Bussiness Detail'}
                 multiline
                 numberOfLines={4}
                 maxLength={1000}
@@ -397,52 +393,39 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
               />
 
               <ControllerInputOutlined
-                rules={{
-                  required: 'Address required',
-                }}
                 control={control}
                 name={'bussinessAddress'}
-                label={'Bussiness Address *'}
+                label={'Bussiness Address (Optional)'}
               />
               <ControllerInputOutlined
-                rules={{
-                  required: 'Tehsil required',
-                }}
                 control={control}
                 name={'bussinessTehsil'}
-                label={'Bussiness Tehsil *'}
+                label={'Bussiness Tehsil (Optional)'}
               />
               <ControllerDropdown
                 control={control}
                 name="bussinessState"
-                rules={{
-                  required: 'State required',
-                }}
                 data={STATES.map(item => ({
                   label: item,
                   value: item,
                 }))}
-                placeholder="Select State *"
+                placeholder="Select State (Optional)"
               />
 
               <ControllerDropdown
                 control={control}
                 name="bussinessDistrict"
-                rules={{
-                  required: 'District required',
-                }}
                 data={DISTRICTS[
                   STATES.indexOf(watch('bussinessState')) + 1
                 ]?.map(item => ({
                   label: item,
                   value: item,
                 }))}
-                placeholder="Select District *"
+                placeholder="Select District (Optional)"
               />
 
               <ControllerInputOutlined
                 rules={{
-                  required: 'Pin code required',
                   minLength: {
                     value: 6,
                     message: 'Pin code should be 6 digit',
@@ -450,7 +433,7 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
                 }}
                 control={control}
                 name={'bussinessPinCode'}
-                label={'Bussiness PinCode *'}
+                label={'Bussiness PinCode (Optional)'}
                 maxLength={6}
                 keyboardType="number-pad"
               />

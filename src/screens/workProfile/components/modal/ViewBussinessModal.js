@@ -25,6 +25,7 @@ const ViewBussinessModal = ({
   handleEdit = () => {},
   refetch,
 }) => {
+  console.log(item, 'in item');
   const hideModal = () => {
     onClose();
   };
@@ -81,12 +82,14 @@ const ViewBussinessModal = ({
         {item?.categoryGroup === 'politics' ? (
           <>
             <View style={styles.party_card_wrap}>
-              <Image
-                source={{
-                  uri: item?.logo,
-                }}
-                style={styles.party_image}
-              />
+              {item?.logo && (
+                <Image
+                  source={{
+                    uri: item?.logo,
+                  }}
+                  style={styles.party_image}
+                />
+              )}
               <View>
                 <Text style={styles.label}>Party Name</Text>
                 <Text style={styles.value}>{item?.name}</Text>
@@ -120,12 +123,14 @@ const ViewBussinessModal = ({
         ) : item?.categoryGroup === 'business' ? (
           <>
             <View style={styles.party_card_wrap}>
-              <Image
-                source={{
-                  uri: item?.logo,
-                }}
-                style={styles.party_image}
-              />
+              {item?.logo && (
+                <Image
+                  source={{
+                    uri: item?.logo,
+                  }}
+                  style={styles.party_image}
+                />
+              )}
               <View>
                 <Text style={styles.label}>Business Name</Text>
                 <Text style={styles.value}>{item?.name}</Text>
@@ -149,12 +154,14 @@ const ViewBussinessModal = ({
         ) : (
           <>
             <View style={styles.party_card_wrap}>
-              <Image
-                source={{
-                  uri: item?.ownerPhoto,
-                }}
-                style={styles.party_image}
-              />
+              {item?.ownerPhoto && (
+                <Image
+                  source={{
+                    uri: item?.ownerPhoto,
+                  }}
+                  style={styles.party_image}
+                />
+              )}
               <View>
                 <Text style={styles.label}>Name</Text>
                 <Text style={styles.value}>{item?.ownerName}</Text>

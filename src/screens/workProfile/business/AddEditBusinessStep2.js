@@ -33,7 +33,7 @@ import Sizes from '../../../constants/Sizes';
 
 const AddEditBusinessStep2 = ({navigation, route}) => {
   const {businessDocId} = route?.params ?? '';
-
+  console.log(businessDocId, 'in docId');
   const [profilePic, setprofilePic] = useState('');
   const [bussinessPartner, setBussinessPartner] = useState(null);
   const [selectedBussinessPartner, setSelectedBussinessPartner] =
@@ -54,7 +54,6 @@ const AddEditBusinessStep2 = ({navigation, route}) => {
   const onSubmit = data => {
     let body = {
       businessDocId: businessDocId,
-
       ownerName: data?.bussinessOwnerName || '',
       ownerPhoto: data?.bussinessOwnerPhoto || '',
       designation: data?.bussinessOwnerDessignation || '',
@@ -76,9 +75,9 @@ const AddEditBusinessStep2 = ({navigation, route}) => {
         businessDocId: businessDocId,
       }),
     onSuccess: success => {
+      console.log(success?.data?.obj);
       setBusinessProfileData(success?.data?.obj);
       setprofilePic(success?.data?.obj?.ownerDetail?.ownerPhoto);
-
       setBussinessPartner(success?.data?.obj?.businessPartner);
     },
     onError: err => {

@@ -43,7 +43,7 @@ import ColorPicker, {
 } from 'reanimated-color-picker';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {getOrgFrame} from '../../services/userServices/frame.services';
-import {useFocusEffect} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import Loader from '../../components/Loader';
 import uploadFile from '../../utils/uploadFile';
 import {addUserPost} from '../../services/userServices/userpost.services';
@@ -74,58 +74,39 @@ const initialState = {
   selectFrameIndex: 0,
 };
 const CustomSDK = ({route, navigation}) => {
-  const {picData, businessDetails, profileType} = route.params || {};
-
+  const isFocused = useIsFocused();
+  const {picData, profileDetail} = route.params || {};
   const [showBorderBox, setShowBorderBox] = useState(false);
   const imgData = picData;
-  const BusinessData = businessDetails;
-
-  const [showSticker, setShowSticker] = useState(false);
-  const [stickers, setStickers] = useState();
-  const [picUrl, setPicUrl] = React.useState('');
   const [textColor, setTextColor] = useState('#fff');
   const [sdkTextColor, setSDKTextColor] = useState('#fff');
   const [showModal, setShowModal] = useState(false);
   const [imageUploading, setImageUploading] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
-  const [showFrame, setFrame] = useState(false);
-  const [showFrame1, setShowFrame1] = useState(true);
-  const [showFrame2, setShowFrame2] = useState(false);
-
   const [textAlignment, setTextAlignment] = useState('left');
   const [fontFamily, setFontFamily] = useState('Arial');
   const [showFontFamily, setShowFontFamily] = useState(false);
-  const [showCross, setShowCross] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
-
   const [state, setState] = useState(initialState);
   const viewShotRef = useRef();
-
-  const {mutate: addUserPostMuatate, isLoading: addUserPostLoading} =
-    useMutation(addUserPost, {
-      onSuccess: success => {
-        ToastAndroid.show(success?.data?.message, ToastAndroid.SHORT);
-      },
-      onError: error => {
-        ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
-      },
-    });
-
   const uploadePhoto = async (path, mime) => {
     try {
       setImageUploading(true);
-      const uplode = await uploadFile({
+      const upload = await uploadFile({
         filePath: {path: path},
-        fileLocation: `public/${Date.now()}`,
+        fileLocation: `postAndShare/${Date.now()}`,
         contentType: mime,
       });
       addUserPostMuatate({
         postName: `Post ${Date.now()}`,
-        postLink: uplode.fileURL,
-        businessDocId: businessDetails?._id,
-        businessType: businessDetails?.businessType,
+        postLink: upload.fileURL,
+        businessDocId: profileDetail?._id,
+        businessType: profileDetail?.businessType,
       });
       setImageUploading(false);
+
+      setState(initialState);
+
       navigation.navigate('ShareSave', {picUrl: path});
     } catch (error) {
       setImageUploading(false);
@@ -143,7 +124,7 @@ const CustomSDK = ({route, navigation}) => {
             'To perform the desired function',
         },
       );
-      const image = await launchImageLibrary({
+      await launchImageLibrary({
         maxWidth: 300,
         maxHeight: 400,
         mediaType: 'photo',
@@ -158,9 +139,6 @@ const CustomSDK = ({route, navigation}) => {
         logo: true,
         website: true,
       }));
-      setShowFrame1(true);
-      setPicUrl(image.assets[0].uri);
-      // uploadePhoto(image.assets[0].uri, image.assets[0].type);
     } catch (error) {
       console.log(error);
       ToastAndroid.show('Something went wrong', ToastAndroid.LONG);
@@ -175,20 +153,7 @@ const CustomSDK = ({route, navigation}) => {
   };
 
   const onCapture = async () => {
-    setShowCross(false);
     const uri = await viewShotRef.current.capture();
-
-    setPicUrl(uri);
-    setState(prev => ({
-      ...prev,
-      address: false,
-      mobile: false,
-      email: false,
-      whatsApp: false,
-      logo: false,
-      website: false,
-    }));
-    setShowFrame1(false);
     uploadePhoto(uri, 'image/png');
   };
 
@@ -205,21 +170,21 @@ const CustomSDK = ({route, navigation}) => {
     refetch: getOrgFrameRefetch,
     data: getOrgFrame_Data,
   } = useQuery({
-    queryKey: ['getOrgFrame'],
+    queryKey: ['getOrgFrame', isFocused],
     queryFn: () => getOrgFrame(),
-    onSuccess: async success => {},
     onError: err => {
       ToastAndroid.show(err?.response?.data?.message, ToastAndroid.LONG);
     },
-    enabled: false,
   });
-
-  useFocusEffect(
-    React.useCallback(() => {
-      getOrgFrameRefetch();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []),
-  );
+  const {mutate: addUserPostMuatate, isLoading: addUserPostLoading} =
+    useMutation(addUserPost, {
+      onSuccess: success => {
+        ToastAndroid.show(success?.data?.message, ToastAndroid.SHORT);
+      },
+      onError: error => {
+        ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
+      },
+    });
 
   return (
     <>
@@ -416,194 +381,17 @@ const CustomSDK = ({route, navigation}) => {
           contentContainerStyle={styles.root}
           showsVerticalScrollIndicator={false}>
           {/* choose image area */}
-          {picUrl ? (
-            <ViewShot
-              ref={viewShotRef}
-              options={{format: 'png', quality: 1.0, result: 'base64'}}>
-              <View style={styles.chooseImageContainer}>
-                <ImageBackground
-                  source={{uri: picUrl}}
-                  resizeMode="center"
-                  style={{
-                    zIndex: 1,
-                    height: '100%',
-                    width: '100%',
-                    justifyContent: 'center',
-                  }}>
-                  <View style={{zIndex: 3}}>
-                    <View>
-                      {state?.logo ? (
-                        <DragDrop onDrag={drag} onDrop={drop}>
-                          <Image
-                            source={Images.akSchoolIcon}
-                            style={{
-                              height: 50,
-                              width: 50,
-                            }}
-                          />
-                        </DragDrop>
-                      ) : null}
-                      {state.business && profileType === 'business' && (
-                        <DragDrop onDrag={drag} onDrop={drop}>
-                          <Text sx={{color: '#fff'}}>
-                            {businessDetails?.name}
-                          </Text>
-                        </DragDrop>
-                      )}
-                    </View>
-                    {showSticker ? (
-                      <DragDrop onDrag={drag} onDrop={drop}>
-                        <Image
-                          source={{uri: stickers}}
-                          style={{
-                            height: 50,
-                            width: 50,
-                            // left: 50,
-                          }}
-                        />
-                      </DragDrop>
-                    ) : null}
-                    {state?.mobile ? (
-                      <DragDrop
-                        onDrag={drag}
-                        onDrop={drop}
-                        setShowModal={setShowModal}>
-                        <Text
-                          style={{
-                            color: textColor,
-                            fontSize: 18,
-                            fontWeight: '700',
-                            position: 'absolute',
-                          }}>
-                          9876543210
-                        </Text>
-                      </DragDrop>
-                    ) : null}
-                    {state?.whatsApp ? (
-                      <DragDrop
-                        onDrag={drag}
-                        onDrop={drop}
-                        setShowModal={setShowModal}>
-                        <Text
-                          style={{
-                            color: textColor,
-                            fontSize: 18,
-                            fontWeight: '700',
-                            position: 'absolute',
-                          }}>
-                          8957339512
-                        </Text>
-                      </DragDrop>
-                    ) : null}
-                    {state?.email ? (
-                      <DragDrop
-                        onDrag={drag}
-                        onDrop={drop}
-                        setShowModal={setShowModal}>
-                        <Text
-                          style={{
-                            color: textColor,
-                            fontSize: 18,
-                            fontWeight: '700',
-                            position: 'absolute',
-                          }}>
-                          postandshare@gamilc.com
-                        </Text>
-                      </DragDrop>
-                    ) : null}
-                    {state?.address ? (
-                      <DragDrop
-                        onDrag={drag}
-                        onDrop={drop}
-                        setShowModal={setShowModal}>
-                        <Text
-                          style={{
-                            color: textColor,
-                            fontSize: 18,
-                            fontWeight: '700',
-                            position: 'absolute',
-                          }}>
-                          123, xyz street, abc city
-                        </Text>
-                      </DragDrop>
-                    ) : null}
-                    {state?.text && state?.showText ? (
-                      <DragDrop
-                        onDrag={drag}
-                        onDrop={drop}
-                        setShowModal={setShowModal}>
-                        <Text
-                          style={{
-                            color: textColor,
-                            fontSize: 18,
-                            fontWeight: '700',
-                            position: 'absolute',
-                            textAlign: textAlignment,
-                            fontFamily: fontFamily,
-                          }}>
-                          {state?.text}
-                        </Text>
-                      </DragDrop>
-                    ) : null}
-                  </View>
-
-                  <View style={{zIndex: 2}}>
-                    {showFrame ? (
-                      <Image
-                        source={Images.frame_1}
-                        style={{
-                          transform: [{rotate: '90deg'}],
-                        }}
-                      />
-                    ) : null}
-                    {showFrame1 ? (
-                      <Image
-                        source={Images.frame_1}
-                        style={{
-                          height: '100%',
-                          width: '100%',
-                        }}
-                      />
-                    ) : null}
-                    {showFrame2 ? (
-                      <ImageBackground
-                        source={Images.frame_2}
-                        style={{
-                          height: '100%',
-                          width: '100%',
-                          top: -20,
-                        }}
-                      />
-                    ) : null}
-                  </View>
-                </ImageBackground>
-                {showCross ? (
-                  <TouchableOpacity
-                    onPress={() => navigation.goBack()}
-                    style={{
-                      zIndex: 4,
-                      top: -10,
-                      right: -15,
-                      position: 'absolute',
-                    }}>
-                    <AntDesign name="closecircleo" size={30} color={'red'} />
-                  </TouchableOpacity>
-                ) : null}
-              </View>
-            </ViewShot>
-          ) : imgData ? (
-            <ViewShot ref={viewShotRef} options={{format: 'jpg', quality: 0.9}}>
-              <View style={styles.chooseImageContainer}>
+          {imgData ? (
+            <View style={styles.chooseImageContainer}>
+              <ViewShot
+                ref={viewShotRef}
+                options={{format: 'jpg', quality: 0.9}}>
                 <ImageBackground
                   source={imgData ? {uri: imgData?.contentUrl} : null}
-                  resizeMode="cover"
                   style={{
                     zIndex: 1,
                     height: 375,
                     width: 375,
-                    justifyContent: 'center',
-                    borderWidth: 1,
-                    borderColor: Colors.PRIMARY,
                   }}>
                   <View style={{zIndex: 3}}>
                     {state?.logo ? (
@@ -614,12 +402,12 @@ const CustomSDK = ({route, navigation}) => {
                         intialY={state.logo_content?.y_axis}>
                         <Image
                           source={
-                            BusinessData
+                            profileDetail
                               ? {
                                   uri:
-                                    BusinessData?.logo ??
-                                    businessDetails?.partyLogo ??
-                                    BusinessData?.profilePic,
+                                    profileDetail?.logo ??
+                                    profileDetail?.partyLogo ??
+                                    profileDetail?.profilePic,
                                 }
                               : Images.akSchoolIcon
                           }
@@ -630,41 +418,31 @@ const CustomSDK = ({route, navigation}) => {
                         />
                       </DragDrop>
                     ) : null}
-                    {state.business && profileType === 'business' && (
-                      <DragDrop
-                        onDrag={drag}
-                        onDrop={drop}
-                        intialX={state.business_content?.x_axis}
-                        intialY={state.business_content?.y_axis}>
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            fontWeight: '700',
-                            position: 'absolute',
-                          }}>
-                          <CustomColorChange
-                            setShowBorderBox={setShowBorderBox}
-                            showBorderBox={showBorderBox}
-                            content={state.business_content}
-                            data={BusinessData?.name}
-                            width={state.business_content.width}
-                            numberOfLines={2}
-                          />
-                        </Text>
-                      </DragDrop>
-                    )}
+                    {state.business &&
+                      profileDetail?.categoryGroup === 'business' && (
+                        <DragDrop
+                          onDrag={drag}
+                          onDrop={drop}
+                          intialX={state.business_content?.x_axis}
+                          intialY={state.business_content?.y_axis}>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              fontWeight: '700',
+                              position: 'absolute',
+                            }}>
+                            <CustomColorChange
+                              setShowBorderBox={setShowBorderBox}
+                              showBorderBox={showBorderBox}
+                              content={state.business_content}
+                              data={profileDetail?.name}
+                              width={state.business_content.width}
+                              numberOfLines={2}
+                            />
+                          </Text>
+                        </DragDrop>
+                      )}
 
-                    {showSticker ? (
-                      <DragDrop onDrag={drag} onDrop={drop}>
-                        <Image
-                          source={{uri: stickers}}
-                          style={{
-                            height: 50,
-                            width: 50,
-                          }}
-                        />
-                      </DragDrop>
-                    ) : null}
                     {state?.mobile ? (
                       <DragDrop
                         onDrag={drag}
@@ -679,7 +457,7 @@ const CustomSDK = ({route, navigation}) => {
                             content={state.mobile_content}
                             setShowBorderBox={setShowBorderBox}
                             showBorderBox={showBorderBox}
-                            data={BusinessData?.mobileNumber}
+                            data={profileDetail?.mobileNumber}
                           />
                         </View>
                       </DragDrop>
@@ -698,7 +476,7 @@ const CustomSDK = ({route, navigation}) => {
                             setShowBorderBox={setShowBorderBox}
                             showBorderBox={showBorderBox}
                             content={state.whatsApp_content}
-                            data={BusinessData?.whatsAppNumber}
+                            data={profileDetail?.whatsAppNumber}
                           />
                         </View>
                       </DragDrop>
@@ -717,7 +495,7 @@ const CustomSDK = ({route, navigation}) => {
                             setShowBorderBox={setShowBorderBox}
                             showBorderBox={showBorderBox}
                             content={state.email_content}
-                            data={BusinessData?.email}
+                            data={profileDetail?.email}
                           />
                         </View>
                       </DragDrop>
@@ -736,7 +514,7 @@ const CustomSDK = ({route, navigation}) => {
                             setShowBorderBox={setShowBorderBox}
                             showBorderBox={showBorderBox}
                             content={state.website_content}
-                            data={BusinessData?.website}
+                            data={profileDetail?.website}
                           />
                         </View>
                       </DragDrop>
@@ -756,24 +534,24 @@ const CustomSDK = ({route, navigation}) => {
                             showBorderBox={showBorderBox}
                             content={state.address_content}
                             data={
-                              BusinessData?.address
-                                ? BusinessData?.address?.address +
+                              profileDetail?.address
+                                ? profileDetail?.address?.address +
                                   ', ' +
-                                  BusinessData?.address?.dist +
+                                  profileDetail?.address?.dist +
                                   ' ' +
-                                  BusinessData?.address?.state
-                                : BusinessData?.state
-                                ? BusinessData?.state +
+                                  profileDetail?.address?.state
+                                : profileDetail?.state
+                                ? profileDetail?.state +
                                   ',' +
-                                  BusinessData?.district +
+                                  profileDetail?.district +
                                   ' ' +
-                                  BusinessData?.legislativeAssembly
-                                : BusinessData?.currentAddress
-                                ? BusinessData?.currentAddress?.address +
+                                  profileDetail?.legislativeAssembly
+                                : profileDetail?.currentAddress
+                                ? profileDetail?.currentAddress?.address +
                                   ', ' +
-                                  BusinessData?.currentAddress?.dist +
+                                  profileDetail?.currentAddress?.dist +
                                   ' ' +
-                                  BusinessData?.currentAddress?.state
+                                  profileDetail?.currentAddress?.state
                                 : null
                             }
                           />
@@ -823,7 +601,6 @@ const CustomSDK = ({route, navigation}) => {
                           }
                           onLoad={() => setIsLoading(false)}
                           source={state.frameImg ? {uri: state.frameImg} : null}
-                          resizeMode="contain"
                           style={{
                             alignSelf: 'center',
                             height: 375,
@@ -834,21 +611,9 @@ const CustomSDK = ({route, navigation}) => {
                       </>
                     ) : null}
                   </View>
-                  {showCross ? (
-                    <TouchableOpacity
-                      onPress={() => navigation.goBack()}
-                      style={{
-                        zIndex: 4,
-                        top: -10,
-                        right: -15,
-                        position: 'absolute',
-                      }}>
-                      <AntDesign name="closecircleo" size={30} color={'red'} />
-                    </TouchableOpacity>
-                  ) : null}
                 </ImageBackground>
-              </View>
-            </ViewShot>
+              </ViewShot>
+            </View>
           ) : (
             <TouchableOpacity
               style={styles.chooseImageContainer}
@@ -1001,23 +766,7 @@ const CustomSDK = ({route, navigation}) => {
                 />
                 <Text style={styles.frameText}>Add Text</Text>
               </TouchableOpacity>
-              {/* sticker */}
-              {/* <TouchableOpacity
-            onPress={() => {
-              if (stickers) {
-                setShowSticker(!showSticker);
-              } else {
-                TakeStickerfromGallery();
-              }
-            }}
-            style={styles.frame}>
-            <MaterialCommunityIcons
-              name="sticker-emoji"
-              size={20}
-              color={Colors.TEXT1}
-            />
-            <Text style={styles.frameText}>Sticker</Text>
-          </TouchableOpacity> */}
+
               <TouchableOpacity
                 onPress={() => setShowFontFamily(true)}
                 style={styles.frame1}>
@@ -1038,24 +787,6 @@ const CustomSDK = ({route, navigation}) => {
                 />
                 <Text style={styles.frameText}>Glow</Text>
               </TouchableOpacity>
-              {/* <View style={styles.frame1}>
-                <Text style={styles.frameText}>Effect 5</Text>
-              </View>
-              <View style={styles.frame}>
-                <Text style={styles.frameText}>Effect 6</Text>
-              </View>
-              <View style={styles.frame}>
-                <Text style={styles.frameText}>Effect 7</Text>
-              </View>
-              <View style={styles.frame}>
-                <Text style={styles.frameText}>Effect 8</Text>
-              </View>
-              <View style={styles.frame}>
-                <Text style={styles.frameText}>Effect 9</Text>
-              </View>
-              <View style={styles.frame}>
-                <Text style={styles.frameText}>Effect 10</Text>
-              </View> */}
             </ScrollView>
           )}
         </ScrollView>

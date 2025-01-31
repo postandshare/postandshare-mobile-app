@@ -52,6 +52,9 @@ const ShowProfileCard = ({item, onPress}) => {
 
       <View style={styles.name_container}>
         <Text style={styles.bussinessName}>{item?.name}</Text>
+        {item?.description && (
+          <Text style={styles.bussinessdescription}>{item?.description}</Text>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -108,7 +111,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: Colors.PRIMARY,
     textAlign: 'justify',
-    marginVertical: 5,
+    marginVertical: 3,
+  },
+  bussinessdescription: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#000',
+    textAlign: 'justify',
   },
   est_date: {
     color: Colors.TEXT1,

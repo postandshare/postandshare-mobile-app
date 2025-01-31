@@ -38,7 +38,9 @@ export default {
   HELPSUPPORT: 'HelpSupport',
   NOTIFICATION: 'Notification',
   AI_IMAGE: 'Ai-image',
-
+  SEE_MORE: 'See More',
+  VIEW_CATEGORY_IMAGES: 'View Category Images',
+  SDK_SCREEN: 'SDK Screen',
   // work profile
   WORK_PROFILE_NAVIGATOR: 'WorkProfileNavigator',
   WORK_PROFILE_LIST: 'WorkProfileList',

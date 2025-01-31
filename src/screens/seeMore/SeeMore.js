@@ -16,7 +16,7 @@ import {ActivityIndicator} from 'react-native-paper';
 import Colors from '../../constants/Colors';
 import globalStyles from '../../styles/globalStyles';
 
-const MonthPhotos = ({navigation, route}) => {
+const SeeMore = ({navigation, route}) => {
   const {data, byLabel} = route?.params ?? {};
   const [loading, setLoading] = React.useState(true);
   return (
@@ -40,6 +40,7 @@ const MonthPhotos = ({navigation, route}) => {
 
             {data?.map((item, index) => (
               <TouchableOpacity
+                key={index}
                 onPress={() =>
                   navigation.navigate(NavigationScreenName.PHOTO_NAVIGATOR, {
                     initialRouteName: item,
@@ -61,7 +62,6 @@ const MonthPhotos = ({navigation, route}) => {
                   onLoadEnd={() => setLoading(false)}
                   source={{uri: item.contentUrl}}
                   style={styles.image}
-                  key={index}
                 />
               </TouchableOpacity>
             ))}
@@ -72,4 +72,4 @@ const MonthPhotos = ({navigation, route}) => {
   );
 };
 
-export default MonthPhotos;
+export default SeeMore;

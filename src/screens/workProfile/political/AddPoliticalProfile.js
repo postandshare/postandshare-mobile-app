@@ -197,9 +197,6 @@ const AddPoliticalProfile = ({navigation}) => {
                 control={control}
                 label="Address"
                 placeholder="Type Address"
-                rules={{
-                  required: 'Address required',
-                }}
               />
               {/* tehsil */}
               <ControllerSingleInput
@@ -207,9 +204,6 @@ const AddPoliticalProfile = ({navigation}) => {
                 control={control}
                 label="Legislative Assembly / Tehsil"
                 placeholder="Type assembly / tehsil"
-                rules={{
-                  required: 'Assembly/Tehsil required',
-                }}
               />
               {/* state */}
               <ControllerDropdown
@@ -219,13 +213,9 @@ const AddPoliticalProfile = ({navigation}) => {
                 placeholder="Select State"
                 data={state.stateList}
                 mode={'modal'}
-                rules={{
-                  required: 'State required',
-                }}
               />
               {/* dist */}
               <ControllerDropdown
-                rules={{required: 'District required'}}
                 name="address.dist"
                 control={control}
                 label="District"
@@ -242,7 +232,6 @@ const AddPoliticalProfile = ({navigation}) => {
                 keyboardType="number-pad"
                 maxLength={6}
                 rules={{
-                  required: 'Pin Code required',
                   minLength: {
                     value: 6,
                     message: 'Pin code should be 6 digit',

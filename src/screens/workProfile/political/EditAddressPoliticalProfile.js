@@ -117,9 +117,6 @@ const EditAddressPoliticalProfile = ({navigation, route}) => {
                 control={control}
                 label="Legislative Assembly / Tehsil"
                 placeholder="Type assembly / tehsil"
-                rules={{
-                  required: 'Assembly/Tehsil required',
-                }}
               />
               {/* state */}
               <ControllerDropdown
@@ -129,13 +126,9 @@ const EditAddressPoliticalProfile = ({navigation, route}) => {
                 placeholder="Select State"
                 data={state.stateList}
                 mode={'modal'}
-                rules={{
-                  required: 'State required',
-                }}
               />
               {/* dist */}
               <ControllerDropdown
-                rules={{required: 'District required'}}
                 name="address.dist"
                 control={control}
                 label="District"
@@ -152,7 +145,6 @@ const EditAddressPoliticalProfile = ({navigation, route}) => {
                 keyboardType="number-pad"
                 maxLength={6}
                 rules={{
-                  required: 'Pin Code required',
                   minLength: {
                     value: 6,
                     message: 'Pin code should be 6 digit',

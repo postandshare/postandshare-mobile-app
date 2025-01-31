@@ -28,14 +28,15 @@ const WorkProfileList = ({navigation, route}) => {
   const isFocused = useIsFocused();
   const [state, setState] = useState({viewModal: false, selectedItem: {}});
   const [searchQuery, setSearchQuery] = useState('');
-  const PhotoData = picData;
+
   const [visible, setVisible] = useState(false);
   const [sortOption, setSortOption] = useState('Newest');
   const [bussinessList, setBussinessList] = useState([]);
   const handleOnPressCard = item => {
     if (picData) {
-      navigation.navigate('CustomSDK', {
-        picData: PhotoData,
+      navigation.navigate(NavigationScreenName.SDK_SCREEN, {
+        picData: picData,
+        profileDetail: item,
       });
       return;
     }
