@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   frameContainer: {
-    marginVertical: 10,
     alignItems: 'center',
   },
   frame: {

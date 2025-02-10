@@ -1,46 +1,33 @@
 /* eslint-disable react-native/no-inline-styles */
 import {
   Dimensions,
-  FlatList,
   Image,
   ImageBackground,
-  Keyboard,
   PermissionsAndroid,
   RefreshControl,
   ScrollView,
   ToastAndroid,
   TouchableOpacity,
   View,
+  TextInput as NativeInput,
 } from 'react-native';
 import {Text} from 'react-native-paper';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import styles from './style';
 import TopHeader from '../../components/TopHeader';
 import Colors from '../../constants/Colors';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
+import Foundation from 'react-native-vector-icons/Foundation';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Images from '../../constants/images';
 import DragDrop from '../../components/DragDrop';
 import ViewShot from 'react-native-view-shot';
-import {
-  ActivityIndicator,
-  Button,
-  Dialog,
-  Portal,
-  TextInput,
-} from 'react-native-paper';
-import FontFamily from '../../constants/FontFamily';
-import ColorPicker, {
-  Panel1,
-  Swatches,
-  Preview,
-  OpacitySlider,
-  HueSlider,
-} from 'reanimated-color-picker';
+import {ActivityIndicator} from 'react-native-paper';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {getOrgFrame} from '../../services/userServices/frame.services';
 import {useIsFocused} from '@react-navigation/native';
@@ -50,7 +37,12 @@ import {addUserPost} from '../../services/userServices/userpost.services';
 import images from '../../constants/images';
 import globalStyles from '../../styles/globalStyles';
 import FrameSelection from './FrameSelection';
-import CustomColorChange from './CustomColorChange';
+import ShowText from './ShowText';
+import ColorPickerModal from './ColorPickerModal';
+import AddMoreTextModal from './AddMoreTextModal';
+import ShowAddMoreText from './ShowAddMoreText';
+import ImageEditor from './ImageEditor';
+import FontFamilyModal from './FontFamilyModal';
 const initialState = {
   fetch: false,
   address: false,
@@ -59,7 +51,8 @@ const initialState = {
   email: false,
   website: false,
   whatsApp: false,
-  business: false,
+  showBusiness_name: false,
+  showBusiness_description: false,
   text: '',
   showText: false,
   logo_content: {},
@@ -68,26 +61,31 @@ const initialState = {
   address_content: {},
   whatsApp_content: {},
   website_content: {},
-  business_content: {},
+  business_name: {},
+  business_description: {},
   showFrameImg: false,
   frameImg: '',
   selectFrameIndex: 0,
+  activeContent: '',
 };
 const CustomSDK = ({route, navigation}) => {
   const isFocused = useIsFocused();
   const {picData, profileDetail} = route.params || {};
-  const [showBorderBox, setShowBorderBox] = useState(false);
   const imgData = picData;
-  const [textColor, setTextColor] = useState('#fff');
-  const [sdkTextColor, setSDKTextColor] = useState('#fff');
-  const [showModal, setShowModal] = useState(false);
   const [imageUploading, setImageUploading] = React.useState(false);
-  const [visible, setVisible] = React.useState(false);
-  const [textAlignment, setTextAlignment] = useState('left');
-  const [fontFamily, setFontFamily] = useState('Arial');
   const [showFontFamily, setShowFontFamily] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [state, setState] = useState(initialState);
+  const [colorPickerModal, setColorPickerModal] = useState(false);
+  const [moreText, setMoreText] = useState({
+    modal: false,
+    textArray: [],
+    edit: false,
+    editData: {},
+    active: false,
+    activeIndex: 0,
+  });
+  const [moreImage, setMoreImage] = useState([]);
   const viewShotRef = useRef();
   const uploadePhoto = async (path, mime) => {
     try {
@@ -124,46 +122,178 @@ const CustomSDK = ({route, navigation}) => {
             'To perform the desired function',
         },
       );
-      await launchImageLibrary({
+      const {assets} = await launchImageLibrary({
         maxWidth: 300,
         maxHeight: 400,
         mediaType: 'photo',
+        selectionLimit: 1,
       });
-
-      setState(prev => ({
-        ...prev,
-        address: true,
-        mobile: true,
-        email: true,
-        whatsApp: true,
-        logo: true,
-        website: true,
-      }));
+      if (assets) {
+        setMoreImage(prev => [...prev, {uri: assets[0]?.uri, selected: true}]);
+      }
     } catch (error) {
       console.log(error);
       ToastAndroid.show('Something went wrong', ToastAndroid.LONG);
     }
   };
-
   const drag = (x, y) => {};
-
   const drop = (x, y) => {
     if (y > Dimensions.get('screen').height - 150) {
     }
   };
 
   const onCapture = async () => {
+    handlePressFrame();
     const uri = await viewShotRef.current.capture();
     uploadePhoto(uri, 'image/png');
   };
-
-  const hideDialog = () => setVisible(false);
-  const hideDialogFontFamily = () => setShowFontFamily(false);
-  const onSelectColor = ({hex}) => {
-    setTextColor(hex);
-    setSDKTextColor(hex);
+  const handleChangeFontSize = fontSize => {
+    if (moreText.active) {
+      moreText.textArray[moreText.activeIndex].fontSize = Number(fontSize);
+    } else {
+      state[state.activeContent].fontSize = Number(fontSize);
+    }
+    setMoreText(prev => ({...prev}));
   };
-
+  const handleChangeFontSizeByPressingButtons = value => {
+    if (moreText.active) {
+      moreText.textArray[moreText.activeIndex].fontSize =
+        Number(moreText.textArray[moreText.activeIndex].fontSize) + value;
+    } else {
+      state[state.activeContent].fontSize =
+        Number(state[state.activeContent].fontSize) + value;
+    }
+    setMoreText(prev => ({...prev}));
+  };
+  const handleChangeColor = color => {
+    if (state.activeContent) {
+      setState(prev => ({
+        ...prev,
+        [state.activeContent]: {
+          ...prev[state.activeContent],
+          fontColor: color,
+        },
+      }));
+    } else {
+      if (moreText.active) {
+        moreText.textArray[moreText.activeIndex].fontColor = color;
+        setMoreText(prev => ({
+          ...prev,
+        }));
+      } else {
+        setState(prev => ({
+          ...prev,
+          logo_content: {...prev.logo_content, fontColor: color},
+          mobile_content: {...prev.mobile_content, fontColor: color},
+          email_content: {...prev.email_content, fontColor: color},
+          address_content: {...prev.address_content, fontColor: color},
+          whatsApp_content: {...prev.whatsApp_content, fontColor: color},
+          website_content: {...prev.website_content, fontColor: color},
+          business_name: {...prev.business_name, fontColor: color},
+          business_description: {
+            ...prev.business_description,
+            fontColor: color,
+          },
+        }));
+        setMoreText(prev => ({
+          ...prev,
+          textArray: prev.textArray.map(item => ({...item, fontColor: color})),
+        }));
+      }
+    }
+    setColorPickerModal(false);
+  };
+  const handleChangeFontFamily = fontFamily => {
+    if (state.activeContent) {
+      setState(prev => ({
+        ...prev,
+        [state.activeContent]: {
+          ...prev[state.activeContent],
+          fontFamily: fontFamily,
+        },
+      }));
+    } else {
+      if (moreText.active) {
+        moreText.textArray[moreText.activeIndex].fontFamily = fontFamily;
+        setMoreText(prev => ({
+          ...prev,
+        }));
+      } else {
+        setState(prev => ({
+          ...prev,
+          logo_content: {...prev.logo_content, fontFamily: fontFamily},
+          mobile_content: {...prev.mobile_content, fontFamily: fontFamily},
+          email_content: {...prev.email_content, fontFamily: fontFamily},
+          address_content: {...prev.address_content, fontFamily: fontFamily},
+          whatsApp_content: {...prev.whatsApp_content, fontFamily: fontFamily},
+          website_content: {...prev.website_content, fontFamily: fontFamily},
+          business_name: {...prev.business_name, fontFamily: fontFamily},
+          business_description: {
+            ...prev.business_description,
+            fontFamily,
+          },
+        }));
+        setMoreText(prev => ({
+          ...prev,
+          textArray: prev.textArray.map(item => ({
+            ...item,
+            fontFamily,
+          })),
+        }));
+      }
+    }
+    setShowFontFamily(false);
+  };
+  const handleAddMoreText = text => {
+    if (moreText.edit) {
+      moreText.textArray[moreText.activeIndex].text = text;
+      setMoreText(prev => ({
+        ...prev,
+        modal: false,
+        edit: false,
+        editData: {},
+      }));
+    } else {
+      setMoreText(prev => ({
+        ...prev,
+        modal: false,
+        edit: false,
+        editData: {},
+        textArray: [
+          ...prev.textArray,
+          {
+            text,
+            fontColor: '#fff',
+            fontSize: 20,
+            textAlign: 'center',
+            x_axis: 200,
+            y_axis: 200,
+          },
+        ],
+      }));
+    }
+  };
+  const handlePressFrame = () => {
+    setMoreText(prev => ({...prev, activeIndex: '', active: false}));
+    setState(prev => ({...prev, activeContent: ''}));
+    setMoreImage(prev => prev.map(item => ({...item, selected: false})));
+  };
+  const handlePressDeleteImage = index => {
+    setMoreImage(prev => prev.filter((_, i) => i !== index));
+  };
+  const handlePressEditText = () => {
+    setMoreText(prev => ({
+      ...prev,
+      editData: prev.textArray[prev.activeIndex],
+      edit: true,
+    }));
+  };
+  const handlePressDeleteText = index => {
+    setMoreText(prev => ({
+      ...prev,
+      textArray: prev.textArray.filter((_, i) => i !== index),
+    }));
+  };
   const {
     isLoading: getOrgFrameLoading,
     isFetching: getOrgFrameFetching,
@@ -185,7 +315,17 @@ const CustomSDK = ({route, navigation}) => {
         ToastAndroid.show(error?.response?.data?.message, ToastAndroid.SHORT);
       },
     });
-
+  useEffect(() => {
+    if (state.activeContent) {
+      setMoreText(prev => ({...prev, activeIndex: '', active: false}));
+    }
+  }, [state.activeContent]);
+  useEffect(() => {
+    if (moreText.active) {
+      setState(prev => ({...prev, activeContent: ''}));
+    }
+  }, [moreText.active]);
+  console.log(state.business_name, 'in state');
   return (
     <>
       <Loader open={imageUploading || addUserPostLoading} text="Loading..." />
@@ -194,174 +334,36 @@ const CustomSDK = ({route, navigation}) => {
         text="Loading..."
       />
       {/* dialogue for adding the text on the image */}
-      <Portal>
-        <Dialog dismissable={false} visible={visible} onDismiss={hideDialog}>
-          <Dialog.Title>Add Text</Dialog.Title>
-          <Dialog.Content>
-            <TextInput
-              label="Add Text"
-              value={state?.text}
-              mode="outlined"
-              numberOfLines={3}
-              multiline
-              style={{
-                textAlign: textAlignment,
-              }}
-              onBlur={() => Keyboard.dismiss()}
-              onChangeText={text => setState(prev => ({...prev, text}))}
-            />
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <TouchableOpacity
-                onPress={() => setTextAlignment('left')}
-                style={{
-                  backgroundColor:
-                    textAlignment === 'left' ? Colors.PRIMARY : Colors.white,
-                  borderWidth: 1,
-                  borderColor:
-                    textAlignment === 'left' ? Colors.PRIMARY : Colors.text2,
-                  borderRadius: 5,
-                  width: 30,
-                  alignItems: 'center',
-                  marginVertical: 5,
-                }}>
-                <Feather name="align-left" size={20} color={Colors.text1} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => setTextAlignment('center')}
-                style={{
-                  backgroundColor:
-                    textAlignment === 'center' ? Colors.PRIMARY : Colors.white,
-                  borderWidth: 1,
-                  borderColor:
-                    textAlignment === 'center' ? Colors.PRIMARY : Colors.text2,
-                  borderRadius: 5,
-                  width: 30,
-                  alignItems: 'center',
-                  marginVertical: 5,
-                }}>
-                <Feather name="align-center" size={20} color={Colors.text1} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => setTextAlignment('right')}
-                style={{
-                  backgroundColor:
-                    textAlignment === 'right' ? Colors.PRIMARY : Colors.white,
-                  borderWidth: 1,
-                  borderColor:
-                    textAlignment === 'right' ? Colors.PRIMARY : Colors.text2,
-                  borderRadius: 5,
-                  width: 30,
-                  alignItems: 'center',
-                  marginVertical: 5,
-                }}>
-                <Feather name="align-right" size={20} color={Colors.text1} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => setTextAlignment('justify')}
-                style={{
-                  backgroundColor:
-                    textAlignment === 'justify' ? Colors.PRIMARY : Colors.white,
-                  borderWidth: 1,
-                  borderColor:
-                    textAlignment === 'justify' ? Colors.PRIMARY : Colors.text2,
-                  borderRadius: 5,
-                  width: 30,
-                  alignItems: 'center',
-                  marginVertical: 5,
-                }}>
-                <Feather name="align-justify" size={20} color={Colors.text1} />
-              </TouchableOpacity>
-            </View>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button
-              onPress={() => {
-                setVisible(false);
-              }}>
-              Cancel
-            </Button>
-            <Button
-              onPress={() => {
-                setState(prev => ({...prev, showText: true}));
-                setVisible(false);
-              }}>
-              Ok
-            </Button>
-          </Dialog.Actions>
-        </Dialog>
-
-        {/* font family dialogue */}
-        <Dialog visible={showFontFamily} onDismiss={hideDialogFontFamily}>
-          <Dialog.Title>Please Select Font Family</Dialog.Title>
-          <Dialog.Content>
-            <Dialog.ScrollArea>
-              <FlatList
-                data={FontFamily}
-                keyExtractor={item => item}
-                renderItem={({item}) => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setFontFamily(item);
-                      setShowFontFamily(false);
-                    }}
-                    style={[
-                      {
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                      },
-                    ]}>
-                    <Text
-                      style={[
-                        fontFamily === item
-                          ? {color: Colors.PRIMARY}
-                          : {
-                              color: Colors.TEXT1,
-                            },
-                        {fontFamily: item},
-                        styles.item_content,
-                      ]}>
-                      {item}
-                    </Text>
-                    {fontFamily === item && (
-                      <AntDesign
-                        name="check"
-                        size={20}
-                        color={Colors.PRIMARY}
-                      />
-                    )}
-                  </TouchableOpacity>
-                )}
-              />
-            </Dialog.ScrollArea>
-          </Dialog.Content>
-        </Dialog>
-
-        {/* modal for color picker */}
-        <Dialog
-          visible={showModal}
-          animationType="slide"
-          contentContainerStyle={{}}>
-          <Dialog.Title>Choose Color</Dialog.Title>
-          <Dialog.Content
-            style={{alignContent: 'center', alignItems: 'center'}}>
-            <ColorPicker
-              style={{width: '70%'}}
-              value="red"
-              onComplete={onSelectColor}>
-              <Preview />
-              <Panel1 />
-              <HueSlider />
-              <OpacitySlider />
-              <Swatches />
-            </ColorPicker>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={() => setShowModal(false)}>Done</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+      <AddMoreTextModal
+        open={moreText.modal || moreText.edit}
+        onClose={() =>
+          setMoreText(prev => ({
+            ...prev,
+            modal: false,
+            edit: false,
+            editData: {},
+          }))
+        }
+        handleChangeText={handleAddMoreText}
+        edit={moreText.edit}
+        editData={moreText.editData}
+      />
+      {/* select font family modal */}
+      <FontFamilyModal
+        open={showFontFamily}
+        onClose={() => setShowFontFamily(false)}
+        handleChangeFontFamily={handleChangeFontFamily}
+        prevFamily={
+          state.activeContent ? state[state.activeContent]?.fontFamily : ''
+        }
+      />
+      {/* color picker modal */}
+      <ColorPickerModal
+        color={state[state.activeContent]?.fontColor}
+        open={colorPickerModal}
+        onClose={() => setColorPickerModal(false)}
+        handleChangeColor={handleChangeColor}
+      />
 
       <ImageBackground
         source={images.background}
@@ -386,232 +388,276 @@ const CustomSDK = ({route, navigation}) => {
               <ViewShot
                 ref={viewShotRef}
                 options={{format: 'jpg', quality: 0.9}}>
-                <ImageBackground
-                  source={imgData ? {uri: imgData?.contentUrl} : null}
-                  style={{
-                    zIndex: 1,
-                    height: 375,
-                    width: 375,
-                  }}>
-                  <View style={{zIndex: 3}}>
-                    {state?.logo ? (
-                      <DragDrop
-                        onDrag={drag}
-                        onDrop={drop}
-                        intialX={state.logo_content?.x_axis}
-                        intialY={state.logo_content?.y_axis}>
-                        <Image
-                          source={
-                            profileDetail
-                              ? {
-                                  uri:
-                                    profileDetail?.logo ??
-                                    profileDetail?.partyLogo ??
-                                    profileDetail?.profilePic,
-                                }
-                              : Images.akSchoolIcon
+                <TouchableOpacity activeOpacity={1} onPress={handlePressFrame}>
+                  <ImageBackground
+                    source={imgData ? {uri: imgData?.contentUrl} : null}
+                    style={{
+                      zIndex: 1,
+                      height: 375,
+                      width: 375,
+                    }}>
+                    <View style={{zIndex: 3}}>
+                      {moreText.textArray?.map((item, i) => (
+                        <ShowAddMoreText
+                          item={item}
+                          active={i === moreText.activeIndex ? true : false}
+                          onPress={() =>
+                            setMoreText(prev => ({
+                              ...prev,
+                              active: true,
+                              activeIndex: i,
+                            }))
                           }
-                          style={{
-                            height: 50,
-                            width: 50,
-                          }}
+                          onPressEdit={handlePressEditText}
+                          onPressDelete={handlePressDeleteText}
+                          index={i}
                         />
-                      </DragDrop>
-                    ) : null}
-                    {state.business &&
-                      profileDetail?.categoryGroup === 'business' && (
+                      ))}
+                      {moreImage.length > 0 &&
+                        moreImage.map((item, i) => (
+                          <TouchableOpacity
+                            activeOpacity={0.5}
+                            key={i}
+                            onPress={() => {
+                              item.selected = true;
+                              setState(prev => ({...prev}));
+                            }}>
+                            <ImageEditor
+                              item={item}
+                              onPresDelete={handlePressDeleteImage}
+                              index={i}
+                            />
+                          </TouchableOpacity>
+                        ))}
+                      {state?.logo ? (
                         <DragDrop
                           onDrag={drag}
                           onDrop={drop}
-                          intialX={state.business_content?.x_axis}
-                          intialY={state.business_content?.y_axis}>
-                          <Text
+                          intialX={state.logo_content?.x_axis}
+                          intialY={state.logo_content?.y_axis}>
+                          <Image
+                            source={
+                              profileDetail
+                                ? {
+                                    uri:
+                                      profileDetail?.logo ??
+                                      profileDetail?.partyLogo ??
+                                      profileDetail?.profilePic,
+                                  }
+                                : Images.akSchoolIcon
+                            }
                             style={{
-                              fontSize: 18,
-                              fontWeight: '700',
-                              position: 'absolute',
-                            }}>
-                            <CustomColorChange
-                              setShowBorderBox={setShowBorderBox}
-                              showBorderBox={showBorderBox}
-                              content={state.business_content}
-                              data={profileDetail?.name}
-                              width={state.business_content.width}
-                              numberOfLines={2}
-                            />
-                          </Text>
+                              height: 50,
+                              width: 50,
+                            }}
+                          />
                         </DragDrop>
+                      ) : null}
+                      {profileDetail?.categoryGroup === 'business' && (
+                        <>
+                          {state.showBusiness_name && (
+                            <>
+                              <ShowText
+                                content={state.business_name}
+                                numberOfLines={2}
+                                text={profileDetail?.name}
+                                activeContent={
+                                  state.activeContent === 'business_name'
+                                    ? true
+                                    : false
+                                }
+                                showDelete={true}
+                                onPressDelete={() =>
+                                  setState(prev => ({
+                                    ...prev,
+                                    showBusiness_name: false,
+                                  }))
+                                }
+                                onPress={() =>
+                                  setState(prev => ({
+                                    ...prev,
+                                    activeContent: 'business_name',
+                                  }))
+                                }
+                              />
+                            </>
+                          )}
+                          {state.showBusiness_description && (
+                            <>
+                              <ShowText
+                                content={state.business_description}
+                                numberOfLines={3}
+                                text={profileDetail?.description}
+                                activeContent={
+                                  state.activeContent === 'business_description'
+                                    ? true
+                                    : false
+                                }
+                                showDelete={true}
+                                onPressDelete={() =>
+                                  setState(prev => ({
+                                    ...prev,
+                                    showBusiness_description: false,
+                                  }))
+                                }
+                                onPress={() =>
+                                  setState(prev => ({
+                                    ...prev,
+                                    activeContent: 'business_description',
+                                  }))
+                                }
+                              />
+                            </>
+                          )}
+                        </>
                       )}
 
-                    {state?.mobile ? (
-                      <DragDrop
-                        onDrag={drag}
-                        onDrop={drop}
-                        intialX={state.mobile_content?.x_axis}
-                        intialY={state.mobile_content?.y_axis}>
-                        <View
-                          style={{
-                            position: 'absolute',
-                          }}>
-                          <CustomColorChange
-                            content={state.mobile_content}
-                            setShowBorderBox={setShowBorderBox}
-                            showBorderBox={showBorderBox}
-                            data={profileDetail?.mobileNumber}
-                          />
-                        </View>
-                      </DragDrop>
-                    ) : null}
-                    {state?.whatsApp ? (
-                      <DragDrop
-                        onDrag={drag}
-                        onDrop={drop}
-                        intialX={state.whatsApp_content?.x_axis}
-                        intialY={state.whatsApp_content?.y_axis}>
-                        <View
-                          style={{
-                            position: 'absolute',
-                          }}>
-                          <CustomColorChange
-                            setShowBorderBox={setShowBorderBox}
-                            showBorderBox={showBorderBox}
-                            content={state.whatsApp_content}
-                            data={profileDetail?.whatsAppNumber}
-                          />
-                        </View>
-                      </DragDrop>
-                    ) : null}
-                    {state?.email ? (
-                      <DragDrop
-                        onDrag={drag}
-                        onDrop={drop}
-                        intialX={state.email_content?.x_axis}
-                        intialY={state.email_content?.y_axis}>
-                        <View
-                          style={{
-                            position: 'absolute',
-                          }}>
-                          <CustomColorChange
-                            setShowBorderBox={setShowBorderBox}
-                            showBorderBox={showBorderBox}
-                            content={state.email_content}
-                            data={profileDetail?.email}
-                          />
-                        </View>
-                      </DragDrop>
-                    ) : null}
-                    {state?.website ? (
-                      <DragDrop
-                        onDrag={drag}
-                        onDrop={drop}
-                        intialX={state.website_content?.x_axis}
-                        intialY={state.website_content?.y_axis}>
-                        <View
-                          style={{
-                            position: 'absolute',
-                          }}>
-                          <CustomColorChange
-                            setShowBorderBox={setShowBorderBox}
-                            showBorderBox={showBorderBox}
-                            content={state.website_content}
-                            data={profileDetail?.website}
-                          />
-                        </View>
-                      </DragDrop>
-                    ) : null}
-                    {state?.address ? (
-                      <DragDrop
-                        intialX={state.address_content?.x_axis}
-                        intialY={state.address_content?.y_axis}
-                        onDrag={drag}
-                        onDrop={drop}>
-                        <View
-                          style={{
-                            position: 'absolute',
-                          }}>
-                          <CustomColorChange
-                            setShowBorderBox={setShowBorderBox}
-                            showBorderBox={showBorderBox}
-                            content={state.address_content}
-                            data={
-                              profileDetail?.address
-                                ? profileDetail?.address?.address +
-                                  ', ' +
-                                  profileDetail?.address?.dist +
-                                  ' ' +
-                                  profileDetail?.address?.state
-                                : profileDetail?.state
-                                ? profileDetail?.state +
-                                  ',' +
-                                  profileDetail?.district +
-                                  ' ' +
-                                  profileDetail?.legislativeAssembly
-                                : profileDetail?.currentAddress
-                                ? profileDetail?.currentAddress?.address +
-                                  ', ' +
-                                  profileDetail?.currentAddress?.dist +
-                                  ' ' +
-                                  profileDetail?.currentAddress?.state
-                                : null
-                            }
-                          />
-                        </View>
-                      </DragDrop>
-                    ) : null}
-                    {state?.text && state?.showText ? (
-                      <DragDrop
-                        onDrag={drag}
-                        onDrop={drop}
-                        setShowModal={setShowModal}>
-                        <Text
-                          style={{
-                            color: textColor,
-                            fontSize: 18,
-                            fontWeight: '700',
-                            position: 'absolute',
-                            textAlign: textAlignment,
-                            fontFamily: fontFamily,
-                          }}>
-                          {state?.text}
-                        </Text>
-                      </DragDrop>
-                    ) : null}
-                  </View>
-                  {/* frames of the images */}
-                  <View style={{zIndex: 2}}>
-                    {state.showFrameImg ? (
-                      <>
-                        {isLoading && (
-                          <ActivityIndicator
-                            style={{
-                              position: 'absolute',
-                              alignSelf: 'center',
-                              top: '45%',
-                            }}
-                            size="large"
-                            color={Colors.PRIMARY}
-                          />
-                        )}
-                        <Image
-                          loadingIndicatorSource={
+                      {state?.mobile ? (
+                        <ShowText
+                          content={state.mobile_content}
+                          numberOfLines={2}
+                          text={profileDetail?.mobileNumber}
+                          activeContent={
+                            state.activeContent === 'mobile_content'
+                              ? true
+                              : false
+                          }
+                          onPress={() =>
+                            setState(prev => ({
+                              ...prev,
+                              activeContent: 'mobile_content',
+                            }))
+                          }
+                        />
+                      ) : null}
+                      {state?.whatsApp ? (
+                        <ShowText
+                          content={state.whatsApp_content}
+                          text={profileDetail?.whatsAppNumber}
+                          activeContent={
+                            state.activeContent === 'whatsApp_content'
+                              ? true
+                              : false
+                          }
+                          onPress={() =>
+                            setState(prev => ({
+                              ...prev,
+                              activeContent: 'whatsApp_content',
+                            }))
+                          }
+                        />
+                      ) : null}
+                      {state?.email ? (
+                        <ShowText
+                          content={state.email_content}
+                          text={profileDetail?.email}
+                          activeContent={
+                            state.activeContent === 'email_content'
+                              ? true
+                              : false
+                          }
+                          onPress={() =>
+                            setState(prev => ({
+                              ...prev,
+                              activeContent: 'email_content',
+                            }))
+                          }
+                        />
+                      ) : null}
+                      {state?.website ? (
+                        <ShowText
+                          content={state.website_content}
+                          text={profileDetail?.website}
+                          activeContent={
+                            state.activeContent === 'website_content'
+                              ? true
+                              : false
+                          }
+                          onPress={() =>
+                            setState(prev => ({
+                              ...prev,
+                              activeContent: 'website_content',
+                            }))
+                          }
+                        />
+                      ) : null}
+                      {state?.address ? (
+                        <ShowText
+                          content={state.address_content}
+                          text={
+                            profileDetail?.address
+                              ? profileDetail?.address?.address +
+                                ', ' +
+                                profileDetail?.address?.dist +
+                                ' ' +
+                                profileDetail?.address?.state
+                              : profileDetail?.state
+                              ? profileDetail?.state +
+                                ',' +
+                                profileDetail?.district +
+                                ' ' +
+                                profileDetail?.legislativeAssembly
+                              : profileDetail?.currentAddress
+                              ? profileDetail?.currentAddress?.address +
+                                ', ' +
+                                profileDetail?.currentAddress?.dist +
+                                ' ' +
+                                profileDetail?.currentAddress?.state
+                              : null
+                          }
+                          activeContent={
+                            state.activeContent === 'address_content'
+                              ? true
+                              : false
+                          }
+                          onPress={() =>
+                            setState(prev => ({
+                              ...prev,
+                              activeContent: 'address_content',
+                            }))
+                          }
+                        />
+                      ) : null}
+                    </View>
+
+                    {/* frames of the images */}
+                    <View style={{zIndex: 2}}>
+                      {state.showFrameImg ? (
+                        <>
+                          {isLoading && (
                             <ActivityIndicator
+                              style={{
+                                position: 'absolute',
+                                alignSelf: 'center',
+                                top: '45%',
+                              }}
                               size="large"
                               color={Colors.PRIMARY}
                             />
-                          }
-                          onLoad={() => setIsLoading(false)}
-                          source={state.frameImg ? {uri: state.frameImg} : null}
-                          style={{
-                            alignSelf: 'center',
-                            height: 375,
-                            width: 375,
-                          }}
-                          res
-                        />
-                      </>
-                    ) : null}
-                  </View>
-                </ImageBackground>
+                          )}
+                          <Image
+                            loadingIndicatorSource={
+                              <ActivityIndicator
+                                size="large"
+                                color={Colors.PRIMARY}
+                              />
+                            }
+                            onLoad={() => setIsLoading(false)}
+                            source={
+                              state.frameImg ? {uri: state.frameImg} : null
+                            }
+                            style={{
+                              alignSelf: 'center',
+                              height: 375,
+                              width: 375,
+                            }}
+                            res
+                          />
+                        </>
+                      ) : null}
+                    </View>
+                  </ImageBackground>
+                </TouchableOpacity>
               </ViewShot>
             </View>
           ) : (
@@ -663,19 +709,7 @@ const CustomSDK = ({route, navigation}) => {
                   LOGO
                 </Text>
               </TouchableOpacity>
-              {/* <TouchableOpacity
-            style={[
-              state?.image ? {backgroundColor: Colors.PRIMARY} : {},
-              styles.additionalDetails,
-            ]}>
-            <Feather
-              name="image"
-              size={30}
-              color={
-                state?.image ? {color: Colors.white} : {color: Colors.TEXT1}
-              }
-            />
-          </TouchableOpacity> */}
+
               <TouchableOpacity
                 style={[
                   state?.mobile ? {backgroundColor: Colors.PRIMARY} : {},
@@ -718,17 +752,6 @@ const CustomSDK = ({route, navigation}) => {
                   color={state?.email ? Colors.white : Colors.TEXT1}
                 />
               </TouchableOpacity>
-              {/* <TouchableOpacity
-            style={[
-              state?.facebook ? {backgroundColor: Colors.PRIMARY} : {},
-              styles.additionalDetails,
-            ]}>
-            <Entypo
-              name="facebook"
-              size={25}
-              color={state?.facebook ? Colors.white : Colors.TEXT1}
-            />
-          </TouchableOpacity> */}
             </ScrollView>
           )}
 
@@ -754,11 +777,21 @@ const CustomSDK = ({route, navigation}) => {
           {state.showFrameImg && (
             <ScrollView
               horizontal
-              contentContainerStyle={styles.frameContainer}
+              contentContainerStyle={{gap: 5}}
               showsHorizontalScrollIndicator={false}>
               <TouchableOpacity
                 style={styles.frame1}
-                onPress={() => setVisible(true)}>
+                onPress={TakePhotofromGallery}>
+                <MaterialIcons
+                  name="library-add"
+                  size={20}
+                  color={Colors.TEXT1}
+                />
+                <Text style={styles.frameText}>Add Pic</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.frame1}
+                onPress={() => setMoreText(prev => ({...prev, modal: true}))}>
                 <MaterialCommunityIcons
                   name="text-recognition"
                   size={20}
@@ -778,15 +811,103 @@ const CustomSDK = ({route, navigation}) => {
                 <Text style={styles.frameText}>Font Style</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => setShowModal(true)}
+                onPress={() => setColorPickerModal(true)}
                 style={styles.frame1}>
-                <MaterialCommunityIcons
-                  name="star-four-points-outline"
-                  size={20}
-                  color={Colors.TEXT1}
-                />
-                <Text style={styles.frameText}>Glow</Text>
+                <Foundation name="text-color" size={25} color={Colors.TEXT1} />
+                <Text style={styles.frameText}>Text Color</Text>
               </TouchableOpacity>
+              {(state.activeContent || moreText.active) && (
+                <>
+                  <View style={{}}>
+                    <Text style={{fontSize: 14, fontWeight: '700'}}>
+                      Font Size
+                    </Text>
+                    <View
+                      style={{
+                        borderWidth: 1,
+                        borderColor: '#999',
+                        height: 40,
+                        backgroundColor: '#f5f5f5',
+                        flexDirection: 'row',
+                        width: 60,
+                      }}>
+                      <NativeInput
+                        value={Number(state[state.activeContent]?.fontSize)}
+                        onChangeText={text => handleChangeFontSize(text)}
+                        style={{
+                          width: 35,
+                          backgroundColor: '#fff',
+                          fontSize: 11,
+                        }}
+                        keyboardType="number-pad"
+                      />
+                      <View
+                        style={{
+                          width: 25,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          marginVertical: 2,
+                        }}>
+                        <TouchableOpacity
+                          onPress={() =>
+                            handleChangeFontSizeByPressingButtons(1)
+                          }>
+                          <MaterialIcons name="arrow-drop-up" size={16} />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() =>
+                            handleChangeFontSizeByPressingButtons(-1)
+                          }>
+                          <MaterialIcons name="arrow-drop-down" size={16} />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                  <View>
+                    <Text style={{fontSize: 14, fontWeight: '700'}}>
+                      Alignment
+                    </Text>
+                    <View style={{flexDirection: 'row', gap: 4}}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          setState(prev => ({
+                            ...prev,
+                            [state.activeContent]: {
+                              ...prev[state.activeContent],
+                              textAlign: 'left',
+                            },
+                          }))
+                        }>
+                        <Feather name="align-left" size={30} />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() =>
+                          setState(prev => ({
+                            ...prev,
+                            [state.activeContent]: {
+                              ...prev[state.activeContent],
+                              textAlign: 'center',
+                            },
+                          }))
+                        }>
+                        <Feather name="align-center" size={30} />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() =>
+                          setState(prev => ({
+                            ...prev,
+                            [state.activeContent]: {
+                              ...prev[state.activeContent],
+                              textAlign: 'right',
+                            },
+                          }))
+                        }>
+                        <Feather name="align-right" size={30} />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </>
+              )}
             </ScrollView>
           )}
         </ScrollView>
