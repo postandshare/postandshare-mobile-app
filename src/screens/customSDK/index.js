@@ -45,12 +45,6 @@ import ImageEditor from './ImageEditor';
 import FontFamilyModal from './FontFamilyModal';
 const initialState = {
   fetch: false,
-  address: false,
-  logo: false,
-  mobile: false,
-  email: false,
-  website: false,
-  whatsApp: false,
   showBusiness_name: false,
   showBusiness_description: false,
   text: '',
@@ -512,7 +506,7 @@ const CustomSDK = ({route, navigation}) => {
                         </>
                       )}
 
-                      {state?.mobile ? (
+                      {state?.mobile_content?.show ? (
                         <ShowText
                           content={state.mobile_content}
                           numberOfLines={2}
@@ -530,7 +524,7 @@ const CustomSDK = ({route, navigation}) => {
                           }
                         />
                       ) : null}
-                      {state?.whatsApp ? (
+                      {state?.whatsApp_content?.show ? (
                         <ShowText
                           content={state.whatsApp_content}
                           text={profileDetail?.whatsAppNumber}
@@ -547,7 +541,7 @@ const CustomSDK = ({route, navigation}) => {
                           }
                         />
                       ) : null}
-                      {state?.email ? (
+                      {state?.email_content?.show ? (
                         <ShowText
                           content={state.email_content}
                           text={profileDetail?.email}
@@ -564,7 +558,7 @@ const CustomSDK = ({route, navigation}) => {
                           }
                         />
                       ) : null}
-                      {state?.website ? (
+                      {state?.website_content?.show ? (
                         <ShowText
                           content={state.website_content}
                           text={profileDetail?.website}
@@ -581,7 +575,7 @@ const CustomSDK = ({route, navigation}) => {
                           }
                         />
                       ) : null}
-                      {state?.address ? (
+                      {state?.address_content?.show ? (
                         <ShowText
                           content={state.address_content}
                           text={
@@ -677,32 +671,49 @@ const CustomSDK = ({route, navigation}) => {
               showsHorizontalScrollIndicator={false}>
               <TouchableOpacity
                 style={[
-                  state?.address ? {backgroundColor: Colors.PRIMARY} : {},
+                  state?.address_content?.show && {
+                    backgroundColor: Colors.PRIMARY,
+                  },
                   styles.additionalDetails,
                 ]}
                 onPress={() =>
-                  setState(prev => ({...prev, address: !state?.address}))
+                  setState(prev => ({
+                    ...prev,
+                    address_content: {
+                      ...prev.address_content,
+                      show: !prev.address_content?.show,
+                    },
+                  }))
                 }>
                 <Entypo
                   name="location-pin"
                   size={25}
-                  color={state?.address ? Colors.white : Colors.TEXT1}
+                  color={
+                    state?.address_content?.show ? Colors.white : Colors.TEXT1
+                  }
                 />
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() =>
                   setState(prev => ({
                     ...prev,
-                    logo: !state?.logo,
+                    logo_content: {
+                      ...prev.logo_content,
+                      show: !prev.logo_content?.show,
+                    },
                   }))
                 }
                 style={[
-                  state?.logo ? {backgroundColor: Colors.PRIMARY} : {},
+                  state?.logo_content?.show
+                    ? {backgroundColor: Colors.PRIMARY}
+                    : {},
                   styles.additionalDetails,
                 ]}>
                 <Text
                   style={[
-                    state?.logo ? {color: Colors.white} : {color: Colors.TEXT1},
+                    state?.logo_content?.show
+                      ? {color: Colors.white}
+                      : {color: Colors.TEXT1},
                     styles.additionalDetailsText,
                     {fontStyle: 'italic'},
                   ]}>
@@ -712,44 +723,98 @@ const CustomSDK = ({route, navigation}) => {
 
               <TouchableOpacity
                 style={[
-                  state?.mobile ? {backgroundColor: Colors.PRIMARY} : {},
+                  state?.mobile_content?.show
+                    ? {backgroundColor: Colors.PRIMARY}
+                    : {},
                   styles.additionalDetails,
                 ]}
                 onPress={() =>
-                  setState(prev => ({...prev, mobile: !state?.mobile}))
+                  setState(prev => ({
+                    ...prev,
+                    mobile_content: {
+                      ...prev.mobile_content,
+                      show: !prev.mobile_content?.show,
+                    },
+                  }))
                 }>
                 <AntDesign
                   name="mobile1"
                   size={25}
-                  color={state?.mobile ? Colors.white : Colors.TEXT1}
+                  color={
+                    state?.mobile_content?.show ? Colors.white : Colors.TEXT1
+                  }
                 />
               </TouchableOpacity>
               <TouchableOpacity
                 style={[
-                  state?.whatsApp ? {backgroundColor: Colors.PRIMARY} : {},
+                  state?.whatsApp_content?.show
+                    ? {backgroundColor: Colors.PRIMARY}
+                    : {},
                   styles.additionalDetails,
                 ]}
                 onPress={() =>
-                  setState(prev => ({...prev, whatsApp: !state?.whatsApp}))
+                  setState(prev => ({
+                    ...prev,
+                    whatsApp_content: {
+                      ...prev.whatsApp_content,
+                      show: !prev.whatsApp_content?.show,
+                    },
+                  }))
                 }>
                 <FontAwesome
                   name="whatsapp"
                   size={25}
-                  color={state?.whatsApp ? Colors.white : Colors.TEXT1}
+                  color={
+                    state?.whatsApp_content?.show ? Colors.white : Colors.TEXT1
+                  }
                 />
               </TouchableOpacity>
               <TouchableOpacity
                 style={[
-                  state?.email ? {backgroundColor: Colors.PRIMARY} : {},
+                  state?.email_content?.show
+                    ? {backgroundColor: Colors.PRIMARY}
+                    : {},
                   styles.additionalDetails,
                 ]}
                 onPress={() =>
-                  setState(prev => ({...prev, email: !state?.email}))
+                  setState(prev => ({
+                    ...prev,
+                    email_content: {
+                      ...prev.email_content,
+                      show: !prev.email_content?.show,
+                    },
+                  }))
                 }>
                 <AntDesign
                   name="mail"
                   size={25}
-                  color={state?.email ? Colors.white : Colors.TEXT1}
+                  color={
+                    state?.email_content?.show ? Colors.white : Colors.TEXT1
+                  }
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  state?.website_content?.show
+                    ? {backgroundColor: Colors.PRIMARY}
+                    : {},
+                  styles.additionalDetails,
+                ]}
+                onPress={() =>
+                  setState(prev => ({
+                    ...prev,
+                    website_content: {
+                      ...prev.website_content,
+                      show: !prev.website_content?.show,
+                    },
+                  }))
+                }>
+                <MaterialCommunityIcons
+                  name="web"
+                  size={25}
+                  color={
+                    state?.website_content?.show ? Colors.white : Colors.TEXT1
+                  }
                 />
               </TouchableOpacity>
             </ScrollView>
