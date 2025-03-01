@@ -50,14 +50,22 @@ const UserProfileCard = ({profileData}) => {
           )}
         </View>
         <View>
-          <Text style={styles.name_text}>
+          <Text style={styles.name_text} numberOfLines={1} ellipsizeMode="tail">
             {profileData?.firstName ?? '-'} {profileData?.middleName ?? '-'}{' '}
             {profileData?.lastName ?? '-'}
           </Text>
-          <Text style={styles.schoole_name}>
+          <Text
+            style={styles.schoole_name}
+            numberOfLines={1}
+            ellipsizeMode="tail">
             {profileData?.mobileNumber ?? '-'}
           </Text>
-          <Text style={styles.schoole_name}>{profileData?.email ?? '-'}</Text>
+          <Text
+            style={[styles.schoole_name]}
+            numberOfLines={1}
+            ellipsizeMode="tail">
+            {profileData?.email ?? '-'}
+          </Text>
         </View>
       </View>
     </>
@@ -108,21 +116,21 @@ const CustomDrawerLeft = ({navigation, route}) => {
             }
           />
 
-          <Item
+          {/* <Item
             icon={<AntDesign name={'filetext1'} style={styles.icon} />}
             text="Terms & Conditions"
             path={NavigationScreenName.TERM_AND_CONDITION}
             onPress={() =>
               navigation.navigate(NavigationScreenName.TERM_AND_CONDITION)
             }
-          />
+          /> */}
 
-          <Item
+          {/* <Item
             icon={<Entypo name={'video'} style={styles.icon} />}
             text="Tutorials"
             path={NavigationScreenName.TUTORIALS}
             onPress={() => navigation.navigate(NavigationScreenName.TUTORIALS)}
-          />
+          /> */}
           <Item
             icon={<Entypo name={'share'} style={styles.icon} />}
             text="Share Us"
@@ -146,22 +154,22 @@ const CustomDrawerLeft = ({navigation, route}) => {
             navigation.navigate(NavigationScreenName.HELPSUPPORT);
           }}
         /> */}
-          <Item
+          {/* <Item
             icon={<MaterialIcons name={'privacy-tip'} style={styles.icon} />}
             text="Privacy Policy"
             path={NavigationScreenName.Privacy_Policy}
             onPress={() =>
               navigation.navigate(NavigationScreenName.Privacy_Policy)
             }
-          />
-          <Item
+          /> */}
+          {/* <Item
             icon={<FontAwesome name={'language'} style={styles.icon} />}
             text="Language Setting"
             path={NavigationScreenName.LANGUAGE_SELECTION}
             onPress={() =>
               navigation.navigate(NavigationScreenName.LANGUAGE_SELECTION)
             }
-          />
+          /> */}
           <Item
             icon={<AntDesign name={'logout'} style={styles.icon} />}
             text="Logout"
@@ -208,10 +216,7 @@ const styles = StyleSheet.create({
     color: Colors.PRIMARY,
     fontWeight: '700',
     fontSize: 16,
-    textAlign: 'center',
-    marginTop: 10,
-    flex: 1,
-    width: '98%',
+    width: Sizes.wp('40%'),
   },
   profile_pic: {
     resizeMode: 'cover',
@@ -220,12 +225,10 @@ const styles = StyleSheet.create({
     borderRadius: 40,
   },
   schoole_name: {
-    flex: 1,
-    fontSize: scale(12),
-    lineHeight: scale(20),
-    textAlign: 'center',
+    fontSize: 14,
     color: Colors.TEXT1,
     fontWeight: '300',
+    width: Sizes.wp('40%'),
   },
   selector_root: {
     flexDirection: 'row',
@@ -292,10 +295,10 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   userProfileCard: {
-    padding: 10,
+    paddingHorizontal: 10,
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 15,
+    paddingVertical: 5,
+    gap: 10,
     borderWidth: 2,
     borderColor: Colors.borderColor,
     borderRadius: 5,

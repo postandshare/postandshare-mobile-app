@@ -4,8 +4,8 @@ import Sizes from '../../constants/Sizes';
 
 const styles = StyleSheet.create({
   root: {
-    flexGrow: 1,
     backgroundColor: Colors.transparent,
+    paddingBottom: 50,
   },
   container: {
     flex: 1,

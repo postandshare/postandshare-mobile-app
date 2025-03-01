@@ -319,7 +319,7 @@ const CustomSDK = ({route, navigation}) => {
       setState(prev => ({...prev, activeContent: ''}));
     }
   }, [moreText.active]);
-  console.log(state.business_name, 'in state');
+
   return (
     <>
       <Loader open={imageUploading || addUserPostLoading} text="Loading..." />
@@ -423,29 +423,24 @@ const CustomSDK = ({route, navigation}) => {
                             />
                           </TouchableOpacity>
                         ))}
-                      {state?.logo ? (
-                        <DragDrop
-                          onDrag={drag}
-                          onDrop={drop}
-                          intialX={state.logo_content?.x_axis}
-                          intialY={state.logo_content?.y_axis}>
-                          <Image
-                            source={
-                              profileDetail
-                                ? {
-                                    uri:
-                                      profileDetail?.logo ??
-                                      profileDetail?.partyLogo ??
-                                      profileDetail?.profilePic,
-                                  }
-                                : Images.akSchoolIcon
-                            }
-                            style={{
-                              height: 50,
-                              width: 50,
+                      {state?.logo_content?.show ? (
+                        <TouchableOpacity
+                          activeOpacity={0.5}
+                          onPress={() => {
+                            state.logo_content.selected = true;
+                            setState(prev => ({...prev}));
+                          }}>
+                          <ImageEditor
+                            item={{
+                              ...state.logo_content,
+                              uri: profileDetail?.logo,
+                            }}
+                            onPresDelete={() => {
+                              state.logo_content.show = false;
+                              setState(prev => ({...prev}));
                             }}
                           />
-                        </DragDrop>
+                        </TouchableOpacity>
                       ) : null}
                       {profileDetail?.categoryGroup === 'business' && (
                         <>
