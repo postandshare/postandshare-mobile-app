@@ -18,8 +18,8 @@ const LogoEditor = ({item, onPresDelete}) => {
   const scale = useSharedValue(1);
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
-  const width = useSharedValue(50);
-  const height = useSharedValue(50);
+  const width = useSharedValue(100);
+  const height = useSharedValue(100);
 
   // Drag Gesture
   const panGesture = useAnimatedGestureHandler({
@@ -44,10 +44,10 @@ const LogoEditor = ({item, onPresDelete}) => {
     },
     onActive: (event, ctx) => {
       width.value = withSpring(
-        Math.max(50, ctx.startWidth + event.translationX),
+        Math.max(100, ctx.startWidth + event.translationX),
       );
       height.value = withSpring(
-        Math.max(50, ctx.startHeight + event.translationY),
+        Math.max(100, ctx.startHeight + event.translationY),
       );
     },
   });

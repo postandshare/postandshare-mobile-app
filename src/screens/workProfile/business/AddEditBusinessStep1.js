@@ -6,7 +6,7 @@ import {
   ToastAndroid,
   View,
 } from 'react-native';
-import {Text} from 'react-native-paper';
+import {Dialog, Divider, Portal, Text} from 'react-native-paper';
 import React, {useEffect, useState} from 'react';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {useForm} from 'react-hook-form';
@@ -30,6 +30,8 @@ import Sizes from '../../../constants/Sizes';
 import Colors from '../../../constants/Colors';
 import CustomButton from '../../../components/CustomButton';
 import ControllerDropdown from '../../../components/common/ControllerDropdown';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import OpenCameraAndGalleryDialog from '../../../components/common/OpenCameraAndGalleryDialog';
 
 const AddEditBusinessStep1 = ({navigation, route}) => {
   const {businessDocId} = route?.params || '';
@@ -63,7 +65,7 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
   const [imageUploading, setImageUploading] = useState(false);
   const [bussinessCategoryData, setBussinessCategoryData] = useState([]);
   const [bussinessSubCategoryList, setBussinessSubCategoryList] = useState([]);
-
+  const [chooseImageDialog, setChooseImageDialog] = useState(false);
   const uploadePhoto = async (path, mime) => {
     try {
       setImageUploading(true);
@@ -80,9 +82,10 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
     }
   };
   // profile pic image picker
-  const TakePhoto = async () => {
+  const TakePhoto = async type => {
     try {
-      const data = await TakePhotofromGalleryWithCrop();
+      setChooseImageDialog(false);
+      const data = await TakePhotofromGalleryWithCrop(type);
       uploadePhoto(data?.path, data?.mime);
     } catch (error) {}
   };
@@ -266,6 +269,11 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
   return (
     <>
       <Loader open={imageUploading} text="Uploading Image" />
+      <OpenCameraAndGalleryDialog
+        TakePhoto={TakePhoto}
+        visible={chooseImageDialog}
+        onDismiss={() => setChooseImageDialog(!chooseImageDialog)}
+      />
       <View style={styles.root}>
         <ScrollView
           contentContainerStyle={styles.contentContainerStyle}
@@ -291,7 +299,9 @@ const AddEditBusinessStep1 = ({navigation, route}) => {
             <View style={styles.image_wrap}>
               <ProfilePic
                 imageUrl={profilePic}
-                TakePhotofromGallery={TakePhoto}
+                TakePhotofromGallery={() =>
+                  setChooseImageDialog(!chooseImageDialog)
+                }
               />
               <Text style={styles.title}>Upload Your Bussiness Logo</Text>
             </View>

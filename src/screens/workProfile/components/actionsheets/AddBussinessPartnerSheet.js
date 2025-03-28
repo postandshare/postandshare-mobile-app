@@ -22,6 +22,8 @@ import {
   addBusinessPartner,
   updateBusinessPartner,
 } from '../../../../services/userServices/bussiness.servies';
+import {TakePhotofromGalleryWithCrop} from '../../../../utils/heplers';
+import OpenCameraAndGalleryDialog from '../../../../components/common/OpenCameraAndGalleryDialog';
 
 const AddBussinessPartnerSheet = ({
   onPressCross,
@@ -31,6 +33,7 @@ const AddBussinessPartnerSheet = ({
   refetch = () => {},
 }) => {
   const [imageUploading, setImageUploading] = useState(false);
+  const [chooseImageDialog, setChooseImageDialog] = useState(false);
   const {control, handleSubmit, reset, setValue} = useForm({
     defaultValues: {
       bussinessPartnerName: '',
@@ -121,38 +124,22 @@ const AddBussinessPartnerSheet = ({
       setImageUploading(false);
     }
   };
-
-  // profile pic image picker
-  const TakePhotofromGallery = async () => {
+  const TakePhoto = async type => {
     try {
-      await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-        {
-          title: 'Post And Share App',
-          message:
-            'We want to access your photos' +
-            'so you can take awesome pictures.',
-        },
-      );
-      ImageCropPicker.openPicker({
-        cropping: true,
-      })
-        .then(image => {
-          uploadePhoto(image.path, image.mime);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    } catch (error) {
-      console.log(error);
-      ToastAndroid.show('Permission Denied', ToastAndroid.LONG);
-    }
+      const data = await TakePhotofromGalleryWithCrop('gallery');
+      uploadePhoto(data?.path, data?.mime);
+    } catch (error) {}
   };
 
   const Loading = addBusinessPartnerlLoading || updateBusinessPartnerLoading;
 
   return (
     <>
+      <OpenCameraAndGalleryDialog
+        TakePhoto={TakePhoto}
+        visible={chooseImageDialog}
+        onDismiss={() => setChooseImageDialog(!chooseImageDialog)}
+      />
       {/* header */}
       <View style={globalStyles.actionSheet_header}>
         <Text style={globalStyles.actionSheet_header_left_text}>
@@ -181,7 +168,7 @@ const AddBussinessPartnerSheet = ({
           }}
           control={control}
           name={'bussinessPartnerName'}
-          label={'Partner Name'}
+          label={'Partner Name *'}
         />
 
         {/* desingnation */}
@@ -191,7 +178,7 @@ const AddBussinessPartnerSheet = ({
           }}
           control={control}
           name={'bussinessPartnerDessignation'}
-          label={'Desingnation'}
+          label={'Desingnation *'}
         />
         {/* photo */}
         <Controller
@@ -202,7 +189,7 @@ const AddBussinessPartnerSheet = ({
               <TouchableOpacity
                 style={styles.photoInput}
                 onPress={() => {
-                  TakePhotofromGallery();
+                  TakePhoto();
                 }}>
                 {value ? (
                   <Image

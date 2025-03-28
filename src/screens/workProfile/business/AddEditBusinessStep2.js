@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {IconButton, Text} from 'react-native-paper';
+import {Dialog, Divider, IconButton, Portal, Text} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import ActionSheet from 'react-native-actions-sheet';
@@ -30,12 +30,14 @@ import images from '../../../constants/images';
 import Colors from '../../../constants/Colors';
 import CustomButton from '../../../components/CustomButton';
 import Sizes from '../../../constants/Sizes';
+import {TakePhotofromGalleryWithCrop} from '../../../utils/heplers';
+import OpenCameraAndGalleryDialog from '../../../components/common/OpenCameraAndGalleryDialog';
 
 const AddEditBusinessStep2 = ({navigation, route}) => {
   const {businessDocId} = route?.params ?? '';
-  console.log(businessDocId, 'in docId');
   const [profilePic, setprofilePic] = useState('');
   const [bussinessPartner, setBussinessPartner] = useState(null);
+  const [chooseImageDialog, setChooseImageDialog] = useState(false);
   const [selectedBussinessPartner, setSelectedBussinessPartner] =
     useState(null);
 
@@ -159,30 +161,12 @@ const AddEditBusinessStep2 = ({navigation, route}) => {
   };
 
   // profile pic image picker
-  const TakePhotofromGallery = async () => {
+  const TakePhoto = async type => {
     try {
-      await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-        {
-          title: 'Post And Share App',
-          message:
-            'We want to access your photos' +
-            'so you can take awesome pictures.',
-        },
-      );
-      ImageCropPicker.openPicker({
-        cropping: true,
-      })
-        .then(image => {
-          uploadePhoto(image.path, image.mime);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    } catch (error) {
-      console.log(error);
-      ToastAndroid.show('Permission Denied', ToastAndroid.LONG);
-    }
+      setChooseImageDialog(false);
+      const data = await TakePhotofromGalleryWithCrop(type);
+      uploadePhoto(data?.path, data?.mime);
+    } catch (error) {}
   };
 
   const actionSheetRef = useRef(null);
@@ -196,7 +180,11 @@ const AddEditBusinessStep2 = ({navigation, route}) => {
   return (
     <>
       <Loader visible={imageUploading} text="loading..." />
-
+      <OpenCameraAndGalleryDialog
+        TakePhoto={TakePhoto}
+        visible={chooseImageDialog}
+        onDismiss={() => setChooseImageDialog(!chooseImageDialog)}
+      />
       <ActionSheet
         ref={actionSheetRef}
         closeOnTouchBackdrop={false}
@@ -229,7 +217,9 @@ const AddEditBusinessStep2 = ({navigation, route}) => {
             <View style={styles.image_wrap}>
               <ProfilePic
                 imageUrl={profilePic}
-                TakePhotofromGallery={TakePhotofromGallery}
+                TakePhotofromGallery={() =>
+                  setChooseImageDialog(!chooseImageDialog)
+                }
               />
               <Text style={styles.title}>Upload Your Bussiness Pic</Text>
             </View>
@@ -251,7 +241,7 @@ const AddEditBusinessStep2 = ({navigation, route}) => {
               }}
               control={control}
               name={'bussinessOwnerDessignation'}
-              label={'Desingnation'}
+              label={'Desingnation *'}
             />
 
             {/* mobile */}

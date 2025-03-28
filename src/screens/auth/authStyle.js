@@ -5,11 +5,14 @@ import Sizes from '../../constants/Sizes';
 import Colors from '../../constants/Colors';
 
 const authStyle = StyleSheet.create({
+  login_container: {
+    flex: 1,
+  },
   upperImage: {
     height: Sizes.hp('65%'),
     justifyContent: 'flex-end',
     paddingHorizontal: Sizes.wp('5%'),
-    paddingVertical: Sizes.hp('3%'),
+    paddingTop: Sizes.hp('3%'),
     top: -Sizes.hp('8%'),
   },
   topImgSec: {
@@ -58,9 +61,7 @@ const authStyle = StyleSheet.create({
   },
   bottom_content_root: {
     paddingHorizontal: Sizes.wp('5%'),
-    // paddingVertical: Sizes.hp('3%'),
-    backgroundColor: Colors.white,
-    bottom: Sizes.hp('10%'),
+    bottom: 0,
   },
   bottom_content_root_Language: {
     paddingHorizontal: Sizes.wp('5%'),
